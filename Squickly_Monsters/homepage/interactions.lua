@@ -152,5 +152,6 @@ end
 function feedPetAnimation()
     setMonsterSequence("happy")
     timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
-    hideShowIcons(getMonster())
+    hideShowAllIcons(getMonster())
+    return true
 end
