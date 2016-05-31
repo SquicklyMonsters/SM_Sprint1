@@ -6,8 +6,8 @@ require("homepage.monster")
 -- Local variables go HERE
 
 local monster;
-local icons
 local feedIcon;
+local icons;
 local hungerBar;
 
 function getAllVariables()
@@ -66,7 +66,7 @@ end
 function setUpIcon(img)
     icon = display.newImage(img, getMonster().x, getMonster().y)
     icon:scale(0.05, 0.05)
-    icon.isVisible = false
+    icon.alpha = 0
     return icon
 end
 
@@ -102,20 +102,21 @@ end
 function hideShowAllIcons()
     xAxis = {75}
     yAxis = {75}
+    monster = getMonster()
 
-    if (icons[1].isVisible == false) then
-        -- print("Show")
+    if (icons[1].alpha == 0) then
+        print("Show")
         for i = 1, 1 do
             transition.to(icons[i], 
                 {x = monster.x + xAxis[i], y = monster.y - yAxis[i],
-                isVisible = true, time = 250})
+                alpha = 1, time = 250})
         end
     else
-        -- print("Hide")
+        print("Hide")
         for i = 1, 1 do
             transition.to(icons[i], 
                 {x = monster.x, y = monster.y,
-                isVisible = false, time = 250})
+                alpha = 0, time = 250})
         end 
     end     
 end
@@ -133,7 +134,7 @@ end
 -- Set reaction when touch monster
 function interactionsToggle(event)
     if event.phase == "ended" then
-        hideShowAllIcons(monster)
+        hideShowAllIcons()
     end
 end
 
@@ -152,5 +153,5 @@ end
 function feedPetAnimation()
     setMonsterSequence("happy")
     timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
-    hideShowIcons(getMonster())
+    hideShowAllIcons(monster)
 end
