@@ -1,6 +1,10 @@
--- ===============
-local monster
--- ===============
+-- -------------------------------------------------------------------------------
+
+-- Local variables go HERE
+
+local monster;
+
+-- -------------------------------------------------------------------------------
 
 function setUpMonster(fileName)
 	-- Set Monster
@@ -41,8 +45,6 @@ function setUpMonster(fileName)
     monster.y = 225
     monster:scale(0.5, 0.5)
     monster:play()
-
-    return monster
 end
 
 function getMonster()

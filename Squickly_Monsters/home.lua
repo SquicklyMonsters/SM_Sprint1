@@ -5,88 +5,68 @@ local scene = composer.newScene()
 
 require("homepage.background")
 require("homepage.monster")
-require("homepage.UI")
+require("homepage.interactions")
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
 -- -----------------------------------------------------------------------------------------------------------------
 
--- Local variables go HERE
+-- Local variables go Here
 
-
+local back;
+local middle;
+local front;
+local monster;
+local feedIcon;
+local hungerBar;
 
 -- -------------------------------------------------------------------------------
 
--- Longer written functions go HERE
-
-
+-- Non-scene functions go Here
 
 -- -------------------------------------------------------------------------------
 
--- Scene functions go HERE
+-- Scene functions go Here
 
 function scene:create( event )
 	local sceneGroup = self.view
 
     -- Setup layer
-    local back = display.newGroup()
-    local middle = display.newGroup()
-    local front = display.newGroup()
+    back = display.newGroup()
+    middle = display.newGroup()
+    front = display.newGroup()
 	
 	-- Set background
-    background = setUpBackground("img/bg/main_background.png")
+    setUpBackground()
+    background = getBackground()
 	
     -- Set Up Monster 
-    local tama = setUpMonster("img/sprites/egg_sprites_all.png")
+    setUpMonster("img/sprites/egg_sprites_all.png")
+    monster = getMonster()
 
     -- Set up Needs Bar
-    hunger = setUpNeedBar("img/others/widget-progress-view.png")
+    setupAllNeedsBars()
+    hungerBar = getHungerBar()
 
-    hunger:setProgress( 0.5 )
+    -- Set up all Icons
+    setUpAllIcons()
+    feedIcon = getFeedIcon()
 
-
-    setUpIcons()
-    local feedIcon = getFeedIcon()
-
-    -- Set reaction when touch
-    function tama:touch(event)
-        if event.phase == "ended" then
-            hideShowIcons(tama)
-        end
-    end
-
-    function feedIcon:touch(event)
-        if event.phase == "ended" then
-            feed()
-            hunger:setProgress(hunger:getProgress() + 0.1)
-            return true
-        end
-    end
-
-    -- Trigger needs
-    function needs()
-        hunger:setProgress(hunger:getProgress() - 0.1)
-    end
+    -- Set All Needs Level (From Save File Later)
+    setHungerLevel(0.8)
 
 	-- Add display objects into group
     -- ============BACK===============
     back:insert(background)
-    back:insert(feedIcon)
-
     -- ===========MIDDLE==============
-    middle:insert(tama)
-
+    middle:insert(monster)
     -- ===========FRONT===============
-    front:insert(hunger)
-
-
+    front:insert(feedIcon)
+    front:insert(hungerBar)
     -- ===============================
 
-    -- Add hunger loop
-    timer.performWithDelay(20000, needs, -1)
-    -- Add even listener for touch event on tama
-    tama:addEventListener("touch", tama)
-    feedIcon:addEventListener("touch", feedIcon)
+    -- Set up all Event Listeners
+    addListeners()
 end
 
 function scene:show( event )
@@ -124,11 +104,6 @@ function scene:destroy( event )
 	-- 
 	-- INSERT code here to cleanup the scene
 	-- e.g. remove display objects, remove touch listeners, save state, etc.
-	
-	if playBtn then
-		playBtn:removeSelf()	-- widgets must be manually removed
-		playBtn = nil
-	end
 end
 
 ---------------------------------------------------------------------------------
