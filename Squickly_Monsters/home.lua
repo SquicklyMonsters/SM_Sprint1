@@ -1,28 +1,27 @@
------------------------------------------------------------------------------------------
---
--- menu.lua
---
------------------------------------------------------------------------------------------
-
+-- Import dependency
+local widget = require( "widget" )
 local composer = require( "composer" )
 local scene = composer.newScene()
 
--- include Corona's "widget" library
-local widget = require "widget"
+require("homepage.tama")
+require("homepage.background")
+require("homepage.UI")
 
---------------------------------------------
+-- -----------------------------------------------------------------------------------------------------------------
+-- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
+-- -----------------------------------------------------------------------------------------------------------------
 
--- forward declarations and other locals
-local playBtn
+-- Local variables go HERE
 
--- 'onRelease' event listener for playBtn
-local function onPlayBtnRelease()
-	
-	-- go to level1.lua scene
-	composer.gotoScene( "level1", "fade", 500 )
-	
-	return true	-- indicates successful touch
-end
+
+
+-- -------------------------------------------------------------------------------
+
+-- Writted functions go HERE
+
+
+
+-- -------------------------------------------------------------------------------
 
 function scene:create( event )
 	local sceneGroup = self.view
