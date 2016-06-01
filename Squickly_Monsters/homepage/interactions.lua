@@ -73,7 +73,7 @@ function setUpAllIcons()
     sleepIcon = setUpIcon("img/others/sleepIcon2.png", 0.6)
     wakeupIcon = setUpIcon("img/others/wakeupIcon2.png", 0.07)
     cleanIcon = setUpIcon("img/others/cleanIcon2.png", 0.09)
-    playIcon = setUpIcon("img/others/playIcon.png", 0.09)
+    playIcon = setUpIcon("img/others/playIcon5.png", 0.12)
 end
 
 function setUpIcon(img, scale)
