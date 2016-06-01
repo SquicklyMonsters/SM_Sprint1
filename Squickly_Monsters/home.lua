@@ -18,6 +18,10 @@ local middle;
 local front;
 local monster;
 local feedIcon;
+local sleepIcon;
+local wakeupIcon;
+local cleanIcon;
+local playIcon;
 local hungerBar;
 
 -- -------------------------------------------------------------------------------
@@ -51,6 +55,10 @@ function scene:create( event )
     -- Set up all Icons
     setUpAllIcons()
     feedIcon = getFeedIcon()
+    sleepIcon = getSleepIcon()
+    wakeupIcon = getWakeupIcon()
+    cleanIcon = getCleanIcon()
+    playIcon = getPlayIcon()
 
 	-- Add display objects into group
     -- ============BACK===============
@@ -59,6 +67,10 @@ function scene:create( event )
     middle:insert(monster)
     -- ===========FRONT===============
     front:insert(feedIcon)
+    front:insert(sleepIcon)
+    front:insert(wakeupIcon)
+    front:insert(cleanIcon)
+    front:insert(playIcon)
     front:insert(hungerBar)
     -- ===============================
 
