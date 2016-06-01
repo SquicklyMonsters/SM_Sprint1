@@ -52,9 +52,6 @@ function scene:create( event )
     setUpAllIcons()
     feedIcon = getFeedIcon()
 
-    -- Set All Needs Level (From Save File Later)
-    setHungerLevel(0.8)
-
 	-- Add display objects into group
     -- ============BACK===============
     back:insert(background)

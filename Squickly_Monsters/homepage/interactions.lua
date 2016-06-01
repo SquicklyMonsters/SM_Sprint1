@@ -22,12 +22,15 @@ end
 -- Setup The Needs Bars Here
 
 function setupAllNeedsBars()
-    hungerBar = setUpNeedBar("img/others/HappinessBar.png", 60)
-    --happinessBar = setUp
-    --hungerBar.x = 60
+    hungerBar = setUpNeedBar("img/others/HappinessBar.png", 10)
+    happinessBar = setUpNeedBar("img/others/HappinessBar.png", 130)
 
+
+    -- Set All Needs Decrement rate
     setHungerLvlDecreaseRate(1000) -- 1000 = 1sec
 
+    -- Set All Needs Level (From Save File Later)
+    setNeedLevel(hungerBar, 0.8)
 end
 
 function setUpNeedBar(fileName, left)
@@ -80,8 +83,8 @@ function getHungerBar()
     return hungerBar
 end
 
-function setHungerLevel(lvl)
-    hungerBar:setProgress(lvl)
+function setNeedLevel(need, lvl)
+    need:setProgress(lvl)
 end
 
 -- Add hunger decreasing loop
@@ -106,23 +109,15 @@ function hideShowAllIcons()
     yAxis = {75}
     monster = getMonster()
 
-<<<<<<< HEAD
     if (icons[1].alpha == 0) then
         --print("Show")
-=======
-    if (icons[1].alpha == 0) then -- Show Icons
->>>>>>> 069427f43ef97ddaf3b15cdcbb1fd000c8a6869f
         for i = 1, 1 do
             transition.to(icons[i], 
                 {x = monster.x + xAxis[i], y = monster.y - yAxis[i],
                 alpha = 1, time = 250})
         end
-<<<<<<< HEAD
     else
         --print("Hide")
-=======
-    else -- Hide Icons
->>>>>>> 069427f43ef97ddaf3b15cdcbb1fd000c8a6869f
         for i = 1, 1 do
             transition.to(icons[i], 
                 {x = monster.x, y = monster.y,
