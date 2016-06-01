@@ -5,15 +5,18 @@ require("homepage.monster")
 
 -- Local variables go HERE
 
+-- TODO: List of each bar
 local monster;
 local feedIcon;
 local icons;
 local hungerBar;
+local happinessBar;
+local hygieneBar;
+local energyBar;
+local expBar;
 
 function getAllVariables()
     monster = getMonster()
-    feedIcon = getFeedIcon()
-    hungerBar = getHungerBar()
     icons = {feedIcon}
 end
 
@@ -22,10 +25,29 @@ end
 -- Setup The Needs Bars Here
 
 function setupAllNeedsBars()
-    hungerBar = setUpHungerBar("img/others/widget-progress-view.png")
+    local startX = 0
+    local spacing = 105
+
+    -- TODO: Update Bar files
+    hungerBar = setUpNeedBar("img/others/HappinessBar.png", startX)
+    happinessBar = setUpNeedBar("img/others/HappinessBar.png", startX + spacing)
+    hygieneBar = setUpNeedBar("img/others/HygieneBar.png", startX + spacing*2)
+    energyBar = setUpNeedBar("img/others/EnergyBar.png", startX + spacing*3)
+    expBar = setUpNeedBar("img/others/EnergyBar.png", startX + spacing*4)
+
+
+    -- Set All Needs Decrement rate (1000 = 1sec)
+    setHungerLvlDecreaseRate(1000)
+
+    -- Set All Needs Level (From Save File Later)
+    setNeedLevel(hungerBar, 0.8)
+    setNeedLevel(happinessBar, 0.8)
+    setNeedLevel(hygieneBar, 0.8)
+    setNeedLevel(energyBar, 0.8)
+    setNeedLevel(expBar, 0.8)
 end
 
-function setUpHungerBar(fileName)
+function setUpNeedBar(fileName, left)
     local options = {
         width = 64,
         height = 64,
@@ -35,7 +57,7 @@ function setUpHungerBar(fileName)
     }
     local progressSheet = graphics.newImageSheet( fileName, options )
 
-    hungerBar = widget.newProgressView(
+    return widget.newProgressView(
         {
             sheet = progressSheet,
             fillOuterMiddleFrame = 2,
@@ -44,15 +66,12 @@ function setUpHungerBar(fileName)
             fillInnerMiddleFrame = 5,
             fillWidth = 0,
             fillHeight = 10,
-            left = display.contentCenterX - 50,
+            left = left,
             top = 50,
             width = 100,
             isAnimated = true
         }
     )
-    setHungerLvlDecreaseRate(1000) -- 1000 = 1sec
-
-    return hungerBar
 end
 
 -- -------------------------------------------------------------------------------
@@ -78,8 +97,8 @@ function getHungerBar()
     return hungerBar
 end
 
-function setHungerLevel(lvl)
-    hungerBar:setProgress(lvl)
+function setNeedLevel(need, lvl)
+    need:setProgress(lvl)
 end
 
 -- Add hunger decreasing loop
@@ -104,13 +123,15 @@ function hideShowAllIcons()
     yAxis = {75}
     monster = getMonster()
 
-    if (icons[1].alpha == 0) then -- Show Icons
+    if (icons[1].alpha == 0) then
+        --print("Show")
         for i = 1, 1 do
             transition.to(icons[i], 
                 {x = monster.x + xAxis[i], y = monster.y - yAxis[i],
                 alpha = 1, time = 250})
         end
-    else -- Hide Icons
+    else
+        --print("Hide")
         for i = 1, 1 do
             transition.to(icons[i], 
                 {x = monster.x, y = monster.y,
@@ -151,5 +172,5 @@ end
 function feedPetAnimation()
     setMonsterSequence("happy")
     timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
-    hideShowAllIcons(monster)
+    hideShowAllIcons()
 end
