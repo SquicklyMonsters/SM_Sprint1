@@ -7,14 +7,23 @@ require("homepage.monster")
 
 local monster;
 local feedIcon;
-local icons;
+local sleepIcon;
+local wakeupIcon;
+local cleanIcon;
+local playIcon;
+local icons; -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
 local hungerBar;
 
 function getAllVariables()
     monster = getMonster()
     feedIcon = getFeedIcon()
+    sleepIcon = getSleepIcon()
+    wakeupIcon = getWakeupIcon()
+    cleanIcon = getCleanIcon()
+    playIcon = getPlayIcon()
     hungerBar = getHungerBar()
-    icons = {feedIcon}
+
+    icons = {feedIcon, sleepIcon, cleanIcon, playIcon}
 end
 
 -- -------------------------------------------------------------------------------
@@ -60,12 +69,16 @@ end
 -- Setup All Icons Bars Here
 
 function setUpAllIcons()
-    feedIcon = setUpIcon("img/others/feedIcon.png")
+    feedIcon = setUpIcon("img/others/feedIcon.png", 0.75)
+    sleepIcon = setUpIcon("img/others/sleepIcon.png", 0.5)
+    wakeupIcon = setUpIcon("img/others/wakeupIcon.png", 0.7)
+    cleanIcon = setUpIcon("img/others/cleanIcon.png", 0.5)
+    playIcon = setUpIcon("img/others/playIcon.png", 0.75)
 end
 
-function setUpIcon(img)
+function setUpIcon(img, scale)
     icon = display.newImage(img, getMonster().x, getMonster().y)
-    icon:scale(0.05, 0.05)
+    icon:scale(scale, scale)
     icon.alpha = 0
     return icon
 end
@@ -99,19 +112,35 @@ function getFeedIcon()
     return feedIcon
 end
 
+function getSleepIcon()
+    return sleepIcon
+end
+
+function getWakeupIcon()
+    return wakeupIcon
+end
+
+function getCleanIcon()
+    return cleanIcon
+end
+
+function getPlayIcon()
+    return playIcon
+end
+
 function hideShowAllIcons()
-    xAxis = {75}
-    yAxis = {75}
+    xAxis = {75,30,-30,-75} -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
+    yAxis = {65,100,100,65}
     monster = getMonster()
 
     if (icons[1].alpha == 0) then -- Show Icons
-        for i = 1, 1 do
+        for i = 1, #icons do
             transition.to(icons[i], 
                 {x = monster.x + xAxis[i], y = monster.y - yAxis[i],
                 alpha = 1, time = 250})
         end
     else -- Hide Icons
-        for i = 1, 1 do
+        for i = 1, #icons do
             transition.to(icons[i], 
                 {x = monster.x, y = monster.y,
                 alpha = 0, time = 250})
@@ -127,6 +156,10 @@ function addListeners()
     getAllVariables()
     monster:addEventListener("touch", interactionsToggle)
     feedIcon:addEventListener("touch", feedButtonClicked)
+    sleepIcon:addEventListener("touch", sleepButtonClicked)
+    wakeupIcon:addEventListener("touch", wakeupButtonClicked)
+    cleanIcon:addEventListener("touch", cleanButtonClicked)
+    playIcon:addEventListener("touch", playButtonClicked)
 end
 
 -- Set reaction when touch monster
@@ -144,6 +177,34 @@ function feedButtonClicked(event)
     end
 end
 
+function sleepButtonClicked(event)
+    if event.phase == "ended" then
+        changeToSleepState()
+        return true
+    end
+end
+
+function wakeupButtonClicked(event)
+    if event.phase == "ended" then
+        changeToWakeupState()
+        return true
+    end
+end
+
+function cleanButtonClicked(event)
+    if event.phase == "ended" then
+        cleanPetAnimation()
+        return true
+    end
+end
+
+function playButtonClicked(event)
+    if event.phase == "ended" then
+        playWithPetAnimation()
+        return true
+    end
+end
+
 -- -------------------------------------------------------------------------------
 
 -- Monster Interaction Animation Here
@@ -152,4 +213,30 @@ function feedPetAnimation()
     setMonsterSequence("happy")
     timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
     hideShowAllIcons(monster)
+end
+
+function cleanPetAnimation()
+    setMonsterSequence("happy")
+    timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
+    hideShowAllIcons(monster)
+end
+
+function playWithPetAnimation()
+    setMonsterSequence("happy")
+    timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
+    hideShowAllIcons(monster)
+end
+
+function changeToSleepState()
+    -- FILL FUNCTION HERE
+    hideShowAllIcons(monster)
+    table.remove(icons, 2)
+    table.insert(icons, 2, wakeupIcon)
+end
+
+function changeToWakeupState()
+    -- FILL FUNCTION HERE
+    hideShowAllIcons(monster)
+    table.remove(icons, 2)
+    table.insert(icons, 2, sleepIcon)
 end
