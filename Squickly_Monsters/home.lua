@@ -16,13 +16,20 @@ require("homepage.interactions")
 local back;
 local middle;
 local front;
+
 local monster;
+
 local feedIcon;
 local sleepIcon;
 local wakeupIcon;
 local cleanIcon;
 local playIcon;
+
 local hungerBar;
+local happinessBar;
+local hygieneBar;
+local energyBar;
+local expBar;
 
 -- -------------------------------------------------------------------------------
 
@@ -51,6 +58,10 @@ function scene:create( event )
     -- Set up Needs Bar
     setupAllNeedsBars()
     hungerBar = getHungerBar()
+    happinessBar = getHappinessBar()
+    hygieneBar = getHygieneBar()
+    energyBar = getEnergyBar()
+    expBar = getExpBar()
 
     -- Set up all Icons
     setUpAllIcons()
@@ -72,6 +83,10 @@ function scene:create( event )
     front:insert(cleanIcon)
     front:insert(playIcon)
     front:insert(hungerBar)
+    front:insert(happinessBar)
+    front:insert(hygieneBar)
+    front:insert(energyBar)
+    front:insert(expBar)
     -- ===============================
 
     -- Set up all Event Listeners
