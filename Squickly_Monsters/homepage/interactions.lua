@@ -104,15 +104,13 @@ function hideShowAllIcons()
     yAxis = {75}
     monster = getMonster()
 
-    if (icons[1].alpha == 0) then
-        print("Show")
+    if (icons[1].alpha == 0) then -- Show Icons
         for i = 1, 1 do
             transition.to(icons[i], 
                 {x = monster.x + xAxis[i], y = monster.y - yAxis[i],
                 alpha = 1, time = 250})
         end
-    else
-        print("Hide")
+    else -- Hide Icons
         for i = 1, 1 do
             transition.to(icons[i], 
                 {x = monster.x, y = monster.y,
