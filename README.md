@@ -3,4 +3,4 @@ First Sprint Iteration, following the Scrum model.
 
 Progress Screenchot One
 
-![alt tag](https://github.com/SquicklyMonsters/SM_Sprint1/blob/majeedthaika/Progess1_Screenshot.png?raw=true)
+![alt tag](https://raw.githubusercontent.com/SquicklyMonsters/SM_Sprint1/master/Progess1_Screenshot.png)
