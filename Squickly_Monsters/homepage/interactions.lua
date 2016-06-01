@@ -5,16 +5,23 @@ require("homepage.monster")
 
 -- Local variables go HERE
 
+-- TODO: List of each bar
 local monster;
 local feedIcon;
 local icons;
 local hungerBar;
+local happinessBar;
+local hygieneBar;
+local energyBar;
+local expBar;
 
 function getAllVariables()
     monster = getMonster()
-    feedIcon = getFeedIcon()
-    hungerBar = getHungerBar()
     icons = {feedIcon}
+
+    -- This does not make sense
+    -- feedIcon = getFeedIcon()
+    -- hungerBar = getHungerBar()
 end
 
 -- -------------------------------------------------------------------------------
@@ -22,15 +29,26 @@ end
 -- Setup The Needs Bars Here
 
 function setupAllNeedsBars()
-    hungerBar = setUpNeedBar("img/others/HappinessBar.png", 10)
-    happinessBar = setUpNeedBar("img/others/HappinessBar.png", 130)
+    local startX = 0
+    local spacing = 105
+
+    -- TODO: Update Bar files
+    hungerBar = setUpNeedBar("img/others/HappinessBar.png", startX)
+    happinessBar = setUpNeedBar("img/others/HappinessBar.png", startX + spacing)
+    hygieneBar = setUpNeedBar("img/others/HygieneBar.png", startX + spacing*2)
+    energyBar = setUpNeedBar("img/others/EnergyBar.png", startX + spacing*3)
+    expBar = setUpNeedBar("img/others/EnergyBar.png", startX + spacing*4)
 
 
-    -- Set All Needs Decrement rate
-    setHungerLvlDecreaseRate(1000) -- 1000 = 1sec
+    -- Set All Needs Decrement rate (1000 = 1sec)
+    setHungerLvlDecreaseRate(1000)
 
     -- Set All Needs Level (From Save File Later)
     setNeedLevel(hungerBar, 0.8)
+    setNeedLevel(happinessBar, 0.8)
+    setNeedLevel(hygieneBar, 0.8)
+    setNeedLevel(energyBar, 0.8)
+    setNeedLevel(expBar, 0.8)
 end
 
 function setUpNeedBar(fileName, left)
