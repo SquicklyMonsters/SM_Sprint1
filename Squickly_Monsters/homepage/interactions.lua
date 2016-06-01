@@ -22,10 +22,15 @@ end
 -- Setup The Needs Bars Here
 
 function setupAllNeedsBars()
-    hungerBar = setUpHungerBar("img/others/widget-progress-view.png")
+    hungerBar = setUpNeedBar("img/others/HappinessBar.png", 60)
+    --happinessBar = setUp
+    --hungerBar.x = 60
+
+    setHungerLvlDecreaseRate(1000) -- 1000 = 1sec
+
 end
 
-function setUpHungerBar(fileName)
+function setUpNeedBar(fileName, left)
     local options = {
         width = 64,
         height = 64,
@@ -35,7 +40,7 @@ function setUpHungerBar(fileName)
     }
     local progressSheet = graphics.newImageSheet( fileName, options )
 
-    hungerBar = widget.newProgressView(
+    return widget.newProgressView(
         {
             sheet = progressSheet,
             fillOuterMiddleFrame = 2,
@@ -44,15 +49,12 @@ function setUpHungerBar(fileName)
             fillInnerMiddleFrame = 5,
             fillWidth = 0,
             fillHeight = 10,
-            left = display.contentCenterX - 50,
+            left = left,
             top = 50,
             width = 100,
             isAnimated = true
         }
     )
-    setHungerLvlDecreaseRate(1000) -- 1000 = 1sec
-
-    return hungerBar
 end
 
 -- -------------------------------------------------------------------------------
