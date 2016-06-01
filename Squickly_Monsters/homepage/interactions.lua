@@ -18,10 +18,6 @@ local expBar;
 function getAllVariables()
     monster = getMonster()
     icons = {feedIcon}
-
-    -- This does not make sense
-    -- feedIcon = getFeedIcon()
-    -- hungerBar = getHungerBar()
 end
 
 -- -------------------------------------------------------------------------------
