@@ -26,19 +26,8 @@ local hygieneBar;
 local energyBar;
 local expBar;
 
-function getAllVariables()
+function cacheVariables()
     monster = getMonster()
-    feedIcon = getFeedIcon()
-    sleepIcon = getSleepIcon()
-    wakeupIcon = getWakeupIcon()
-    cleanIcon = getCleanIcon()
-    playIcon = getPlayIcon()
-    hungerBar = getHungerBar()
-    happinessBar = getHappinessBar()
-    hygieneBar = getHygieneBar()
-    energyBar = getEnergyBar()
-    expBar = getExpBar()
-
     icons = {feedIcon, sleepIcon, cleanIcon, playIcon}
 end
 
@@ -273,7 +262,7 @@ end
 -- Add All Event Listeners Here
 
 function addListeners()
-    getAllVariables()
+    cacheVariables()
     monster:addEventListener("touch", interactionsToggle)
     feedIcon:addEventListener("touch", feedButtonClicked)
     sleepIcon:addEventListener("touch", sleepButtonClicked)
