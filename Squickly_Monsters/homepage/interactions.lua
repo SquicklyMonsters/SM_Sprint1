@@ -291,12 +291,6 @@ function hideShowAllIcons(iconsTable)
     yAxis = {65,100,100,65}
     monster = getMonster()
 
-    print("bef")
-    print(currentVisibleList)
-    print("yo")
-    print(iconsTable)
-    print("aft")
-
     if (currentVisibleList == nil) then -- Show Icons
         for i = 1, #iconsTable do
             transition.to(iconsTable[i], 
