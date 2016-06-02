@@ -26,19 +26,8 @@ local hygieneBar;
 local energyBar;
 local expBar;
 
-function getAllVariables()
+function cacheVariables()
     monster = getMonster()
-    feedIcon = getFeedIcon()
-    sleepIcon = getSleepIcon()
-    wakeupIcon = getWakeupIcon()
-    cleanIcon = getCleanIcon()
-    playIcon = getPlayIcon()
-    hungerBar = getHungerBar()
-    happinessBar = getHappinessBar()
-    hygieneBar = getHygieneBar()
-    energyBar = getEnergyBar()
-    expBar = getExpBar()
-
     icons = {feedIcon, sleepIcon, cleanIcon, playIcon}
 end
 
@@ -273,7 +262,7 @@ end
 -- Add All Event Listeners Here
 
 function addListeners()
-    getAllVariables()
+    cacheVariables()
     monster:addEventListener("touch", interactionsToggle)
     feedIcon:addEventListener("touch", feedButtonClicked)
     sleepIcon:addEventListener("touch", sleepButtonClicked)
@@ -291,6 +280,7 @@ end
 
 function feedButtonClicked(event)
     if event.phase == "ended" then
+        changeToWakeupState()
         feedPetAnimation()
         changeNeedsLevel(hungerBar, true, 0.3)
         return true
@@ -300,7 +290,6 @@ end
 function sleepButtonClicked(event)
     if event.phase == "ended" then
         changeToSleepState()
-        setEnergyRateLongTerm(true, 1000, 0.1)
         return true
     end
 end
@@ -308,13 +297,13 @@ end
 function wakeupButtonClicked(event)
     if event.phase == "ended" then
         changeToWakeupState()
-        setEnergyRateLongTerm(false, 1000, 0.1)
         return true
     end
 end
 
 function cleanButtonClicked(event)
     if event.phase == "ended" then
+        changeToWakeupState()
         cleanPetAnimation()
         changeNeedsLevel(hygieneBar, true, 0.3)
         return true
@@ -323,6 +312,7 @@ end
 
 function playButtonClicked(event)
     if event.phase == "ended" then
+        changeToWakeupState()
         playWithPetAnimation()
         changeNeedsLevel(happinessBar, true, 0.3)
         return true
@@ -353,6 +343,7 @@ end
 function changeToSleepState()
     -- FILL FUNCTION HERE
     hideShowAllIcons(monster)
+    setEnergyRateLongTerm(true, 1000, 0.1)
     table.remove(icons, 2)
     table.insert(icons, 2, wakeupIcon)
 end
@@ -360,6 +351,7 @@ end
 function changeToWakeupState()
     -- FILL FUNCTION HERE
     hideShowAllIcons(monster)
+    setEnergyRateLongTerm(false, 1000, 0.1)
     table.remove(icons, 2)
     table.insert(icons, 2, sleepIcon)
 end
