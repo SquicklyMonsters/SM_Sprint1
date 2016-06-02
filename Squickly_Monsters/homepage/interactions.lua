@@ -347,7 +347,6 @@ function feedButtonClicked(event)
     if event.phase == "ended" then
         hideShowAllIcons(iconsList)
         hideShowAllIcons(foodIconsList)
-        changeToWakeupState()
     end
 end
 
