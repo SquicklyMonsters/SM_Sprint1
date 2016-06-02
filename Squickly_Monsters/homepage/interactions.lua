@@ -39,12 +39,15 @@ local hygieneBar;
 local energyBar;
 local expBar;
 
+local isTouchAble;
+
 function cacheVariables()
     monster = getMonster()
     background = getBackground()
     iconsList = {feedIcon, sleepIcon, cleanIcon, playIcon}
     foodIconsList = {moreFoodIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, shopIcon}
     playIconsList = {morePlayIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, shopIcon}
+    isTouchAble = true
 end
 
 -- -------------------------------------------------------------------------------
@@ -289,14 +292,19 @@ function getMorePlayIcon()
     return morePlayIcon
 end
 
+function enableTouch()
+    isTouchAble = true
+end
+
 function hideShowAllIcons(iconsTable)
     xAxis = {75,30,-30,-75} -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
     yAxis = {65,100,100,65}
     monster = getMonster()
 
-
+    isTouchAble = false
     if (iconsTable[1].alpha) == 0 then -- Show Icons
         for i = 1, #iconsTable do
+            iconsTable[i].isTouchEnabled = true
             transition.to(iconsTable[i], 
                 {x = monster.x + xAxis[i], y = monster.y - yAxis[i],
                 alpha = 1, time = 250})
@@ -304,13 +312,15 @@ function hideShowAllIcons(iconsTable)
         currentVisibleList = iconsTable
     else -- Hide Icons
         for i = 1, #iconsTable do
+            iconsTable[i].isTouchEnabled = true
             transition.to(iconsTable[i], 
                 {x = monster.x, y = monster.y,
                 alpha = 0, time = 250})
 
         end 
         currentVisibleList = nil
-    end     
+    end   
+    timer.performWithDelay(250, enableTouch)
 end
 
 -- -------------------------------------------------------------------------------
@@ -338,111 +348,139 @@ end
 
 -- Set reaction when touch monster
 function monsterToggle(event)
-    if event.phase == "ended" then
-        if (currentVisibleList == nil) then
-            hideShowAllIcons(iconsList)
-        else 
-            hideShowAllIcons(currentVisibleList)
+    if isTouchAble then
+        if event.phase == "ended" then
+            if (currentVisibleList == nil) then
+                hideShowAllIcons(iconsList)
+            else 
+                hideShowAllIcons(currentVisibleList)
+            end
         end
     end
 end
 
 function backgroundToggle(event)
-    if event.phase == "ended" then
-        if (currentVisibleList ~= nil) then
-            hideShowAllIcons(currentVisibleList)
+    if isTouchAble then
+        if event.phase == "ended" then
+            if (currentVisibleList ~= nil) then
+                hideShowAllIcons(currentVisibleList)
+            end
         end
     end
 end
 
 function feedButtonClicked(event)
-    if event.phase == "ended" then
-        hideShowAllIcons(iconsList)
-        hideShowAllIcons(foodIconsList)
+    if isTouchAble then
+        if event.phase == "ended" then
+            hideShowAllIcons(iconsList)
+            hideShowAllIcons(foodIconsList)
+        end
     end
 end
 
 function sleepButtonClicked(event)
-    if event.phase == "ended" then
-        hideShowAllIcons(iconsList)
-        changeToSleepState()
+    if isTouchAble then
+        if event.phase == "ended" then
+            hideShowAllIcons(iconsList)
+            changeToSleepState()
+        end
     end
 end
 
 function wakeupButtonClicked(event)
-    if event.phase == "ended" then
-        hideShowAllIcons(iconsList)
-        changeToWakeupState()
+    if isTouchAble then
+        if event.phase == "ended" then
+            hideShowAllIcons(iconsList)
+            changeToWakeupState()
+        end
     end
 end
 
 function cleanButtonClicked(event)
-    if event.phase == "ended" then
-        hideShowAllIcons(iconsList)
-        changeToWakeupState()
-        cleanPetAnimation()
-        changeNeedsLevel(hygieneBar, true, 0.3)
+    if isTouchAble then
+        if event.phase == "ended" then
+            hideShowAllIcons(iconsList)
+            changeToWakeupState()
+            cleanPetAnimation()
+            changeNeedsLevel(hygieneBar, true, 0.3)
+        end
     end
 end
 
 function playButtonClicked(event)
-    if event.phase == "ended" then
-        hideShowAllIcons(iconsList)
-        hideShowAllIcons(playIconsList)
+    if isTouchAble then
+        if event.phase == "ended" then
+            hideShowAllIcons(iconsList)
+            hideShowAllIcons(playIconsList)
+        end
     end
 end
 
 function mostRecentFood1Clicked(event)
-    if event.phase == "ended" then
-        hideShowAllIcons(foodIconsList)
-        changeToWakeupState()
-        feedPetAnimation()
-        changeNeedsLevel(hungerBar, true, 0.3)
+    if isTouchAble then
+        if event.phase == "ended" then
+            hideShowAllIcons(foodIconsList)
+            changeToWakeupState()
+            feedPetAnimation()
+            changeNeedsLevel(hungerBar, true, 0.3)
+        end
     end
 end
 
 function mostRecentFood2Clicked(event)
-    if event.phase == "ended" then
-        hideShowAllIcons(foodIconsList)
-        changeToWakeupState()
-        feedPetAnimation()
-        changeNeedsLevel(hungerBar, true, 0.6)
+    if isTouchAble then
+        if event.phase == "ended" then
+            hideShowAllIcons(foodIconsList)
+            changeToWakeupState()
+            feedPetAnimation()
+            changeNeedsLevel(hungerBar, true, 0.6)
+        end
     end
 end
 
 function moreFoodClicked(event)
-    if event.phase == "ended" then
-        hideShowAllIcons(currentVisibleList)
+    if isTouchAble then
+        if event.phase == "ended" then
+            hideShowAllIcons(currentVisibleList)
+        end
     end
 end
 
 function shopButtonClicked(event)
-    if event.phase == "ended" then
-        hideShowAllIcons(currentVisibleList)
+    if isTouchAble then
+        if event.phase == "ended" then
+            hideShowAllIcons(currentVisibleList)
+        end
     end
 end
 
 function mostRecentPlay1Clicked(event)
-    if event.phase == "ended" then
-        hideShowAllIcons(playIconsList)
-        changeToWakeupState()
-        playWithPetAnimation()
-        changeNeedsLevel(happinessBar, true, 0.3)
+    if isTouchAble then
+        if event.phase == "ended" then
+            hideShowAllIcons(playIconsList)
+            changeToWakeupState()
+            playWithPetAnimation()
+            changeNeedsLevel(happinessBar, true, 0.3)
+        end
     end
 end
 
 function mostRecentPlay2Clicked(event)
-    if event.phase == "ended" then
-        hideShowAllIcons(playIconsList)
-        changeToWakeupState()
-        playWithPetAnimation()
-        changeNeedsLevel(happinessBar, true, 0.6)
+    if isTouchAble then
+        if event.phase == "ended" then
+            hideShowAllIcons(playIconsList)
+            changeToWakeupState()
+            playWithPetAnimation()
+            changeNeedsLevel(happinessBar, true, 0.6)
+        end
     end
 end
 
 function morePlayClicked(event)
-    if event.phase == "ended" then
-        hideShowAllIcons(currentVisibleList)
+    if isTouchAble then
+        if event.phase == "ended" then
+            hideShowAllIcons(currentVisibleList)
+        end
     end
 end
 
