@@ -286,12 +286,12 @@ function getMorePlayIcon()
     return morePlayIcon
 end
 
-function hideShowAllIcons(iconsTable)
+function hideShowAllIcons(iconsTable, show)
     xAxis = {75,30,-30,-75} -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
     yAxis = {65,100,100,65}
     monster = getMonster()
 
-    if (currentVisibleList == nil) then -- Show Icons
+    if (iconsTable[1].alpha) == 0 then -- Show Icons
         for i = 1, #iconsTable do
             transition.to(iconsTable[i], 
                 {x = monster.x + xAxis[i], y = monster.y - yAxis[i],
@@ -303,6 +303,7 @@ function hideShowAllIcons(iconsTable)
             transition.to(iconsTable[i], 
                 {x = monster.x, y = monster.y,
                 alpha = 0, time = 250})
+
         end 
         currentVisibleList = nil
     end     
@@ -331,10 +332,10 @@ end
 -- Set reaction when touch monster
 function interactionsToggle(event)
     if event.phase == "ended" then
-        if (currentVisibleList ~= nil) then
-            hideShowAllIcons(currentVisibleList)
-        else
+        if (currentVisibleList == nil) then
             hideShowAllIcons(iconsList)
+        else 
+            hideShowAllIcons(currentVisibleList)
         end
     end
 end
