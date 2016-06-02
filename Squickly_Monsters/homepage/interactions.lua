@@ -1,11 +1,13 @@
 local widget = require( "widget" )
 require("homepage.monster")
+require("homepage.background")
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
 -- TODO: List of each bar
 local monster;
+local background;
 
 local hunger_tm; -- for rate timer loop
 local happiness_tm; -- for rate timer loop
@@ -39,6 +41,7 @@ local expBar;
 
 function cacheVariables()
     monster = getMonster()
+    background = getBackground()
     iconsList = {feedIcon, sleepIcon, cleanIcon, playIcon}
     foodIconsList = {moreFoodIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, shopIcon}
     playIconsList = {morePlayIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, shopIcon}
@@ -315,7 +318,8 @@ end
 
 function addListeners()
     cacheVariables()
-    monster:addEventListener("touch", interactionsToggle)
+    monster:addEventListener("touch", monsterToggle)
+    background:addEventListener("touch", backgroundToggle)
     feedIcon:addEventListener("touch", feedButtonClicked)
     sleepIcon:addEventListener("touch", sleepButtonClicked)
     wakeupIcon:addEventListener("touch", wakeupButtonClicked)
@@ -333,11 +337,19 @@ function addListeners()
 end
 
 -- Set reaction when touch monster
-function interactionsToggle(event)
+function monsterToggle(event)
     if event.phase == "ended" then
         if (currentVisibleList == nil) then
             hideShowAllIcons(iconsList)
         else 
+            hideShowAllIcons(currentVisibleList)
+        end
+    end
+end
+
+function backgroundToggle(event)
+    if event.phase == "ended" then
+        if (currentVisibleList ~= nil) then
             hideShowAllIcons(currentVisibleList)
         end
     end
