@@ -46,8 +46,8 @@ end
 -- Setup The Needs Bars Here
 
 function setupAllNeedsBars()
-    local startX = 0
-    local spacing = 105
+    local startX = 10
+    local spacing = 95
 
     -- TODO: Update Bar files
     hungerBar = setUpNeedBar("img/others/HappinessBar.png", startX)
@@ -92,7 +92,7 @@ function setUpNeedBar(fileName, left)
             fillHeight = 10,
             left = left,
             top = 50,
-            width = 100,
+            width = 80,
             isAnimated = true
         }
     )
