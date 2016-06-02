@@ -298,19 +298,6 @@ function hideShowAllIcons(iconsTable)
                 alpha = 1, time = 250})
         end
         currentVisibleList = iconsTable
-    elseif (currentVisibleList ~= iconsTable) then 
-        for i = 1, #currentVisibleList do -- Hide current Icons
-            transition.to(currentVisibleList[i], 
-                {x = monster.x, y = monster.y,
-                alpha = 0, time = 250})
-        end 
-
-        for i = 1, #iconsTable do -- Show New Icons
-            transition.to(iconsTable[i], 
-                {x = monster.x + xAxis[i], y = monster.y - yAxis[i],
-                alpha = 1, time = 250})
-        end
-        currentVisibleList = iconsTable
     else -- Hide Icons
         for i = 1, #iconsTable do
             transition.to(iconsTable[i], 
@@ -354,6 +341,7 @@ end
 
 function feedButtonClicked(event)
     if event.phase == "ended" then
+        hideShowAllIcons(iconsList)
         hideShowAllIcons(foodIconsList)
         changeToWakeupState()
     end
@@ -384,6 +372,7 @@ end
 
 function playButtonClicked(event)
     if event.phase == "ended" then
+        hideShowAllIcons(iconsList)
         hideShowAllIcons(playIconsList)
     end
 end
