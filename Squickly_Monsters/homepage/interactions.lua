@@ -402,7 +402,7 @@ function mostRecentFood2Clicked(event)
         hideShowAllIcons(foodIconsList)
         changeToWakeupState()
         feedPetAnimation()
-        changeNeedsLevel(hungerBar, true, 0.3)
+        changeNeedsLevel(hungerBar, true, 0.6)
     end
 end
 
@@ -432,7 +432,7 @@ function mostRecentPlay2Clicked(event)
         hideShowAllIcons(playIconsList)
         changeToWakeupState()
         playWithPetAnimation()
-        changeNeedsLevel(happinessBar, true, 0.3)
+        changeNeedsLevel(happinessBar, true, 0.6)
     end
 end
 
