@@ -294,6 +294,9 @@ function hideShowAllIcons(iconsTable)
     yAxis = {65,100,100,65}
     monster = getMonster()
 
+    if (iconsTable == nil) then
+        return
+    end
 
     if (iconsTable[1].alpha) == 0 then -- Show Icons
         for i = 1, #iconsTable do
