@@ -18,7 +18,18 @@ local sleepIcon;
 local wakeupIcon;
 local cleanIcon;
 local playIcon;
-local icons; -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
+local mostRecentFoodIcon1;
+local mostRecentFoodIcon2;
+local moreFoodIcon;
+local shopIcon;
+local mostRecentPlayIcon1;
+local mostRecentPlayIcon2;
+local morePlayIcon;
+
+local iconsList; -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
+local foodIconsList;
+local playIconsList;
+local currentVisibleList;
 
 local hungerBar;
 local happinessBar;
@@ -28,7 +39,9 @@ local expBar;
 
 function cacheVariables()
     monster = getMonster()
-    icons = {feedIcon, sleepIcon, cleanIcon, playIcon}
+    iconsList = {feedIcon, sleepIcon, cleanIcon, playIcon}
+    foodIconsList = {moreFoodIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, shopIcon}
+    playIconsList = {morePlayIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, shopIcon}
 end
 
 -- -------------------------------------------------------------------------------
@@ -96,6 +109,13 @@ function setUpAllIcons()
     wakeupIcon = setUpIcon("img/others/wakeupIcon.png", 0.7)
     cleanIcon = setUpIcon("img/others/cleanIcon.png", 0.5)
     playIcon = setUpIcon("img/others/playIcon.png", 0.75)
+    mostRecentFoodIcon1 = setUpIcon("img/others/cupcakeIcon.png", 0.75)
+    mostRecentFoodIcon2 = setUpIcon("img/others/milkIcon.png", 0.5)
+    moreFoodIcon = setUpIcon("img/others/optionsIcon.png", 0.75)
+    shopIcon = setUpIcon("img/others/shopIcon.png", 0.5)
+    mostRecentPlayIcon1 = setUpIcon("img/others/legomanIcon.png", 0.75)
+    mostRecentPlayIcon2 = setUpIcon("img/others/footballIcon.png", 0.75)
+    morePlayIcon = setUpIcon("img/others/optionsIcon.png", 0.75)
 end
 
 function setUpIcon(img, scale)
@@ -238,23 +258,66 @@ function getPlayIcon()
     return playIcon
 end
 
-function hideShowAllIcons()
+function getMostRecentFoodIcon1()
+    return mostRecentFoodIcon1
+end
+
+function getMostRecentFoodIcon2()
+    return mostRecentFoodIcon2
+end
+
+function getMoreFoodIcon()
+    return moreFoodIcon
+end
+
+function getShopIcon()
+    return shopIcon
+end
+
+function getMostRecentPlayIcon1()
+    return mostRecentPlayIcon1
+end
+
+function getMostRecentPlayIcon2()
+    return mostRecentPlayIcon2
+end
+
+function getMorePlayIcon()
+    return morePlayIcon
+end
+
+function hideShowAllIcons(iconsTable)
     xAxis = {75,30,-30,-75} -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
     yAxis = {65,100,100,65}
     monster = getMonster()
 
-    if (icons[1].alpha == 0) then -- Show Icons
-        for i = 1, #icons do
-            transition.to(icons[i], 
+    if (currentVisibleList == nil) then -- Show Icons
+        for i = 1, #iconsTable do
+            transition.to(iconsTable[i], 
                 {x = monster.x + xAxis[i], y = monster.y - yAxis[i],
                 alpha = 1, time = 250})
         end
-    else -- Hide Icons
-        for i = 1, #icons do
-            transition.to(icons[i], 
+        currentVisibleList = iconsTable
+    elseif (currentVisibleList ~= iconsTable) then 
+        for i = 1, #currentVisibleList do -- Hide current Icons
+            transition.to(currentVisibleList[i], 
                 {x = monster.x, y = monster.y,
                 alpha = 0, time = 250})
         end 
+
+        for i = 1, #iconsTable do -- Show New Icons
+            transition.to(iconsTable[i], 
+                {x = monster.x + xAxis[i], y = monster.y - yAxis[i],
+                alpha = 1, time = 250})
+        end
+        currentVisibleList = iconsTable
+    else -- Hide Icons
+        for i = 1, #iconsTable do
+            transition.to(iconsTable[i], 
+                {x = monster.x, y = monster.y,
+                alpha = 0, time = 250})
+        end 
+        currentVisibleList = nil
     end     
 end
 
@@ -269,53 +332,113 @@ function addListeners()
     wakeupIcon:addEventListener("touch", wakeupButtonClicked)
     cleanIcon:addEventListener("touch", cleanButtonClicked)
     playIcon:addEventListener("touch", playButtonClicked)
+    mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
+    mostRecentFoodIcon2:addEventListener("touch", mostRecentFood2Clicked)
+    moreFoodIcon:addEventListener("touch", moreFoodClicked)
+    shopIcon:addEventListener("touch", shopButtonClicked)
+    mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
+    mostRecentPlayIcon2:addEventListener("touch", mostRecentPlay2Clicked)
+    morePlayIcon:addEventListener("touch", morePlayClicked)
 end
 
 -- Set reaction when touch monster
 function interactionsToggle(event)
     if event.phase == "ended" then
-        hideShowAllIcons()
+        if (currentVisibleList ~= nil) then
+            hideShowAllIcons(currentVisibleList)
+        else
+            hideShowAllIcons(iconsList)
+        end
     end
 end
 
 function feedButtonClicked(event)
     if event.phase == "ended" then
+        hideShowAllIcons(foodIconsList)
         changeToWakeupState()
-        feedPetAnimation()
-        changeNeedsLevel(hungerBar, true, 0.3)
-        return true
     end
 end
 
 function sleepButtonClicked(event)
     if event.phase == "ended" then
+        hideShowAllIcons(iconsList)
         changeToSleepState()
-        return true
     end
 end
 
 function wakeupButtonClicked(event)
     if event.phase == "ended" then
+        hideShowAllIcons(iconsList)
         changeToWakeupState()
-        return true
     end
 end
 
 function cleanButtonClicked(event)
     if event.phase == "ended" then
+        hideShowAllIcons(iconsList)
         changeToWakeupState()
         cleanPetAnimation()
         changeNeedsLevel(hygieneBar, true, 0.3)
-        return true
     end
 end
 
 function playButtonClicked(event)
     if event.phase == "ended" then
+        hideShowAllIcons(playIconsList)
+    end
+end
+
+function mostRecentFood1Clicked(event)
+    if event.phase == "ended" then
+        hideShowAllIcons(foodIconsList)
+        changeToWakeupState()
+        feedPetAnimation()
+        changeNeedsLevel(hungerBar, true, 0.3)
+    end
+end
+
+function mostRecentFood2Clicked(event)
+    if event.phase == "ended" then
+        hideShowAllIcons(foodIconsList)
+        changeToWakeupState()
+        feedPetAnimation()
+        changeNeedsLevel(hungerBar, true, 0.3)
+    end
+end
+
+function moreFoodClicked(event)
+    if event.phase == "ended" then
+        hideShowAllIcons(currentVisibleList)
+    end
+end
+
+function shopButtonClicked(event)
+    if event.phase == "ended" then
+        hideShowAllIcons(currentVisibleList)
+    end
+end
+
+function mostRecentPlay1Clicked(event)
+    if event.phase == "ended" then
+        hideShowAllIcons(playIconsList)
         changeToWakeupState()
         playWithPetAnimation()
         changeNeedsLevel(happinessBar, true, 0.3)
-        return true
+    end
+end
+
+function mostRecentPlay2Clicked(event)
+    if event.phase == "ended" then
+        hideShowAllIcons(playIconsList)
+        changeToWakeupState()
+        playWithPetAnimation()
+        changeNeedsLevel(happinessBar, true, 0.3)
+    end
+end
+
+function morePlayClicked(event)
+    if event.phase == "ended" then
+        hideShowAllIcons(currentVisibleList)
     end
 end
 
@@ -325,33 +448,26 @@ end
 function feedPetAnimation()
     setMonsterSequence("happy")
     timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
-    hideShowAllIcons(monster)
 end
 
 function cleanPetAnimation()
     setMonsterSequence("happy")
     timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
-    hideShowAllIcons(monster)
 end
 
 function playWithPetAnimation()
     setMonsterSequence("happy")
     timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
-    hideShowAllIcons(monster)
 end
 
 function changeToSleepState()
-    -- FILL FUNCTION HERE
-    hideShowAllIcons(monster)
     setEnergyRateLongTerm(true, 1000, 0.1)
-    table.remove(icons, 2)
-    table.insert(icons, 2, wakeupIcon)
+    table.remove(iconsList, 2)
+    table.insert(iconsList, 2, wakeupIcon)
 end
 
 function changeToWakeupState()
-    -- FILL FUNCTION HERE
-    hideShowAllIcons(monster)
     setEnergyRateLongTerm(false, 1000, 0.1)
-    table.remove(icons, 2)
-    table.insert(icons, 2, sleepIcon)
+    table.remove(iconsList, 2)
+    table.insert(iconsList, 2, sleepIcon)
 end

@@ -33,7 +33,7 @@ function setUpMonster(fileName)
         {
             name = "happy",
             start = 6,
-            count = 8,
+            count = 12,
             time = 1600,
             loopcount = 0,
             loopdirection = "forward"
