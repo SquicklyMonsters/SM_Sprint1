@@ -291,6 +291,13 @@ function hideShowAllIcons(iconsTable)
     yAxis = {65,100,100,65}
     monster = getMonster()
 
+    print("List")
+    print(iconsList)
+    print(playIconsList)
+    print("bef")
+    print(currentVisibleList)
+    print(iconsTable)
+    print("aft")
     if (currentVisibleList == nil) then -- Show Icons
         for i = 1, #iconsTable do
             transition.to(iconsTable[i], 
@@ -332,10 +339,12 @@ function addListeners()
     wakeupIcon:addEventListener("touch", wakeupButtonClicked)
     cleanIcon:addEventListener("touch", cleanButtonClicked)
     playIcon:addEventListener("touch", playButtonClicked)
+
     mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
     mostRecentFoodIcon2:addEventListener("touch", mostRecentFood2Clicked)
     moreFoodIcon:addEventListener("touch", moreFoodClicked)
     shopIcon:addEventListener("touch", shopButtonClicked)
+
     mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
     mostRecentPlayIcon2:addEventListener("touch", mostRecentPlay2Clicked)
     morePlayIcon:addEventListener("touch", morePlayClicked)
