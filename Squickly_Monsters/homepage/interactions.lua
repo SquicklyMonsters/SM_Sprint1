@@ -1,11 +1,13 @@
 local widget = require( "widget" )
 require("homepage.monster")
+require("homepage.background")
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
 -- TODO: List of each bar
 local monster;
+local background;
 
 local hunger_tm; -- for rate timer loop
 local happiness_tm; -- for rate timer loop
@@ -39,6 +41,7 @@ local expBar;
 
 function cacheVariables()
     monster = getMonster()
+    background = getBackground()
     iconsList = {feedIcon, sleepIcon, cleanIcon, playIcon}
     foodIconsList = {moreFoodIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, shopIcon}
     playIconsList = {morePlayIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, shopIcon}
@@ -291,6 +294,7 @@ function hideShowAllIcons(iconsTable)
     yAxis = {65,100,100,65}
     monster = getMonster()
 
+
     if (iconsTable[1].alpha) == 0 then -- Show Icons
         for i = 1, #iconsTable do
             transition.to(iconsTable[i], 
@@ -314,23 +318,26 @@ end
 
 function addListeners()
     cacheVariables()
-    monster:addEventListener("touch", interactionsToggle)
+    monster:addEventListener("touch", monsterToggle)
+    background:addEventListener("touch", backgroundToggle)
     feedIcon:addEventListener("touch", feedButtonClicked)
     sleepIcon:addEventListener("touch", sleepButtonClicked)
     wakeupIcon:addEventListener("touch", wakeupButtonClicked)
     cleanIcon:addEventListener("touch", cleanButtonClicked)
     playIcon:addEventListener("touch", playButtonClicked)
+
     mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
     mostRecentFoodIcon2:addEventListener("touch", mostRecentFood2Clicked)
     moreFoodIcon:addEventListener("touch", moreFoodClicked)
     shopIcon:addEventListener("touch", shopButtonClicked)
+
     mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
     mostRecentPlayIcon2:addEventListener("touch", mostRecentPlay2Clicked)
     morePlayIcon:addEventListener("touch", morePlayClicked)
 end
 
 -- Set reaction when touch monster
-function interactionsToggle(event)
+function monsterToggle(event)
     if event.phase == "ended" then
         if (currentVisibleList == nil) then
             hideShowAllIcons(iconsList)
@@ -340,11 +347,18 @@ function interactionsToggle(event)
     end
 end
 
+function backgroundToggle(event)
+    if event.phase == "ended" then
+        if (currentVisibleList ~= nil) then
+            hideShowAllIcons(currentVisibleList)
+        end
+    end
+end
+
 function feedButtonClicked(event)
     if event.phase == "ended" then
         hideShowAllIcons(iconsList)
         hideShowAllIcons(foodIconsList)
-        changeToWakeupState()
     end
 end
 
@@ -392,7 +406,7 @@ function mostRecentFood2Clicked(event)
         hideShowAllIcons(foodIconsList)
         changeToWakeupState()
         feedPetAnimation()
-        changeNeedsLevel(hungerBar, true, 0.3)
+        changeNeedsLevel(hungerBar, true, 0.6)
     end
 end
 
@@ -422,7 +436,7 @@ function mostRecentPlay2Clicked(event)
         hideShowAllIcons(playIconsList)
         changeToWakeupState()
         playWithPetAnimation()
-        changeNeedsLevel(happinessBar, true, 0.3)
+        changeNeedsLevel(happinessBar, true, 0.6)
     end
 end
 
