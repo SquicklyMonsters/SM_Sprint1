@@ -148,27 +148,27 @@ end
 
 local function hungerRateEventHandler( event )
     local params = event.source.params
-    toggleHungerLevel(params.increase,params.amount)
+    changeNeedsLevel(hungerBar, params.increase,params.amount)
 end
 
 local function happinessRateEventHandler( event )
     local params = event.source.params
-    toggleHappinessLevel(params.increase,params.amount)
+    changeNeedsLevel(happinessBar, params.increase,params.amount)
 end
 
 local function hygieneRateEventHandler( event )
     local params = event.source.params
-    toggleHygieneLevel(params.increase,params.amount)
+    changeNeedsLevel(hygieneBar, params.increase,params.amount)
 end
 
 local function energyRateEventHandler( event )
     local params = event.source.params
-    toggleEnergyLevel(params.increase,params.amount)
+    changeNeedsLevel(energyBar, params.increase,params.amount)
 end
 
 local function expRateEventHandler( event )
     local params = event.source.params
-    toggleExpLevel(params.increase,params.amount)
+    changeNeedsLevel(expBar, params.increase,params.amount)
 end
 
 -- ------------------------------------------------
@@ -216,45 +216,13 @@ function setExpRateLongTerm(increasing, rate, amount)
 end
 
 -- ------------------------------------------------
--- Toggling a certain amount (Still needs to have more calculations later)
+-- Changing by a certain amount (Still needs to have more calculations later)
 
-function toggleHungerLevel(increase, amount)
+function changeNeedsLevel(needsBar, increase, amount)
     if (increase) then
-        hungerBar:setProgress(hungerBar:getProgress() + amount)
+        needsBar:setProgress(needsBar:getProgress() + amount)
     else
-        hungerBar:setProgress(hungerBar:getProgress() - amount)
-    end
-end
-
-function toggleHappinessLevel(increase, amount)
-    if (increase) then
-        happinessBar:setProgress(happinessBar:getProgress() + amount)
-    else
-        happinessBar:setProgress(happinessBar:getProgress() - amount)
-    end
-end
-
-function toggleHygieneLevel(increase, amount)
-    if (increase) then
-        hygieneBar:setProgress(hygieneBar:getProgress() + amount)
-    else
-        hygieneBar:setProgress(hygieneBar:getProgress() - amount)
-    end
-end
-
-function toggleEnergyLevel(increase, amount)
-    if (increase) then
-        energyBar:setProgress(energyBar:getProgress() + amount)
-    else
-        energyBar:setProgress(energyBar:getProgress() - amount)
-    end
-end
-
-function toggleExpLevel(increase, amount)
-    if (increase) then
-        expBar:setProgress(expBar:getProgress() + amount)
-    else
-        expBar:setProgress(expBar:getProgress() - amount)
+        needsBar:setProgress(needsBar:getProgress() - amount)
     end
 end
 
@@ -324,7 +292,7 @@ end
 function feedButtonClicked(event)
     if event.phase == "ended" then
         feedPetAnimation()
-        toggleHungerLevel(true, 0.1)
+        changeNeedsLevel(hungerBar, true, 0.3)
         return true
     end
 end
@@ -348,7 +316,7 @@ end
 function cleanButtonClicked(event)
     if event.phase == "ended" then
         cleanPetAnimation()
-        toggleHygieneLevel(true, 0.1)
+        changeNeedsLevel(hygieneBar, true, 0.3)
         return true
     end
 end
@@ -356,7 +324,7 @@ end
 function playButtonClicked(event)
     if event.phase == "ended" then
         playWithPetAnimation()
-        toggleHappinessLevel(true, 0.1)
+        changeNeedsLevel(happinessBar, true, 0.3)
         return true
     end
 end
