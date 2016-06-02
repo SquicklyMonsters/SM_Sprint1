@@ -25,6 +25,14 @@ local wakeupIcon;
 local cleanIcon;
 local playIcon;
 
+local mostRecentFoodIcon1;
+local mostRecentFoodIcon2;
+local moreFoodIcon;
+local shopIcon;
+local mostRecentPlayIcon1;
+local mostRecentPlayIcon2;
+local morePlayIcon;
+
 local hungerBar;
 local happinessBar;
 local hygieneBar;
@@ -70,6 +78,13 @@ function scene:create( event )
     wakeupIcon = getWakeupIcon()
     cleanIcon = getCleanIcon()
     playIcon = getPlayIcon()
+    mostRecentFoodIcon1 = getMostRecentFoodIcon1()
+    mostRecentFoodIcon2 = getMostRecentFoodIcon2()
+    moreFoodIcon = getMoreFoodIcon()
+    shopIcon = getShopIcon()
+    mostRecentPlayIcon1 = getMostRecentPlayIcon1()
+    mostRecentPlayIcon2 = getMostRecentPlayIcon2()
+    morePlayIcon = getMorePlayIcon()
 
 	-- Add display objects into group
     -- ============BACK===============
@@ -82,6 +97,13 @@ function scene:create( event )
     front:insert(wakeupIcon)
     front:insert(cleanIcon)
     front:insert(playIcon)
+    front:insert(mostRecentFoodIcon1)
+    front:insert(mostRecentFoodIcon2)
+    front:insert(moreFoodIcon)
+    front:insert(shopIcon)
+    front:insert(mostRecentPlayIcon1)
+    front:insert(mostRecentPlayIcon2)
+    front:insert(morePlayIcon)
     front:insert(hungerBar)
     front:insert(happinessBar)
     front:insert(hygieneBar)
