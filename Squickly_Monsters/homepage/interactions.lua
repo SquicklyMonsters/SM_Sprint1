@@ -286,7 +286,7 @@ function getMorePlayIcon()
     return morePlayIcon
 end
 
-function hideShowAllIcons(iconsTable, show)
+function hideShowAllIcons(iconsTable)
     xAxis = {75,30,-30,-75} -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
     yAxis = {65,100,100,65}
     monster = getMonster()
