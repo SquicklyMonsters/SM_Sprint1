@@ -7,12 +7,14 @@ require("homepage.monster")
 
 -- TODO: List of each bar
 local monster;
+
 local feedIcon;
 local sleepIcon;
 local wakeupIcon;
 local cleanIcon;
 local playIcon;
 local icons; -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
+
 local hungerBar;
 local happinessBar;
 local hygieneBar;
@@ -27,6 +29,10 @@ function getAllVariables()
     cleanIcon = getCleanIcon()
     playIcon = getPlayIcon()
     hungerBar = getHungerBar()
+    happinessBar = getHappinessBar()
+    hygieneBar = getHygieneBar()
+    energyBar = getEnergyBar()
+    expBar = getExpBar()
 
     icons = {feedIcon, sleepIcon, cleanIcon, playIcon}
 end
@@ -46,16 +52,19 @@ function setupAllNeedsBars()
     energyBar = setUpNeedBar("img/others/EnergyBar.png", startX + spacing*3)
     expBar = setUpNeedBar("img/others/EnergyBar.png", startX + spacing*4)
 
+    -- Set All Needs Level (From Save File Later)
+    setNeedLevel(hungerBar, 0.5)
+    setNeedLevel(happinessBar, 0.5)
+    setNeedLevel(hygieneBar, 0.5)
+    setNeedLevel(energyBar, 0.5)
+    setNeedLevel(expBar, 0.5)
 
     -- Set All Needs Decrement rate (1000 = 1sec)
-    setHungerLvlDecreaseRate(1000)
-
-    -- Set All Needs Level (From Save File Later)
-    setNeedLevel(hungerBar, 0.8)
-    setNeedLevel(happinessBar, 0.8)
-    setNeedLevel(hygieneBar, 0.8)
-    setNeedLevel(energyBar, 0.8)
-    setNeedLevel(expBar, 0.8)
+    setHungerRateLongTerm(false, 1000, 0.2)
+    setHappinessRateLongTerm(false, 1000, 0.2)
+    setHygieneRateLongTerm(false, 1000, 0.2)
+    setEnergyRateLongTerm(false, 1000, 0.2)
+    setExpRateLongTerm(true, 1000, 0.2)
 end
 
 function setUpNeedBar(fileName, left)
@@ -112,17 +121,108 @@ function getHungerBar()
     return hungerBar
 end
 
+function getHappinessBar()
+    return happinessBar
+end
+
+function getHygieneBar()
+    return hygieneBar
+end
+
+function getEnergyBar()
+    return energyBar
+end
+
+function getExpBar()
+    return expBar
+end
+
 function setNeedLevel(need, lvl)
     need:setProgress(lvl)
 end
 
--- Add hunger decreasing loop
-function setHungerLvlDecreaseRate(rate)
-    timer.performWithDelay(rate, decreaseHungerLevel, -1) -- 1000 = 1sec
+-- ------------------------------------------------
+-- Adds forever increasing/decreasing needs level
+function setHungerRateLongTerm(increasing, rate, amount) -- increasing is boolean val which shows that rate should increase if true
+    if (increasing) then                                 -- rate is frequency of the change, amount is the magnitude of change
+        timer.performWithDelay(rate, toggleHungerLevel(true, amount), -1) -- rate 1000 = 1sec, -1 is infinite interations
+    else
+        timer.performWithDelay(rate, toggleHungerLevel(false, amount), -1)
+    end
 end
 
-function decreaseHungerLevel()
-    hungerBar:setProgress(hungerBar:getProgress() - 0.1)
+function setHappinessRateLongTerm(increasing, rate, amount) -- increasing is boolean val which shows that rate should increase if true
+    if (increasing) then                                    -- rate is frequency of the change, amount is the magnitude of change
+        timer.performWithDelay(rate, toggleHappinessLevel(true, amount), -1) -- rate 1000 = 1sec, -1 is infinite interations
+    else
+        timer.performWithDelay(rate, toggleHappinessLevel(false, amount), -1)
+    end
+end
+
+function setHygieneRateLongTerm(increasing, rate, amount) -- increasing is boolean val which shows that rate should increase if true
+    if (increasing) then                                  -- rate is frequency of the change, amount is the magnitude of change
+        timer.performWithDelay(rate, toggleHygieneLevel(true, amount), -1) -- rate 1000 = 1sec, -1 is infinite interations
+    else
+        timer.performWithDelay(rate, toggleHygieneLevel(false, amount), -1)
+    end
+end
+
+function setEnergyRateLongTerm(increasing, rate, amount) -- increasing is boolean val which shows that rate should increase if true
+    if (increasing) then                                 -- rate is frequency of the change, amount is the magnitude of change
+        timer.performWithDelay(rate, toggleEnergyLevel(true, amount), -1) -- rate 1000 = 1sec, -1 is infinite interations
+    else
+        timer.performWithDelay(rate, toggleEnergyLevel(false, amount), -1)
+    end
+end
+
+function setExpRateLongTerm(increasing, rate, amount) -- increasing is boolean val which shows that rate should increase if true
+    if (increasing) then                              -- rate is frequency of the change, amount is the magnitude of change
+        timer.performWithDelay(rate, toggleExpLevel(true, amount), -1) -- rate 1000 = 1sec, -1 is infinite interations
+    else
+        timer.performWithDelay(rate, toggleExpLevel(false, amount), -1)
+    end
+end
+
+-- ------------------------------------------------
+-- Toggling a certain amount (Still needs to have more calculations later)
+function toggleHungerLevel(increase, amount)
+    if (increase) then
+        hungerBar:setProgress(hungerBar:getProgress() + amount)
+    else
+        hungerBar:setProgress(hungerBar:getProgress() - amount)
+    end
+end
+
+function toggleHappinessLevel(increase, amount)
+    if (increase) then
+        happinessBar:setProgress(happinessBar:getProgress() + amount)
+    else
+        happinessBar:setProgress(happinessBar:getProgress() - amount)
+    end
+end
+
+function toggleHygieneLevel(increase, amount)
+    if (increase) then
+        hygieneBar:setProgress(hygieneBar:getProgress() + amount)
+    else
+        hygieneBar:setProgress(hygieneBar:getProgress() - amount)
+    end
+end
+
+function toggleEnergyLevel(increase, amount)
+    if (increase) then
+        energyBar:setProgress(energyBar:getProgress() + amount)
+    else
+        energyBar:setProgress(energyBar:getProgress() - amount)
+    end
+end
+
+function toggleExpLevel(increase, amount)
+    if (increase) then
+        expBar:setProgress(expBar:getProgress() + amount)
+    else
+        expBar:setProgress(expBar:getProgress() - amount)
+    end
 end
 
 -- -------------------------------------------------------------------------------
@@ -193,7 +293,7 @@ end
 function feedButtonClicked(event)
     if event.phase == "ended" then
         feedPetAnimation()
-        hungerBar:setProgress(hungerBar:getProgress() + 0.1)
+        toggleHungerLevel(true, 0.1)
         return true
     end
 end
@@ -201,6 +301,7 @@ end
 function sleepButtonClicked(event)
     if event.phase == "ended" then
         changeToSleepState()
+        setEnergyRateLongTerm(true, 1000, 0.2)
         return true
     end
 end
@@ -208,6 +309,7 @@ end
 function wakeupButtonClicked(event)
     if event.phase == "ended" then
         changeToWakeupState()
+        setEnergyRateLongTerm(false, 1000, 0.2)
         return true
     end
 end
@@ -215,6 +317,7 @@ end
 function cleanButtonClicked(event)
     if event.phase == "ended" then
         cleanPetAnimation()
+        toggleHygieneLevel(true, 0.1)
         return true
     end
 end
@@ -222,6 +325,7 @@ end
 function playButtonClicked(event)
     if event.phase == "ended" then
         playWithPetAnimation()
+        toggleHappinessLevel(true, 0.1)
         return true
     end
 end
