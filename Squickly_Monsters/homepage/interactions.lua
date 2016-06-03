@@ -5,9 +5,9 @@ require("homepage.background")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
--- TODO: List of each bar
 local monster;
 local background;
+local menuBar;
 
 local hunger_tm; -- for rate timer loop
 local happiness_tm; -- for rate timer loop
@@ -43,6 +43,7 @@ local isTouchAble;
 
 function cacheVariables()
     monster = getMonster()
+    menuBar = getMenuBar()
     background = getBackground()
     iconsList = {feedIcon, sleepIcon, cleanIcon, playIcon}
     foodIconsList = {moreFoodIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, shopIcon}
@@ -54,8 +55,8 @@ end
 -- Setup The Needs Bars Here
 
 function setupAllNeedsBars()
-    local startX = 10
-    local spacing = 95
+    local startX = display.contentWidth/10
+    local spacing = display.contentWidth/6
 
     -- TODO: Update Bar files
     hungerBar = setUpNeedBar("img/others/HappinessBar.png", startX)
@@ -81,9 +82,9 @@ end
 
 function setUpNeedBar(fileName, left)
     local options = {
-        width = 64,
+        width = 192,
         height = 64,
-        numFrames = 6,
+        numFrames = 2,
         sheetContentWidth = 384,
         sheetContentHeight = 64
     }
@@ -92,15 +93,15 @@ function setUpNeedBar(fileName, left)
     return widget.newProgressView(
         {
             sheet = progressSheet,
-            fillOuterMiddleFrame = 2,
+            fillOuterMiddleFrame = 1,
             fillOuterWidth = 0,
-            fillOuterHeight = 10,
-            fillInnerMiddleFrame = 5,
+            fillOuterHeight = display.contentHeight/25,
+            fillInnerMiddleFrame = 2,
             fillWidth = 0,
-            fillHeight = 10,
+            fillHeight = display.contentHeight/25,
             left = left,
-            top = 50,
-            width = 80,
+            top = 10,
+            width = display.contentWidth/8,
             isAnimated = true
         }
     )
@@ -346,7 +347,7 @@ function addListeners()
     morePlayIcon:addEventListener("touch", morePlayClicked)
 end
 
--- Set reaction when touch monster
+-- Set reaction when press button
 function monsterToggle(event)
     if isTouchAble then
         if event.phase == "ended" then
@@ -365,6 +366,7 @@ function backgroundToggle(event)
             if (currentVisibleList ~= nil) then
                 hideShowAllIcons(currentVisibleList)
             end
+            menuBar:hide()
         end
     end
 end

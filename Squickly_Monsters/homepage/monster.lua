@@ -42,8 +42,11 @@ function setUpMonster(fileName)
 
     monster = display.newSprite(imageSheet, sequence)
     monster.x = display.contentCenterX
-    monster.y = 225
-    monster:scale(0.5, 0.5)
+    monster.y = display.contentCenterY* 27/16
+    monster:scale(
+                 display.contentWidth/(options.width*4),
+                 display.contentHeight/(options.height*2.5)
+                 )
     monster:play()
 end
 
