@@ -7,10 +7,10 @@ function widget.newPanel( options )                                     -- Setti
     local customOptions = options or {}
     local opt = {}
     opt.location = "right"
-    local default_width = display.contentWidth * 0.3
-    local default_height = display.contentHeight
-    opt.width = customOptions.width or default_width
-    opt.height = customOptions.height or default_height
+    -- local default_width = display.contentWidth * 0.5
+    -- local default_height = display.contentHeight
+    opt.width = customOptions.width
+    opt.height = customOptions.height
     opt.speed = customOptions.speed or 500
     opt.inEasing = customOptions.inEasing or easing.linear
     opt.outEasing = customOptions.outEasing or easing.linear
@@ -41,7 +41,7 @@ function widget.newPanel( options )                                     -- Setti
             options.onComplete = opt.listener
             self.completeState = "hidden"
         end
-        options.x = display.actualContentWidth
+        options.x = display.actualContentWidth - 80
         transition.to( self, options )
     end
     return container

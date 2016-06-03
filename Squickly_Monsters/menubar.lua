@@ -20,43 +20,49 @@ end
 function setUpMenuBar()
   menuBar = widget.newPanel{
     speed = 1000,
+    width = 150,
+    height = 300,
     inEasing = easing.outBack,
     outEasing = easing.outCubic,
   }
   menuBar:show()
   menuBar.background = display.newRect(0, 0, menuBar.width, menuBar.height)
-  menuBar.background:setFillColor(0, 0, 0, 120/255)
+  menuBar.background:setFillColor(1, 1, 1, 120/255)
   menuBar:insert(menuBar.background)
 
-  menuBar.sildeButton = widget.newButton{
-    top = 135,
-    left = 378,
+  local startX = -130
+  local spacingX = 70
+  local middleY = -20
+
+  menuBar.slideButton = widget.newButton{
+    top = startX + (spacingX*3)/2,
+    left = middleY - 55,
     width = 50,
     height = 50,
-    defaultFile = "happy.png",
-    overFile = "angry.png",
+    defaultFile = "img/others/slideButton.png",
+    --overFile = "angry.png",
     onEvent = handleButtonEvent,
   }
 
   menuBar.homeButton = widget.newButton{
-    top = -140,
-    left = -60,
+    top = startX,
+    left = middleY,
     width = 50,
     height = 50,
     defaultFile = "happy.png",
     overFile = "angry.png",
   }
   menuBar.shopButton = widget.newButton{
-    top = -70,
-    left = -60,
+    top = startX + spacingX,
+    left = middleY,
     width = 50,
     height = 50,
     defaultFile = "happy.png",
     overFile = "angry.png",
   }
   menuBar.miniGameButton = widget.newButton{
-    top = -10,
-    left = -60,
+    top = startX + spacingX*2,
+    left = middleY,
     width = 50,
     height = 50,
     defaultFile = "happy.png",
@@ -64,8 +70,8 @@ function setUpMenuBar()
   }
 
   menuBar.settingButton = widget.newButton{
-    top = 10,
-    left = -60,
+    top = startX + spacingX*3,
+    left = middleY,
     width = 50,
     height = 50,
     defaultFile = "happy.png",
@@ -74,9 +80,10 @@ function setUpMenuBar()
 
 
   menuBar:insert(menuBar.slideButton)
-  -- menuBar:insert(menuBar.homeButton)
-  -- menuBar:insert(menuBar.miniGameButton)
-  -- menuBar:insert(menuBar.settingButton)
+  menuBar:insert(menuBar.homeButton)
+  menuBar:insert(menuBar.shopButton)
+  menuBar:insert(menuBar.miniGameButton)
+  menuBar:insert(menuBar.settingButton)
 
 end
 
