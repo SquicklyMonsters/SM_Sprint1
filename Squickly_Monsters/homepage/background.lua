@@ -29,6 +29,10 @@ function setUpBackground()
     background = display.newSprite(backgroundSheet, backgroundSequence)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
+    background:scale(
+                    display.contentWidth/backgroundOption.width, 
+                    display.contentHeight/backgroundOption.height
+                    )
     background:play()
 end
 
