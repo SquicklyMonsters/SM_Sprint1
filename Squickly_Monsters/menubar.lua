@@ -1,8 +1,54 @@
 local widget = require("widget")
 local composser = require("composer")
-require("Npanel")
 
 local menuBar;
+
+--=====================================================================================================================================================
+-- This is sliding panel function. Have 2 command show, hide,
+function widget.newPanel( options )                                     -- Setting Panel : have default value and can be customize
+    local opt = {}
+    opt.location = "right"
+    opt.width = options.width
+    opt.height = options.height
+    opt.speed = options.speed
+    opt.inEasing = options.inEasing
+    opt.outEasing = options.outEasing
+
+    local background = display.newImage(options.imageDir)
+    local container = display.newContainer( opt.width, opt.height )
+    container.x = display.actualContentWidth
+    container.y = display.contentCenterY
+    container:insert(background, true)
+
+    function container:show()                                             -- show function
+        local options = {
+            time = opt.speed,
+            transition = opt.inEasing
+        }
+        if ( opt.listener ) then
+            options.onComplete = opt.listener
+        end
+        options.x = display.actualContentWidth - opt.width + 35
+        self.completeState = "shown"
+        transition.to( self, options )
+    end
+
+    function container:hide()                                           -- hide function
+        local options = {
+            time = opt.speed,
+            transition = opt.outEasing
+        }
+        if ( opt.listener ) then
+            options.onComplete = opt.listener
+        end
+        options.x = display.actualContentWidth - 14
+        self.completeState = "hidden"
+        transition.to( self, options )
+    end
+    return container
+end
+-- ==========================================================================================================================
+
 
 function handleButtonEvent(event)
   local phase = event.phase
@@ -22,11 +68,9 @@ function setUpMenuBar()
     height = 480,
     inEasing = easing.outBack,
     outEasing = easing.outCubic,
+    imageDir = "img/bg/menuBar.png"
   }
-  menuBar.background = display.newImage("img/bg/menuBar.png")
-  menuBar.background:scale(1, 1.1)
-  menuBar:insert(menuBar.background)
-
+  
   menuBar:show()
   menuBar:hide()
 
