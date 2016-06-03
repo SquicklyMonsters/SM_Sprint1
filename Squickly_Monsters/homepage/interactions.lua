@@ -56,7 +56,7 @@ end
 -- Setup The Needs Bars Here
 
 function setupAllNeedsBars()
-    local startX = 10
+    local startX = display.contentWidth/10
     local spacing = 95
 
     -- TODO: Update Bar files

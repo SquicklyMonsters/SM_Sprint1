@@ -15,7 +15,7 @@ function widget.newPanel( options )                                     -- Setti
 
     local background = display.newImage(options.imageDir)
     local container = display.newContainer( opt.width, opt.height )
-    container.x = display.viewableContentWidth
+    container.x = display.contentWidth
     container.y = display.contentCenterY
     container:insert(background, true)
 
@@ -27,7 +27,7 @@ function widget.newPanel( options )                                     -- Setti
         if ( opt.listener ) then
             options.onComplete = opt.listener
         end
-        options.x = display.viewableContentWidth + opt.width*0.1
+        options.x = display.contentWidth - 30
         self.completeState = "shown"
         transition.to( self, options )
     end
@@ -40,7 +40,7 @@ function widget.newPanel( options )                                     -- Setti
         if ( opt.listener ) then
             options.onComplete = opt.listener
         end
-        options.x = display.viewableContentWidth + opt.width*0.67
+        options.x = display.contentWidth + 30
         self.completeState = "hidden"
         transition.to( self, options )
     end
