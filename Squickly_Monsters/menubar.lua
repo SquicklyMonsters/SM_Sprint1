@@ -7,7 +7,6 @@ local menuBar;
 -- This is sliding panel function. Have 2 command show, hide,
 function widget.newPanel( options )                                     -- Setting Panel : have default value and can be customize
     local opt = {}
-    opt.location = "right"
     opt.width = options.width
     opt.height = options.height
     opt.speed = options.speed
@@ -16,7 +15,7 @@ function widget.newPanel( options )                                     -- Setti
 
     local background = display.newImage(options.imageDir)
     local container = display.newContainer( opt.width, opt.height )
-    container.x = display.actualContentWidth
+    container.x = display.viewableContentWidth
     container.y = display.contentCenterY
     container:insert(background, true)
 
@@ -28,7 +27,7 @@ function widget.newPanel( options )                                     -- Setti
         if ( opt.listener ) then
             options.onComplete = opt.listener
         end
-        options.x = display.actualContentWidth - opt.width + 35
+        options.x = display.viewableContentWidth + opt.width*0.1
         self.completeState = "shown"
         transition.to( self, options )
     end
@@ -41,7 +40,7 @@ function widget.newPanel( options )                                     -- Setti
         if ( opt.listener ) then
             options.onComplete = opt.listener
         end
-        options.x = display.actualContentWidth - 14
+        options.x = display.viewableContentWidth + opt.width*0.67
         self.completeState = "hidden"
         transition.to( self, options )
     end
@@ -78,6 +77,7 @@ function setUpMenuBar()
   local spacingX = 70
   local middleY = -25
   local iconsDir = "img/icons/"
+
   menuBar.slideButton = widget.newButton{
     top = startX + (spacingX*3)/2,
     left = middleY - 30,
