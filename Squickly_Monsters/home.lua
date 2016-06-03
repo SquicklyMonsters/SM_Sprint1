@@ -55,6 +55,7 @@ function scene:create( event )
     back = display.newGroup()
     middle = display.newGroup()
     front = display.newGroup()
+    over = display.newGroup()
 
 	-- Set background
     setUpBackground()
@@ -114,8 +115,13 @@ function scene:create( event )
     front:insert(hygieneBar)
     front:insert(energyBar)
     front:insert(expBar)
-		front:insert(menuBar)
+    -- ===========OVER===============
+	over:insert(menuBar)
     -- ===============================
+
+    sceneGroup:insert(back)
+    sceneGroup:insert(middle)
+    sceneGroup:insert(front)
 
     -- Set up all Event Listeners
     addListeners()

@@ -5,7 +5,6 @@ require("homepage.background")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
--- TODO: List of each bar
 local monster;
 local background;
 local menuBar;
@@ -348,7 +347,7 @@ function addListeners()
     morePlayIcon:addEventListener("touch", morePlayClicked)
 end
 
--- Set reaction when touch monster
+-- Set reaction when press button
 function monsterToggle(event)
     if isTouchAble then
         if event.phase == "ended" then
