@@ -87,9 +87,9 @@ function scene:create( event )
     mostRecentPlayIcon2 = getMostRecentPlayIcon2()
     morePlayIcon = getMorePlayIcon()
 
-		-- Set up menu bar
-		setUpMenuBar()
-		menuBar = getMenuBar()
+	-- Set up menu bar
+	setUpMenuBar()
+	menuBar = getMenuBar()
 
 	-- Add display objects into group
     -- ============BACK===============

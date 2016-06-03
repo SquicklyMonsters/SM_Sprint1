@@ -8,6 +8,7 @@ require("homepage.background")
 -- TODO: List of each bar
 local monster;
 local background;
+local menuBar;
 
 local hunger_tm; -- for rate timer loop
 local happiness_tm; -- for rate timer loop
@@ -43,6 +44,7 @@ local isTouchAble;
 
 function cacheVariables()
     monster = getMonster()
+    menuBar = getMenuBar()
     background = getBackground()
     iconsList = {feedIcon, sleepIcon, cleanIcon, playIcon}
     foodIconsList = {moreFoodIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, shopIcon}
@@ -99,7 +101,7 @@ function setUpNeedBar(fileName, left)
             fillWidth = 0,
             fillHeight = 10,
             left = left,
-            top = 50,
+            top = 10,
             width = 80,
             isAnimated = true
         }
@@ -365,6 +367,7 @@ function backgroundToggle(event)
             if (currentVisibleList ~= nil) then
                 hideShowAllIcons(currentVisibleList)
             end
+            menuBar:hide()
         end
     end
 end

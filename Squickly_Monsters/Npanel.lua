@@ -4,21 +4,17 @@ local composer = require("composer")
 --=====================================================================================================================================================
 -- This is sliding panel function. Have 2 command show, hide,
 function widget.newPanel( options )                                     -- Setting Panel : have default value and can be customize
-    local customOptions = options or {}
+    local customOptions = options
     local opt = {}
     opt.location = "right"
-    -- local default_width = display.contentWidth * 0.5
-    -- local default_height = display.contentHeight
     opt.width = customOptions.width
     opt.height = customOptions.height
-    opt.speed = customOptions.speed or 500
-    opt.inEasing = customOptions.inEasing or easing.linear
-    opt.outEasing = customOptions.outEasing or easing.linear
+    opt.speed = customOptions.speed
+    opt.inEasing = customOptions.inEasing
+    opt.outEasing = customOptions.outEasing
 
     local container = display.newContainer( opt.width, opt.height )
-        container.anchorX = 0.0
         container.x = display.actualContentWidth
-        container.anchorY = 0.5
         container.y = display.contentCenterY
     function container:show()                                             -- show function
         local options = {
@@ -27,9 +23,9 @@ function widget.newPanel( options )                                     -- Setti
         }
         if ( opt.listener ) then
             options.onComplete = opt.listener
-            self.completeState = "shown"
         end
-        options.x = display.actualContentWidth - opt.width
+        options.x = display.actualContentWidth - opt.width + 35
+        self.completeState = "shown"
         transition.to( self, options )
     end
     function container:hide()                                           -- hide function
@@ -39,9 +35,9 @@ function widget.newPanel( options )                                     -- Setti
         }
         if ( opt.listener ) then
             options.onComplete = opt.listener
-            self.completeState = "hidden"
         end
-        options.x = display.actualContentWidth - 80
+        options.x = display.actualContentWidth - 14
+        self.completeState = "hidden"
         transition.to( self, options )
     end
     return container
