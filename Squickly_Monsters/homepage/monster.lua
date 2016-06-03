@@ -45,7 +45,7 @@ function setUpMonster(fileName)
     monster.y = display.contentCenterY* 27/16
     monster:scale(
                  display.contentWidth/(options.width*4),
-                 display.contentHeight/(options.height*3)
+                 display.contentHeight/(options.height*2.5)
                  )
     monster:play()
 end

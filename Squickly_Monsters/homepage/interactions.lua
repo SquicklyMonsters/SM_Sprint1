@@ -83,9 +83,9 @@ end
 
 function setUpNeedBar(fileName, left)
     local options = {
-        width = 64,
+        width = 192,
         height = 64,
-        numFrames = 6,
+        numFrames = 2,
         sheetContentWidth = 384,
         sheetContentHeight = 64
     }
@@ -94,16 +94,15 @@ function setUpNeedBar(fileName, left)
     return widget.newProgressView(
         {
             sheet = progressSheet,
-            fillOuterMiddleFrame = 2,
+            fillOuterMiddleFrame = 1,
             fillOuterWidth = 0,
-            fillOuterHeight = 10,
-            fillInnerMiddleFrame = 5,
+            fillOuterHeight = display.contentHeight/25,
+            fillInnerMiddleFrame = 2,
             fillWidth = 0,
-            fillHeight = 10,
+            fillHeight = display.contentHeight/25,
             left = left,
             top = 10,
             width = display.contentWidth/8,
-            height = 1,
             isAnimated = true
         }
     )

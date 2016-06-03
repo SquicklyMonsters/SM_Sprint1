@@ -14,7 +14,8 @@ function widget.newPanel( options )                                     -- Setti
     opt.outEasing = options.outEasing
 
     local background = display.newImage(options.imageDir)
-    local container = display.newContainer( opt.width, opt.height )
+
+    local container = display.newContainer(opt.width, display.contentHeight)
     container.x = display.contentWidth
     container.y = display.contentCenterY
     container:insert(background, true)
