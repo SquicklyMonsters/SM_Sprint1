@@ -6,7 +6,7 @@ local scene = composer.newScene()
 require("homepage.background")
 require("homepage.monster")
 require("homepage.interactions")
-require("menubar")
+require("homepage.UI")
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
 -- -----------------------------------------------------------------------------------------------------------------
@@ -39,7 +39,6 @@ local hygieneBar;
 local energyBar;
 local expBar;
 
-local menuBar;
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
@@ -55,7 +54,6 @@ function scene:create( event )
     back = display.newGroup()
     middle = display.newGroup()
     front = display.newGroup()
-    over = display.newGroup()
 
 	-- Set background
     setUpBackground()
@@ -88,10 +86,6 @@ function scene:create( event )
     mostRecentPlayIcon2 = getMostRecentPlayIcon2()
     morePlayIcon = getMorePlayIcon()
 
-	-- Set up menu bar
-	setUpMenuBar()
-	menuBar = getMenuBar()
-
 	-- Add display objects into group
     -- ============BACK===============
     back:insert(background)
@@ -115,9 +109,6 @@ function scene:create( event )
     front:insert(hygieneBar)
     front:insert(energyBar)
     front:insert(expBar)
-    -- ===========OVER===============
-	over:insert(menuBar)
-    -- ===============================
 
     sceneGroup:insert(back)
     sceneGroup:insert(middle)
@@ -130,8 +121,10 @@ end
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
+    
 
 	if phase == "will" then
+        composer.showOverlay("menubar")
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
 		-- Called when the scene is now on screen
@@ -151,6 +144,7 @@ function scene:hide( event )
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
 	elseif phase == "did" then
+        --composer.hideOverlay()
 		-- Called when the scene is now off screen
 	end
 end

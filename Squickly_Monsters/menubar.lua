@@ -1,5 +1,6 @@
 local widget = require("widget")
 local composer = require("composer")
+local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
@@ -167,3 +168,32 @@ end
 function getMenuBar()
   return menuBar
 end
+
+-- -------------------------------------------------------------------------------
+
+function scene:create( event )
+  local sceneGroup = self.view
+  setUpMenuBar()
+  sceneGroup:insert(menuBar)
+end
+
+function scene:show( event )
+end
+
+function scene:hide( event )
+end
+
+function scene:destroy( event )
+end
+
+---------------------------------------------------------------------------------
+
+-- Listener setup
+scene:addEventListener( "create", scene )
+scene:addEventListener( "show", scene )
+scene:addEventListener( "hide", scene )
+scene:addEventListener( "destroy", scene )
+
+---------------------------------------------------------------------------------
+
+return scene
