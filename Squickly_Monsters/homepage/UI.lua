@@ -1,5 +1,6 @@
 local widget = require( "widget" )
--- -------------------------------------------------------------------------------
+require("savegame")
+-------------------------------------------------------------------------------
 -- Local variables go HERE
 
 local feedIcon;
@@ -15,16 +16,14 @@ local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
 local morePlayIcon;
 
-local hungerBar;
-local happinessBar;
-local hygieneBar;
-local energyBar;
-local expBar;
+local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins 
+local needsLevels;
+local needsBars;
 
 -- -------------------------------------------------------------------------------
 -- Set up needs bar
 
-function setUpNeedBar(fileName, left)
+function setUpNeedsBar(fileName, left)
     local options = {
         width = 192,
         height = 64,
@@ -51,8 +50,9 @@ function setUpNeedBar(fileName, left)
     )
 end
 
-function setNeedLevel(need, lvl)
-    need:setProgress(lvl)
+function setNeedsLevel(need, lvl)
+    needsLevels[need] = lvl
+    needsBars[need]:setProgress(lvl/maxNeedsLevels[need])
 end
 
 function setupAllNeedsBars()
@@ -60,19 +60,21 @@ function setupAllNeedsBars()
     local spacing = display.contentWidth/6
 
     -- TODO: Update Bar files
-    hungerBar = setUpNeedBar("img/others/HappinessBar.png", startX)
-    happinessBar = setUpNeedBar("img/others/HappinessBar.png", startX + spacing)
-    hygieneBar = setUpNeedBar("img/others/HygieneBar.png", startX + spacing*2)
-    energyBar = setUpNeedBar("img/others/EnergyBar.png", startX + spacing*3)
-    expBar = setUpNeedBar("img/others/EnergyBar.png", startX + spacing*4)
+    needsBars = {}
+    needsBars.hunger = setUpNeedsBar("img/others/HappinessBar.png", startX)
+    needsBars.happiness = setUpNeedsBar("img/others/HappinessBar.png", startX + spacing)
+    needsBars.hygiene = setUpNeedsBar("img/others/HygieneBar.png", startX + spacing*2)
+    needsBars.energy = setUpNeedsBar("img/others/EnergyBar.png", startX + spacing*3)
+    needsBars.exp = setUpNeedsBar("img/others/EnergyBar.png", startX + spacing*4)
 
-    -- Set All Needs Level (From Save File Later)
-    setNeedLevel(hungerBar, 0.5)
-    setNeedLevel(happinessBar, 0.5)
-    setNeedLevel(hygieneBar, 0.5)
-    setNeedLevel(energyBar, 0.5)
-    setNeedLevel(expBar, 0.5)
+    -- Set All Needs Level
+    needsLevels, maxNeedsLevels = getSavedLevels()
 
+    setNeedsLevel("hunger", needsLevels.hunger)
+    setNeedsLevel("happiness", needsLevels.happiness)
+    setNeedsLevel("hygiene", needsLevels.hygiene)
+    setNeedsLevel("energy", needsLevels.energy)
+    setNeedsLevel("exp", needsLevels.exp)
 end
 -- -------------------------------------------------------------------------------
 -- Setup All Icons Here
@@ -104,18 +106,19 @@ end
 
 local function needRateEventHandler( event )
     local params = event.source.params
-    changeNeedsLevel(params.needBar, params.increase,params.amount)
+
+    changeNeedsLevel(params.need, params.change)
 end
 
 -- ------------------------------------------------
 -- Adds forever increasing/decreasing needs level
 
-function setRateLongTerm(needBar, increasing, rate, amount) 
+function setRateLongTerm(need, rate, amount) 
     -- increasing is boolean val which shows that rate should increase if true
     -- rate is frequency of the change, amount is the magnitude of change
     -- rate 1000 = 1sec, -1 is infinite interations
-    local tmp = timer.performWithDelay(rate, needRateEventHandler, -1) 
-    tmp.params = {needBar=needBar, increase=increasing,amount=amount}
+    local tmp = timer.performWithDelay(rate, needRateEventHandler, -1)
+    tmp.params = {need=need, change=amount}
     if needBar == energyBar then
         return tmp
     end
@@ -123,35 +126,62 @@ end
 -- ------------------------------------------------
 -- Changing by a certain amount (Still needs to have more calculations later)
 
-function changeNeedsLevel(needsBar, increase, amount)
-    if (increase) then
-        needsBar:setProgress(needsBar:getProgress() + amount)
-    else
-        needsBar:setProgress(needsBar:getProgress() - amount)
-    end
+function changeNeedsLevel(need, change)
+    setNeedsLevel(need, needsLevels[need] + change)
+end
+
+-- -------------------------------------------------------------------------------
+-- Get needs level
+
+function getCurrentNeedsLevels()
+    return needsLevels
+end
+
+function getMaxNeedsLevels()
+    return maxNeedsLevels
+end
+
+function getHungerLevel()
+    return needsLevels.hunger
+end
+
+function getHappinessLevel()
+    return needsLevels.happiness
+end
+
+function getHygieneLevel()
+    return needsLevels.hygiene
+end
+
+function getEnergyLevel()
+    return needsLevels.energy
+end
+
+function getExpLevel()
+    return needsLevels.exp
 end
 
 -- -------------------------------------------------------------------------------
 -- Get needs bar
 
 function getHungerBar()
-    return hungerBar
+    return needsBars.hunger
 end
 
 function getHappinessBar()
-    return happinessBar
+    return needsBars.happiness
 end
 
 function getHygieneBar()
-    return hygieneBar
+    return needsBars.hygiene
 end
 
 function getEnergyBar()
-    return energyBar
+    return needsBars.energy
 end
 
 function getExpBar()
-    return expBar
+    return needsBars.exp
 end
 
 -- -------------------------------------------------------------------------------
