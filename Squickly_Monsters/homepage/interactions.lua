@@ -9,11 +9,7 @@ local monster;
 local background;
 local menuBar;
 
-local hunger_tm; -- for rate timer loop
-local happiness_tm; -- for rate timer loop
-local hygiene_tm; -- for rate timer loop
-local energy_tm; -- for rate timer loop
-local exp_tm; -- for rate timer loop
+local sleepWakeID;
 
 local feedIcon;
 local sleepIcon;
@@ -73,11 +69,11 @@ function setupAllNeedsBars()
     setNeedLevel(expBar, 0.5)
 
     -- Set All Needs Decrement/Increment rates (1000 = 1sec)
-    setHungerRateLongTerm(false, 1000, 0.1)
-    setHappinessRateLongTerm(false, 1000, 0.1)
-    setHygieneRateLongTerm(false, 1000, 0.1)
-    setEnergyRateLongTerm(false, 1000, 0.1)
-    setExpRateLongTerm(true, 1000, 0.1)
+    setRateLongTerm(hungerBar, false, 1000, 0.1)
+    setRateLongTerm(happinessBar, false, 1000, 0.1)
+    setRateLongTerm(hygieneBar, false, 1000, 0.1)
+    setRateLongTerm(energyBar, false, 1000, 0.1)
+    setRateLongTerm(expBar, true, 1000, 0.1)
 end
 
 function setUpNeedBar(fileName, left)
@@ -162,75 +158,24 @@ end
 -- ------------------------------------------------
 -- Needs Rate Event Handler
 
-local function hungerRateEventHandler( event )
+local function needRateEventHandler( event )
     local params = event.source.params
-    changeNeedsLevel(hungerBar, params.increase,params.amount)
-end
-
-local function happinessRateEventHandler( event )
-    local params = event.source.params
-    changeNeedsLevel(happinessBar, params.increase,params.amount)
-end
-
-local function hygieneRateEventHandler( event )
-    local params = event.source.params
-    changeNeedsLevel(hygieneBar, params.increase,params.amount)
-end
-
-local function energyRateEventHandler( event )
-    local params = event.source.params
-    changeNeedsLevel(energyBar, params.increase,params.amount)
-end
-
-local function expRateEventHandler( event )
-    local params = event.source.params
-    changeNeedsLevel(expBar, params.increase,params.amount)
+    changeNeedsLevel(params.needBar, params.increase,params.amount)
 end
 
 -- ------------------------------------------------
 -- Adds forever increasing/decreasing needs level
 
-function setHungerRateLongTerm(increasing, rate, amount) -- increasing is boolean val which shows that rate should increase if true
-                                                         -- rate is frequency of the change, amount is the magnitude of change
-    if (hunger_tm ~= nil) then
-        timer.cancel(hunger_tm)
+function setRateLongTerm(needBar, increasing, rate, amount) 
+    -- increasing is boolean val which shows that rate should increase if true
+    -- rate is frequency of the change, amount is the magnitude of change
+    -- rate 1000 = 1sec, -1 is infinite interations
+    local tmp = timer.performWithDelay(rate, needRateEventHandler, -1) 
+    tmp.params = {needBar=needBar, increase=increasing,amount=amount}
+    if needBar == energyBar then
+        sleepWakeID = tmp
     end
-    hunger_tm = timer.performWithDelay(rate, hungerRateEventHandler, -1) -- rate 1000 = 1sec, -1 is infinite interations
-    hunger_tm.params = {increase=increasing,amount=amount}
 end
-
-function setHappinessRateLongTerm(increasing, rate, amount)
-    if (happiness_tm ~= nil) then
-        timer.cancel(happiness_tm)
-    end
-    happiness_tm = timer.performWithDelay(rate, happinessRateEventHandler, -1)
-    happiness_tm.params = {increase=increasing,amount=amount}
-end
-
-function setHygieneRateLongTerm(increasing, rate, amount)
-    if (hygiene_tm ~= nil) then
-        timer.cancel(hygiene_tm)
-    end
-    hygiene_tm = timer.performWithDelay(rate, hygieneRateEventHandler, -1)
-    hygiene_tm.params = {increase=increasing,amount=amount}
-end
-
-function setEnergyRateLongTerm(increasing, rate, amount)
-    if (energy_tm ~= nil) then
-        timer.cancel(energy_tm)
-    end
-    energy_tm = timer.performWithDelay(rate, energyRateEventHandler, -1)
-    energy_tm.params = {increase=increasing,amount=amount}
-end
-
-function setExpRateLongTerm(increasing, rate, amount)
-    if (exp_tm ~= nil) then
-        timer.cancel(exp_tm)
-    end
-    exp_tm = timer.performWithDelay(rate, expRateEventHandler, -1)
-    exp_tm.params = {increase=increasing,amount=amount}
-end
-
 -- ------------------------------------------------
 -- Changing by a certain amount (Still needs to have more calculations later)
 
@@ -384,6 +329,7 @@ function sleepButtonClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(iconsList)
+            cancelOldLoop()
             changeToSleepState()
         end
     end
@@ -393,6 +339,7 @@ function wakeupButtonClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(iconsList)
+            cancelOldLoop()
             changeToWakeupState()
         end
     end
@@ -505,13 +452,19 @@ function playWithPetAnimation()
 end
 
 function changeToSleepState()
-    setEnergyRateLongTerm(true, 1000, 0.1)
+    setRateLongTerm(energyBar, true, 1000, 0.1)
     table.remove(iconsList, 2)
     table.insert(iconsList, 2, wakeupIcon)
 end
 
 function changeToWakeupState()
-    setEnergyRateLongTerm(false, 1000, 0.1)
+    setRateLongTerm(energyBar, false, 1000, 0.1)
     table.remove(iconsList, 2)
     table.insert(iconsList, 2, sleepIcon)
+end
+
+function cancelOldLoop()
+    if (sleepWakeID ~= nil) then
+        timer.cancel(sleepWakeID)
+    end
 end
