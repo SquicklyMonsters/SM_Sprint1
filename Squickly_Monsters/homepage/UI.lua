@@ -1,4 +1,6 @@
 local widget = require( "widget" )
+-- -------------------------------------------------------------------------------
+-- Local variables go HERE
 
 local feedIcon;
 local sleepIcon;
@@ -115,7 +117,6 @@ function setRateLongTerm(needBar, increasing, rate, amount)
     local tmp = timer.performWithDelay(rate, needRateEventHandler, -1) 
     tmp.params = {needBar=needBar, increase=increasing,amount=amount}
     if needBar == energyBar then
-        print("yes")
         return tmp
     end
 end

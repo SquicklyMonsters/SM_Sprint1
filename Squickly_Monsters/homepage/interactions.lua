@@ -1,7 +1,4 @@
 require("menuBar")
-require("homepage.monster")
-require("homepage.background")
-
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
@@ -36,6 +33,8 @@ local energyBar;
 local expBar;
 
 local isTouchAble;
+
+-- -------------------------------------------------------------------------------
 
 function cacheVariables()
     monster = getMonster()
@@ -119,35 +118,10 @@ function hideShowAllIcons(iconsTable)
     end   
     timer.performWithDelay(250, enableTouch)
 end
-
 -- -------------------------------------------------------------------------------
--- Add All Event Listeners Here
-
-function addListeners()
-    -- Tag along
-    cacheVariables()
-    setDecrementRate()
-
-    monster:addEventListener("touch", monsterToggle)
-    background:addEventListener("touch", backgroundToggle)
-    feedIcon:addEventListener("touch", feedButtonClicked)
-    sleepIcon:addEventListener("touch", sleepButtonClicked)
-    wakeupIcon:addEventListener("touch", wakeupButtonClicked)
-    cleanIcon:addEventListener("touch", cleanButtonClicked)
-    playIcon:addEventListener("touch", playButtonClicked)
-
-    mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
-    mostRecentFoodIcon2:addEventListener("touch", mostRecentFood2Clicked)
-    moreFoodIcon:addEventListener("touch", moreFoodClicked)
-    shopIcon:addEventListener("touch", shopButtonClicked)
-
-    mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
-    mostRecentPlayIcon2:addEventListener("touch", mostRecentPlay2Clicked)
-    morePlayIcon:addEventListener("touch", morePlayClicked)
-end
-
 -- Set reaction when press button
-function monsterToggle(event)
+
+function monsterClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             if (currentVisibleList == nil) then
@@ -159,7 +133,7 @@ function monsterToggle(event)
     end
 end
 
-function backgroundToggle(event)
+function backgroundClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             if (currentVisibleList ~= nil) then
@@ -303,8 +277,34 @@ function changeToWakeupState()
 end
 
 function cancelOldLoop()
-    print(sleepWakeID)
     if (sleepWakeID ~= nil) then
         timer.cancel(sleepWakeID)
     end
+end
+
+-- -------------------------------------------------------------------------------
+-- Add All Event Listeners Here
+
+function addListeners()
+    ---- Tag along ----
+    cacheVariables()
+    setDecrementRate()
+    -------------------
+
+    monster:addEventListener("touch", monsterClicked)
+    background:addEventListener("touch", backgroundClicked)
+    feedIcon:addEventListener("touch", feedButtonClicked)
+    sleepIcon:addEventListener("touch", sleepButtonClicked)
+    wakeupIcon:addEventListener("touch", wakeupButtonClicked)
+    cleanIcon:addEventListener("touch", cleanButtonClicked)
+    playIcon:addEventListener("touch", playButtonClicked)
+
+    mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
+    mostRecentFoodIcon2:addEventListener("touch", mostRecentFood2Clicked)
+    moreFoodIcon:addEventListener("touch", moreFoodClicked)
+    shopIcon:addEventListener("touch", shopButtonClicked)
+
+    mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
+    mostRecentPlayIcon2:addEventListener("touch", mostRecentPlay2Clicked)
+    morePlayIcon:addEventListener("touch", morePlayClicked)
 end
