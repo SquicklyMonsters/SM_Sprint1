@@ -1,4 +1,5 @@
 local widget = require( "widget" )
+require("menuBar")
 require("homepage.monster")
 require("homepage.background")
 
@@ -45,6 +46,11 @@ function cacheVariables()
     foodIconsList = {moreFoodIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, shopIcon}
     playIconsList = {morePlayIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, shopIcon}
     isTouchAble = true
+
+    if menuBar == nil then
+        setUpMenuBar()
+        menuBar = getMenuBar()
+    end
 end
 
 -- -------------------------------------------------------------------------------

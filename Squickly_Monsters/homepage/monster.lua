@@ -5,7 +5,7 @@
 local monster;
 
 -- -------------------------------------------------------------------------------
-
+-- Set get Monster
 function setUpMonster(fileName)
 	-- Set Monster
 	local options = {
@@ -53,6 +53,7 @@ end
 function getMonster()
     return monster
 end
+-- -------------------------------------------------------------------------------
 
 function setMonsterSequence(sequence)
     monster:setSequence(sequence)
@@ -62,4 +63,22 @@ end
 function setSequenceNormal(event)
     monster:setSequence("normal")
     monster:play()
+end
+
+-- -------------------------------------------------------------------------------
+-- Monster animation
+
+function feedPetAnimation()
+    setMonsterSequence("happy")
+    timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
+end
+
+function cleanPetAnimation()
+    setMonsterSequence("happy")
+    timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
+end
+
+function playWithPetAnimation()
+    setMonsterSequence("happy")
+    timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
 end
