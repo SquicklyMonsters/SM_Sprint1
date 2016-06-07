@@ -6,6 +6,7 @@ local scene = composer.newScene()
 require("homepage.background")
 require("homepage.monster")
 require("homepage.interactions")
+require("homepage.UI")
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
 -- -----------------------------------------------------------------------------------------------------------------
