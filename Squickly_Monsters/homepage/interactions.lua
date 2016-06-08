@@ -67,8 +67,6 @@ function cacheVariables()
     -- Instantiate hide/show icons lock
     isTouchAble = true
 
-    -- Setup Menu bar and get Menu bar object
-    -- setUpMenuBar()
 end
 -- -------------------------------------------------------------------------------
 -- Setup The Decrement Rate
