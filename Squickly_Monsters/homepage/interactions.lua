@@ -72,12 +72,12 @@ end
 -- Setup The Decrement Rate
 
 function setDecrementRate()
-    setRateLongTerm("hunger", 1000, -100)
-    setRateLongTerm("happiness", 1000, -100)
-    setRateLongTerm("hygiene", 1000, -100)
+    setRateLongTerm("hunger", 1000, -10)
+    setRateLongTerm("happiness", 1000, -10)
+    setRateLongTerm("hygiene", 1000, -10)
     setRateLongTerm("exp", 1000, 10)
     -- Need sleepWakeID for canceling old loop before assign new one
-    sleepWakeID = setRateLongTerm("energy", 1000, -100)
+    sleepWakeID = setRateLongTerm("energy", 1000, -10)
 end
 
 -- -------------------------------------------------------------------------------
