@@ -1,4 +1,4 @@
-require("menuBar")
+require("menubar")
 require("savegame") -- For Testing
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
