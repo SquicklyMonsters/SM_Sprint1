@@ -7,6 +7,7 @@ require("homepage.background")
 require("homepage.monster")
 require("homepage.interactions")
 require("homepage.UI")
+require("savegame")
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
 -- -----------------------------------------------------------------------------------------------------------------
@@ -84,6 +85,7 @@ function scene:create( event )
     mostRecentPlayIcon1 = getMostRecentPlayIcon1()
     mostRecentPlayIcon2 = getMostRecentPlayIcon2()
     morePlayIcon = getMorePlayIcon()
+    setAutoSaveRate(10000)
 
 	-- Add display objects into group
     -- ============BACK===============

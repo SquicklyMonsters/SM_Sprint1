@@ -1,5 +1,5 @@
 local widget = require( "widget" )
-require("savegame")
+require("loadgame")
 -------------------------------------------------------------------------------
 -- Local variables go HERE
 
@@ -106,7 +106,6 @@ end
 
 local function needRateEventHandler( event )
     local params = event.source.params
-
     changeNeedsLevel(params.need, params.change)
 end
 
