@@ -5,8 +5,9 @@ local scene = composer.newScene()
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 local menuBar;
-local chageScenceEffect = "crossFade"
-local chageSceneTime = 250
+local firstTime = true;
+local chageScenceEffect = "crossFade";
+local chageSceneTime = 250;
 -- -------------------------------------------------------------------------------
 -- Set reaction when menu bar buttons press
 
@@ -66,7 +67,7 @@ function widget.newPanel( options )
     local background = display.newImage(options.imageDir)
 
     local container = display.newContainer(opt.width, display.contentHeight)
-    container.x = display.contentWidth
+    container.x = display.contentWidth + 30
     container.y = display.contentCenterY
     container:insert(background, true)
 
@@ -114,7 +115,7 @@ function setUpMenuBar()
 
   menuBar.slideButton = widget.newButton{
     top = startX + (spacingX*3)/2,
-    left = middleY - 30,
+    left = middleY - 29,
     width = 25,
     height = 50,
     defaultFile = iconsDir .. "slideIcon.png",

@@ -42,7 +42,6 @@ local expBar;
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
-
 -- -------------------------------------------------------------------------------
 
 -- Scene functions go Here
@@ -109,7 +108,7 @@ function scene:create( event )
     front:insert(hygieneBar)
     front:insert(energyBar)
     front:insert(expBar)
-
+    -- ===============================
     sceneGroup:insert(back)
     sceneGroup:insert(middle)
     sceneGroup:insert(front)
