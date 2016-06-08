@@ -36,9 +36,11 @@ function setUpNeedsBar(fileName, left)
     return widget.newProgressView(
         {
             sheet = progressSheet,
+            -- Empty bar frame
             fillOuterMiddleFrame = 1,
             fillOuterWidth = 0,
             fillOuterHeight = display.contentHeight/25,
+            -- Full bar frame
             fillInnerMiddleFrame = 2,
             fillWidth = 0,
             fillHeight = display.contentHeight/25,
@@ -77,9 +79,10 @@ function setupAllNeedsBars()
     needsBars.energy = setUpNeedsBar("img/others/EnergyBar.png", startX + spacing*3)
     needsBars.exp = setUpNeedsBar("img/others/EnergyBar.png", startX + spacing*4)
 
-    -- Set All Needs Level
+    -- Load data from save
     needsLevels, maxNeedsLevels = getSavedLevels()
 
+    -- Set All Needs Level
     setNeedsLevel("hunger", needsLevels.hunger)
     setNeedsLevel("happiness", needsLevels.happiness)
     setNeedsLevel("hygiene", needsLevels.hygiene)
