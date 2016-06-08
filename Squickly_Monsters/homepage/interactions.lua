@@ -1,4 +1,5 @@
 require("menuBar")
+require("savegame")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
@@ -216,6 +217,7 @@ function moreFoodClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(currentVisibleList)
+            saveData() -- For Testing
         end
     end
 end

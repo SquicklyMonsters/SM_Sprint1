@@ -1,5 +1,5 @@
 local widget = require( "widget" )
-require("savegame")
+require("loadgame")
 -------------------------------------------------------------------------------
 -- Local variables go HERE
 
@@ -69,6 +69,7 @@ function setupAllNeedsBars()
 
     -- Set All Needs Level
     needsLevels, maxNeedsLevels = getSavedLevels()
+    print(needsLevels)
 
     setNeedsLevel("hunger", needsLevels.hunger)
     setNeedsLevel("happiness", needsLevels.happiness)
