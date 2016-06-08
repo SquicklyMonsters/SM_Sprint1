@@ -19,7 +19,7 @@ end
 -- Load functions
 
 function loadData() 
-    print(filePath)
+    -- print(filePath)
     local file = io.open( filePath, "r" )
     needsLevels = {}
     maxNeedsLevels = {}
@@ -32,11 +32,10 @@ function loadData()
         inTable = json.decode(contents);
         io.close( file ) -- important!
 
-        print(inTable)
         maxNeedsLevels = inTable[1]
         needsLevels = inTable[2]
     else
-        print ("no file found")
+        -- print ("no file found")
         maxNeedsLevels = {
             hunger = 2880,
             happiness = 2880,

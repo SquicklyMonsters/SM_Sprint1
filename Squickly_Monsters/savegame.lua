@@ -22,7 +22,7 @@ end
 -- Save functions
 
 function saveData()
-	print("saved file")
+	-- print("saved file")
     maxNeedsLevels = getMaxNeedsLevels()
     needsLevels = getCurrentNeedsLevels()
     local outTable = {maxNeedsLevels, needsLevels}
