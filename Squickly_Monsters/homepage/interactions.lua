@@ -26,11 +26,9 @@ local foodIconsList;
 local playIconsList;
 local currentVisibleList;
 
-local hungerBar;
-local happinessBar;
-local hygieneBar;
-local energyBar;
-local expBar;
+local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins 
+local needsLevels;
+local needsBars;
 
 local isTouchAble;
 
@@ -40,12 +38,13 @@ function cacheVariables()
     monster = getMonster()
     background = getBackground()
 
-    -- Cache Need Bars
-    hungerBar = getHungerBar()
-    happinessBar = getHappinessBar()
-    hygieneBar = getHygieneBar()
-    energyBar = getEnergyBar()
-    expBar = getExpBar()
+    -- Cache Need Levels
+    needsLevels = {}
+    needsLevels.hunger = getHungerLevel()
+    needsLevels.happiness = getHappinessLevel()
+    needsLevels.hygiene = getHygieneLevel()
+    needsLevels.energy = getEnergyLevel()
+    needsLevels.exp = getExpLevel()
 
     -- Cache Icons
     feedIcon = getFeedIcon()
@@ -77,12 +76,12 @@ end
 -- Setup The Decrement Rate
 
 function setDecrementRate()
-    setRateLongTerm(hungerBar, false, 1000, 0.1)
-    setRateLongTerm(happinessBar, false, 1000, 0.1)
-    setRateLongTerm(hygieneBar, false, 1000, 0.1)
-    setRateLongTerm(expBar, true, 1000, 0.1)
+    setRateLongTerm("hunger", 1000, -10)
+    setRateLongTerm("happiness", 1000, -10)
+    setRateLongTerm("hygiene", 1000, -10)
+    setRateLongTerm("exp", 1000, 10)
 
-    sleepWakeID = setRateLongTerm(energyBar, false, 1000, 0.1)
+    sleepWakeID = setRateLongTerm("energy", 1000, -10)
 end
 
 -- -------------------------------------------------------------------------------
@@ -177,7 +176,7 @@ function cleanButtonClicked(event)
             hideShowAllIcons(iconsList)
             changeToWakeupState()
             cleanPetAnimation()
-            changeNeedsLevel(hygieneBar, true, 0.3)
+            changeNeedsLevel("hygiene", 500)
         end
     end
 end
@@ -197,7 +196,7 @@ function mostRecentFood1Clicked(event)
             hideShowAllIcons(foodIconsList)
             changeToWakeupState()
             feedPetAnimation()
-            changeNeedsLevel(hungerBar, true, 0.3)
+            changeNeedsLevel("hunger", 500)
         end
     end
 end
@@ -208,7 +207,7 @@ function mostRecentFood2Clicked(event)
             hideShowAllIcons(foodIconsList)
             changeToWakeupState()
             feedPetAnimation()
-            changeNeedsLevel(hungerBar, true, 0.6)
+            changeNeedsLevel("hunger", 1000)
         end
     end
 end
@@ -235,7 +234,7 @@ function mostRecentPlay1Clicked(event)
             hideShowAllIcons(playIconsList)
             changeToWakeupState()
             playWithPetAnimation()
-            changeNeedsLevel(happinessBar, true, 0.3)
+            changeNeedsLevel("happiness", 500)
         end
     end
 end
@@ -246,7 +245,7 @@ function mostRecentPlay2Clicked(event)
             hideShowAllIcons(playIconsList)
             changeToWakeupState()
             playWithPetAnimation()
-            changeNeedsLevel(happinessBar, true, 0.6)
+            changeNeedsLevel("happiness", 1000)
         end
     end
 end
@@ -264,14 +263,14 @@ end
 
 function changeToSleepState()
     cancelOldLoop()
-    sleepWakeID = setRateLongTerm(energyBar, true, 1000, 0.1)
+    sleepWakeID = setRateLongTerm("energy", 1000, 10)
     table.remove(iconsList, 2)
     table.insert(iconsList, 2, wakeupIcon)
 end
 
 function changeToWakeupState()
     cancelOldLoop()
-    sleepWakeID = setRateLongTerm(energyBar, false, 1000, 0.1)
+    sleepWakeID = setRateLongTerm("energy", 1000, -10)
     table.remove(iconsList, 2)
     table.insert(iconsList, 2, sleepIcon)
 end
