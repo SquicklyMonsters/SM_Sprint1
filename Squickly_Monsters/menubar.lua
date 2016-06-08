@@ -67,6 +67,8 @@ function widget.newPanel( options )
     local background = display.newImage(options.imageDir)
 
     local container = display.newContainer(opt.width, display.contentHeight)
+    -- Start as a hide bar state
+    container.completeState = "hidden"
     container.x = display.contentWidth + 30
     container.y = display.contentCenterY
     container:insert(background, true)
@@ -104,14 +106,11 @@ function setUpMenuBar()
     outEasing = easing.outCubic,
     imageDir = "img/bg/menuBar.png"
   }
-  
-  menuBar:show()
-  menuBar:hide()
 
   local startX = -130
   local spacingX = 70
   local middleY = -25
-  local iconsDir = "img/icons/"
+  local iconsDir = "img/icons/menubarIcons/"
 
   menuBar.slideButton = widget.newButton{
     top = startX + (spacingX*3)/2,
