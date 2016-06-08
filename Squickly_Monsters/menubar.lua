@@ -1,11 +1,62 @@
 local widget = require("widget")
-local composser = require("composer")
+local composer = require("composer")
+local scene = composer.newScene()
 
+-- -------------------------------------------------------------------------------
+-- Local variables go HERE
 local menuBar;
+local firstTime = true;
+local chageScenceEffect = "crossFade";
+local chageSceneTime = 250;
+-- -------------------------------------------------------------------------------
+-- Set reaction when menu bar buttons press
 
---=====================================================================================================================================================
--- This is sliding panel function. Have 2 command show, hide,
-function widget.newPanel( options )                                     -- Setting Panel : have default value and can be customize
+function slideButtonEvent(event)
+  if event.phase == "ended" then
+    if menuBar.completeState == "hidden" then
+      menuBar:show()
+    else
+      menuBar:hide()
+    end
+  end
+end
+
+function homeButtonEvent(event)
+  if event.phase == "ended" then
+    if composer.getSceneName("current") ~= "home" then
+      composer.gotoScene("home", chageScenceEffect, chageSceneTime)
+    end
+  end
+end
+
+function shopButtonEven(event)
+  if event.phase == "ended" then
+    if composer.getSceneName("current") ~= "shop" then
+      composer.gotoScene("shop", chageScenceEffect, chageSceneTime)
+    end
+  end
+end
+
+function miniGameButtonEvent(event)
+  if event.phase == "ended" then
+    if composer.getSceneName("current") ~= "miniGame" then
+      composer.gotoScene("miniGame", chageScenceEffect, chageSceneTime)
+    end
+  end
+end
+
+function settingsButtonEvent(event)
+  if event.phase == "ended" then
+    if composer.getSceneName("current") ~= "settings" then
+      composer.gotoScene("settings", chageScenceEffect, chageSceneTime)
+    end
+  end
+end
+
+-- -------------------------------------------------------------------------------
+-- Set up contructor for menu bar
+
+function widget.newPanel( options )                                    
     local opt = {}
     opt.width = options.width
     opt.height = options.height
@@ -14,51 +65,37 @@ function widget.newPanel( options )                                     -- Setti
     opt.outEasing = options.outEasing
 
     local background = display.newImage(options.imageDir)
-    local container = display.newContainer( opt.width, opt.height )
-    container.x = display.viewableContentWidth
+
+    local container = display.newContainer(opt.width, display.contentHeight)
+    -- Start as a hide bar state
+    container.completeState = "hidden"
+    container.x = display.contentWidth + 30
     container.y = display.contentCenterY
     container:insert(background, true)
 
-    function container:show()                                             -- show function
+    function container:show()                                          
         local options = {
             time = opt.speed,
             transition = opt.inEasing
         }
-        if ( opt.listener ) then
-            options.onComplete = opt.listener
-        end
-        options.x = display.viewableContentWidth + opt.width*0.1
+        options.x = display.contentWidth - 30
         self.completeState = "shown"
-        transition.to( self, options )
+        transition.to(self, options)
     end
 
-    function container:hide()                                           -- hide function
+    function container:hide()                                    
         local options = {
             time = opt.speed,
             transition = opt.outEasing
         }
-        if ( opt.listener ) then
-            options.onComplete = opt.listener
-        end
-        options.x = display.viewableContentWidth + opt.width*0.67
+        options.x = display.contentWidth + 30
         self.completeState = "hidden"
-        transition.to( self, options )
+        transition.to(self, options)
     end
     return container
 end
--- ==========================================================================================================================
-
-
-function handleButtonEvent(event)
-  local phase = event.phase
-  if phase == "ended" then
-    if menuBar.completeState == "hidden" then
-      menuBar:show()
-    else
-      menuBar:hide()
-    end
-  end
-end
+-- -------------------------------------------------------------------------------
+-- Set up menu bar
 
 function setUpMenuBar()
   menuBar = widget.newPanel{
@@ -69,22 +106,19 @@ function setUpMenuBar()
     outEasing = easing.outCubic,
     imageDir = "img/bg/menuBar.png"
   }
-  
-  menuBar:show()
-  menuBar:hide()
 
   local startX = -130
   local spacingX = 70
   local middleY = -25
-  local iconsDir = "img/icons/"
+  local iconsDir = "img/icons/menubarIcons/"
 
   menuBar.slideButton = widget.newButton{
     top = startX + (spacingX*3)/2,
-    left = middleY - 30,
+    left = middleY - 29,
     width = 25,
     height = 50,
     defaultFile = iconsDir .. "slideIcon.png",
-    onEvent = handleButtonEvent,
+    onEvent = slideButtonEvent,
   }
 
   menuBar.homeButton = widget.newButton{
@@ -93,6 +127,7 @@ function setUpMenuBar()
     width = 50,
     height = 50,
     defaultFile = iconsDir .. "homeIcon.png",
+    onEvent = homeButtonEvent,
   }
   menuBar.shopButton = widget.newButton{
     top = startX + spacingX,
@@ -100,6 +135,7 @@ function setUpMenuBar()
     width = 50,
     height = 50,
     defaultFile = iconsDir .. "shopIcon.png",
+    onEvent = shopButtonEven,
   }
   menuBar.miniGameButton = widget.newButton{
     top = startX + spacingX*2,
@@ -107,14 +143,16 @@ function setUpMenuBar()
     width = 50,
     height = 50,
     defaultFile = iconsDir .. "miniGameIcon.png",
+    onEvent = miniGameButtonEvent,
   }
 
-  menuBar.settingButton = widget.newButton{
+  menuBar.settingsButton = widget.newButton{
     top = startX + spacingX*3,
     left = middleY,
     width = 50,
     height = 50,
     defaultFile = iconsDir .. "settingsIcon.png",
+    onEvent = settingsButtonEvent,
   }
 
 
@@ -122,10 +160,40 @@ function setUpMenuBar()
   menuBar:insert(menuBar.homeButton)
   menuBar:insert(menuBar.shopButton)
   menuBar:insert(menuBar.miniGameButton)
-  menuBar:insert(menuBar.settingButton)
+  menuBar:insert(menuBar.settingsButton)
 
 end
+-- -------------------------------------------------------------------------------
 
 function getMenuBar()
   return menuBar
 end
+
+-- -------------------------------------------------------------------------------
+
+function scene:create( event )
+  local sceneGroup = self.view
+  setUpMenuBar()
+  sceneGroup:insert(menuBar)
+end
+
+function scene:show( event )
+end
+
+function scene:hide( event )
+end
+
+function scene:destroy( event )
+end
+
+---------------------------------------------------------------------------------
+
+-- Listener setup
+scene:addEventListener( "create", scene )
+scene:addEventListener( "show", scene )
+scene:addEventListener( "hide", scene )
+scene:addEventListener( "destroy", scene )
+
+---------------------------------------------------------------------------------
+
+return scene

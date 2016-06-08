@@ -5,7 +5,7 @@
 local monster;
 
 -- -------------------------------------------------------------------------------
-
+-- Set get Monster
 function setUpMonster(fileName)
 	-- Set Monster
 	local options = {
@@ -42,14 +42,18 @@ function setUpMonster(fileName)
 
     monster = display.newSprite(imageSheet, sequence)
     monster.x = display.contentCenterX
-    monster.y = 260
-    monster:scale(0.5, 0.5)
+    monster.y = display.contentCenterY* 27/16
+    monster:scale(
+                 display.contentWidth/(options.width*4),
+                 display.contentHeight/(options.height*2.5)
+                 )
     monster:play()
 end
 
 function getMonster()
     return monster
 end
+-- -------------------------------------------------------------------------------
 
 function setMonsterSequence(sequence)
     monster:setSequence(sequence)
@@ -59,4 +63,22 @@ end
 function setSequenceNormal(event)
     monster:setSequence("normal")
     monster:play()
+end
+
+-- -------------------------------------------------------------------------------
+-- Monster animation
+
+function feedPetAnimation()
+    setMonsterSequence("happy")
+    timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
+end
+
+function cleanPetAnimation()
+    setMonsterSequence("happy")
+    timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
+end
+
+function playWithPetAnimation()
+    setMonsterSequence("happy")
+    timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
 end
