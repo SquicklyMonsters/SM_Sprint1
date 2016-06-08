@@ -110,7 +110,7 @@ function setUpMenuBar()
   local startX = -130
   local spacingX = 70
   local middleY = -25
-  local iconsDir = "img/icons/"
+  local iconsDir = "img/icons/menubarIcons/"
 
   menuBar.slideButton = widget.newButton{
     top = startX + (spacingX*3)/2,

@@ -109,6 +109,7 @@ function hideShowAllIcons(iconsTable)
         end 
         currentVisibleList = nil
     end   
+    -- Release lock after icons transition is finish
     timer.performWithDelay(250, enableTouch)
 end
 -- -------------------------------------------------------------------------------

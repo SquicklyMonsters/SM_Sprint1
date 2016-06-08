@@ -70,14 +70,14 @@ function setupAllNeedsBars()
     -- Starting x-axis and spacing between bars
     local startX = display.contentWidth/10
     local spacing = display.contentWidth/6
-
+    local barsDir = "img/bars/"
     -- TODO: Update Bar files
     needsBars = {}
-    needsBars.hunger = setUpNeedsBar("img/others/HappinessBar.png", startX)
-    needsBars.happiness = setUpNeedsBar("img/others/HappinessBar.png", startX + spacing)
-    needsBars.hygiene = setUpNeedsBar("img/others/HygieneBar.png", startX + spacing*2)
-    needsBars.energy = setUpNeedsBar("img/others/EnergyBar.png", startX + spacing*3)
-    needsBars.exp = setUpNeedsBar("img/others/EnergyBar.png", startX + spacing*4)
+    needsBars.hunger = setUpNeedsBar(barsDir .. "HappinessBar.png", startX)
+    needsBars.happiness = setUpNeedsBar(barsDir .. "HappinessBar.png", startX + spacing)
+    needsBars.hygiene = setUpNeedsBar(barsDir .. "HygieneBar.png", startX + spacing*2)
+    needsBars.energy = setUpNeedsBar(barsDir .. "EnergyBar.png", startX + spacing*3)
+    needsBars.exp = setUpNeedsBar(barsDir .. "EnergyBar.png", startX + spacing*4)
 
     -- Load data from save
     needsLevels, maxNeedsLevels = getSavedLevels()
@@ -93,18 +93,19 @@ end
 -- Setup All Icons Here
 
 function setUpAllIcons()
-    feedIcon = setUpIcon("img/others/feedIcon.png", 0.75)
-    sleepIcon = setUpIcon("img/others/sleepIcon.png", 0.5)
-    wakeupIcon = setUpIcon("img/others/wakeupIcon.png", 0.7)
-    cleanIcon = setUpIcon("img/others/cleanIcon.png", 0.5)
-    playIcon = setUpIcon("img/others/playIcon.png", 0.75)
-    mostRecentFoodIcon1 = setUpIcon("img/others/cupcakeIcon.png", 0.75)
-    mostRecentFoodIcon2 = setUpIcon("img/others/milkIcon.png", 0.5)
-    moreFoodIcon = setUpIcon("img/others/optionsIcon.png", 0.75)
-    shopIcon = setUpIcon("img/others/shopIcon.png", 0.5)
-    mostRecentPlayIcon1 = setUpIcon("img/others/legomanIcon.png", 0.75)
-    mostRecentPlayIcon2 = setUpIcon("img/others/footballIcon.png", 0.75)
-    morePlayIcon = setUpIcon("img/others/optionsIcon.png", 0.75)
+    local iconsDir = "img/icons/UIIcons/"
+    feedIcon = setUpIcon(iconsDir .. "feedIcon.png", 0.75)
+    sleepIcon = setUpIcon(iconsDir .. "sleepIcon.png", 0.5)
+    wakeupIcon = setUpIcon(iconsDir .. "wakeupIcon.png", 0.7)
+    cleanIcon = setUpIcon(iconsDir .. "cleanIcon.png", 0.5)
+    playIcon = setUpIcon(iconsDir .. "playIcon.png", 0.75)
+    mostRecentFoodIcon1 = setUpIcon(iconsDir .. "cupcakeIcon.png", 0.75)
+    mostRecentFoodIcon2 = setUpIcon(iconsDir .. "milkIcon.png", 0.5)
+    moreFoodIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
+    shopIcon = setUpIcon(iconsDir .. "shopIcon.png", 0.5)
+    mostRecentPlayIcon1 = setUpIcon(iconsDir .. "legomanIcon.png", 0.75)
+    mostRecentPlayIcon2 = setUpIcon(iconsDir .. "footballIcon.png", 0.75)
+    morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
 end
 
 function setUpIcon(img, scale)
