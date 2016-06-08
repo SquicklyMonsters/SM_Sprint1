@@ -24,7 +24,6 @@ end
 function homeButtonEvent(event)
   if event.phase == "ended" then
     if composer.getSceneName("current") ~= "home" then
-      print(menuBar)
       composer.gotoScene("home", chageScenceEffect, chageSceneTime)
     end
   end
@@ -32,7 +31,6 @@ end
 
 function shopButtonEven(event)
   if event.phase == "ended" then
-    print(menuBar)
     if composer.getSceneName("current") ~= "shop" then
       composer.gotoScene("shop", chageScenceEffect, chageSceneTime)
     end
@@ -164,8 +162,6 @@ function setUpMenuBar()
   menuBar:insert(menuBar.shopButton)
   menuBar:insert(menuBar.miniGameButton)
   menuBar:insert(menuBar.settingsButton)
-
-  print("setup menubar")
 
 end
 -- -------------------------------------------------------------------------------

@@ -42,16 +42,6 @@ local expBar;
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
--- function backgroundClicked(event)
---     if isTouchAble then
---         if event.phase == "ended" then
---             if (currentVisibleList ~= nil) then
---                 hideShowAllIcons(currentVisibleList)
---             end
---             getMenuBar():hide()
---         end
---     end
--- end
 -- -------------------------------------------------------------------------------
 
 -- Scene functions go Here
@@ -125,7 +115,6 @@ function scene:create( event )
 
     -- Set up all Event Listeners
     addListeners()
-    -- background:addEventListener("touch", backgroundClicked)
 end
 
 function scene:show( event )
