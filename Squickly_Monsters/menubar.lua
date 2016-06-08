@@ -178,9 +178,7 @@ end
 
 function scene:create( event )
   local sceneGroup = self.view
-  if menuBar == nil then
-    setUpMenuBar()
-  end
+  setUpMenuBar()
   sceneGroup:insert(menuBar)
 end
 

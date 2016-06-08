@@ -4,7 +4,6 @@ require("menubar")
 
 local monster;
 local background;
-local menuBar;
 
 local sleepWakeID;
 
@@ -69,8 +68,7 @@ function cacheVariables()
     isTouchAble = true
 
     -- Setup Menu bar and get Menu bar object
-    setUpMenuBar()
-    menuBar = getMenuBar()
+    -- setUpMenuBar()
 end
 -- -------------------------------------------------------------------------------
 -- Setup The Decrement Rate
@@ -138,7 +136,7 @@ function backgroundClicked(event)
             if (currentVisibleList ~= nil) then
                 hideShowAllIcons(currentVisibleList)
             end
-            menuBar:hide()
+            getMenuBar():hide()
         end
     end
 end
