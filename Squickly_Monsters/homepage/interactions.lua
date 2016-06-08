@@ -1,4 +1,4 @@
-require("menuBar")
+require("menubar")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
