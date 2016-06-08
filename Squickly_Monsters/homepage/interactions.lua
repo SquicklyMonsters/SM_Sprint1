@@ -214,6 +214,7 @@ function moreFoodClicked(event)
         if event.phase == "ended" then
             hideShowAllIcons(currentVisibleList)
             saveData() -- For Testing
+            setAutoSaveRate(20000) -- For Testing
         end
     end
 end

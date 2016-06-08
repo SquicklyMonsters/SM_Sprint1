@@ -69,7 +69,6 @@ function setupAllNeedsBars()
 
     -- Set All Needs Level
     needsLevels, maxNeedsLevels = getSavedLevels()
-    print(needsLevels)
 
     setNeedsLevel("hunger", needsLevels.hunger)
     setNeedsLevel("happiness", needsLevels.happiness)
@@ -107,7 +106,6 @@ end
 
 local function needRateEventHandler( event )
     local params = event.source.params
-
     changeNeedsLevel(params.need, params.change)
 end
 
