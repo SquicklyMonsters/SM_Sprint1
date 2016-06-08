@@ -51,11 +51,21 @@ function setUpNeedsBar(fileName, left)
 end
 
 function setNeedsLevel(need, lvl)
+    -- Prevent lvl going over 100% and below 0%
+    if lvl > maxNeedsLevels[need] then
+        lvl = maxNeedsLevels[need]
+    elseif lvl < 0 then
+        lvl = 0
+    end
+
+    -- For saving the value
     needsLevels[need] = lvl
+    -- Make change on need bar
     needsBars[need]:setProgress(lvl/maxNeedsLevels[need])
 end
 
 function setupAllNeedsBars()
+    -- Starting x-axis and spacing between bars
     local startX = display.contentWidth/10
     local spacing = display.contentWidth/6
 
