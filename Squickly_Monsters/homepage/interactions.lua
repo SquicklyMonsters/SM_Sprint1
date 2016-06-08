@@ -95,7 +95,6 @@ function hideShowAllIcons(iconsTable)
     isTouchAble = false
     if (iconsTable[1].alpha) == 0 then -- Show Icons
         for i = 1, #iconsTable do
-            iconsTable[i].isTouchEnabled = true
             transition.to(iconsTable[i], 
                 {x = monster.x + xAxis[i], y = monster.y - yAxis[i],
                 alpha = 1, time = 250})
@@ -103,7 +102,6 @@ function hideShowAllIcons(iconsTable)
         currentVisibleList = iconsTable
     else -- Hide Icons
         for i = 1, #iconsTable do
-            iconsTable[i].isTouchEnabled = true
             transition.to(iconsTable[i], 
                 {x = monster.x, y = monster.y,
                 alpha = 0, time = 250})
