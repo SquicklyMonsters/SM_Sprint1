@@ -4,10 +4,11 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
+
 local menuBar;
-local firstTime = true;
 local chageScenceEffect = "crossFade";
 local chageSceneTime = 250;
+
 -- -------------------------------------------------------------------------------
 -- Set reaction when menu bar buttons press
 
@@ -81,7 +82,6 @@ function setUpMenuBar()
   local spacingX = 70
   local middleY = -25
   local iconsDir = "img/icons/menubarIcons/"
-  local pa = {toScene = "home"}
 
   menuBar.slideButton = widget.newButton{
     top = startX + (spacingX*3)/2,
@@ -126,10 +126,11 @@ function setUpMenuBar()
     onEvent = changeSceneButtonEvent,
   }
 
+  -- Set scene file for each buttons to be use in changeSceneButtonEvent
   menuBar.homeButton.scene = "home"
   menuBar.shopButton.scene = "shop"
   menuBar.miniGameButton.scene = "miniGame"
-  menuBar.settingsButton.scene = "settings"
+  menuBar.settingsButton.scene = "inventory"
 
   menuBar:insert(menuBar.slideButton)
   menuBar:insert(menuBar.homeButton)

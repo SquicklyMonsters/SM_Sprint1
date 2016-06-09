@@ -1,4 +1,5 @@
 require("savegame") -- For Testing
+local composer = require("composer")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
@@ -118,11 +119,12 @@ end
 function monsterClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
-            if (currentVisibleList == nil) then
-                hideShowAllIcons(iconsList)
-            else 
-                hideShowAllIcons(currentVisibleList)
-            end
+            -- if (currentVisibleList == nil) then
+            --     hideShowAllIcons(iconsList)
+            -- else 
+            --     hideShowAllIcons(currentVisibleList)
+            -- end
+            composer.showOverlay("inventory")
         end
     end
 end

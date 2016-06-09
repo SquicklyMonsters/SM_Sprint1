@@ -1,3 +1,4 @@
+local food = require("foodClass")
 local widget = require("widget")
 local composer = require( "composer" )
 local scene = composer.newScene()
@@ -5,6 +6,24 @@ local scene = composer.newScene()
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 local maxSize;
+
+-- -------------------------------------------------------------------------------
+-- Set all Event listeners HERE
+
+function itemClickedEvent(event)
+	-- Just gonna eat it right away for now
+	if event.phase == "ended" then
+		event.target.item:eat()
+		-- print(event.target)
+		-- print(event.target.width)
+	end
+end
+
+function closeEvent(event)
+	if event.phase == "ended" then
+		composer.gotoScene("home")
+	end
+end
 
 -- -------------------------------------------------------------------------------
 
@@ -18,36 +37,51 @@ function widget.newPanel( options )
     return container
 end
 
--- Called when the scene's view does not exist:
-function scene:create( event )
-	local sceneGroup = self.view
-
-	-- fish = widget.newPanel{
- --    width = 50,
- --    height = 50,
- --    imageDir = "img/icons/fish.png"
- --  	}
-
+function setUpInventory()
  	local inventory = widget.newPanel {
  		width = 300,
- 		height = 280,
+ 		height = 300,
  		imageDir = "img/bg/inventory.png"
  	}
 
- 	local startX = display.contentCenterX - inventory.width/2 + 50
- 	local startY = display.contentCenterY - inventory.height/2 + 40
+ 	local startX = -inventory.width*(1/3)
+ 	local startY = -inventory.height*(1/3)
  	print(startX, startY)
 
+ 	local burger = food.new("burger", 5, 500, 0, 0, 0, 0)
+ 	print(burger)
  	inventory.item1 = widget.newButton {
  		top = startY,
 	    left = startX,
 	    width = 50,
 	    height = 50,
 	    defaultFile = "img/icons/fish.png",
-	    -- onEvent = slideButtonEvent,
+	    onEvent = itemClickedEvent,
  	}
 
+ 	inventory.close = widget.newButton {
+ 		top = startY + 100,
+ 		left = startX + 100,
+ 		width = 50,
+ 		height = 50,
+ 		defaultFile = "img/icons/close.png",
+ 		onEvent = closeEvent,
+ 	}
+ 	inventory.item1.item = burger
+ 	inventory:insert(inventory.item1)
+ 	inventory:insert(inventory.close)
+
+ 	return inventory
+end
+
+-- Called when the scene's view does not exist:
+function scene:create( event )
+	local sceneGroup = self.view
+	local inventory = setUpInventory()
+
+
 	sceneGroup:insert(inventory)
+
 end
 
 function scene:show( event )
@@ -56,6 +90,7 @@ function scene:show( event )
     
 
 	if phase == "will" then
+		-- composer.showOverlay("menubar")
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
 		-- Called when the scene is now on screen

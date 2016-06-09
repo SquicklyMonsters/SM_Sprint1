@@ -126,6 +126,7 @@ function scene:show( event )
 
 	if phase == "will" then
         composer.showOverlay("menubar")
+        -- composer.showOverlay("inventory")
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
 		-- Called when the scene is now on screen

@@ -30,6 +30,7 @@ function food:eat()
 	changeNeedsLevel("happiness", self.happinessAffect)
 	changeNeedsLevel("energy", self.energyAffect)
 	changeNeedsLevel("exp", self.expAffect)
+	print("EAT !!")
 end
 
 -------------------------------------------------
