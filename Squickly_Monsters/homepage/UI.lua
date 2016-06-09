@@ -119,9 +119,9 @@ function setUpIcon(img, scale)
 end
 
 function setUpInventoryIcon(img, scale)
-    icon = display.newImage(img, getMonster().x, getMonster().y)
+    icon = display.newImage(img, display.contentWidth*0.1, display.contentHeight*0.9)
     icon:scale(scale, scale)
-    icon.alpha = 0
+    icon.alpha = 1
     return icon
 end
 
