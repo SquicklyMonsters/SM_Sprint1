@@ -144,7 +144,7 @@ function update( event )
     updateSpeed()
     updateHero()
     updateBlocks()
-    -- checkCollisions()
+    checkCollisions()
 end
 
 function updateBackgrounds()
