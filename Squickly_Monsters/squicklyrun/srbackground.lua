@@ -233,17 +233,17 @@ function checkCollisions()
      end
 end
 
--- -- -----------------------------------------------------------------------------------------------------------------
--- --Event Handlers
+-- -----------------------------------------------------------------------------------------------------------------
+--Event Handlers
 
--- --this is the function that handles the jump events. If the screen is touched on the left side
--- --then make the monster jump
--- function touched( event )
---      if(event.phase == "began") then
---           if(event.x < 241) then
---                if(onGround) then
---                     hero.accel = hero.accel + 20
---                end
---           end
---      end
--- end
+--this is the function that handles the jump events. If the screen is touched on the left side
+--then make the monster jump
+function touched( event )
+     if(event.phase == "began") then
+          if(event.x < 241) then
+               if(onGround) then
+                    hero.accel = hero.accel + 20
+               end
+          end
+     end
+end
