@@ -1,4 +1,4 @@
-local food = require("foodClass")
+-- local foodList = require("foodList")
 local widget = require("widget")
 local composer = require( "composer" )
 local scene = composer.newScene()
@@ -27,7 +27,7 @@ end
 
 -- -------------------------------------------------------------------------------
 
-function widget.newPanel( options )                                    
+function widget.newPanel(options)                                    
     local background = display.newImage(options.imageDir)
     local container = display.newContainer(options.width, options.height)
     container:insert(background, true)
@@ -36,6 +36,8 @@ function widget.newPanel( options )
 
     return container
 end
+
+
 
 function setUpInventory()
  	local inventory = widget.newPanel {
@@ -48,8 +50,7 @@ function setUpInventory()
  	local startY = -inventory.height*(1/3)
  	print(startX, startY)
 
- 	local burger = food.new("burger", 5, 500, 0, 0, 0, 0)
- 	print(burger)
+
  	inventory.item1 = widget.newButton {
  		top = startY,
 	    left = startX,
@@ -67,7 +68,8 @@ function setUpInventory()
  		defaultFile = "img/icons/close.png",
  		onEvent = closeEvent,
  	}
- 	inventory.item1.item = burger
+ 	inventory.item1.item = foodList.burger
+
  	inventory:insert(inventory.item1)
  	inventory:insert(inventory.close)
 
