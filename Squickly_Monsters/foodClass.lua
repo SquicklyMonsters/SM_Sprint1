@@ -1,4 +1,3 @@
-require("homepage.UI")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
@@ -25,7 +24,10 @@ end
 -------------------------------------------------
 
 function food:eat()
-	--change needs bar according to food affect
+	-- Change to eating animation and wake up monster
+	changeToWakeupState()
+    feedPetAnimation()
+    -- Change needs bar according to food affect
 	changeNeedsLevel("hunger", self.hungerAffect)
 	changeNeedsLevel("happiness", self.happinessAffect)
 	changeNeedsLevel("hygiene", self.hygieneAffect)
