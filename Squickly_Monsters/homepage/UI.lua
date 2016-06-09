@@ -21,8 +21,7 @@ local needsLevels;
 local needsBars;
 
 
-local cloud;
-local monster;
+local cloud;      --- local for cloud Icon
 -- -------------------------------------------------------------------------------
 -- Set up needs bar
 
@@ -109,7 +108,7 @@ function setUpAllIcons()
     mostRecentPlayIcon1 = setUpIcon(iconsDir .. "legomanIcon.png", 0.75)
     mostRecentPlayIcon2 = setUpIcon(iconsDir .. "footballIcon.png", 0.75)
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
-    cloud = setUpIcon(iconsDir.. "cloud.png", 0.75)
+    cloud = setUpIcon(iconsDir.. "cloud.png", 0.75)   ----------------------- Add cloud icon here
 end
 
 function setUpIcon(img, scale)
@@ -144,11 +143,11 @@ end
 -- Changing by a certain amount (Still needs to have more calculations later)
 function changeNeedsLevel(need, change)
     setNeedsLevel(need, needsLevels[need] + change)
-    if need == "hunger" then
-      if needsBars.hunger:getProgress() < 0.4 then
-        transition.fadeIn( cloud, {x = getMonster().x +100, y = getMonster().y - 120, time=1500 } )
+    if need == "hunger" then  -- --------------------------------------------------------------------Check only for hunger bar.
+      if needsBars.hunger:getProgress() < 0.4 then---------------------------------------------------If hunger is less than 40% to
+        transition.fadeIn( cloud, {x = getMonster().x +100, y = getMonster().y - 120, time=1500 } )-- then fade in with icon
       else
-        transition.fadeOut( cloud, {time=1500 } )
+        transition.fadeOut( cloud, {time=1500 } )---------------------------------------------------- else doing fade out
       end
     end
 end
