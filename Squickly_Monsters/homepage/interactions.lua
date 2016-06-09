@@ -1,4 +1,5 @@
 require("savegame") -- For Testing
+require("foodList")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
@@ -191,7 +192,8 @@ function mostRecentFood1Clicked(event)
             hideShowAllIcons(foodIconsList)
             changeToWakeupState()
             feedPetAnimation()
-            changeNeedsLevel("hunger", 500)
+            local burger = getFood("burger")
+            burger:eat()
         end
     end
 end
