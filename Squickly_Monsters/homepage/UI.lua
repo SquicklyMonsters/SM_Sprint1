@@ -16,10 +16,13 @@ local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
 local morePlayIcon;
 
-local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins 
+local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins
 local needsLevels;
 local needsBars;
 
+
+local cloud;
+local monster;
 -- -------------------------------------------------------------------------------
 -- Set up needs bar
 
@@ -106,6 +109,7 @@ function setUpAllIcons()
     mostRecentPlayIcon1 = setUpIcon(iconsDir .. "legomanIcon.png", 0.75)
     mostRecentPlayIcon2 = setUpIcon(iconsDir .. "footballIcon.png", 0.75)
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
+    cloud = setUpIcon(iconsDir.. "cloud.png", 0.75)
 end
 
 function setUpIcon(img, scale)
@@ -126,7 +130,7 @@ end
 -- ------------------------------------------------
 -- Adds forever increasing/decreasing needs level
 
-function setRateLongTerm(need, rate, amount) 
+function setRateLongTerm(need, rate, amount)
     -- increasing is boolean val which shows that rate should increase if true
     -- rate is frequency of the change, amount is the magnitude of change
     -- rate 1000 = 1sec, -1 is infinite interations
@@ -138,9 +142,15 @@ function setRateLongTerm(need, rate, amount)
 end
 -- ------------------------------------------------
 -- Changing by a certain amount (Still needs to have more calculations later)
-
 function changeNeedsLevel(need, change)
     setNeedsLevel(need, needsLevels[need] + change)
+    if need == "hunger" then
+      if needsBars.hunger:getProgress() < 0.4 then
+        transition.fadeIn( cloud, {x = getMonster().x +100, y = getMonster().y - 120, time=1500 } )
+      else
+        transition.fadeOut( cloud, {time=1500 } )
+      end
+    end
 end
 
 -- -------------------------------------------------------------------------------
@@ -246,4 +256,8 @@ end
 
 function getMorePlayIcon()
     return morePlayIcon
+end
+
+function getCloud()
+  return cloud
 end

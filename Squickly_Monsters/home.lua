@@ -40,6 +40,11 @@ local hygieneBar;
 local energyBar;
 local expBar;
 
+
+------------------------------------------------
+local cloud;
+-- cloud = setUpIcon("img.meat.png", 0.75)
+
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
@@ -73,6 +78,7 @@ function scene:create( event )
 
     -- Set up all Icons
     setUpAllIcons()
+		cloud = getCloud()
     feedIcon = getFeedIcon()
     sleepIcon = getSleepIcon()
     wakeupIcon = getWakeupIcon()
@@ -94,6 +100,7 @@ function scene:create( event )
     middle:insert(monster)
     -- ===========FRONT===============
     front:insert(feedIcon)
+		front:insert(cloud)
     front:insert(sleepIcon)
     front:insert(wakeupIcon)
     front:insert(cleanIcon)
@@ -110,6 +117,7 @@ function scene:create( event )
     front:insert(hygieneBar)
     front:insert(energyBar)
     front:insert(expBar)
+		-- front:insert(cloud)
     -- ===============================
     sceneGroup:insert(back)
     sceneGroup:insert(middle)
@@ -122,7 +130,7 @@ end
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-    
+
 
 	if phase == "will" then
         composer.showOverlay("menubar")
