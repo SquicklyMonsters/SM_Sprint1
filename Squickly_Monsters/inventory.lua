@@ -58,8 +58,8 @@ function setUpInventory()
  	local startY = -inventory.height*(1/3)
 
  	local rows = 3
- 	local spacingX = display.contentWidth/10 --ASDNAISNDIANSD CHANGE TO HEIGHT
- 	local spacingY = display.contentWidth/10
+ 	local spacingX = (inventory.width)/4   --ASDNAISNDIANSD CHANGE TO HEIGHT
+ 	local spacingY = inventory.height/4
 
  	inventory.items = {}
 
