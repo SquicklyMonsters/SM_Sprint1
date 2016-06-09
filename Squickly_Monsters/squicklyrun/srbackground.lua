@@ -136,36 +136,36 @@ function setupSprite()
 	screen:insert(collisionRect)
 end
 
--- -- -----------------------------------------------------------------------------------------------------------------
--- --Update functions
+-- -----------------------------------------------------------------------------------------------------------------
+--Update functions
 
--- function update( event )
---     updateBackgrounds()
---     updateSpeed()
---     updateHero()
---     updateBlocks()
---     checkCollisions()
--- end
+function update( event )
+    updateBackgrounds()
+    updateSpeed()
+    -- updateHero()
+    -- updateBlocks()
+    -- checkCollisions()
+end
 
--- function updateBackgrounds()
--- 	--far background movement
--- 	backgroundfar.x = backgroundfar.x - (speed/55)
+function updateBackgrounds()
+	--far background movement
+	backgroundfar.x = backgroundfar.x - (speed/55)
 	 
--- 	--near background movement
--- 	backgroundnear1.x = backgroundnear1.x - (speed/5)
--- 	if(backgroundnear1.x < -239) then
--- 		backgroundnear1.x = 760
--- 	end
+	--near background movement
+	backgroundnear1.x = backgroundnear1.x - (speed/5)
+	if(backgroundnear1.x < -239) then
+		backgroundnear1.x = 760
+	end
 	 
--- 	backgroundnear2.x = backgroundnear2.x - (speed/5)
--- 	if(backgroundnear2.x < -239) then
--- 		backgroundnear2.x = 760
--- 	end
--- end
+	backgroundnear2.x = backgroundnear2.x - (speed/5)
+	if(backgroundnear2.x < -239) then
+		backgroundnear2.x = 760
+	end
+end
 
--- function updateSpeed()
--- 	speed = speed + .05
--- end
+function updateSpeed()
+	speed = speed + .05
+end
 
 -- function updateHero()
 --      --if our hero is jumping then switch to the jumping animation
