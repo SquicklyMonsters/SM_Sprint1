@@ -57,16 +57,9 @@ end
 -- Set up contructor for menu bar
 
 function widget.newPanel( options )                                    
-    local opt = {}
-    opt.width = options.width
-    opt.height = options.height
-    opt.speed = options.speed
-    opt.inEasing = options.inEasing
-    opt.outEasing = options.outEasing
-
     local background = display.newImage(options.imageDir)
 
-    local container = display.newContainer(opt.width, display.contentHeight)
+    local container = display.newContainer(options.width, display.contentHeight)
     -- Start as a hide bar state
     container.completeState = "hidden"
     container.x = display.contentWidth + 30
@@ -75,8 +68,8 @@ function widget.newPanel( options )
 
     function container:show()                                          
         local options = {
-            time = opt.speed,
-            transition = opt.inEasing
+            time = options.speed,
+            transition = options.inEasing
         }
         options.x = display.contentWidth - 30
         self.completeState = "shown"
@@ -85,8 +78,8 @@ function widget.newPanel( options )
 
     function container:hide()                                    
         local options = {
-            time = opt.speed,
-            transition = opt.outEasing
+            time = options.speed,
+            transition = options.outEasing
         }
         options.x = display.contentWidth + 30
         self.completeState = "hidden"
