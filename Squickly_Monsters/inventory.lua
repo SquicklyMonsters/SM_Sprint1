@@ -58,7 +58,7 @@ function setUpInventory()
  	local startY = -inventory.height*(1/3)
 
  	local rows = 3
- 	local spacingX = (inventory.width)/4   --ASDNAISNDIANSD CHANGE TO HEIGHT
+ 	local spacingX = (inventory.width)/4
  	local spacingY = inventory.height/4
 
  	inventory.items = {}
@@ -76,6 +76,7 @@ function setUpInventory()
 
  		inventory.items[i].item = itemList[i]
  		inventory:insert(inventory.items[i])
+ 		--another smaller frame for quantity
  	end
 
  	inventory.close = widget.newButton {
