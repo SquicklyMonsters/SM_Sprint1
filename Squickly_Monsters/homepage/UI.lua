@@ -108,20 +108,17 @@ function setUpAllIcons()
     mostRecentPlayIcon1 = setUpIcon(iconsDir .. "legomanIcon.png", 0.75)
     mostRecentPlayIcon2 = setUpIcon(iconsDir .. "footballIcon.png", 0.75)
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
-    inventoryIcon  = setUpInventoryIcon(iconsDir .. "inventoryIcon.png", 1)
+    inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 1, display.contentWidth*0.1, display.contentHeight*0.9, 1)
 end
 
-function setUpIcon(img, scale)
-    icon = display.newImage(img, getMonster().x, getMonster().y)
-    icon:scale(scale, scale)
-    icon.alpha = 0
-    return icon
-end
+function setUpIcon(img, scale, x, y, alpha)
+    x = x or getMonster().x
+    y = y or getMonster().y
+    alpha = alpha or 0
 
-function setUpInventoryIcon(img, scale)
-    icon = display.newImage(img, display.contentWidth*0.1, display.contentHeight*0.9)
+    icon = display.newImage(img, x, y)
     icon:scale(scale, scale)
-    icon.alpha = 1
+    icon.alpha = alpha
     return icon
 end
 
