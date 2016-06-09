@@ -142,8 +142,8 @@ end
 function update( event )
     updateBackgrounds()
     updateSpeed()
-    -- updateHero()
-    -- updateBlocks()
+    updateHero()
+    updateBlocks()
     -- checkCollisions()
 end
 
@@ -167,47 +167,47 @@ function updateSpeed()
 	speed = speed + .05
 end
 
--- function updateHero()
---      --if our hero is jumping then switch to the jumping animation
---      --if not keep playing the running animation
---      if(onGround) then
---           if(wasOnGround == false) then
---                hero:setSequence("running")
---                hero:play()
---           end
---      else
---           hero:setSequence("jumping")
---           hero:play()
---      end
+function updateHero()
+     --if our hero is jumping then switch to the jumping animation
+     --if not keep playing the running animation
+     if(onGround) then
+          if(wasOnGround == false) then
+               hero:setSequence("running")
+               hero:play()
+          end
+     else
+          hero:setSequence("jumping")
+          hero:play()
+     end
  
---      if(hero.accel > 0) then
---           hero.accel = hero.accel - 1
---      end
+     if(hero.accel > 0) then
+          hero.accel = hero.accel - 1
+     end
  
---      --update the heros position accel is used for our jump and
---      --gravity keeps the hero coming down. You can play with those 2 variables
---      --to make lots of interesting combinations of gameplay like 'low gravity' situations
---      hero.y = hero.y - hero.accel
---      hero.y = hero.y - hero.gravity
---      --update the collisionRect to stay in front of the hero
---      collisionRect.y = hero.y
--- end
+     --update the heros position accel is used for our jump and
+     --gravity keeps the hero coming down. You can play with those 2 variables
+     --to make lots of interesting combinations of gameplay like 'low gravity' situations
+     hero.y = hero.y - hero.accel
+     hero.y = hero.y - hero.gravity
+     --update the collisionRect to stay in front of the hero
+     collisionRect.y = hero.y
+end
 
--- function updateBlocks()
--- 	for a = 1, blocks.numChildren, 1 do
--- 		if(a > 1) then
--- 			newX = (blocks[a - 1]).x + 79
--- 		else
--- 			newX = (blocks[8]).x + 79 - speed
--- 		end
+function updateBlocks()
+	for a = 1, blocks.numChildren, 1 do
+		if(a > 1) then
+			newX = (blocks[a - 1]).x + 79
+		else
+			newX = (blocks[8]).x + 79 - speed
+		end
 		 
--- 		if((blocks[a]).x < -40) then
--- 			(blocks[a]).x, (blocks[a]).y = newX, (blocks[a]).y
--- 		else
--- 			(blocks[a]):translate(speed * -1, 0)
--- 		end
--- 	end
--- end
+		if((blocks[a]).x < -40) then
+			(blocks[a]).x, (blocks[a]).y = newX, (blocks[a]).y
+		else
+			(blocks[a]):translate(speed * -1, 0)
+		end
+	end
+end
  
 -- function checkCollisions()
 --      wasOnGround = onGround
