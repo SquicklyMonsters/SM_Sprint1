@@ -40,10 +40,7 @@ local hygieneBar;
 local energyBar;
 local expBar;
 
-
-------------------------------------------------
-local cloud;
--- cloud = setUpIcon("img.meat.png", 0.75)
+local cloud;      -- local for cloud
 
 -- -------------------------------------------------------------------------------
 
@@ -117,7 +114,6 @@ function scene:create( event )
     front:insert(hygieneBar)
     front:insert(energyBar)
     front:insert(expBar)
-		-- front:insert(cloud)
     -- ===============================
     sceneGroup:insert(back)
     sceneGroup:insert(middle)
