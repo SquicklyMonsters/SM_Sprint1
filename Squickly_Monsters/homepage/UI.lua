@@ -16,6 +16,8 @@ local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
 local morePlayIcon;
 
+local inventoryIcon;
+
 local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins 
 local needsLevels;
 local needsBars;
@@ -106,9 +108,17 @@ function setUpAllIcons()
     mostRecentPlayIcon1 = setUpIcon(iconsDir .. "legomanIcon.png", 0.75)
     mostRecentPlayIcon2 = setUpIcon(iconsDir .. "footballIcon.png", 0.75)
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
+    inventoryIcon  = setUpInventoryIcon(iconsDir .. "inventoryIcon.png", 1)
 end
 
 function setUpIcon(img, scale)
+    icon = display.newImage(img, getMonster().x, getMonster().y)
+    icon:scale(scale, scale)
+    icon.alpha = 0
+    return icon
+end
+
+function setUpInventoryIcon(img, scale)
     icon = display.newImage(img, getMonster().x, getMonster().y)
     icon:scale(scale, scale)
     icon.alpha = 0
@@ -246,4 +256,8 @@ end
 
 function getMorePlayIcon()
     return morePlayIcon
+end
+
+function getInventoryIcon()
+    return inventoryIcon
 end

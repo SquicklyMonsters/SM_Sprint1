@@ -5,6 +5,7 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
+itemList = {foodList.burger, foodList.icecream, foodList.fish, foodList.noodles};
 local maxSize;
 
 -- -------------------------------------------------------------------------------
@@ -37,7 +38,14 @@ function widget.newPanel(options)
     return container
 end
 
-
+--counts the length of the list, can't use #list because #list stops counting at first nil
+function listLength(list)
+	count = 0
+	for i, items in pairs(list) do
+    	count = count + 1
+	end
+	return count
+end
 
 function setUpInventory()
  	local inventory = widget.newPanel {
@@ -48,29 +56,37 @@ function setUpInventory()
 
  	local startX = -inventory.width*(1/3)
  	local startY = -inventory.height*(1/3)
- 	print(startX, startY)
 
+ 	local rows = 3
+ 	local spacingX = display.contentWidth/10 --ASDNAISNDIANSD CHANGE TO HEIGHT
+ 	local spacingY = display.contentWidth/10
 
- 	inventory.item1 = widget.newButton {
- 		top = startY,
-	    left = startX,
-	    width = 50,
-	    height = 50,
-	    defaultFile = "img/icons/fish.png",
-	    onEvent = itemClickedEvent,
- 	}
+ 	inventory.items = {}
+
+ 	for i = 1, listLength(itemList) do --loops to create each item on inventory
+
+ 		inventory.items[i] = widget.newButton {
+ 			top = startY + (spacingY * (math.floor((i-1) / rows))), -- division of row
+	    	left = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows)), -- modulo of row
+	    	width = 50,
+	    	height = 50,
+	    	defaultFile = itemList[i].image,
+	    	onEvent = itemClickedEvent,
+ 		}
+
+ 		inventory.items[i].item = itemList[i]
+ 		inventory:insert(inventory.items[i])
+ 	end
 
  	inventory.close = widget.newButton {
- 		top = startY + 100,
- 		left = startX + 100,
+ 		top = startY - (spacingY * 0.6),
+ 		left = startX + (spacingX * 2.7),
  		width = 50,
  		height = 50,
  		defaultFile = "img/icons/close.png",
  		onEvent = closeEvent,
  	}
- 	inventory.item1.item = foodList.burger
 
- 	inventory:insert(inventory.item1)
  	inventory:insert(inventory.close)
 
  	return inventory
