@@ -1,59 +1,51 @@
+local widget = require("widget")
 local composer = require( "composer" )
 local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 local maxSize;
-local 
 
 -- -------------------------------------------------------------------------------
 
 function widget.newPanel( options )                                    
-
     local background = display.newImage(options.imageDir)
-
-    local container = display.newContainer(opt.width, display.contentHeight)
-    -- Start as a hide bar state
+    local container = display.newContainer(options.width, options.height)
     container:insert(background, true)
+    container.x = display.contentCenterX
+    container.y = display.contentCenterY
 
-    -- function container:show()                                          
-    --     local options = {
-    --         time = opt.speed,
-    --         transition = opt.inEasing
-    --     }
-    --     options.x = display.contentWidth - 30
-    --     self.completeState = "shown"
-    --     transition.to(self, options)
-    -- end
-
-    -- function container:hide()                                    
-    --     local options = {
-    --         time = opt.speed,
-    --         transition = opt.outEasing
-    --     }
-    --     options.x = display.contentWidth + 30
-    --     self.completeState = "hidden"
-    --     transition.to(self, options)
-    -- end
     return container
 end
 
 -- Called when the scene's view does not exist:
 function scene:create( event )
 	local sceneGroup = self.view
-	local options = {
-		width = 300,
-		height = 280,
-	}
-	local inventory = display.newImage("img/bg/inventory.png", options)
-	inventory.x = display.contentCenterX
-	inventory.y = display.contentCenterY
 
-	menuBar = widget.newPanel{
-    width = 50,
-    height = 50,
-    imageDir = "img/icons/fish.png"
-  	}
+	-- fish = widget.newPanel{
+ --    width = 50,
+ --    height = 50,
+ --    imageDir = "img/icons/fish.png"
+ --  	}
+
+ 	local inventory = widget.newPanel {
+ 		width = 300,
+ 		height = 280,
+ 		imageDir = "img/bg/inventory.png"
+ 	}
+
+ 	local startX = display.contentCenterX - inventory.width/2 + 50
+ 	local startY = display.contentCenterY - inventory.height/2 + 40
+ 	print(startX, startY)
+
+ 	inventory.item1 = widget.newButton {
+ 		top = startY,
+	    left = startX,
+	    width = 50,
+	    height = 50,
+	    defaultFile = "img/icons/fish.png",
+	    -- onEvent = slideButtonEvent,
+ 	}
 
 	sceneGroup:insert(inventory)
 end

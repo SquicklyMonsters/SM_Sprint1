@@ -21,34 +21,11 @@ function slideButtonEvent(event)
   end
 end
 
-function homeButtonEvent(event)
+function changeSceneButtonEvent(event)
+  local scene = event.target.scene
   if event.phase == "ended" then
-    if composer.getSceneName("current") ~= "home" then
-      composer.gotoScene("home", chageScenceEffect, chageSceneTime)
-    end
-  end
-end
-
-function shopButtonEven(event)
-  if event.phase == "ended" then
-    if composer.getSceneName("current") ~= "shop" then
-      composer.gotoScene("shop", chageScenceEffect, chageSceneTime)
-    end
-  end
-end
-
-function miniGameButtonEvent(event)
-  if event.phase == "ended" then
-    if composer.getSceneName("current") ~= "miniGame" then
-      composer.gotoScene("miniGame", chageScenceEffect, chageSceneTime)
-    end
-  end
-end
-
-function settingsButtonEvent(event)
-  if event.phase == "ended" then
-    if composer.getSceneName("current") ~= "settings" then
-      composer.gotoScene("settings", chageScenceEffect, chageSceneTime)
+    if composer.getSceneName("current") ~= scene then
+      composer.gotoScene(scene, chageScenceEffect, chageSceneTime)
     end
   end
 end
@@ -104,6 +81,7 @@ function setUpMenuBar()
   local spacingX = 70
   local middleY = -25
   local iconsDir = "img/icons/menubarIcons/"
+  local pa = {toScene = "home"}
 
   menuBar.slideButton = widget.newButton{
     top = startX + (spacingX*3)/2,
@@ -120,7 +98,7 @@ function setUpMenuBar()
     width = 50,
     height = 50,
     defaultFile = iconsDir .. "homeIcon.png",
-    onEvent = homeButtonEvent,
+    onEvent = changeSceneButtonEvent,
   }
   menuBar.shopButton = widget.newButton{
     top = startX + spacingX,
@@ -128,7 +106,7 @@ function setUpMenuBar()
     width = 50,
     height = 50,
     defaultFile = iconsDir .. "shopIcon.png",
-    onEvent = shopButtonEven,
+    onEvent = changeSceneButtonEvent,
   }
   menuBar.miniGameButton = widget.newButton{
     top = startX + spacingX*2,
@@ -136,7 +114,7 @@ function setUpMenuBar()
     width = 50,
     height = 50,
     defaultFile = iconsDir .. "miniGameIcon.png",
-    onEvent = miniGameButtonEvent,
+    onEvent = changeSceneButtonEvent,
   }
 
   menuBar.settingsButton = widget.newButton{
@@ -145,9 +123,13 @@ function setUpMenuBar()
     width = 50,
     height = 50,
     defaultFile = iconsDir .. "settingsIcon.png",
-    onEvent = settingsButtonEvent,
+    onEvent = changeSceneButtonEvent,
   }
 
+  menuBar.homeButton.scene = "home"
+  menuBar.shopButton.scene = "shop"
+  menuBar.miniGameButton.scene = "miniGame"
+  menuBar.settingsButton.scene = "settings"
 
   menuBar:insert(menuBar.slideButton)
   menuBar:insert(menuBar.homeButton)
