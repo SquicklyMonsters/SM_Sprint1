@@ -88,7 +88,10 @@ function setUpInventory()
  	}
 
  	inventory:insert(inventory.close)
-
+ 	inventory:scale(
+ 				(display.contentWidth/inventory.width)*0.4, 
+ 				(display.contentHeight/inventory.height)*0.5
+ 				)
  	return inventory
 end
 
