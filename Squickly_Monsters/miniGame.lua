@@ -24,8 +24,8 @@ function scene:create( event )
 	blocks = getBlockImages()
 	game_bg = getBackgroundImages()
 
-	sceneGroup:insert( blocks )
 	sceneGroup:insert( game_bg )
+	sceneGroup:insert( blocks )
 end
 
 function scene:show( event )

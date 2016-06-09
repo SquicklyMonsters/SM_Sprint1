@@ -35,7 +35,7 @@ function setupBackground()
 
 	--adds an image to our game centered at x and y coordinates
 	backbackground = display.newImage("img/squicklyrun/background.png")
-	backbackground.x = 240
+	backbackground.x = 300
 	backbackground.y = 160
 	 
 	backgroundfar = display.newImage("img/squicklyrun/bgfar1.png")
