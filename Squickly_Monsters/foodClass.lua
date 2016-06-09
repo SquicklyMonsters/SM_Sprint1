@@ -2,8 +2,8 @@ require("homepage.UI")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
-local food = {}
-local food_mt = { __index = food } -- metatable
+local food = {};
+local food_mt = { __index = food }; -- metatable
 
 -- -------------------------------------------------------------------------------
 
@@ -31,6 +31,7 @@ function food:eat()
 	changeNeedsLevel("hygiene", self.hygieneAffect)
 	changeNeedsLevel("energy", self.energyAffect)
 	changeNeedsLevel("exp", self.expAffect)
+	print("Eat " .. self.name .. "!!")
 end
 
 -------------------------------------------------
