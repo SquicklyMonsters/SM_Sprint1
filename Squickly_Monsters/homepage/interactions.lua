@@ -194,8 +194,8 @@ function mostRecentFood1Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(foodIconsList)
-            changeToWakeupState()
-            feedPetAnimation()
+            -- changeToWakeupState()
+            -- feedPetAnimation()
             local burger = foodList.burger
             burger:eat()
         end
@@ -206,8 +206,8 @@ function mostRecentFood2Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(foodIconsList)
-            changeToWakeupState()
-            feedPetAnimation()
+            -- changeToWakeupState()
+            -- feedPetAnimation()
             changeNeedsLevel("hunger", 1000)
         end
     end
