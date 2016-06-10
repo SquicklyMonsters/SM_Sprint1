@@ -107,6 +107,7 @@ function setUpInventory()
  	local spacingY = inventory.height/4
 
  	itemList, itemQuantities = loadInventoryData()
+ 	print(itemList)
  	inventory.items = {}
 
  	for i = 1, #itemList do --loops to create each item on inventory
@@ -162,6 +163,7 @@ end
 -- -------------------------------------------------------------------------------
 -- Get functions HERE
 function getItemList()
+	print(itemList)
 	return itemList
 end
 
