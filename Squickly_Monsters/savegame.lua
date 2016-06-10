@@ -50,6 +50,7 @@ function saveInventoryData()
    local outTable = {itemList, itemQuantities}
    local contents = json.encode(outTable)
 
+
    writeFile(inventoryDataFile, contents)
    print("save inv")
 end

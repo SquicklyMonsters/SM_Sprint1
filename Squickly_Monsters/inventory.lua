@@ -5,8 +5,8 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
-local itemList = {foodList.burger, foodList.icecream, foodList.fish, foodList.noodles};
-local itemQuantities = {2, 3, 4, 5};
+local itemList;
+local itemQuantities;
 local itemTexts = {};
 
 local inventory;
@@ -18,8 +18,8 @@ local maxSize;
 function itemClickedEvent(event)
 	-- Just gonna eat it right away for now
 	if event.phase == "ended" then
-		event.target.item:eat()
 		local idx = event.target.idx
+		foodList[itemList[idx]]:eat()
 		reduceQuantity(idx)
 	end
 end
@@ -35,9 +35,13 @@ end
 -- Reduce quantity of the item when use
 function reduceQuantity(idx)
 	itemTexts[idx].text = itemTexts[idx].text - 1
+	itemQuantities[idx] = itemQuantities[idx] - 1
 	if tonumber(itemTexts[idx].text) <= 0 then
 		removeItem(idx)
+	else
+		saveInventoryData()
 	end
+
 end
 
 
@@ -57,6 +61,7 @@ function removeItem(idx)
 	itemQuantities = new_itemQuantities
 	itemTexts = new_itemTexts
 
+	saveInventoryData()
 	updateInventory()
 end
 
@@ -107,17 +112,17 @@ function setUpInventory()
  	for i = 1, #itemList do --loops to create each item on inventory
  		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
  		local y = startY + (spacingY * (math.floor((i-1) / rows))) 
-
+ 		local food = foodList[itemList[i]]
  		inventory.items[i] = widget.newButton {
  			top = y, -- division of row
 	    	left = x, -- modulo of row
 	    	width = 50,
 	    	height = 50,
-	    	defaultFile = itemList[i].image,
+	    	defaultFile = food.image,
 	    	onEvent = itemClickedEvent,
  		}
 
- 		inventory.items[i].item = itemList[i]
+ 		inventory.items[i].item = food
  		inventory.items[i].idx = i
  		local textOptions = {
 			text = itemQuantities[i], 
@@ -162,10 +167,6 @@ end
 
 function getItemQuantities()
 	return itemQuantities
-end
-
-function getItemTexts()
-	return itemTexts
 end
 
 -- -------------------------------------------------------------------------------
