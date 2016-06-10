@@ -42,7 +42,7 @@ local hygieneBar;
 local energyBar;
 local expBar;
 
-local hungerCloud;      --- local for cloud Icon
+local hungerCloud;
 local energyCloud;
 
 -- -------------------------------------------------------------------------------

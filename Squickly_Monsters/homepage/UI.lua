@@ -20,9 +20,7 @@ local inventoryIcon;
 local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins
 local needsLevels;
 local needsBars;
-
-
-local hungerCloudThought;      --- local for cloud Icon
+local hungerCloudThought;
 local energyCloudThought;
 -- -------------------------------------------------------------------------------
 -- Set up needs bar
@@ -110,8 +108,8 @@ function setUpAllIcons()
     mostRecentPlayIcon1 = setUpIcon(iconsDir .. "legomanIcon.png", 0.75)
     mostRecentPlayIcon2 = setUpIcon(iconsDir .. "footballIcon.png", 0.75)
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
-    hungerCloudThought = setUpIcon(iconsDir.. "cloud.png", 0.75, getMonster().x +100, getMonster().y -120)   ----------------------- Add hungry icon here
-    energyCloudThought = setUpIcon(iconsDir.. "battery.png", 0.75, getMonster().x -100, getMonster().y -120)  ---------------------- Add energy icon here
+    hungerCloudThought = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
+    energyCloudThought = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
     inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
 end
 
@@ -157,12 +155,11 @@ end
 -- checkBar keep checking the hungerBar and energyBar
 -- if it less than 40 % then pop up the thoughtcloud
 function thoughtCloud(need)
-  if need == "hunger" then  -- --------------------------------------------------------------------Check only for hunger bar.
-    if needsBars.hunger:getProgress() < 0.4 then---------------------------------------------------If hunger is less than 40% to
+  if need == "hunger" then
+    if needsBars.hunger:getProgress() < 0.4 then
       transition.fadeIn( hungerCloudThought, {time=1500 } )-- then fade in with icon
     else
-      transition.fadeOut( hungerCloudThought, { time=1500 } )---------------------------------------------------- else doing fade out
-      -- transition.to(cloud,{x = getMonster().x, y = getMonster().y,alpha=0})
+      transition.fadeOut( hungerCloudThought, { time=1500 } )
     end
   end
   if need == "energy" then
