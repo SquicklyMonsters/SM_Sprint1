@@ -16,7 +16,7 @@ local player;
 
 function scene:create( event )
 	local sceneGroup = self.view
-	
+
 	setupBackground()
 	setupGround()
 	setupObstaclesAndEnemies()
@@ -36,10 +36,10 @@ end
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-    
 
 	if phase == "will" then
         composer.showOverlay("menubar")
+		restartGame()
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
 		-- Called when the scene is now on screen
