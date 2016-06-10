@@ -1,4 +1,6 @@
 require("savegame") -- For Testing
+local composer = require("composer")
+require("foodList")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
@@ -19,6 +21,7 @@ local shopIcon;
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
 local morePlayIcon;
+local inventoryIcon;
 
 local iconsList; -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
 local foodIconsList;
@@ -30,7 +33,7 @@ local needsLevels;
 local needsBars;
 
 local isTouchAble;
-
+local inventoryIsShow = false;
 -- -------------------------------------------------------------------------------
 
 function cacheVariables()
@@ -58,6 +61,7 @@ function cacheVariables()
     mostRecentPlayIcon1 = getMostRecentPlayIcon1()
     mostRecentPlayIcon2 = getMostRecentPlayIcon2()
     morePlayIcon = getMorePlayIcon()
+    inventoryIcon = getInventoryIcon()
 
     -- Create lists
     iconsList = {feedIcon, sleepIcon, cleanIcon, playIcon}
@@ -189,9 +193,8 @@ function mostRecentFood1Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(foodIconsList)
-            changeToWakeupState()
-            feedPetAnimation()
-            changeNeedsLevel("hunger", 500)
+            local burger = foodList.burger
+            burger:eat()
         end
     end
 end
@@ -200,8 +203,6 @@ function mostRecentFood2Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(foodIconsList)
-            changeToWakeupState()
-            feedPetAnimation()
             changeNeedsLevel("hunger", 1000)
         end
     end
@@ -255,6 +256,20 @@ function morePlayClicked(event)
     end
 end
 
+function inventoryClicked(event)
+    if isTouchAble then
+        if event.phase == "ended" then
+            if inventoryIsShow then
+                composer.gotoScene(composer.getSceneName("current"))
+                inventoryIsShow = false
+            else
+                composer.showOverlay("inventory")
+                inventoryIsShow = true
+            end
+        end
+    end
+end
+
 -- -------------------------------------------------------------------------------
 -- Sleep / Wakeup functions
 
@@ -303,4 +318,6 @@ function addListeners()
     mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
     mostRecentPlayIcon2:addEventListener("touch", mostRecentPlay2Clicked)
     morePlayIcon:addEventListener("touch", morePlayClicked)
+
+    inventoryIcon:addEventListener("touch", inventoryClicked)
 end

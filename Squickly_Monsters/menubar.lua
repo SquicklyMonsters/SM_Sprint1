@@ -4,10 +4,11 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
+
 local menuBar;
-local firstTime = true;
 local chageScenceEffect = "crossFade";
 local chageSceneTime = 250;
+
 -- -------------------------------------------------------------------------------
 -- Set reaction when menu bar buttons press
 
@@ -21,34 +22,11 @@ function slideButtonEvent(event)
   end
 end
 
-function homeButtonEvent(event)
+function changeSceneButtonEvent(event)
+  local scene = event.target.scene
   if event.phase == "ended" then
-    if composer.getSceneName("current") ~= "home" then
-      composer.gotoScene("home", chageScenceEffect, chageSceneTime)
-    end
-  end
-end
-
-function shopButtonEven(event)
-  if event.phase == "ended" then
-    if composer.getSceneName("current") ~= "shop" then
-      composer.gotoScene("shop", chageScenceEffect, chageSceneTime)
-    end
-  end
-end
-
-function miniGameButtonEvent(event)
-  if event.phase == "ended" then
-    if composer.getSceneName("current") ~= "miniGame" then
-      composer.gotoScene("miniGame", chageScenceEffect, chageSceneTime)
-    end
-  end
-end
-
-function settingsButtonEvent(event)
-  if event.phase == "ended" then
-    if composer.getSceneName("current") ~= "settings" then
-      composer.gotoScene("settings", chageScenceEffect, chageSceneTime)
+    if composer.getSceneName("current") ~= scene then
+      composer.gotoScene(scene, chageScenceEffect, chageSceneTime)
     end
   end
 end
@@ -57,16 +35,9 @@ end
 -- Set up contructor for menu bar
 
 function widget.newPanel( options )                                    
-    local opt = {}
-    opt.width = options.width
-    opt.height = options.height
-    opt.speed = options.speed
-    opt.inEasing = options.inEasing
-    opt.outEasing = options.outEasing
-
     local background = display.newImage(options.imageDir)
 
-    local container = display.newContainer(opt.width, display.contentHeight)
+    local container = display.newContainer(options.width, display.contentHeight)
     -- Start as a hide bar state
     container.completeState = "hidden"
     container.x = display.contentWidth + 30
@@ -75,8 +46,8 @@ function widget.newPanel( options )
 
     function container:show()                                          
         local options = {
-            time = opt.speed,
-            transition = opt.inEasing
+            time = options.speed,
+            transition = options.inEasing
         }
         options.x = display.contentWidth - 30
         self.completeState = "shown"
@@ -85,8 +56,8 @@ function widget.newPanel( options )
 
     function container:hide()                                    
         local options = {
-            time = opt.speed,
-            transition = opt.outEasing
+            time = options.speed,
+            transition = options.outEasing
         }
         options.x = display.contentWidth + 30
         self.completeState = "hidden"
@@ -127,7 +98,7 @@ function setUpMenuBar()
     width = 50,
     height = 50,
     defaultFile = iconsDir .. "homeIcon.png",
-    onEvent = homeButtonEvent,
+    onEvent = changeSceneButtonEvent,
   }
   menuBar.shopButton = widget.newButton{
     top = startX + spacingX,
@@ -135,7 +106,7 @@ function setUpMenuBar()
     width = 50,
     height = 50,
     defaultFile = iconsDir .. "shopIcon.png",
-    onEvent = shopButtonEven,
+    onEvent = changeSceneButtonEvent,
   }
   menuBar.miniGameButton = widget.newButton{
     top = startX + spacingX*2,
@@ -143,7 +114,7 @@ function setUpMenuBar()
     width = 50,
     height = 50,
     defaultFile = iconsDir .. "miniGameIcon.png",
-    onEvent = miniGameButtonEvent,
+    onEvent = changeSceneButtonEvent,
   }
 
   menuBar.settingsButton = widget.newButton{
@@ -152,9 +123,14 @@ function setUpMenuBar()
     width = 50,
     height = 50,
     defaultFile = iconsDir .. "settingsIcon.png",
-    onEvent = settingsButtonEvent,
+    onEvent = changeSceneButtonEvent,
   }
 
+  -- Set scene file for each buttons to be use in changeSceneButtonEvent
+  menuBar.homeButton.scene = "home"
+  menuBar.shopButton.scene = "shop"
+  menuBar.miniGameButton.scene = "miniGame"
+  menuBar.settingsButton.scene = "settings"
 
   menuBar:insert(menuBar.slideButton)
   menuBar:insert(menuBar.homeButton)

@@ -15,7 +15,8 @@ local shopIcon;
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
 local morePlayIcon;
-
+local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins
+local inventoryIcon;
 local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins
 local needsLevels;
 local needsBars;
@@ -109,12 +110,17 @@ function setUpAllIcons()
     mostRecentPlayIcon2 = setUpIcon(iconsDir .. "footballIcon.png", 0.75)
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
     cloud = setUpIcon(iconsDir.. "cloud.png", 0.75)   ----------------------- Add cloud icon here
+    inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
 end
 
-function setUpIcon(img, scale)
-    icon = display.newImage(img, getMonster().x, getMonster().y)
+function setUpIcon(img, scale, x, y, alpha)
+    x = x or getMonster().x
+    y = y or getMonster().y
+    alpha = alpha or 0
+
+    icon = display.newImage(img, x, y)
     icon:scale(scale, scale)
-    icon.alpha = 0
+    icon.alpha = alpha
     return icon
 end
 
@@ -262,7 +268,9 @@ end
 function getMorePlayIcon()
     return morePlayIcon
 end
-
 function getCloud()
-  return cloud
+    return cloud
+end
+function getInventoryIcon()
+    return inventoryIcon
 end

@@ -34,6 +34,8 @@ local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
 local morePlayIcon;
 
+local inventoryIcon;
+
 local hungerBar;
 local happinessBar;
 local hygieneBar;
@@ -88,6 +90,7 @@ function scene:create( event )
     mostRecentPlayIcon1 = getMostRecentPlayIcon1()
     mostRecentPlayIcon2 = getMostRecentPlayIcon2()
     morePlayIcon = getMorePlayIcon()
+    inventoryIcon = getInventoryIcon()
     setAutoSaveRate(10000)
 
 	-- Add display objects into group
@@ -95,6 +98,12 @@ function scene:create( event )
     back:insert(background)
     -- ===========MIDDLE==============
     middle:insert(monster)
+    middle:insert(hungerBar)
+    middle:insert(happinessBar)
+    middle:insert(hygieneBar)
+    middle:insert(energyBar)
+    middle:insert(expBar)
+    middle:insert(inventoryIcon)
     -- ===========FRONT===============
     front:insert(feedIcon)
 		front:insert(cloud)
@@ -109,11 +118,6 @@ function scene:create( event )
     front:insert(mostRecentPlayIcon1)
     front:insert(mostRecentPlayIcon2)
     front:insert(morePlayIcon)
-    front:insert(hungerBar)
-    front:insert(happinessBar)
-    front:insert(hygieneBar)
-    front:insert(energyBar)
-    front:insert(expBar)
     -- ===============================
     sceneGroup:insert(back)
     sceneGroup:insert(middle)
@@ -130,6 +134,7 @@ function scene:show( event )
 
 	if phase == "will" then
         composer.showOverlay("menubar")
+        -- composer.showOverlay("inventory")
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
 		-- Called when the scene is now on screen

@@ -1,38 +1,45 @@
----------------------------------------------------------------------------------
---
--- scene2.lua
---
----------------------------------------------------------------------------------
-
+-- Import dependency
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-local image, text1, text2, text3, memTimer
+require("squicklyrun.srbackground")
+-- -----------------------------------------------------------------------------------------------------------------
+-- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
+-- -----------------------------------------------------------------------------------------------------------------
+-- Local variables go Here
+
+local screen;
+local player;
+
+-- -------------------------------------------------------------------------------
+-- Scene functions go Here
 
 function scene:create( event )
 	local sceneGroup = self.view
-	
-	image = display.newImage( "bg2.jpg" )
-	image.x = display.contentCenterX
-	image.y = display.contentCenterY
-	
-	sceneGroup:insert( image )
-	
-	text1 = display.newText( "MiniGame", 0, 0, native.systemFontBold, 24 )
-	text1:setFillColor( 255 )
-	text1.x, text1.y = display.contentWidth * 0.5, 50
-	sceneGroup:insert( text1 )
-	
-	print( "\n2: create event" )
+
+	setupBackground()
+	setupGround()
+	setupObstaclesAndEnemies()
+	setupSprite()
+	setupScoreAndGameOver()
+
+	screen = getScreenLayer()
+	player = getPlayerLayer()
+
+	sceneGroup:insert( screen )
+	-- sceneGroup:insert( player )
+
+	timer.performWithDelay(1, update, -1)
+	Runtime:addEventListener("touch", touched, -1)
 end
 
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-    
 
 	if phase == "will" then
         composer.showOverlay("menubar")
+		restartGame()
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
 		-- Called when the scene is now on screen

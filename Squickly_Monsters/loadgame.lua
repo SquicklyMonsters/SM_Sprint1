@@ -6,7 +6,7 @@ local needsLevels;
 local json = require("json")
 
 -- Set location for saved data
-local filePath = system.pathForFile( "data.txt", system.DocumentsDirectory )
+local filePath = system.pathForFile( "data.txt", system.DocumentsDirectory ) -- Default Dir
 
 -- -------------------------------------------------------------------------------
 -- Get latest Data from Save file
