@@ -3,7 +3,7 @@ food = require("foodClass")
 -- -------------------------------------------------------------------------------
 
 local iconsDir = "img/icons/food/"
-foodList = {"burger", "noodles", "icecream", "fish"};
+foodList = {"burger", "icecream", "fish", "noodles"};
 
 -- -------------------------------------------------------------------------------
 

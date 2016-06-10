@@ -54,6 +54,8 @@ end
 
 function itemClickedEvent(event)
     if event.phase == "ended" then
+        itemList = getItemList()
+        itemQuantities = getItemQuantities()
         local idx = event.target.idx
         print(idx)
         local exist = checkExist(idx)
@@ -121,8 +123,6 @@ function scene:create( event )
 
     -- Retrieve inventory data from save file
     setUpInventoryData()
-    itemList = getItemList()
-    itemQuantities = getItemQuantities()
 
     -- Setup layer
     back = display.newGroup()
