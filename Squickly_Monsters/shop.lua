@@ -38,16 +38,12 @@ end
 
 function itemClickedEvent(event)
     if event.phase == "ended" then
-        itemList = getItemList()
-        itemQuantities = getItemQuantities()
-        local idx = event.target.idx
-        print(idx)
-        local exist = checkExist(idx)
-        print(itemList[idx])
-        if exist then
+        local item = event.target.item
+        local idx = isInInventory(item.name)
+        if idx then
             increaseQuantity(idx)
         else
-            addToInventory(idx)
+            addToInventory(item.name)
         end
     end
 end
@@ -68,6 +64,7 @@ function setUpShop()
     local spacingY = (inventory.height)/3.75
 
     shopList = getFoodList()
+    print(#shopList)
     inventory.items = {}
 
     for i = 1, #shopList do --loops to create each item on inventory
@@ -175,7 +172,7 @@ end
 
 function scene:destroy( event )
 	local sceneGroup = self.view
-
+    saveInventoryData()
 	-- Called prior to the removal of scene's "view" (sceneGroup)
 	--
 	-- INSERT code here to cleanup the scene

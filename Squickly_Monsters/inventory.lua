@@ -1,4 +1,3 @@
--- local foodList = require("foodList")
 local widget = require("widget")
 local composer = require( "composer" )
 local scene = composer.newScene()
@@ -10,7 +9,7 @@ local itemQuantities;
 local itemTexts = {};
 
 local inventory;
-local maxSize;
+local maxSize = 9;
 
 -- -------------------------------------------------------------------------------
 -- Set all Event listeners HERE
@@ -18,8 +17,9 @@ local maxSize;
 function itemClickedEvent(event)
 	-- Just gonna eat it right away for now
 	if event.phase == "ended" then
+		local food = event.target.item
 		local idx = event.target.idx
-		foodList[itemList[idx]]:eat()
+		food:eat()
 		reduceQuantity(idx)
 	end
 end
@@ -32,12 +32,17 @@ end
 
 -- -------------------------------------------------------------------------------
 --adds new item to inventory
-function addToInventory(idx)
+function addToInventory(itemName)
+	-- If number of item will not exceed limit size: add item
+	if #itemList < maxSize then
+		table.insert(itemList, itemName)
+		table.insert(itemQuantities, 1)
+	end
 end
 
 -- increase quantity of the item if it already exists
 function increaseQuantity(idx)
-    itemQuantities[idx] = itemQuantities[idx] + 1
+	itemQuantities[idx] = itemQuantities[idx] + 1
 end
 
 -- Reduce quantity of the item when use
@@ -70,16 +75,19 @@ function removeItem(idx)
 	updateInventory()
 end
 
-function checkExist(name)
+function isInInventory(name)
 	for i, itemName in ipairs(itemList) do
+		-- If item exists in inventory: return its index
 		if itemName == name then
-	  		print (itemName)
+	  		return i
 	  	end
 	end
+	return false
 end
 
 function updateInventory()
 	-- Pretty much refresh the screen
+	saveInventoryData()
 	inventory:removeSelf()
 	scene:create()
 end
@@ -185,6 +193,7 @@ function scene:create( event )
 	local sceneGroup = self.view
 	inventory = setUpInventory()
 	sceneGroup:insert(inventory)
+	-- print(composer.getSceneName("current"))
 
 end
 
@@ -207,7 +216,6 @@ end
 function scene:hide( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-
 	if event.phase == "will" then
 		-- Called when the scene is on screen and is about to move off screen
 		--
@@ -221,7 +229,6 @@ end
 
 function scene:destroy( event )
 	-- Save data before exit
-	saveInventoryData()
 end
 
 ---------------------------------------------------------------------------------
