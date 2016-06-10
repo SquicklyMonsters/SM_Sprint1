@@ -31,6 +31,11 @@ local collisionRect;
 local inEvent;
 local eventRun;
 
+--Game score and Game over
+local score;
+local scoreText;
+local gameOver;
+
 -- -----------------------------------------------------------------------------------------------------------------
 
 function getScreenLayer()
@@ -111,6 +116,27 @@ function setupGround()
 	screen:insert(blocks)
 end
 
+function setupScoreAndGameOver()
+	score = 0
+
+	gameOver = display.newImage("img/squicklyrun/gameOver.png")
+	gameOver.name = "gameOver"
+	gameOver.x = 0
+	gameOver.y = 500
+
+	local options = {
+		text = "score: " .. score,
+		x = 50,
+		y = 30,
+		font = native.systemFontBold,   
+		fontSize = 18,
+		align = "left",
+	}
+	scoreText = display.newText(options);
+	screen:insert(gameOver)
+	screen:insert(scoreText)
+end
+
 function setupSprite()
 	local imgsheetSetup = {
 		width = 100,
@@ -134,6 +160,7 @@ function setupSprite()
 	hero.y = 200
 	hero.gravity = -6
 	hero.accel = 0
+	hero.isAlive = true
 
 	--rectangle used for our collision detection it will always be in front of the hero sprite
 	--that way we know if the hero hit into anything
@@ -229,25 +256,29 @@ end
 function updateHero()
 	--if our hero is jumping then switch to the jumping animation
 	--if not keep playing the running animation
-	if(onGround) then
-		if(wasOnGround == false) then
-			hero:setSequence("running")
+	if(hero.isAlive == true) then
+		if(onGround) then
+			if(wasOnGround) then
+
+			else
+				hero:setSequence("running")
+				hero:play()
+			end
+		else
+			hero:setSequence("jumping")
 			hero:play()
 		end
-	else
-		hero:setSequence("jumping")
-		hero:play()
-	end
- 
-	if(hero.accel > 0) then
-		hero.accel = hero.accel - 1
-	end
- 
-	--update the heros position accel is used for our jump and
-	--gravity keeps the hero coming down. You can play with those 2 variables
-	--to make lots of interesting combinations of gameplay like 'low gravity' situations
-	hero.y = hero.y - hero.accel
-	hero.y = hero.y - hero.gravity
+		if(hero.accel > 0) then
+			hero.accel = hero.accel - 1
+		end
+		--update the heros position accel is used for our jump and
+		--gravity keeps the hero coming down. You can play with those 2 variables
+		--to make lots of interesting combinations of gameplay like 'low gravity' situations
+		hero.y = hero.y - hero.accel
+		hero.y = hero.y - hero.gravity
+	 else
+		hero:rotate(5)
+	 end
 	--update the collisionRect to stay in front of the hero
 	collisionRect.y = hero.y
 end
@@ -260,6 +291,9 @@ function updateBlocks()
 			newX = (blocks[8]).x + 79 - speed
 		end
 		if((blocks[a]).x < -40) then
+			score = score + 1
+			scoreText.text = "score: " .. score
+
 			if(inEvent == 11) then
 				(blocks[a]).x, (blocks[a]).y = newX, 600
 			else
@@ -372,6 +406,11 @@ function checkCollisions()
 	for a = 1, blocks.numChildren, 1 do
 		if(collisionRect.y - 10 > blocks[a].y - 170 and blocks[a].x - 40 < collisionRect.x and blocks[a].x + 40 > collisionRect.x) then
 			speed = 0
+			hero.isAlive = false
+			--this simply pauses the current animation
+			hero:pause()
+			gameOver.x = display.contentWidth*.65
+			gameOver.y = display.contentHeight/2
 		end
 	end
 	--stop the game if the hero runs into a spike wall
@@ -380,6 +419,11 @@ function checkCollisions()
 			if(collisionRect.y - 10> spikes[a].y - 170 and spikes[a].x - 40 < collisionRect.x and spikes[a].x + 40 > collisionRect.x) then
 				--stop the hero
 				speed = 0
+				hero.isAlive = false
+				--this simply pauses the current animation
+				hero:pause()
+				gameOver.x = display.contentWidth*.65
+				gameOver.y = display.contentHeight/2
 			end
 		end
 	end
@@ -389,6 +433,11 @@ function checkCollisions()
 			if(((  ((hero.y-ghosts[a].y))<70) and ((hero.y - ghosts[a].y) > -70)) and (ghosts[a].x - 40 < collisionRect.x and ghosts[a].x + 40 > collisionRect.x)) then
 				--stop the hero
 				speed = 0
+				hero.isAlive = false
+				--this simply pauses the current animation
+				hero:pause()
+				gameOver.x = display.contentWidth*.65
+				gameOver.y = display.contentHeight/2
 			end
 		end
 	end
@@ -493,21 +542,72 @@ function runEvent()
 	end
 end
 
+function restartGame()
+	--move menu
+	gameOver.x = 0
+	gameOver.y = 500
+	--reset the score
+	score = 0
+	--reset the game speed
+	speed = 5
+	--reset the hero
+	hero.isAlive = true
+	hero.x = 110
+	hero.y = 200
+	hero:setSequence("running")
+	hero:play()
+	hero.rotation = 0
+	--reset the groundLevel
+	groundLevel = groundMin
+	for a = 1, blocks.numChildren, 1 do
+		blocks[a].x = (a * 79) - 79
+		blocks[a].y = groundLevel
+	end
+	--reset the ghosts
+	for a = 1, ghosts.numChildren, 1 do
+		ghosts[a].x = 800
+		ghosts[a].y = 600
+	end
+	--reset the spikes
+	for a = 1, spikes.numChildren, 1 do
+		spikes[a].x = 900
+		spikes[a].y = 500
+	end
+	--reset the blasts
+	for a = 1, blasts.numChildren, 1 do
+		blasts[a].x = 800
+		blasts[a].y = 500
+	end
+	--reset the backgrounds
+	backgroundfar.x = 480
+	backgroundfar.y = 160
+	backgroundnear1.x = 240
+	backgroundnear1.y = 160
+	backgroundnear2.x = 760
+	backgroundnear2.y = 160
+end
+
 --the only difference in the touched function is now if you touch the
 --right side of the screen the hero will fire off a little blue bolt
 function touched( event )
-	if(event.phase == "began") then
-		if(event.x < 241) then
-			if(onGround) then
-				hero.accel = hero.accel + 20
-			end
-		else
-			for a=1, blasts.numChildren, 1 do
-				if(blasts[a].isAlive == false) then
-					blasts[a].isAlive = true
-					blasts[a].x = hero.x + 50
-					blasts[a].y = hero.y
-					break
+	if(event.x < gameOver.x + 150 and event.x > gameOver.x - 150 and event.y < gameOver.y + 95 and event.y > gameOver.y - 95) then
+		restartGame()
+	else
+		if(hero.isAlive == true) then
+			if(event.phase == "began") then
+				if(event.x < 241) then
+					if(onGround) then
+						hero.accel = hero.accel + 20
+					end
+				else
+					for a=1, blasts.numChildren, 1 do
+						if(blasts[a].isAlive == false) then
+							blasts[a].isAlive = true
+							blasts[a].x = hero.x + 50
+							blasts[a].y = hero.y
+							break
+						end
+					end
 				end
 			end
 		end
