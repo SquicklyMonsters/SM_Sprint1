@@ -1,6 +1,6 @@
-# SM_Sprints
+# SM_Sprints (_following the Scrum model_)
 
-##First Sprint Iteration (_following the Scrum model_).
+##First Sprint Iteration
 
 * Added Image Layers
 * Added Initial Culture Template For Project
