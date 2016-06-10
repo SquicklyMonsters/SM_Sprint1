@@ -8,8 +8,8 @@ require("squicklyrun.srbackground")
 -- -----------------------------------------------------------------------------------------------------------------
 -- Local variables go Here
 
-local blocks;
-local game_bg;
+local screen;
+local player;
 
 -- -------------------------------------------------------------------------------
 -- Scene functions go Here
@@ -19,13 +19,16 @@ function scene:create( event )
 	
 	setupBackground()
 	setupGround()
-	timer.performWithDelay(1, updateScene, -1)
+	setupSprite()
 
-	blocks = getBlockImages()
-	game_bg = getBackgroundImages()
+	screen = getScreenLayer()
+	player = getPlayerLayer()
 
-	sceneGroup:insert( game_bg )
-	sceneGroup:insert( blocks )
+	sceneGroup:insert( screen )
+	-- sceneGroup:insert( player )
+
+	timer.performWithDelay(1, update, -1)
+	Runtime:addEventListener("touch", touched, -1)
 end
 
 function scene:show( event )
