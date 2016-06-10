@@ -1,34 +1,63 @@
----------------------------------------------------------------------------------
---
--- scene1.lua
---
----------------------------------------------------------------------------------
-
+-- Import dependency
+local widget = require( "widget" )
 local composer = require( "composer" )
 local scene = composer.newScene()
 
----------------------------------------------------------------------------------
--- BEGINNING OF YOUR IMPLEMENTATION
----------------------------------------------------------------------------------
+require("shop.background")
+-- require("shop.monster")
+-- require("shop.interactions")
+-- require("shop.UI")
+require("savegame")
+-- -----------------------------------------------------------------------------------------------------------------
+-- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
+-- -----------------------------------------------------------------------------------------------------------------
 
-local image, text1, text2, text3, memTimer
+-- Local variables go Here
 
--- Called when the scene's view does not exist:
+local back;
+local middle;
+local front;
+
+local inventoryIcon;
+
+-- -------------------------------------------------------------------------------
+
+-- Non-scene functions go Here
+-- -------------------------------------------------------------------------------
+
+-- Scene functions go Here
+
 function scene:create( event )
 	local sceneGroup = self.view
-	
-	image = display.newImage( "bg.jpg" )
-	image.x = display.contentCenterX
-	image.y = display.contentCenterY
-	
-	sceneGroup:insert( image )
-	
-	text1 = display.newText( "Shop", 0, 0, native.systemFontBold, 24 )
-	text1:setFillColor( 255 )
-	text1.x, text1.y = display.contentWidth * 0.5, 50
-	sceneGroup:insert( text1 )
-	
-	print( "\n1: create event")
+
+    -- Setup layer
+    back = display.newGroup()
+    middle = display.newGroup()
+    front = display.newGroup()
+
+	-- Set background
+    setUpBackground()
+    background = getBackground()
+
+    -- Set up all Icons
+    setUpAllIcons()
+    inventoryIcon = getInventoryIcon()
+    setAutoSaveRate(10000)
+
+	-- Add display objects into group
+    -- ============BACK===============
+    back:insert(background)
+    -- ===========MIDDLE==============
+    middle:insert(inventoryIcon)
+    -- ===========FRONT===============
+    
+    -- ===============================
+    sceneGroup:insert(back)
+    sceneGroup:insert(middle)
+    sceneGroup:insert(front)
+
+    -- Set up all Event Listeners
+    addListeners()
 end
 
 function scene:show( event )
@@ -38,6 +67,7 @@ function scene:show( event )
 
 	if phase == "will" then
         composer.showOverlay("menubar")
+        -- composer.showOverlay("inventory")
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
 		-- Called when the scene is now on screen
@@ -63,6 +93,12 @@ function scene:hide( event )
 end
 
 function scene:destroy( event )
+	local sceneGroup = self.view
+
+	-- Called prior to the removal of scene's "view" (sceneGroup)
+	--
+	-- INSERT code here to cleanup the scene
+	-- e.g. remove display objects, remove touch listeners, save state, etc.
 end
 
 ---------------------------------------------------------------------------------
@@ -73,6 +109,6 @@ scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
 
----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 return scene
