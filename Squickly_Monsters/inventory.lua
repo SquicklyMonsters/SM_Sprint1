@@ -71,7 +71,12 @@ function updateInventory()
 	inventory:removeSelf()
 	scene:create()
 end
+
+function setUpInventoryData()
+	itemList, itemQuantities = loadInventoryData()
+end
 -- -------------------------------------------------------------------------------
+
 
 function widget.newPanel(options)                                    
     local background = display.newImage(options.imageDir)
@@ -81,15 +86,6 @@ function widget.newPanel(options)
     container.y = display.contentCenterY
 
     return container
-end
-
---counts the length of the list, can't use #list because #list stops counting at first nil
-function listLength(list)
-	count = 0
-	for i, items in pairs(list) do
-    	count = count + 1
-	end
-	return count
 end
 
 function setUpInventory()
@@ -106,8 +102,9 @@ function setUpInventory()
  	local spacingX = (inventory.width)/4
  	local spacingY = inventory.height/4
 
- 	itemList, itemQuantities = loadInventoryData()
- 	print(itemList)
+ 	-- Retrieve data from save file
+ 	setUpInventoryData()
+
  	inventory.items = {}
 
  	for i = 1, #itemList do --loops to create each item on inventory

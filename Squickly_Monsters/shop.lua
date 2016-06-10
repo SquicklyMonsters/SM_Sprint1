@@ -56,7 +56,7 @@ function itemClickedEvent(event)
     if event.phase == "ended" then
         local idx = event.target.idx
         local exist = checkExist(idx)
-        print(itemList)
+        -- print(itemList)
         if exist then
             increaseQuantity(idx)
         else
@@ -117,6 +117,8 @@ end
 function scene:create( event )
 	local sceneGroup = self.view
 
+    -- Retrieve inventory data from save file
+    setUpInventoryData()
     itemList = getItemList()
     itemQuantities = getItemQuantities()
 
