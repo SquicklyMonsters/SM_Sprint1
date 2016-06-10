@@ -12,6 +12,8 @@ local blocks;
 local ghosts;
 local spikes;
 local blasts;
+local boss;
+local bossSpits;
 
 --main display groups
 local screen;
@@ -156,7 +158,7 @@ function setupSprite()
 	hero:play()
 
 	-- Hero Attributes
-	hero.x = 110
+	hero.x = 60
 	hero.y = 200
 	hero.gravity = -6
 	hero.accel = 0
@@ -178,6 +180,8 @@ function setupObstaclesAndEnemies()
 	ghosts = display.newGroup()
 	spikes = display.newGroup()
 	blasts = display.newGroup()
+	boss = display.newGroup()
+	bossSpits = display.newGroup()
 
 	--create ghosts and set their position to be off-screen
 	for a = 1, 3, 1 do
@@ -214,9 +218,34 @@ function setupObstaclesAndEnemies()
 		blasts:insert(blast)
 	end
 
+	boss = display.newImage("img/squicklyrun/boss.png", 150, 150)
+	boss.x = 300
+	boss.y = 550
+	boss.isAlive = false
+	boss.health = 10
+	boss.goingDown = true
+	boss.canShoot = false
+	--spitCycle is the only thing that is not self explantory
+	--every time we move a ground piece back to the right of the
+	--screen we update the score by one. Now we also update the
+	--spite cycle. Every time spitCycle is a multiple of three
+	--the boss will shoot his projectile. This just keeps track
+	--of that for us!
+	boss.spitCycle = 0
+	for a=1, 3, 1 do
+		local bossSpit = display.newImage("img/squicklyrun/bossSpit.png")
+		bossSpit.x = 400
+		bossSpit.y = 550
+		bossSpit.isAlive = false
+		bossSpit.speed = 3
+		bossSpits:insert(bossSpit)
+	end
+
 	screen:insert(spikes)
 	screen:insert(blasts)
 	screen:insert(ghosts)
+	screen:insert(boss)
+	screen:insert(bossSpits)
 end
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -230,6 +259,10 @@ function update( event )
 	updateBlasts()
 	updateSpikes()
 	updateGhosts()
+	updateBossSpit()
+	if(boss.isAlive == true) then
+		updateBoss()
+	end
 	checkCollisions()
 end
 
@@ -291,14 +324,35 @@ function updateBlocks()
 			newX = (blocks[8]).x + 79 - speed
 		end
 		if((blocks[a]).x < -40) then
-			score = score + 1
-			scoreText.text = "score: " .. score
+			--only update the score if the boss is not alive
+			if (boss.isAlive == false) then
+				score = score + 1
+				scoreText.text = "score: " .. score
+			else
+				--have the boss spit every three block passes
+				boss.spitCycle = boss.spitCycle + 1
+				if(boss.y > 100 and boss.y < 300 and boss.spitCycle%3 == 0) then
+					for a=1, bossSpits.numChildren, 1 do
+						if(bossSpits[a].isAlive == false) then
+							bossSpits[a].isAlive = true
+							bossSpits[a].x = boss.x - 35
+							bossSpits[a].y = boss.y + 55
+							bossSpits[a].speed = math.random(5,10)
+							break
+						end
+					end
+				end
+			end
+			if(inEvent == 15) then
+				groundLevel = groundMin
+			end
 
 			if(inEvent == 11) then
 				(blocks[a]).x, (blocks[a]).y = newX, 600
 			else
 				(blocks[a]).x, (blocks[a]).y = newX, groundLevel
 			end
+
 			--by setting up the spikes this way we are guaranteed to
 			--only have 3 spikes out at most at a time.
 			if(inEvent == 12) then
@@ -331,6 +385,30 @@ function updateBlasts()
 				blasts[a].x = 800
 				blasts[a].y = 500
 				blasts[a].isAlive = false
+			end
+		end
+		--check for collisions with the boss
+		if(boss.isAlive == true) then
+			if(blasts[a].y - 25 > boss.y - 120 and blasts[a].y + 25 < boss.y + 120 and boss.x - 40 < blasts[a].x + 25 and boss.x + 40 > blasts[a].x - 25) then
+				blasts[a].x = 800
+				blasts[a].y = 500
+				blasts[a].isAlive = false
+				--everything is the same only 1 hit will not kill the boss so just take a little health away
+				boss.health = boss.health - 1
+			end
+		end
+		--check for collisions between the blasts and the bossSpit
+		for b = 1, bossSpits.numChildren, 1 do
+			if(bossSpits[b].isAlive == true) then
+				if(blasts[a].y - 20 > bossSpits[b].y - 120 and blasts[a].y + 20 < bossSpits[b].y + 120 and bossSpits[b].x - 25 < blasts[a].x + 20 and bossSpits[b].x + 25 > blasts[a].x - 20) then
+					blasts[a].x = 800
+					blasts[a].y = 500
+					blasts[a].isAlive = false
+					bossSpits[b].x = 400
+					bossSpits[b].y = 550
+					bossSpits[b].isAlive = false
+					bossSpits[b].speed = 0
+				end
 			end
 		end
 		--check for collisions between the blasts and the spikes
@@ -399,7 +477,59 @@ function updateGhosts()
 		end
 	end
 end
- 
+
+function updateBoss()
+	--check to make sure that the boss hasn't been killed
+	if(boss.health > 0) then
+		--check to see if the boss needs to change direction
+		if(boss.y > 210) then
+			boss.goingDown = false
+		end
+		if(boss.y < 100) then
+			boss.goingDown = true
+		end
+		if(boss.goingDown) then
+			boss.y = boss.y + 2
+		else
+			boss.y = boss.y - 2
+		end
+	else
+		--if the boss has been killed make him slowly disappear
+		boss.alpha = boss.alpha - .01
+	end
+	--once the hero has been killed and disappear officially
+	--kill him off and reset him back to where he was
+	if(boss.alpha <= 0) then
+		boss.isAlive = false
+		boss.x = 300
+		boss.y = 550
+		boss.alpha = 1
+		boss.health = 10
+		inEvent = 0
+		boss.spitCycle = 0
+	end
+end
+
+function updateBossSpit()
+	for a = 1, bossSpits.numChildren, 1 do
+		if(bossSpits[a].isAlive) then
+			(bossSpits[a]):translate(speed * -1, 0)
+			if(bossSpits[a].y > hero.y) then
+				bossSpits[a].y = bossSpits[a].y - 1
+			end
+			if(bossSpits[a].y < hero.y) then
+				bossSpits[a].y = bossSpits[a].y + 1
+			end
+			if(bossSpits[a].x < -80) then
+				bossSpits[a].x = 400
+				bossSpits[a].y = 550
+				bossSpits[a].speed = 0
+				bossSpits[a].isAlive = false;
+			end
+		end
+	end
+end
+
 function checkCollisions()
 	wasOnGround = onGround
 	--checks to see if the collisionRect has collided with anything.
@@ -432,6 +562,20 @@ function checkCollisions()
 		if(ghosts[a].isAlive == true) then
 			if(((  ((hero.y-ghosts[a].y))<70) and ((hero.y - ghosts[a].y) > -70)) and (ghosts[a].x - 40 < collisionRect.x and ghosts[a].x + 40 > collisionRect.x)) then
 				--stop the hero
+				speed = 0
+				hero.isAlive = false
+				--this simply pauses the current animation
+				hero:pause()
+				gameOver.x = display.contentWidth*.65
+				gameOver.y = display.contentHeight/2
+			end
+		end
+	end
+	--make sure the player didn't get hit by the boss's spit!
+	for a = 1, bossSpits.numChildren, 1 do
+	if(bossSpits[a].isAlive == true) then
+		if(((  ((hero.y-bossSpits[a].y))<45)) and ((  ((hero.y-bossSpits[a].y))>-45)) and ((  ((hero.x-bossSpits[a].x))>-45)) ) then
+			--stop the hero
 				speed = 0
 				hero.isAlive = false
 				--this simply pauses the current animation
@@ -478,30 +622,45 @@ function checkEvent()
 	if(inEvent > 0 and eventRun > 0) then
 		  --Do nothing
 	else
-		  --if we are not in an event check to see if we are going to start a new event.
-		check = math.random(100)
-		--ghost event
-		if(check > 60 and check < 73) then
-				inEvent = 13
+		--this is where we spawn the boss after every 30 blocks
+		--also control the boss's health from here
+		if(boss.isAlive == false and score%30 == 0) then
+			boss.isAlive = true
+			boss.x = 400
+			boss.y = -200
+			boss.health = 10
+		end
+
+		--if the boss is alive then keep the event set to 15
+		--this will prevent the other events from spawning
+		if(boss.isAlive == true) then
+			inEvent = 15
+		else
+			--if we are not in an event check to see if we are going to start a new event.
+			check = math.random(100)
+			--ghost event
+			if(check > 60 and check < 73) then
+					inEvent = 13
+					eventRun = 1
+			end
+			--the more frequently you want events to happen then
+			--greater you should make the checks
+			if(check > 72 and check < 81) then
+				inEvent = 12
 				eventRun = 1
-		end
-		--the more frequently you want events to happen then
-		--greater you should make the checks
-		if(check > 72 and check < 81) then
-			inEvent = 12
-			eventRun = 1
-		end
-		  --this first event is going to cause the elevation of the ground to change. For this game we
-		  --only want the elevation to change 1 block at a time so we don't get long runs of changing
-		  --elevation that is impossible to pass so we set eventRun to 1.
-		if(check > 80 and check < 99) then
-			   --since we are in an event we need to decide what we want to do. By making inEvent another
-			   --random number we can now randomly choose which direction we want the elevation to change.
-			inEvent = math.random(10)
-			eventRun = 1
-		elseif(check > 98) then
-			inEvent = 11
-			eventRun = 2
+			end
+			  --this first event is going to cause the elevation of the ground to change. For this game we
+			  --only want the elevation to change 1 block at a time so we don't get long runs of changing
+			  --elevation that is impossible to pass so we set eventRun to 1.
+			if(check > 80 and check < 99) then
+				   --since we are in an event we need to decide what we want to do. By making inEvent another
+				   --random number we can now randomly choose which direction we want the elevation to change.
+				inEvent = math.random(10)
+				eventRun = 1
+			elseif(check > 98) then
+				inEvent = 11
+				eventRun = 2
+			end
 		end
 	end
 	 --if we are in an event call runEvent to figure out if anything special needs to be done
@@ -552,7 +711,7 @@ function restartGame()
 	speed = 5
 	--reset the hero
 	hero.isAlive = true
-	hero.x = 110
+	hero.x = 60
 	hero.y = 200
 	hero:setSequence("running")
 	hero:play()
@@ -577,6 +736,16 @@ function restartGame()
 	for a = 1, blasts.numChildren, 1 do
 		blasts[a].x = 800
 		blasts[a].y = 500
+	end
+	--reset the boss
+	boss.isAlive = false
+	boss.x = 300
+	boss.y = 550
+	--reset the boss's spit
+	for a = 1, bossSpits.numChildren, 1 do
+	bossSpits[a].x = 400
+		bossSpits[a].y = 550
+		bossSpits[a].isAlive = false
 	end
 	--reset the backgrounds
 	backgroundfar.x = 480

@@ -212,7 +212,7 @@ function moreFoodClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(currentVisibleList)
-            saveData() -- For Testing
+            saveNeedsData() -- For Testing
             setAutoSaveRate(20000) -- For Testing
         end
     end
@@ -261,6 +261,7 @@ function inventoryClicked(event)
         if event.phase == "ended" then
             if inventoryIsShow then
                 composer.gotoScene(composer.getSceneName("current"))
+                saveInventoryData()
                 inventoryIsShow = false
             else
                 composer.showOverlay("inventory")

@@ -1,39 +1,42 @@
 -- Some forward declarations
-local maxNeedsLevels;
-local needsLevels;
+
 
 -- Load external libraries
 local json = require("json")
 
 -- Set location for saved data
-local filePath = system.pathForFile( "data.txt", system.DocumentsDirectory ) -- Default Dir
+local needsDataFile = system.pathForFile( "needsData.txt", system.DocumentsDirectory ) -- Default Dir
+local inventoryDataFile = system.pathForFile( "inventoryData.txt", system.DocumentsDirectory )
 
 -- -------------------------------------------------------------------------------
 -- Get latest Data from Save file
 function getSavedLevels()
-    loadData()
-    return needsLevels, maxNeedsLevels
+    return loadNeedsData()
 end
 
 -- -------------------------------------------------------------------------------
+function readFile(file)
+    -- read all contents of file into a string
+    -- local contents = file:read( "*a" )
+    -- inTable = json.decode(contents);
+    -- io.close( file ) -- important!
+    local contents = file:read( "*a" )
+    inTable = json.decode(contents);
+    io.close( file ) -- important!
+    return inTable
+end
+-- -------------------------------------------------------------------------------
 -- Load functions
-
-function loadData() 
-    -- print(filePath)
-    local file = io.open( filePath, "r" )
-    needsLevels = {}
-    maxNeedsLevels = {}
+function loadNeedsData() 
+    local file = io.open( needsDataFile, "r" )
+    local needsLevels = {}
+    local maxNeedsLevels = {}
     
     if file then
-        local inTable = {}
-
-        -- read all contents of file into a string
-        local contents = file:read( "*a" )
-        inTable = json.decode(contents);
-        io.close( file ) -- important!
-
+        local inTable = readFile(file)
         maxNeedsLevels = inTable[1]
         needsLevels = inTable[2]
+        -- print("load")
     else
         -- print ("no file found")
         maxNeedsLevels = {
@@ -52,5 +55,21 @@ function loadData()
             exp = 1440,
         }
     end
+    return needsLevels, maxNeedsLevels
 end
 -- -------------------------------------------------------------------------------
+
+function loadInventoryData()
+    local file = io.open( inventoryDataFile, "r" )
+    local itemList = {"burger", "icecream", "fish", "noodles"}
+    local itemQuantities = {2, 3, 4, 5}
+
+    if file then
+        local inTable = readFile(file)
+        itemList = inTable[1]
+        itemQuantities = inTable[2]
+        print("load inv")
+    end
+
+    return itemList, itemQuantities, itemTexts
+end

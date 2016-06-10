@@ -65,7 +65,7 @@ function scene:create( event )
     background = getBackground()
 
     -- Set Up Monster
-    setUpMonster("img/sprites/egg_sprites_all.png")
+    setUpMonster("img/sprites/sleep.png")
     monster = getMonster()
 
     -- Set up Needs Bar

@@ -5,7 +5,11 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
-itemList = {foodList.burger, foodList.icecream, foodList.fish, foodList.noodles};
+local itemList;
+local itemQuantities;
+local itemTexts = {};
+
+local inventory;
 local maxSize;
 
 -- -------------------------------------------------------------------------------
@@ -14,17 +18,59 @@ local maxSize;
 function itemClickedEvent(event)
 	-- Just gonna eat it right away for now
 	if event.phase == "ended" then
-		event.target.item:eat()
+		local idx = event.target.idx
+		foodList[itemList[idx]]:eat()
+		reduceQuantity(idx)
 	end
 end
 
 function closeEvent(event)
 	if event.phase == "ended" then
-		-- Go back to the current scene (destroy this scene in process)
-		composer.gotoScene(composer.getSceneName("current"))
+		inventoryClicked(event)
 	end
 end
 
+-- -------------------------------------------------------------------------------
+
+-- Reduce quantity of the item when use
+function reduceQuantity(idx)
+	itemTexts[idx].text = itemTexts[idx].text - 1
+	itemQuantities[idx] = itemQuantities[idx] - 1
+	if tonumber(itemTexts[idx].text) <= 0 then
+		removeItem(idx)
+	else
+		saveInventoryData()
+	end
+
+end
+
+
+function removeItem(idx)
+	local new_itemList = {}
+	local new_itemQuantities = {}
+	local new_itemTexts = {}
+	for i = 1, #itemList do
+		-- Add all the items into new list except the one that ran out
+		if i ~= idx then
+			table.insert(new_itemList, itemList[i])
+			table.insert(new_itemTexts, itemTexts[i])
+			table.insert(new_itemQuantities, itemQuantities[i])
+		end
+	end
+	itemList = new_itemList
+	itemQuantities = new_itemQuantities
+	itemTexts = new_itemTexts
+
+	saveInventoryData()
+	updateInventory()
+end
+
+
+function updateInventory()
+	-- Pretty much refresh the screen
+	inventory:removeSelf()
+	scene:create()
+end
 -- -------------------------------------------------------------------------------
 
 function widget.newPanel(options)                                    
@@ -60,21 +106,39 @@ function setUpInventory()
  	local spacingX = (inventory.width)/4
  	local spacingY = inventory.height/4
 
+ 	itemList, itemQuantities = loadInventoryData()
  	inventory.items = {}
 
- 	for i = 1, listLength(itemList) do --loops to create each item on inventory
-
+ 	for i = 1, #itemList do --loops to create each item on inventory
+ 		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
+ 		local y = startY + (spacingY * (math.floor((i-1) / rows))) 
+ 		local food = foodList[itemList[i]]
  		inventory.items[i] = widget.newButton {
- 			top = startY + (spacingY * (math.floor((i-1) / rows))), -- division of row
-	    	left = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows)), -- modulo of row
+ 			top = y, -- division of row
+	    	left = x, -- modulo of row
 	    	width = 50,
 	    	height = 50,
-	    	defaultFile = itemList[i].image,
+	    	defaultFile = food.image,
 	    	onEvent = itemClickedEvent,
  		}
 
- 		inventory.items[i].item = itemList[i]
+ 		inventory.items[i].item = food
+ 		inventory.items[i].idx = i
+ 		local textOptions = {
+			text = itemQuantities[i], 
+			x = x + 70, 
+			y = y + 65, 
+			width = 50, 
+			height = 50
+ 		}
+
+ 		local text = display.newText(textOptions)
+ 		text:setFillColor( 1, 0, 0 )
+
+ 		table.insert(itemTexts, i, text)
  		inventory:insert(inventory.items[i])
+ 		inventory:insert(text)
+
  		--another smaller frame for quantity
  	end
 
@@ -92,15 +156,24 @@ function setUpInventory()
  				(display.contentWidth/inventory.width)*0.4, 
  				(display.contentHeight/inventory.height)*0.5
  				)
+
  	return inventory
 end
+-- -------------------------------------------------------------------------------
+-- Get functions HERE
+function getItemList()
+	return itemList
+end
 
+function getItemQuantities()
+	return itemQuantities
+end
+
+-- -------------------------------------------------------------------------------
 -- Called when the scene's view does not exist:
 function scene:create( event )
 	local sceneGroup = self.view
-	local inventory = setUpInventory()
-
-
+	inventory = setUpInventory()
 	sceneGroup:insert(inventory)
 
 end
