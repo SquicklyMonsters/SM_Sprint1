@@ -3,7 +3,7 @@ food = require("foodClass")
 -- -------------------------------------------------------------------------------
 
 local iconsDir = "img/icons/food/"
-foodList = {};
+foodList = {"burger", "icecream", "fish", "noodles"};
 
 -- -------------------------------------------------------------------------------
 
@@ -17,3 +17,7 @@ local fish = food.new("fish", 5, 250, 50, 0, 0, 0, iconsDir .. "fish.png")
 foodList.fish = fish
 
 -- -------------------------------------------------------------------------------
+
+function getFoodList()
+	return foodList
+end

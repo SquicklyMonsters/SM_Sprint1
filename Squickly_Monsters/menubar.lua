@@ -25,7 +25,11 @@ end
 function changeSceneButtonEvent(event)
   local scene = event.target.scene
   if event.phase == "ended" then
-    if composer.getSceneName("current") ~= scene then
+    local currentScene = composer.getSceneName("current")
+    if currentScene ~= scene then
+      if currentScene ~= "home" then
+        composer.removeScene(currentScene)
+      end
       composer.gotoScene(scene, chageScenceEffect, chageSceneTime)
     end
   end

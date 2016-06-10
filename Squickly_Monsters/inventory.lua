@@ -1,4 +1,4 @@
--- local foodList = require("foodList")
+require("inventory.interactions")
 local widget = require("widget")
 local composer = require( "composer" )
 local scene = composer.newScene()
@@ -10,18 +10,24 @@ local itemQuantities;
 local itemTexts = {};
 
 local inventory;
-local maxSize;
-
 -- -------------------------------------------------------------------------------
 -- Set all Event listeners HERE
 
 function itemClickedEvent(event)
 	-- Just gonna eat it right away for now
 	if event.phase == "ended" then
+		local food = event.target.item
 		local idx = event.target.idx
-		foodList[itemList[idx]]:eat()
-		reduceQuantity(idx)
+		local quantity = reduceQuantity(idx)
+		if quantity > 0 then
+			-- Update display number
+			itemTexts[idx].text = quantity
+		else 
+			updateInventory()
+		end
+		food:eat()
 	end
+
 end
 
 function closeEvent(event)
@@ -32,42 +38,9 @@ end
 
 -- -------------------------------------------------------------------------------
 
--- Reduce quantity of the item when use
-function reduceQuantity(idx)
-	itemTexts[idx].text = itemTexts[idx].text - 1
-	itemQuantities[idx] = itemQuantities[idx] - 1
-	if tonumber(itemTexts[idx].text) <= 0 then
-		removeItem(idx)
-	else
-		saveInventoryData()
-	end
-
-end
-
-
-function removeItem(idx)
-	local new_itemList = {}
-	local new_itemQuantities = {}
-	local new_itemTexts = {}
-	for i = 1, #itemList do
-		-- Add all the items into new list except the one that ran out
-		if i ~= idx then
-			table.insert(new_itemList, itemList[i])
-			table.insert(new_itemTexts, itemTexts[i])
-			table.insert(new_itemQuantities, itemQuantities[i])
-		end
-	end
-	itemList = new_itemList
-	itemQuantities = new_itemQuantities
-	itemTexts = new_itemTexts
-
-	saveInventoryData()
-	updateInventory()
-end
-
-
 function updateInventory()
 	-- Pretty much refresh the screen
+	saveInventoryData()
 	inventory:removeSelf()
 	scene:create()
 end
@@ -81,15 +54,6 @@ function widget.newPanel(options)
     container.y = display.contentCenterY
 
     return container
-end
-
---counts the length of the list, can't use #list because #list stops counting at first nil
-function listLength(list)
-	count = 0
-	for i, items in pairs(list) do
-    	count = count + 1
-	end
-	return count
 end
 
 function setUpInventory()
@@ -106,7 +70,9 @@ function setUpInventory()
  	local spacingX = (inventory.width)/4
  	local spacingY = inventory.height/4
 
- 	itemList, itemQuantities = loadInventoryData()
+ 	-- Retrieve data from save file
+ 	itemList, itemQuantities = setUpInventoryData()
+
  	inventory.items = {}
 
  	for i = 1, #itemList do --loops to create each item on inventory
@@ -160,21 +126,21 @@ function setUpInventory()
  	return inventory
 end
 -- -------------------------------------------------------------------------------
--- Get functions HERE
-function getItemList()
-	return itemList
+function getItemTexts()
+	return itemTexts
 end
 
-function getItemQuantities()
-	return itemQuantities
+function setItemTexts(itemTexts)
+	itemTexts = itemTexts
 end
-
 -- -------------------------------------------------------------------------------
+
 -- Called when the scene's view does not exist:
 function scene:create( event )
 	local sceneGroup = self.view
 	inventory = setUpInventory()
 	sceneGroup:insert(inventory)
+	print(composer.getSceneName("current"))
 
 end
 
@@ -184,7 +150,7 @@ function scene:show( event )
     
 
 	if phase == "will" then
-		-- composer.showOverlay("menubar")
+		-- composer.hideOverlay()
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
 		-- Called when the scene is now on screen
@@ -197,7 +163,6 @@ end
 function scene:hide( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-
 	if event.phase == "will" then
 		-- Called when the scene is on screen and is about to move off screen
 		--
@@ -210,6 +175,8 @@ function scene:hide( event )
 end
 
 function scene:destroy( event )
+	-- Save data before exit
+	saveInventoryData()
 end
 
 ---------------------------------------------------------------------------------
