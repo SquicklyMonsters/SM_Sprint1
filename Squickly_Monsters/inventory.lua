@@ -31,6 +31,14 @@ function closeEvent(event)
 end
 
 -- -------------------------------------------------------------------------------
+--adds new item to inventory
+function addToInventory(idx)
+end
+
+-- increase quantity of the item if it already exists
+function increaseQuantity(idx)
+    itemQuantities[idx] = itemQuantities[idx] + 1
+end
 
 -- Reduce quantity of the item when use
 function reduceQuantity(idx)
@@ -38,8 +46,6 @@ function reduceQuantity(idx)
 	itemQuantities[idx] = itemQuantities[idx] - 1
 	if tonumber(itemTexts[idx].text) <= 0 then
 		removeItem(idx)
-	else
-		saveInventoryData()
 	end
 
 end
@@ -61,10 +67,16 @@ function removeItem(idx)
 	itemQuantities = new_itemQuantities
 	itemTexts = new_itemTexts
 
-	saveInventoryData()
 	updateInventory()
 end
 
+function checkExist(name)
+	for i, itemName in ipairs(itemList) do
+		if itemName == name then
+	  		print (itemName)
+	  	end
+	end
+end
 
 function updateInventory()
 	-- Pretty much refresh the screen
@@ -160,7 +172,6 @@ end
 -- -------------------------------------------------------------------------------
 -- Get functions HERE
 function getItemList()
-	print(itemList)
 	return itemList
 end
 
@@ -183,7 +194,7 @@ function scene:show( event )
     
 
 	if phase == "will" then
-		-- composer.showOverlay("menubar")
+		-- composer.hideOverlay()
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
 		-- Called when the scene is now on screen
@@ -209,6 +220,8 @@ function scene:hide( event )
 end
 
 function scene:destroy( event )
+	-- Save data before exit
+	saveInventoryData()
 end
 
 ---------------------------------------------------------------------------------

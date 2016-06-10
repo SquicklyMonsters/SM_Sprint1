@@ -36,22 +36,6 @@ function widget.newPanel(options)
     return container
 end
 
---check if the item exists in inventory
-function checkExist(idx)
-    return true
-end
-
---adds new item to inventory
-function addToInventory(idx)
-end
-
--- increase quantity of the item if it already exists
-function increaseQuantity(idx)
-    -- itemTexts[idx].text = itemTexts[idx].text + 1
-    itemQuantities[idx] = itemQuantities[idx] + 1
-    saveInventoryData()
-end
-
 function itemClickedEvent(event)
     if event.phase == "ended" then
         itemList = getItemList()
