@@ -19,6 +19,7 @@ function scene:create( event )
 	
 	setupBackground()
 	setupGround()
+	setupScoreAndGameOver()
 	setupObstaclesAndEnemies()
 	setupSprite()
 
