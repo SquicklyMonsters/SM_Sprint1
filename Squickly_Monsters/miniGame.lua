@@ -19,9 +19,9 @@ function scene:create( event )
 	
 	setupBackground()
 	setupGround()
-	setupScoreAndGameOver()
 	setupObstaclesAndEnemies()
 	setupSprite()
+	setupScoreAndGameOver()
 
 	screen = getScreenLayer()
 	player = getPlayerLayer()

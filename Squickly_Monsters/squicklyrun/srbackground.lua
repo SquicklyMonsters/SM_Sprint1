@@ -542,21 +542,72 @@ function runEvent()
 	end
 end
 
+function restartGame()
+	--move menu
+	gameOver.x = 0
+	gameOver.y = 500
+	--reset the score
+	score = 0
+	--reset the game speed
+	speed = 5
+	--reset the hero
+	hero.isAlive = true
+	hero.x = 110
+	hero.y = 200
+	hero:setSequence("running")
+	hero:play()
+	hero.rotation = 0
+	--reset the groundLevel
+	groundLevel = groundMin
+	for a = 1, blocks.numChildren, 1 do
+		blocks[a].x = (a * 79) - 79
+		blocks[a].y = groundLevel
+	end
+	--reset the ghosts
+	for a = 1, ghosts.numChildren, 1 do
+		ghosts[a].x = 800
+		ghosts[a].y = 600
+	end
+	--reset the spikes
+	for a = 1, spikes.numChildren, 1 do
+		spikes[a].x = 900
+		spikes[a].y = 500
+	end
+	--reset the blasts
+	for a = 1, blasts.numChildren, 1 do
+		blasts[a].x = 800
+		blasts[a].y = 500
+	end
+	--reset the backgrounds
+	backgroundfar.x = 480
+	backgroundfar.y = 160
+	backgroundnear1.x = 240
+	backgroundnear1.y = 160
+	backgroundnear2.x = 760
+	backgroundnear2.y = 160
+end
+
 --the only difference in the touched function is now if you touch the
 --right side of the screen the hero will fire off a little blue bolt
 function touched( event )
-	if(event.phase == "began") then
-		if(event.x < 241) then
-			if(onGround) then
-				hero.accel = hero.accel + 20
-			end
-		else
-			for a=1, blasts.numChildren, 1 do
-				if(blasts[a].isAlive == false) then
-					blasts[a].isAlive = true
-					blasts[a].x = hero.x + 50
-					blasts[a].y = hero.y
-					break
+	if(event.x < gameOver.x + 150 and event.x > gameOver.x - 150 and event.y < gameOver.y + 95 and event.y > gameOver.y - 95) then
+		restartGame()
+	else
+		if(hero.isAlive == true) then
+			if(event.phase == "began") then
+				if(event.x < 241) then
+					if(onGround) then
+						hero.accel = hero.accel + 20
+					end
+				else
+					for a=1, blasts.numChildren, 1 do
+						if(blasts[a].isAlive == false) then
+							blasts[a].isAlive = true
+							blasts[a].x = hero.x + 50
+							blasts[a].y = hero.y
+							break
+						end
+					end
 				end
 			end
 		end
