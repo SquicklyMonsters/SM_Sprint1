@@ -108,7 +108,7 @@ function setUpAllIcons()
     mostRecentPlayIcon1 = setUpIcon(iconsDir .. "legomanIcon.png", 0.75)
     mostRecentPlayIcon2 = setUpIcon(iconsDir .. "footballIcon.png", 0.75)
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
-    inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 1, display.contentWidth*0.07, display.contentHeight*0.85, 1)
+    inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
 end
 
 function setUpIcon(img, scale, x, y, alpha)
