@@ -2,12 +2,13 @@ require("homepage.UI")
 local json = require("json")
 -- -----------------------------------------------------------------------------------------------------------------
 -- Some forward declarations
-local maxNeedsLevels;
-local needsLevels;
+-- local maxNeedsLevels;
+-- local needsLevels;
 local saveRate;
 
 -- Set location for saved data
-local filePath = system.pathForFile( "data.txt", system.DocumentsDirectory )
+local needsDataFile = system.pathForFile( "needsData.txt", system.DocumentsDirectory )
+local inventoryDataFile = system.pathForFile( "inventoryData.txt", system.DocumentsDirectory )
 
 -- -------------------------------------------------------------------------------
 -- Set Auto Save rate
@@ -15,22 +16,40 @@ function setAutoSaveRate(rate) -- 1000 = 1sec
 	if saveRate~= nil then
 		timer.cancel(saveRate)
 	end
-    saveRate = timer.performWithDelay(rate, saveData, -1)
+    saveRate = timer.performWithDelay(rate, saveAllData, -1)
 end
 
 -- -------------------------------------------------------------------------------
--- Save functions
-
-function saveData()
-	-- print("saved file")
-    maxNeedsLevels = getMaxNeedsLevels()
-    needsLevels = getCurrentNeedsLevels()
-    local outTable = {maxNeedsLevels, needsLevels}
-
-    file = io.open( filePath, "w" )
-
-    local contents = json.encode(outTable)
+function writeFile(file, contents)
+    file = io.open(file, "w")
     file:write(contents)
+    io.close(file)    
+end
+-- -------------------------------------------------------------------------------
+-- Save functions
+function saveAllData()
+    saveNeedsData()
+end
+
+function saveNeedsData()
+	-- print("saved file")
+    local maxNeedsLevels = getMaxNeedsLevels()
+    local needsLevels = getCurrentNeedsLevels()
     
-    io.close(file)
+    local outTable = {maxNeedsLevels, needsLevels}
+    local contents = json.encode(outTable)
+    
+    writeFile(needsDataFile, contents)
+    print("save")
+end
+
+function saveInventoryData()
+   local itemList = getItemList()
+   local itemQuantities = getItemQuantities()
+
+   local outTable = {itemList, itemQuantities}
+   local contents = json.encode(outTable)
+
+   writeFile(inventoryDataFile, contents)
+   print("save inv")
 end

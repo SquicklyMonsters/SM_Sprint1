@@ -7,7 +7,7 @@ local scene = composer.newScene()
 -- Local variables go HERE
 local itemList = {foodList.burger, foodList.icecream, foodList.fish, foodList.noodles};
 local itemQuantities = {2, 3, 4, 5};
-local itemText = {};
+local itemTexts = {};
 
 local inventory;
 local maxSize;
@@ -34,28 +34,28 @@ end
 
 -- Reduce quantity of the item when use
 function reduceQuantity(idx)
-	itemText[idx].text = itemText[idx].text - 1
-	if tonumber(itemText[idx].text) <= 0 then
+	itemTexts[idx].text = itemTexts[idx].text - 1
+	if tonumber(itemTexts[idx].text) <= 0 then
 		removeItem(idx)
 	end
 end
 
 
 function removeItem(idx)
-	new_itemList = {}
-	new_itemQuantities = {}
-	new_itemText = {}
+	local new_itemList = {}
+	local new_itemQuantities = {}
+	local new_itemTexts = {}
 	for i = 1, #itemList do
 		-- Add all the items into new list except the one that ran out
 		if i ~= idx then
 			table.insert(new_itemList, itemList[i])
-			table.insert(new_itemText, itemText[i])
+			table.insert(new_itemTexts, itemTexts[i])
 			table.insert(new_itemQuantities, itemQuantities[i])
 		end
 	end
 	itemList = new_itemList
 	itemQuantities = new_itemQuantities
-	itemText = new_itemText
+	itemTexts = new_itemTexts
 
 	updateInventory()
 end
@@ -101,6 +101,7 @@ function setUpInventory()
  	local spacingX = (inventory.width)/4
  	local spacingY = inventory.height/4
 
+ 	itemList, itemQuantities = loadInventoryData()
  	inventory.items = {}
 
  	for i = 1, #itemList do --loops to create each item on inventory
@@ -129,7 +130,7 @@ function setUpInventory()
  		local text = display.newText(textOptions)
  		text:setFillColor( 1, 0, 0 )
 
- 		table.insert(itemText, i, text)
+ 		table.insert(itemTexts, i, text)
  		inventory:insert(inventory.items[i])
  		inventory:insert(text)
 
@@ -153,13 +154,25 @@ function setUpInventory()
 
  	return inventory
 end
+-- -------------------------------------------------------------------------------
+-- Get functions HERE
+function getItemList()
+	return itemList
+end
 
+function getItemQuantities()
+	return itemQuantities
+end
+
+function getItemTexts()
+	return itemTexts
+end
+
+-- -------------------------------------------------------------------------------
 -- Called when the scene's view does not exist:
 function scene:create( event )
 	local sceneGroup = self.view
 	inventory = setUpInventory()
-
-
 	sceneGroup:insert(inventory)
 
 end
