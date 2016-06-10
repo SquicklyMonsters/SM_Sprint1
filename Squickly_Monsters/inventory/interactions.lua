@@ -22,7 +22,6 @@ end
 
 -- Reduce quantity of the item when use
 function reduceQuantity(idx)
-	-- itemTexts[idx].text = itemTexts[idx].text - 1
 	itemQuantities[idx] = itemQuantities[idx] - 1
 	if itemQuantities[idx] > 0 then
 		return itemQuantities[idx]

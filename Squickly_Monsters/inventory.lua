@@ -20,6 +20,7 @@ function itemClickedEvent(event)
 		local idx = event.target.idx
 		local quantity = reduceQuantity(idx)
 		if quantity > 0 then
+			-- Update display number
 			itemTexts[idx].text = quantity
 		else 
 			updateInventory()
