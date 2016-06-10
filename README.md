@@ -22,3 +22,5 @@ _Details Coming Soon ..._
 ![alt tag](https://raw.githubusercontent.com/SquicklyMonsters/SM_Sprints/master/ProgressScreenshot/Sprint2/Progess2_Screenshot.jpg)
 ![alt tag](https://raw.githubusercontent.com/SquicklyMonsters/SM_Sprints/master/ProgressScreenshot/Sprint2/Progess3_Screenshot.png)
 ![alt tag](https://raw.githubusercontent.com/SquicklyMonsters/SM_Sprints/master/ProgressScreenshot/Sprint2/Progess4_Screenshot.png)
+![alt tag](https://raw.githubusercontent.com/SquicklyMonsters/SM_Sprints/master/ProgressScreenshot/Sprint2/Progess5_Screenshot.png)
+![alt tag](https://raw.githubusercontent.com/SquicklyMonsters/SM_Sprints/master/ProgressScreenshot/Sprint2/Progess6_Screenshot.png)
