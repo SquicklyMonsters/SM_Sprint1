@@ -15,14 +15,13 @@ function itemClickedEvent(event)
 	-- Just gonna eat it right away for now
 	if event.phase == "ended" then
 		event.target.item:eat()
-		-- print(event.target)
-		-- print(event.target.width)
 	end
 end
 
 function closeEvent(event)
 	if event.phase == "ended" then
-		composer.gotoScene("home")
+		-- Go back to the current scene (destroy this scene in process)
+		composer.gotoScene(composer.getSceneName("current"))
 	end
 end
 
