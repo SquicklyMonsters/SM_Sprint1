@@ -6,6 +6,8 @@ local scene = composer.newScene()
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 itemList = {foodList.burger, foodList.icecream, foodList.fish, foodList.noodles};
+itemQuantities = {2, 3, 4, 5};
+itemText = {};
 local maxSize;
 
 -- -------------------------------------------------------------------------------
@@ -15,6 +17,8 @@ function itemClickedEvent(event)
 	-- Just gonna eat it right away for now
 	if event.phase == "ended" then
 		event.target.item:eat()
+		local idx = event.target.idx
+		reduceQuantity(idx)
 	end
 end
 
@@ -24,6 +28,13 @@ function closeEvent(event)
 		composer.gotoScene(composer.getSceneName("current"))
 	end
 end
+
+-- -------------------------------------------------------------------------------
+
+function reduceQuantity(idx)
+	itemText[idx].text = itemText[idx].text - 1
+end
+
 
 -- -------------------------------------------------------------------------------
 
@@ -63,10 +74,12 @@ function setUpInventory()
  	inventory.items = {}
 
  	for i = 1, listLength(itemList) do --loops to create each item on inventory
+ 		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
+ 		local y = startY + (spacingY * (math.floor((i-1) / rows))) 
 
  		inventory.items[i] = widget.newButton {
- 			top = startY + (spacingY * (math.floor((i-1) / rows))), -- division of row
-	    	left = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows)), -- modulo of row
+ 			top = y, -- division of row
+	    	left = x, -- modulo of row
 	    	width = 50,
 	    	height = 50,
 	    	defaultFile = itemList[i].image,
@@ -74,7 +87,22 @@ function setUpInventory()
  		}
 
  		inventory.items[i].item = itemList[i]
+ 		inventory.items[i].idx = i
+ 		local textOptions = {
+			text = itemQuantities[i], 
+			x = x + 70, 
+			y = y + 65, 
+			width = 50, 
+			height = 50
+ 		}
+
+ 		local text = display.newText(textOptions)
+ 		text:setFillColor( 1, 0, 0 )
+
+ 		table.insert(itemText, i, text)
  		inventory:insert(inventory.items[i])
+ 		inventory:insert(text)
+
  		--another smaller frame for quantity
  	end
 
@@ -86,12 +114,13 @@ function setUpInventory()
  		defaultFile = "img/icons/close.png",
  		onEvent = closeEvent,
  	}
-
+ 	print(inventory.width)
  	inventory:insert(inventory.close)
  	inventory:scale(
  				(display.contentWidth/inventory.width)*0.4, 
  				(display.contentHeight/inventory.height)*0.5
  				)
+ 	print(inventory.width*(display.contentWidth/inventory.width)*0.4)
  	return inventory
 end
 
