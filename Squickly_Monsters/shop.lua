@@ -38,7 +38,7 @@ end
 
 --check if the item exists in inventory
 function checkExist(idx)
-    -- return true
+    return true
 end
 
 --adds new item to inventory
@@ -55,8 +55,9 @@ end
 function itemClickedEvent(event)
     if event.phase == "ended" then
         local idx = event.target.idx
+        print(idx)
         local exist = checkExist(idx)
-        -- print(itemList)
+        print(itemList[idx])
         if exist then
             increaseQuantity(idx)
         else
@@ -69,7 +70,7 @@ function setUpShop()
     local inventory = widget.newPanel {
         width = 820,
         height = 400,
-        imageDir = "img/bg/shoplist1.png"
+        imageDir = "img/bg/shoplist.png"
     }
     inventory.x = display.contentCenterX + (display.contentWidth/30)
 
@@ -97,9 +98,10 @@ function setUpShop()
             onEvent = itemClickedEvent,
         }
 
-        inventory:insert(inventory.items[i])
+        inventory.items[i].item = food
+        inventory.items[i].idx = i
 
-        --another smaller frame for quantity
+        inventory:insert(inventory.items[i])
     end
 
     inventory:scale(
