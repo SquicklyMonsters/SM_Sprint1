@@ -1,3 +1,4 @@
+require("inventory.interactions")
 local widget = require("widget")
 local composer = require( "composer" )
 local scene = composer.newScene()
@@ -9,8 +10,6 @@ local itemQuantities;
 local itemTexts = {};
 
 local inventory;
-local maxSize = 9;
-
 -- -------------------------------------------------------------------------------
 -- Set all Event listeners HERE
 
@@ -19,9 +18,15 @@ function itemClickedEvent(event)
 	if event.phase == "ended" then
 		local food = event.target.item
 		local idx = event.target.idx
+		local quantity = reduceQuantity(idx)
+		if quantity > 0 then
+			itemTexts[idx].text = quantity
+		else 
+			updateInventory()
+		end
 		food:eat()
-		reduceQuantity(idx)
 	end
+
 end
 
 function closeEvent(event)
@@ -31,59 +36,6 @@ function closeEvent(event)
 end
 
 -- -------------------------------------------------------------------------------
---adds new item to inventory
-function addToInventory(itemName)
-	-- If number of item will not exceed limit size: add item
-	if #itemList < maxSize then
-		table.insert(itemList, itemName)
-		table.insert(itemQuantities, 1)
-	end
-end
-
--- increase quantity of the item if it already exists
-function increaseQuantity(idx)
-	itemQuantities[idx] = itemQuantities[idx] + 1
-end
-
--- Reduce quantity of the item when use
-function reduceQuantity(idx)
-	itemTexts[idx].text = itemTexts[idx].text - 1
-	itemQuantities[idx] = itemQuantities[idx] - 1
-	if tonumber(itemTexts[idx].text) <= 0 then
-		removeItem(idx)
-	end
-
-end
-
-
-function removeItem(idx)
-	local new_itemList = {}
-	local new_itemQuantities = {}
-	local new_itemTexts = {}
-	for i = 1, #itemList do
-		-- Add all the items into new list except the one that ran out
-		if i ~= idx then
-			table.insert(new_itemList, itemList[i])
-			table.insert(new_itemTexts, itemTexts[i])
-			table.insert(new_itemQuantities, itemQuantities[i])
-		end
-	end
-	itemList = new_itemList
-	itemQuantities = new_itemQuantities
-	itemTexts = new_itemTexts
-
-	updateInventory()
-end
-
-function isInInventory(name)
-	for i, itemName in ipairs(itemList) do
-		-- If item exists in inventory: return its index
-		if itemName == name then
-	  		return i
-	  	end
-	end
-	return false
-end
 
 function updateInventory()
 	-- Pretty much refresh the screen
@@ -91,12 +43,7 @@ function updateInventory()
 	inventory:removeSelf()
 	scene:create()
 end
-
-function setUpInventoryData()
-	itemList, itemQuantities = loadInventoryData()
-end
 -- -------------------------------------------------------------------------------
-
 
 function widget.newPanel(options)                                    
     local background = display.newImage(options.imageDir)
@@ -123,7 +70,7 @@ function setUpInventory()
  	local spacingY = inventory.height/4
 
  	-- Retrieve data from save file
- 	setUpInventoryData()
+ 	itemList, itemQuantities = setUpInventoryData()
 
  	inventory.items = {}
 
@@ -178,22 +125,21 @@ function setUpInventory()
  	return inventory
 end
 -- -------------------------------------------------------------------------------
--- Get functions HERE
-function getItemList()
-	return itemList
+function getItemTexts()
+	return itemTexts
 end
 
-function getItemQuantities()
-	return itemQuantities
+function setItemTexts(itemTexts)
+	itemTexts = itemTexts
 end
-
 -- -------------------------------------------------------------------------------
+
 -- Called when the scene's view does not exist:
 function scene:create( event )
 	local sceneGroup = self.view
 	inventory = setUpInventory()
 	sceneGroup:insert(inventory)
-	-- print(composer.getSceneName("current"))
+	print(composer.getSceneName("current"))
 
 end
 
@@ -229,6 +175,7 @@ end
 
 function scene:destroy( event )
 	-- Save data before exit
+	saveInventoryData()
 end
 
 ---------------------------------------------------------------------------------

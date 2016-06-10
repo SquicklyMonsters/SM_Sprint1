@@ -7,7 +7,6 @@ local background;
 -- -------------------------------------------------------------------------------
 
 function setUpBackground() 
-    print("HEYYY")
     -- Set Background
     -- local background = display.newImage("background.png", display.contentCenterX, display.contentCenterY)
     local backgroundOption = {
