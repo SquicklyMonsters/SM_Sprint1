@@ -2,7 +2,7 @@ local widget = require("widget")
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-local image, text1, text2, text3, memTimer
+local image, text1
 
 function goToSRGame(event)
 	if ( event.phase == "ended" ) then
