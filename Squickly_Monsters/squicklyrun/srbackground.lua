@@ -266,16 +266,8 @@ function checkEvent()
 	if(inEvent > 0 and eventRun > 0) then
 		  --Do nothing
 	else
-		  --if we are not in an event check to see if we are going to start a new event. To do this
-		  --we generate a random number between 1 and 100. We then check to see if our 'check' is
-		  --going to start an event. We are using 100 here in the example because it is easy to determine
-		  --the likelihood that an event will fire(We could just as easilt chosen 10 or 1000).
-		  --For example, if we decide that an event is going to
-		  --start everytime check is over 80 then we know that everytime a block is reset there is a 20%
-		  --chance that an event will start. So one in every five blocks should start a new event. This
-		  --is where you will have to fit the needs of your game.
+		  --if we are not in an event check to see if we are going to start a new event.
 		check = math.random(100)
- 
 		  --this first event is going to cause the elevation of the ground to change. For this game we
 		  --only want the elevation to change 1 block at a time so we don't get long runs of changing
 		  --elevation that is impossible to pass so we set eventRun to 1.
@@ -284,16 +276,14 @@ function checkEvent()
 			   --random number we can now randomly choose which direction we want the elevation to change.
 			inEvent = math.random(10)
 			eventRun = 1
+		elseif(check > 98) then
+			inEvent = 11
+			eventRun = 2
 		end
 	end
 	 --if we are in an event call runEvent to figure out if anything special needs to be done
 	if(inEvent > 0) then
 		runEvent()
-	end
-	
-	if(check > 98) then
-		inEvent = 11
-		eventRun = 2
 	end
 end
 
