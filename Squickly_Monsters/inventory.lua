@@ -5,9 +5,11 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
-itemList = {foodList.burger, foodList.icecream, foodList.fish, foodList.noodles};
-itemQuantities = {2, 3, 4, 5};
-itemText = {};
+local itemList = {foodList.burger, foodList.icecream, foodList.fish, foodList.noodles};
+local itemQuantities = {2, 3, 4, 5};
+local itemText = {};
+
+local inventory;
 local maxSize;
 
 -- -------------------------------------------------------------------------------
@@ -24,18 +26,46 @@ end
 
 function closeEvent(event)
 	if event.phase == "ended" then
-		-- Go back to the current scene (destroy this scene in process)
-		composer.gotoScene(composer.getSceneName("current"))
+		inventoryClicked(event)
 	end
 end
 
 -- -------------------------------------------------------------------------------
 
+-- Reduce quantity of the item when use
 function reduceQuantity(idx)
 	itemText[idx].text = itemText[idx].text - 1
+	if tonumber(itemText[idx].text) <= 0 then
+		removeItem(idx)
+	end
 end
 
 
+function removeItem(idx)
+	new_itemList = {}
+	new_itemQuantities = {}
+	new_itemText = {}
+	for i = 1, #itemList do
+		-- Add all the items into new list except the one that ran out
+		if i ~= idx then
+			table.insert(new_itemList, itemList[i])
+			table.insert(new_itemText, itemText[i])
+			table.insert(new_itemQuantities, itemQuantities[i])
+		end
+	end
+	itemList = new_itemList
+	itemQuantities = new_itemQuantities
+	itemText = new_itemText
+
+	updateInventory()
+end
+
+
+function updateInventory()
+	-- Pretty much refresh the screen
+	inventory:removeSelf()
+	scene:create()
+end
 -- -------------------------------------------------------------------------------
 
 function widget.newPanel(options)                                    
@@ -73,7 +103,7 @@ function setUpInventory()
 
  	inventory.items = {}
 
- 	for i = 1, listLength(itemList) do --loops to create each item on inventory
+ 	for i = 1, #itemList do --loops to create each item on inventory
  		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
  		local y = startY + (spacingY * (math.floor((i-1) / rows))) 
 
@@ -114,20 +144,20 @@ function setUpInventory()
  		defaultFile = "img/icons/close.png",
  		onEvent = closeEvent,
  	}
- 	print(inventory.width)
+
  	inventory:insert(inventory.close)
  	inventory:scale(
  				(display.contentWidth/inventory.width)*0.4, 
  				(display.contentHeight/inventory.height)*0.5
  				)
- 	print(inventory.width*(display.contentWidth/inventory.width)*0.4)
+
  	return inventory
 end
 
 -- Called when the scene's view does not exist:
 function scene:create( event )
 	local sceneGroup = self.view
-	local inventory = setUpInventory()
+	inventory = setUpInventory()
 
 
 	sceneGroup:insert(inventory)
