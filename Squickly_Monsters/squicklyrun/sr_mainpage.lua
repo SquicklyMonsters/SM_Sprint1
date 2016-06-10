@@ -1,48 +1,45 @@
-local widget = require("widget")
+-- Import dependency
 local composer = require( "composer" )
 local scene = composer.newScene()
+require( "squicklyrun.sr_background" )
 
-local image, text1, text2, text3, memTimer
+-- -----------------------------------------------------------------------------------------------------------------
+-- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
+-- -----------------------------------------------------------------------------------------------------------------
+-- Local variables go Here
 
-function goToSRGame(event)
-	if ( event.phase == "ended" ) then
-		composer.gotoScene( "squicklyrun.sr_mainpage" )
-    end
-end
+local screen;
+local player;
+
+-- -------------------------------------------------------------------------------
+-- Scene functions go Here
 
 function scene:create( event )
 	local sceneGroup = self.view
-	
-	image = display.newImage( "bg2.jpg" )
-	image.x = display.contentCenterX
-	image.y = display.contentCenterY
-	
-	text1 = display.newText( "MiniGame", 0, 0, native.systemFontBold, 24 )
-	text1:setFillColor( 255 )
-	text1.x, text1.y = display.contentWidth * 0.5, 50
-	
-	srIcon = widget.newButton{
-		width = 100,
-		height = 100,
-		defaultFile = "img/squicklyrun/srIcon.png",
-	}
-	srIcon.x, srIcon.y = display.contentCenterX-80, display.contentCenterY-20
 
+	setupBackground()
+	setupGround()
+	setupObstaclesAndEnemies()
+	setupSprite()
+	setupScoreAndGameOver()
 
-	srIcon:addEventListener('touch',goToSRGame)
+	screen = getScreenLayer()
+	player = getPlayerLayer()
 
-	sceneGroup:insert( image )
-	sceneGroup:insert( text1 )
-	sceneGroup:insert( srIcon )
+	sceneGroup:insert( screen )
+	-- sceneGroup:insert( player )
+
+	timer.performWithDelay(1, update, -1)
+	Runtime:addEventListener("touch", touched, -1)
 end
 
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-	
 
 	if phase == "will" then
-		composer.showOverlay("menubar")
+        composer.showOverlay("menubar")
+		restartGame()
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
 		-- Called when the scene is now on screen
@@ -62,7 +59,7 @@ function scene:hide( event )
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
 	elseif phase == "did" then
-		--composer.hideOverlay()
+        --composer.hideOverlay()
 		-- Called when the scene is now off screen
 	end
 end
