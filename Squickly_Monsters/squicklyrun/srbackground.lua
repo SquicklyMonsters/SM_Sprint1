@@ -7,8 +7,11 @@ local backgroundfar;
 local backgroundnear1;
 local backgroundnear2;
 
---create a new group to hold all of our blocks
+--display groups
 local blocks;
+local ghosts;
+local spikes;
+local blasts;
 
 --main display groups
 local screen;
@@ -114,7 +117,7 @@ function setupSprite()
 		height = 100,
 		numFrames = 3
 	}
-	local spriteSheet = graphics.newImageSheet("img/squicklyrun/monsterSpriteSheet.png", imgsheetSetup);
+	local spriteSheet = graphics.newImageSheet("img/squicklyrun/heroSpriteSheet.png", imgsheetSetup);
 	
 	local sequenceData = {
 		{ name = "running", start = 1, count = 6, time = 600, loopCount = 0},
@@ -144,6 +147,51 @@ function setupSprite()
 	screen:insert(collisionRect)
 end
 
+function setupObstaclesAndEnemies()
+	ghosts = display.newGroup()
+	spikes = display.newGroup()
+	blasts = display.newGroup()
+
+	--create ghosts and set their position to be off-screen
+	for a = 1, 3, 1 do
+		local ghost = display.newImage("img/squicklyrun/ghost.png")
+		ghost.name = ("ghost" .. a)
+		ghost.id = a
+		ghost.x = 800
+		ghost.y = 600
+		ghost.speed = 0
+			--variable used to determine if they are in play or not
+		ghost.isAlive = false
+			--make the ghosts transparent and more... ghostlike!
+		ghost.alpha = .5
+		ghosts:insert(ghost)
+	end
+	--create spikes
+	for a = 1, 3, 1 do
+		local spike = display.newImage("img/squicklyrun/spikeBlock.png")
+		spike.name = ("spike" .. a)
+		spike.id = a
+		spike.x = 900
+		spike.y = 500
+		spike.isAlive = false
+		spikes:insert(spike)
+	end
+	--create blasts
+	for a=1, 5, 1 do
+		local blast = display.newImage("img/squicklyrun/blast.png")
+		blast.name = ("blast" .. a)
+		blast.id = a
+		blast.x = 800
+		blast.y = 500
+		blast.isAlive = false
+		blasts:insert(blast)
+	end
+
+	screen:insert(spikes)
+	screen:insert(blasts)
+	screen:insert(ghosts)
+end
+
 -- -----------------------------------------------------------------------------------------------------------------
 --Update functions
 
@@ -152,6 +200,9 @@ function update( event )
 	updateSpeed()
 	updateHero()
 	updateBlocks()
+	updateBlasts()
+	updateSpikes()
+	updateGhosts()
 	checkCollisions()
 end
 
@@ -214,9 +265,103 @@ function updateBlocks()
 			else
 				(blocks[a]).x, (blocks[a]).y = newX, groundLevel
 			end
+			--by setting up the spikes this way we are guaranteed to
+			--only have 3 spikes out at most at a time.
+			if(inEvent == 12) then
+				for a=1, spikes.numChildren, 1 do
+					if(spikes[a].isAlive == true) then
+						--do nothing
+					else
+						spikes[a].isAlive = true
+						spikes[a].y = groundLevel - 200
+						spikes[a].x = newX
+						break
+					end
+				end
+			end
 			checkEvent()
 		else
 			(blocks[a]):translate(speed * -1, 0)
+		end
+	end
+end
+
+function updateBlasts()
+	--for each blast that we instantiated check to see what it is doing
+	for a = 1, blasts.numChildren, 1 do
+		--if that blast is not in play we don't need to check anything else
+		if(blasts[a].isAlive == true) then
+			(blasts[a]):translate(5, 0)
+			--if the blast has moved off of the screen, then kill it and return it to its original place
+			if(blasts[a].x > 550) then
+				blasts[a].x = 800
+				blasts[a].y = 500
+				blasts[a].isAlive = false
+			end
+		end
+		--check for collisions between the blasts and the spikes
+		for b = 1, spikes.numChildren, 1 do
+			if(spikes[b].isAlive == true) then
+				if(blasts[a].y - 25 > spikes[b].y - 120 and blasts[a].y + 25 < spikes[b].y + 120 and spikes[b].x - 40 < blasts[a].x + 25 and spikes[b].x + 40 > blasts[a].x - 25) then
+					blasts[a].x = 800
+					blasts[a].y = 500
+					blasts[a].isAlive = false
+					spikes[b].x = 900
+					spikes[b].y = 500
+					spikes[b].isAlive = false
+				end
+			end
+		end
+ 
+		--check for collisions between the blasts and the ghosts
+		for b = 1, ghosts.numChildren, 1 do
+			if(ghosts[b].isAlive == true) then
+				if(blasts[a].y - 25 > ghosts[b].y - 120 and blasts[a].y + 25 < ghosts[b].y + 120 and ghosts[b].x - 40 < blasts[a].x + 25 and ghosts[b].x + 40 > blasts[a].x - 25) then
+					blasts[a].x = 800
+					blasts[a].y = 500
+					blasts[a].isAlive = false
+					ghosts[b].x = 800
+					ghosts[b].y = 600
+					ghosts[b].isAlive = false
+					ghosts[b].speed = 0
+				end
+			end
+		end
+	end
+end
+
+--check to see if the spikes are alive or not, if they are
+--then update them appropriately
+function updateSpikes()
+	for a = 1, spikes.numChildren, 1 do
+		if(spikes[a].isAlive == true) then
+			(spikes[a]):translate(speed * -1, 0)
+			if(spikes[a].x < -80) then
+				spikes[a].x = 900
+				spikes[a].y = 500
+				spikes[a].isAlive = false
+			end
+		end
+	end
+end
+
+--update the ghosts if they are alive
+function updateGhosts()
+	for a = 1, ghosts.numChildren, 1 do
+		if(ghosts[a].isAlive == true) then
+			(ghosts[a]):translate(speed * -1, 0)
+			if(ghosts[a].y > hero.y) then
+				ghosts[a].y = ghosts[a].y - 1
+			end
+			if(ghosts[a].y < hero.y) then
+				ghosts[a].y = ghosts[a].y + 1
+			end
+			if(ghosts[a].x < -80) then
+				ghosts[a].x = 800
+				ghosts[a].y = 600
+				ghosts[a].speed = 0
+				ghosts[a].isAlive = false;
+			end
 		end
 	end
 end
@@ -227,6 +372,24 @@ function checkCollisions()
 	for a = 1, blocks.numChildren, 1 do
 		if(collisionRect.y - 10 > blocks[a].y - 170 and blocks[a].x - 40 < collisionRect.x and blocks[a].x + 40 > collisionRect.x) then
 			speed = 0
+		end
+	end
+	--stop the game if the hero runs into a spike wall
+	for a = 1, spikes.numChildren, 1 do
+		if(spikes[a].isAlive == true) then
+			if(collisionRect.y - 10> spikes[a].y - 170 and spikes[a].x - 40 < collisionRect.x and spikes[a].x + 40 > collisionRect.x) then
+				--stop the hero
+				speed = 0
+			end
+		end
+	end
+	--make sure the player didn't get hit by a ghost!
+	for a = 1, ghosts.numChildren, 1 do
+		if(ghosts[a].isAlive == true) then
+			if(((  ((hero.y-ghosts[a].y))<70) and ((hero.y - ghosts[a].y) > -70)) and (ghosts[a].x - 40 < collisionRect.x and ghosts[a].x + 40 > collisionRect.x)) then
+				--stop the hero
+				speed = 0
+			end
 		end
 	end
 	--this is where we check to see if the hero is on the ground or in the air, if he is in the air then he can't jump(sorry no double
@@ -249,7 +412,7 @@ end
 --Event Handlers
 
 --this is the function that handles the jump events. If the screen is touched on the left side
---then make the monster jump
+--then make the hero jump
 function checkEvent()
 	--first check to see if we are already in an event, we only want 1 event going on at a time
 	if(eventRun > 0) then
@@ -268,6 +431,17 @@ function checkEvent()
 	else
 		  --if we are not in an event check to see if we are going to start a new event.
 		check = math.random(100)
+		--ghost event
+		if(check > 60 and check < 73) then
+				inEvent = 13
+				eventRun = 1
+		end
+		--the more frequently you want events to happen then
+		--greater you should make the checks
+		if(check > 72 and check < 81) then
+			inEvent = 12
+			eventRun = 1
+		end
 		  --this first event is going to cause the elevation of the ground to change. For this game we
 		  --only want the elevation to change 1 block at a time so we don't get long runs of changing
 		  --elevation that is impossible to pass so we set eventRun to 1.
@@ -284,6 +458,20 @@ function checkEvent()
 	 --if we are in an event call runEvent to figure out if anything special needs to be done
 	if(inEvent > 0) then
 		runEvent()
+	end
+	--this will be a little bit different as we want this to really
+	--make the game feel even more random. change where the ghosts
+	--spawn and how fast they come at the hero.
+	if(inEvent == 13) then
+		for a=1, ghosts.numChildren, 1 do
+			if(ghosts[a].isAlive == false) then
+				ghosts[a].isAlive = true
+				ghosts[a].x = 500
+				ghosts[a].y = math.random(-50, 400)
+				ghosts[a].speed = math.random(2,4)
+				break
+			end
+		end
 	end
 end
 
@@ -305,11 +493,22 @@ function runEvent()
 	end
 end
 
+--the only difference in the touched function is now if you touch the
+--right side of the screen the hero will fire off a little blue bolt
 function touched( event )
 	if(event.phase == "began") then
 		if(event.x < 241) then
 			if(onGround) then
 				hero.accel = hero.accel + 20
+			end
+		else
+			for a=1, blasts.numChildren, 1 do
+				if(blasts[a].isAlive == false) then
+					blasts[a].isAlive = true
+					blasts[a].x = hero.x + 50
+					blasts[a].y = hero.y
+					break
+				end
 			end
 		end
 	end
