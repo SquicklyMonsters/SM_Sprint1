@@ -143,15 +143,21 @@ end
 -- Changing by a certain amount (Still needs to have more calculations later)
 function changeNeedsLevel(need, change)
     setNeedsLevel(need, needsLevels[need] + change)
-    if need == "hunger" then  -- --------------------------------------------------------------------Check only for hunger bar.
-      if needsBars.hunger:getProgress() < 0.4 then---------------------------------------------------If hunger is less than 40% to
-        transition.fadeIn( cloud, {x = getMonster().x +100, y = getMonster().y - 120, time=1500 } )-- then fade in with icon
-      else
-        transition.fadeOut( cloud, {time=1500 } )---------------------------------------------------- else doing fade out
-      end
-    end
+    thoughtCloud(need)
 end
-
+-- -----------------------------------------------------------------------------
+-- checkBar keep checking the hungerBar and energyBar
+-- if it less than 40 % then pop up the thoughtcloud
+function thoughtCloud(need)
+  if need == "hunger" then  -- --------------------------------------------------------------------Check only for hunger bar.
+    if needsBars.hunger:getProgress() < 0.4 then---------------------------------------------------If hunger is less than 40% to
+      transition.fadeIn( cloud, {x = getMonster().x +100, y = getMonster().y - 120, time=1500 } )-- then fade in with icon
+    else
+      transition.fadeOut( cloud, { time=1500 } )---------------------------------------------------- else doing fade out
+      -- transition.to(cloud,{x = getMonster().x, y = getMonster().y,alpha=0})
+    end
+  end
+end
 -- -------------------------------------------------------------------------------
 -- Get needs level
 
