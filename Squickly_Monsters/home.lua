@@ -42,7 +42,8 @@ local hygieneBar;
 local energyBar;
 local expBar;
 
-local cloud;      -- local for cloud
+local hungerCloud;      --- local for cloud Icon
+local energyCloud;
 
 -- -------------------------------------------------------------------------------
 
@@ -77,7 +78,8 @@ function scene:create( event )
 
     -- Set up all Icons
     setUpAllIcons()
-		cloud = getCloud()
+		hungerCloud = getHungerCloud()
+		energyCloud = getEnergyCloud()
     feedIcon = getFeedIcon()
     sleepIcon = getSleepIcon()
     wakeupIcon = getWakeupIcon()
@@ -106,7 +108,8 @@ function scene:create( event )
     middle:insert(inventoryIcon)
     -- ===========FRONT===============
     front:insert(feedIcon)
-		front:insert(cloud)
+		front:insert(hungerCloud)
+		front:insert(energyCloud)
     front:insert(sleepIcon)
     front:insert(wakeupIcon)
     front:insert(cleanIcon)

@@ -22,7 +22,8 @@ local needsLevels;
 local needsBars;
 
 
-local cloud;      --- local for cloud Icon
+local hungerCloudThought;      --- local for cloud Icon
+local energyCloudThought;
 -- -------------------------------------------------------------------------------
 -- Set up needs bar
 
@@ -109,7 +110,8 @@ function setUpAllIcons()
     mostRecentPlayIcon1 = setUpIcon(iconsDir .. "legomanIcon.png", 0.75)
     mostRecentPlayIcon2 = setUpIcon(iconsDir .. "footballIcon.png", 0.75)
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
-    cloud = setUpIcon(iconsDir.. "cloud.png", 0.75)   ----------------------- Add cloud icon here
+    hungerCloudThought = setUpIcon(iconsDir.. "cloud.png", 0.75, getMonster().x +100, getMonster().y -120)   ----------------------- Add hungry icon here
+    energyCloudThought = setUpIcon(iconsDir.. "battery.png", 0.75, getMonster().x -100, getMonster().y -120)  ---------------------- Add energy icon here
     inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
 end
 
@@ -157,10 +159,17 @@ end
 function thoughtCloud(need)
   if need == "hunger" then  -- --------------------------------------------------------------------Check only for hunger bar.
     if needsBars.hunger:getProgress() < 0.4 then---------------------------------------------------If hunger is less than 40% to
-      transition.fadeIn( cloud, {x = getMonster().x +100, y = getMonster().y - 120, time=1500 } )-- then fade in with icon
+      transition.fadeIn( hungerCloudThought, {time=1500 } )-- then fade in with icon
     else
-      transition.fadeOut( cloud, { time=1500 } )---------------------------------------------------- else doing fade out
+      transition.fadeOut( hungerCloudThought, { time=1500 } )---------------------------------------------------- else doing fade out
       -- transition.to(cloud,{x = getMonster().x, y = getMonster().y,alpha=0})
+    end
+  end
+  if need == "energy" then
+    if needsBars.energy:getProgress() < 0.4 then
+      transition.fadeIn( energyCloudThought, {time = 1500})
+    else
+      transition.fadeOut( energyCloudThought, {time = 1500})
     end
   end
 end
@@ -268,8 +277,11 @@ end
 function getMorePlayIcon()
     return morePlayIcon
 end
-function getCloud()
-    return cloud
+function getHungerCloud()
+    return hungerCloudThought
+end
+function getEnergyCloud()
+    return energyCloudThought
 end
 function getInventoryIcon()
     return inventoryIcon
