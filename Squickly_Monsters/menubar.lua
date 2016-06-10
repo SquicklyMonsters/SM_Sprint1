@@ -130,7 +130,7 @@ function setUpMenuBar()
   menuBar.homeButton.scene = "home"
   menuBar.shopButton.scene = "shop"
   menuBar.miniGameButton.scene = "miniGame"
-  menuBar.settingsButton.scene = "inventory"
+  menuBar.settingsButton.scene = "settings"
 
   menuBar:insert(menuBar.slideButton)
   menuBar:insert(menuBar.homeButton)

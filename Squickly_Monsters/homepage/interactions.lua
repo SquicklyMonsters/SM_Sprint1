@@ -21,7 +21,6 @@ local shopIcon;
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
 local morePlayIcon;
-
 local inventoryIcon;
 
 local iconsList; -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
@@ -34,7 +33,7 @@ local needsLevels;
 local needsBars;
 
 local isTouchAble;
-
+local inventoryIsShow = false;
 -- -------------------------------------------------------------------------------
 
 function cacheVariables()
@@ -194,8 +193,6 @@ function mostRecentFood1Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(foodIconsList)
-            -- changeToWakeupState()
-            -- feedPetAnimation()
             local burger = foodList.burger
             burger:eat()
         end
@@ -206,8 +203,6 @@ function mostRecentFood2Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(foodIconsList)
-            -- changeToWakeupState()
-            -- feedPetAnimation()
             changeNeedsLevel("hunger", 1000)
         end
     end
@@ -264,7 +259,13 @@ end
 function inventoryClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
-            composer.showOverlay("inventory")
+            if inventoryIsShow then
+                composer.gotoScene(composer.getSceneName("current"))
+                inventoryIsShow = false
+            else
+                composer.showOverlay("inventory")
+                inventoryIsShow = true
+            end
         end
     end
 end
