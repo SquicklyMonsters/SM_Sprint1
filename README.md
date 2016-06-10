@@ -16,9 +16,16 @@
 
 ##Second Sprint Iteration
 
-_Details Coming Soon ..._
+* Menu Bar fixes, Cleaner Code and Code Maintanence
+* Added Graphics for Monster 1 (fireball) Animation Default and Sleep
+* Added Monster Thoguht Bubble Graphics
+* Added Load/Save Game Feature
+* Added Food (and General) Items
+* Added Endless Running Minigame (i.e. Squickly-Run)
+* Added Inventory and Shop
 
 ![alt tag](https://raw.githubusercontent.com/SquicklyMonsters/SM_Sprints/master/ProgressScreenshot/Sprint2/Progess1_Screenshot.jpg)
 ![alt tag](https://raw.githubusercontent.com/SquicklyMonsters/SM_Sprints/master/ProgressScreenshot/Sprint2/Progess2_Screenshot.jpg)
 ![alt tag](https://raw.githubusercontent.com/SquicklyMonsters/SM_Sprints/master/ProgressScreenshot/Sprint2/Progess3_Screenshot.png)
 ![alt tag](https://raw.githubusercontent.com/SquicklyMonsters/SM_Sprints/master/ProgressScreenshot/Sprint2/Progess4_Screenshot.png)
+![alt tag](https://raw.githubusercontent.com/SquicklyMonsters/SM_Sprints/master/ProgressScreenshot/Sprint2/Progess5_Screenshot.png)
