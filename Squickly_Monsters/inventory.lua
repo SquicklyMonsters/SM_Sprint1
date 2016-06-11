@@ -10,7 +10,6 @@ local itemQuantities;
 local itemTexts = {};
 
 local inventory;
-local buyholder;
 -- -------------------------------------------------------------------------------
 -- Set all Event listeners HERE
 
@@ -100,7 +99,7 @@ function setUpInventory()
  		}
 
  		local text = display.newText(textOptions)
- 		text:setFillColor( 1, 0, 0 )
+ 		text:setFillColor( 0, 1, 0 )
 
  		table.insert(itemTexts, i, text)
  		inventory:insert(inventory.items[i])
@@ -140,7 +139,6 @@ end
 function scene:create( event )
 	local sceneGroup = self.view
 	inventory = setUpInventory()
-	buyholder = setUpIcon("img/icons/UIIcons/buy.png", 0.75)
 	sceneGroup:insert(inventory)
 	print(composer.getSceneName("current"))
 

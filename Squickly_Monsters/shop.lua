@@ -21,6 +21,8 @@ local itemList;
 local itemQuantities;
 local itemTexts = {};
 
+local buyHolder;
+
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
@@ -35,8 +37,20 @@ function widget.newPanel(options)
     return container
 end
 
+function buyClicked(event)
+    event.target:removeSelf()
+end
+
+function buyNotice()
+    buyHolder = display.newImageRect("img/icons/UIIcons/buy.png", 150, 150)
+    buyHolder.x = display.contentCenterX
+    buyHolder.y = display.contentCenterY
+    buyHolder:addEventListener("touch", buyClicked)
+end
+
 function itemClickedEvent(event)
     if event.phase == "ended" then
+        buyNotice()
         local item = event.target.item
         local idx = isInInventory(item.name)
         if idx then
@@ -94,7 +108,7 @@ function setUpShop()
         print(textOptions.text)
 
         local text = display.newText(textOptions)
-        text:setFillColor( 0, 1, 0 )
+        text:setFillColor( 1, 1, 0 )
 
         table.insert(itemTexts, i, text)
         inventory:insert(inventory.items[i])
@@ -135,6 +149,7 @@ function scene:create( event )
     -- Set up all Icons
     setUpAllIcons()
     inventoryIcon = getInventoryIcon()
+    -- buyholder = setUpIcon("img/icons/UIIcons/buy.png", 0.75)
 
 	-- Add display objects into group
     -- ============BACK===============
@@ -143,7 +158,7 @@ function scene:create( event )
     middle:insert(shop)
     middle:insert(inventoryIcon)
     -- ===========FRONT===============
-
+    -- front:insert(buyholder)
     -- ===============================
     sceneGroup:insert(back)
     sceneGroup:insert(middle)
