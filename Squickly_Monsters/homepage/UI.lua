@@ -1,4 +1,5 @@
 local widget = require( "widget" )
+local composer = require("composer")
 require("loadgame")
 -------------------------------------------------------------------------------
 -- Local variables go HERE
@@ -155,20 +156,23 @@ end
 -- checkBar keep checking the hungerBar and energyBar
 -- if it less than 40 % then pop up the thoughtcloud
 function thoughtCloud(need)
-  if need == "hunger" then
-    if needsBars.hunger:getProgress() < 0.4 then
-      transition.fadeIn( hungerCloudThought, {time=1500 } )-- then fade in with icon
-    else
-      transition.fadeOut( hungerCloudThought, { time=1500 } )
+
+    if (composer.getSceneName("current") == "home") then
+        if need == "hunger" then
+            if needsBars.hunger:getProgress() < 0.4 then
+                transition.fadeIn( hungerCloudThought, {time=1500 } )-- then fade in with icon
+            else
+                transition.fadeOut( hungerCloudThought, { time=1500 } )
+            end
+        end
+        if need == "energy" then
+            if needsBars.energy:getProgress() < 0.4 then
+                transition.fadeIn( energyCloudThought, {time = 1500})
+            else
+                transition.fadeOut( energyCloudThought, {time = 1500})
+            end
+        end
     end
-  end
-  if need == "energy" then
-    if needsBars.energy:getProgress() < 0.4 then
-      transition.fadeIn( energyCloudThought, {time = 1500})
-    else
-      transition.fadeOut( energyCloudThought, {time = 1500})
-    end
-  end
 end
 -- -------------------------------------------------------------------------------
 -- Get needs level
