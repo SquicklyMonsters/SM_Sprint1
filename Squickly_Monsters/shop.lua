@@ -19,6 +19,7 @@ local front;
 local inventoryIcon;
 local itemList;
 local itemQuantities;
+local itemTexts = {};
 
 -- -------------------------------------------------------------------------------
 
@@ -83,6 +84,21 @@ function setUpShop()
         inventory.items[i].item = food
         inventory.items[i].idx = i
 
+        local textOptions = {
+            text = food.cost, 
+            x = x + 70, 
+            y = y + 65, 
+            width = 50, 
+            height = 50
+        }
+        print(textOptions.text)
+
+        local text = display.newText(textOptions)
+        text:setFillColor( 0, 1, 0 )
+
+        table.insert(itemTexts, i, text)
+        inventory:insert(inventory.items[i])
+        inventory:insert(text)
         inventory:insert(inventory.items[i])
     end
 

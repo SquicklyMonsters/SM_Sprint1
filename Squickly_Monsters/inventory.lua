@@ -10,6 +10,7 @@ local itemQuantities;
 local itemTexts = {};
 
 local inventory;
+local buyholder;
 -- -------------------------------------------------------------------------------
 -- Set all Event listeners HERE
 
@@ -139,6 +140,7 @@ end
 function scene:create( event )
 	local sceneGroup = self.view
 	inventory = setUpInventory()
+	buyholder = setUpIcon("img/icons/UIIcons/buy.png", 0.75)
 	sceneGroup:insert(inventory)
 	print(composer.getSceneName("current"))
 
