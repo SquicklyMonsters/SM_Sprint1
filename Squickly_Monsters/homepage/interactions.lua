@@ -174,7 +174,7 @@ function cleanButtonClicked(event)
         if event.phase == "ended" then
             hideShowAllIcons(iconsList)
             changeToWakeupState()
-            cleanPetAnimation()
+            cleanAnimation()
             changeNeedsLevel("hygiene", 500)
         end
     end
@@ -231,7 +231,7 @@ function mostRecentPlay1Clicked(event)
         if event.phase == "ended" then
             hideShowAllIcons(playIconsList)
             changeToWakeupState()
-            playWithPetAnimation()
+            playAnimation()
             changeNeedsLevel("happiness", 500)
         end
     end
@@ -242,7 +242,7 @@ function mostRecentPlay2Clicked(event)
         if event.phase == "ended" then
             hideShowAllIcons(playIconsList)
             changeToWakeupState()
-            playWithPetAnimation()
+            playAnimation()
             changeNeedsLevel("happiness", 1000)
         end
     end
@@ -273,6 +273,7 @@ end
 
 function changeToSleepState()
     cancelOldLoop()
+    sleepAnimation()
     sleepWakeID = setRateLongTerm("energy", 1000, 10)
     table.remove(iconsList, 2)
     table.insert(iconsList, 2, wakeupIcon)
@@ -280,6 +281,7 @@ end
 
 function changeToWakeupState()
     cancelOldLoop()
+    defaultAnimation()
     sleepWakeID = setRateLongTerm("energy", 1000, -10)
     table.remove(iconsList, 2)
     table.insert(iconsList, 2, sleepIcon)

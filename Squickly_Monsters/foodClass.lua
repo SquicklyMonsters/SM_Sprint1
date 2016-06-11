@@ -26,7 +26,7 @@ end
 function food:eat()
 	-- Change to eating animation and wake up monster
 	changeToWakeupState()
-    feedPetAnimation()
+    feedAnimation()
     -- Change needs bar according to food affect
 	changeNeedsLevel("hunger", self.hungerAffect)
 	changeNeedsLevel("happiness", self.happinessAffect)
