@@ -38,14 +38,12 @@ function widget.newPanel(options)
 end
 
 function buyClicked(event)
-    event.target:removeSelf()
+    buyHolder.alpha = 0
 end
 
 function buyNotice()
-    buyHolder = display.newImageRect("img/icons/UIIcons/buy.png", 150, 150)
-    buyHolder.x = display.contentCenterX
-    buyHolder.y = display.contentCenterY
-    buyHolder:addEventListener("touch", buyClicked)
+    buyHolder.alpha = 1
+    background:addEventListener("touch", buyClicked)
 end
 
 function itemClickedEvent(event)
@@ -149,7 +147,10 @@ function scene:create( event )
     -- Set up all Icons
     setUpAllIcons()
     inventoryIcon = getInventoryIcon()
-    -- buyholder = setUpIcon("img/icons/UIIcons/buy.png", 0.75)
+    buyHolder = display.newImageRect("img/icons/UIIcons/buy.png", 150, 150)
+    buyHolder.x = display.contentCenterX
+    buyHolder.y = display.contentCenterY
+    buyHolder.alpha = 0
 
 	-- Add display objects into group
     -- ============BACK===============
@@ -158,7 +159,7 @@ function scene:create( event )
     middle:insert(shop)
     middle:insert(inventoryIcon)
     -- ===========FRONT===============
-    -- front:insert(buyholder)
+    front:insert(buyHolder)
     -- ===============================
     sceneGroup:insert(back)
     sceneGroup:insert(middle)
