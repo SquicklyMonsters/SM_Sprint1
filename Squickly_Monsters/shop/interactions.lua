@@ -10,6 +10,7 @@ local sleepWakeID;
 local inventoryIcon;
 local isTouchAble;
 local inventoryIsShow = false;
+
 -- -------------------------------------------------------------------------------
 
 function cacheVariables()

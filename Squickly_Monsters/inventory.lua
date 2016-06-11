@@ -99,7 +99,7 @@ function setUpInventory()
  		}
 
  		local text = display.newText(textOptions)
- 		text:setFillColor( 1, 0, 0 )
+ 		text:setFillColor( 0, 1, 0 )
 
  		table.insert(itemTexts, i, text)
  		inventory:insert(inventory.items[i])
