@@ -50,11 +50,11 @@ function setUpMonster(fileName)
  --    monster:play()
     local options = {
     width = 2388/4,
-    height = 3462/4,
+    height = 3461/4,
     numFrames = 16,
 
     sheetContentWidth = 2388,
-    sheetContentHeight = 3462,
+    sheetContentHeight = 3461,
 
     }
     local imageSheet = graphics.newImageSheet(fileName, options)

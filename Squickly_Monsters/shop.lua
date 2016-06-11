@@ -5,9 +5,7 @@ local scene = composer.newScene()
 
 require("shop.background")
 require("shop.interactions")
-require("foodList")
-require("inventory")
-require("savegame")
+require("inventory.interactions")
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
 -- -----------------------------------------------------------------------------------------------------------------
@@ -21,6 +19,9 @@ local front;
 local inventoryIcon;
 local itemList;
 local itemQuantities;
+local itemTexts = {};
+
+local buyHolder;
 
 -- -------------------------------------------------------------------------------
 
@@ -36,35 +37,26 @@ function widget.newPanel(options)
     return container
 end
 
---check if the item exists in inventory
-function checkExist(idx)
-    return true
+function buyClicked(event)
+    buyHolder.alpha = 0
 end
 
---adds new item to inventory
-function addToInventory(idx)
-end
-
--- increase quantity of the item if it already exists
-function increaseQuantity(idx)
-    -- itemTexts[idx].text = itemTexts[idx].text + 1
-    itemQuantities[idx] = itemQuantities[idx] + 1
-    saveInventoryData()
+function buyNotice()
+    buyHolder.alpha = 1
+    background:addEventListener("touch", buyClicked)
 end
 
 function itemClickedEvent(event)
     if event.phase == "ended" then
-        itemList = getItemList()
-        itemQuantities = getItemQuantities()
-        local idx = event.target.idx
-        print(idx)
-        local exist = checkExist(idx)
-        print(itemList[idx])
-        if exist then
+        buyNotice()
+        local item = event.target.item
+        local idx = isInInventory(item.name)
+        if idx then
             increaseQuantity(idx)
         else
-            addToInventory(idx)
+            addToInventory(item.name)
         end
+        saveInventoryData()
     end
 end
 
@@ -83,7 +75,8 @@ function setUpShop()
     local spacingX = (inventory.width)/7.5
     local spacingY = (inventory.height)/3.75
 
-    shopList = getFoodList()
+    local shopList = getFoodList()
+
     inventory.items = {}
 
     for i = 1, #shopList do --loops to create each item on inventory
@@ -103,6 +96,21 @@ function setUpShop()
         inventory.items[i].item = food
         inventory.items[i].idx = i
 
+        local textOptions = {
+            text = food.cost, 
+            x = x + 70, 
+            y = y + 65, 
+            width = 50, 
+            height = 50
+        }
+        print(textOptions.text)
+
+        local text = display.newText(textOptions)
+        text:setFillColor( 1, 1, 0 )
+
+        table.insert(itemTexts, i, text)
+        inventory:insert(inventory.items[i])
+        inventory:insert(text)
         inventory:insert(inventory.items[i])
     end
 
@@ -139,6 +147,10 @@ function scene:create( event )
     -- Set up all Icons
     setUpAllIcons()
     inventoryIcon = getInventoryIcon()
+    buyHolder = display.newImageRect("img/icons/UIIcons/buy.png", 150, 150)
+    buyHolder.x = display.contentCenterX
+    buyHolder.y = display.contentCenterY
+    buyHolder.alpha = 0
 
 	-- Add display objects into group
     -- ============BACK===============
@@ -147,7 +159,7 @@ function scene:create( event )
     middle:insert(shop)
     middle:insert(inventoryIcon)
     -- ===========FRONT===============
-
+    front:insert(buyHolder)
     -- ===============================
     sceneGroup:insert(back)
     sceneGroup:insert(middle)
@@ -191,7 +203,6 @@ end
 
 function scene:destroy( event )
 	local sceneGroup = self.view
-
 	-- Called prior to the removal of scene's "view" (sceneGroup)
 	--
 	-- INSERT code here to cleanup the scene

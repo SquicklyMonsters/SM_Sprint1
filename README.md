@@ -29,3 +29,4 @@
 <img src="https://raw.githubusercontent.com/SquicklyMonsters/SM_Sprints/master/ProgressScreenshot/Sprint2/Progess3_Screenshot.png" width="250">
 <img src="https://raw.githubusercontent.com/SquicklyMonsters/SM_Sprints/master/ProgressScreenshot/Sprint2/Progess4_Screenshot.png" width="250">
 <img src="https://raw.githubusercontent.com/SquicklyMonsters/SM_Sprints/master/ProgressScreenshot/Sprint2/Progess5_Screenshot.png" width="250">
+<img src="https://raw.githubusercontent.com/SquicklyMonsters/SM_Sprints/master/ProgressScreenshot/Sprint2/Progess6_Screenshot.png" width="250">

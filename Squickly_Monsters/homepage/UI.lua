@@ -15,13 +15,13 @@ local shopIcon;
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
 local morePlayIcon;
-
+local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins
 local inventoryIcon;
-
-local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins 
+local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins
 local needsLevels;
 local needsBars;
-
+local hungerCloudThought;
+local energyCloudThought;
 -- -------------------------------------------------------------------------------
 -- Set up needs bar
 
@@ -108,6 +108,8 @@ function setUpAllIcons()
     mostRecentPlayIcon1 = setUpIcon(iconsDir .. "legomanIcon.png", 0.75)
     mostRecentPlayIcon2 = setUpIcon(iconsDir .. "footballIcon.png", 0.75)
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
+    hungerCloudThought = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
+    energyCloudThought = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
     inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
 end
 
@@ -133,7 +135,7 @@ end
 -- ------------------------------------------------
 -- Adds forever increasing/decreasing needs level
 
-function setRateLongTerm(need, rate, amount) 
+function setRateLongTerm(need, rate, amount)
     -- increasing is boolean val which shows that rate should increase if true
     -- rate is frequency of the change, amount is the magnitude of change
     -- rate 1000 = 1sec, -1 is infinite interations
@@ -145,11 +147,29 @@ function setRateLongTerm(need, rate, amount)
 end
 -- ------------------------------------------------
 -- Changing by a certain amount (Still needs to have more calculations later)
-
 function changeNeedsLevel(need, change)
     setNeedsLevel(need, needsLevels[need] + change)
+    thoughtCloud(need)
 end
-
+-- -----------------------------------------------------------------------------
+-- checkBar keep checking the hungerBar and energyBar
+-- if it less than 40 % then pop up the thoughtcloud
+function thoughtCloud(need)
+  if need == "hunger" then
+    if needsBars.hunger:getProgress() < 0.4 then
+      transition.fadeIn( hungerCloudThought, {time=1500 } )-- then fade in with icon
+    else
+      transition.fadeOut( hungerCloudThought, { time=1500 } )
+    end
+  end
+  if need == "energy" then
+    if needsBars.energy:getProgress() < 0.4 then
+      transition.fadeIn( energyCloudThought, {time = 1500})
+    else
+      transition.fadeOut( energyCloudThought, {time = 1500})
+    end
+  end
+end
 -- -------------------------------------------------------------------------------
 -- Get needs level
 
@@ -254,7 +274,12 @@ end
 function getMorePlayIcon()
     return morePlayIcon
 end
-
+function getHungerCloud()
+    return hungerCloudThought
+end
+function getEnergyCloud()
+    return energyCloudThought
+end
 function getInventoryIcon()
     return inventoryIcon
 end

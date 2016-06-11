@@ -10,6 +10,7 @@ local sleepWakeID;
 local inventoryIcon;
 local isTouchAble;
 local inventoryIsShow = false;
+
 -- -------------------------------------------------------------------------------
 
 function cacheVariables()
@@ -28,16 +29,13 @@ end
 -- Hide / Show Icons with Lock
 
 function inventoryClicked(event)
-    if isTouchAble then
-        if event.phase == "ended" then
-            if inventoryIsShow then
-                composer.gotoScene(composer.getSceneName("current"))
-                saveInventoryData()
-                inventoryIsShow = false
-            else
-                composer.showOverlay("inventory")
-                inventoryIsShow = true
-            end
+    if event.phase == "ended" then
+        if inventoryIsShow then
+            composer.gotoScene(composer.getSceneName("current"))
+            inventoryIsShow = false
+        else
+            composer.showOverlay("inventory")
+            inventoryIsShow = true
         end
     end
 end

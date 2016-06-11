@@ -28,7 +28,7 @@ local foodIconsList;
 local playIconsList;
 local currentVisibleList;
 
-local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins 
+local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins
 local needsLevels;
 local needsBars;
 
@@ -99,20 +99,20 @@ function hideShowAllIcons(iconsTable)
     isTouchAble = false
     if (iconsTable[1].alpha) == 0 then -- Show Icons
         for i = 1, #iconsTable do
-            transition.to(iconsTable[i], 
+            transition.to(iconsTable[i],
                 {x = monster.x + xAxis[i], y = monster.y - yAxis[i],
                 alpha = 1, time = 250})
         end
         currentVisibleList = iconsTable
     else -- Hide Icons
         for i = 1, #iconsTable do
-            transition.to(iconsTable[i], 
+            transition.to(iconsTable[i],
                 {x = monster.x, y = monster.y,
                 alpha = 0, time = 250})
 
-        end 
+        end
         currentVisibleList = nil
-    end   
+    end
     -- Release lock after icons transition is finish
     timer.performWithDelay(250, enableTouch)
 end
@@ -124,7 +124,7 @@ function monsterClicked(event)
         if event.phase == "ended" then
             if (currentVisibleList == nil) then
                 hideShowAllIcons(iconsList)
-            else 
+            else
                 hideShowAllIcons(currentVisibleList)
             end
         end
@@ -257,16 +257,13 @@ function morePlayClicked(event)
 end
 
 function inventoryClicked(event)
-    if isTouchAble then
-        if event.phase == "ended" then
-            if inventoryIsShow then
-                composer.gotoScene(composer.getSceneName("current"))
-                saveInventoryData()
-                inventoryIsShow = false
-            else
-                composer.showOverlay("inventory")
-                inventoryIsShow = true
-            end
+    if event.phase == "ended" then
+        if inventoryIsShow then
+            composer.gotoScene(composer.getSceneName("current"))
+            inventoryIsShow = false
+        else
+            composer.showOverlay("inventory")
+            inventoryIsShow = true
         end
     end
 end
