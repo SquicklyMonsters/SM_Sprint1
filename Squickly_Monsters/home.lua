@@ -106,10 +106,34 @@ function scene:create( event )
     middle:insert(energyBar)
     middle:insert(expBar)
     middle:insert(inventoryIcon)
+
+    local cols = 5
+
+    local spacingX = (display.contentCenterX)
+    local spacingY = (display.contentCenterY)
+
+    local needBarText = {"hunger", "happiness", "hygiene", "energy", "exp"}
+    for i = 1, #needBarText do
+        local x = (display.contentCenterX-320) + (135 * ((i-1)))
+        local y = display.contentCenterY - (spacingY) - 35
+
+        local textOptions = {
+            text = needBarText[i], 
+            x = x + 70, 
+            y = y + 65, 
+            width = 90, 
+            height = 50
+        }
+
+        local text = display.newText(textOptions)
+        text:setFillColor( 0, 0, 0 )
+        middle:insert(text)
+    end
+
     -- ===========FRONT===============
     front:insert(feedIcon)
-		front:insert(hungerCloud)
-		front:insert(energyCloud)
+	front:insert(hungerCloud)
+	front:insert(energyCloud)
     front:insert(sleepIcon)
     front:insert(wakeupIcon)
     front:insert(cleanIcon)
