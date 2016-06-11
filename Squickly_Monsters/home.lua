@@ -42,6 +42,9 @@ local hygieneBar;
 local energyBar;
 local expBar;
 
+local hungerCloud;
+local energyCloud;
+
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
@@ -75,6 +78,8 @@ function scene:create( event )
 
     -- Set up all Icons
     setUpAllIcons()
+		hungerCloud = getHungerCloud()
+		energyCloud = getEnergyCloud()
     feedIcon = getFeedIcon()
     sleepIcon = getSleepIcon()
     wakeupIcon = getWakeupIcon()
@@ -103,6 +108,8 @@ function scene:create( event )
     middle:insert(inventoryIcon)
     -- ===========FRONT===============
     front:insert(feedIcon)
+		front:insert(hungerCloud)
+		front:insert(energyCloud)
     front:insert(sleepIcon)
     front:insert(wakeupIcon)
     front:insert(cleanIcon)
@@ -126,7 +133,7 @@ end
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-    
+
 
 	if phase == "will" then
         composer.showOverlay("menubar")
