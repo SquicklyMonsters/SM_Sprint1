@@ -5,9 +5,7 @@ local scene = composer.newScene()
 
 require("shop.background")
 require("shop.interactions")
-require("foodList")
-require("inventory")
-require("savegame")
+require("inventory.interactions")
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
 -- -----------------------------------------------------------------------------------------------------------------
@@ -36,35 +34,16 @@ function widget.newPanel(options)
     return container
 end
 
---check if the item exists in inventory
-function checkExist(idx)
-    return true
-end
-
---adds new item to inventory
-function addToInventory(idx)
-end
-
--- increase quantity of the item if it already exists
-function increaseQuantity(idx)
-    -- itemTexts[idx].text = itemTexts[idx].text + 1
-    itemQuantities[idx] = itemQuantities[idx] + 1
-    saveInventoryData()
-end
-
 function itemClickedEvent(event)
     if event.phase == "ended" then
-        itemList = getItemList()
-        itemQuantities = getItemQuantities()
-        local idx = event.target.idx
-        print(idx)
-        local exist = checkExist(idx)
-        print(itemList[idx])
-        if exist then
+        local item = event.target.item
+        local idx = isInInventory(item.name)
+        if idx then
             increaseQuantity(idx)
         else
-            addToInventory(idx)
+            addToInventory(item.name)
         end
+        saveInventoryData()
     end
 end
 
@@ -83,7 +62,8 @@ function setUpShop()
     local spacingX = (inventory.width)/7.5
     local spacingY = (inventory.height)/3.75
 
-    shopList = getFoodList()
+    local shopList = getFoodList()
+
     inventory.items = {}
 
     for i = 1, #shopList do --loops to create each item on inventory
@@ -191,7 +171,6 @@ end
 
 function scene:destroy( event )
 	local sceneGroup = self.view
-
 	-- Called prior to the removal of scene's "view" (sceneGroup)
 	--
 	-- INSERT code here to cleanup the scene
