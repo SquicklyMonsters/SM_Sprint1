@@ -49,12 +49,12 @@ function setUpMonster(fileName)
  --                 )
  --    monster:play()
     local options = {
-    width = 2388/4,
-    height = 3461/4,
-    numFrames = 16,
+    width = 4655/8,
+    height = 5520/6,
+    numFrames = 48,
 
-    sheetContentWidth = 2388,
-    sheetContentHeight = 3461,
+    sheetContentWidth = 4655,
+    sheetContentHeight = 5520,
 
     }
     local imageSheet = graphics.newImageSheet(fileName, options)
@@ -64,6 +64,15 @@ function setUpMonster(fileName)
         {
             name = "normal",
             start = 1,
+            count = 32,
+            time = 200*32,
+            loopcount = 0,
+            loopdirection = "forward"
+        },
+
+        {
+            name = "sleep",
+            start = 33,
             count = 16,
             time = 200*16,
             loopcount = 0,
@@ -99,17 +108,25 @@ end
 -- -------------------------------------------------------------------------------
 -- Monster animation
 
-function feedPetAnimation()
+function feedAnimation()
     setMonsterSequence("happy")
     timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
 end
 
-function cleanPetAnimation()
+function cleanAnimation()
     setMonsterSequence("happy")
     timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
 end
 
-function playWithPetAnimation()
+function playAnimation()
     setMonsterSequence("happy")
     timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
+end
+
+function sleepAnimation()
+    setMonsterSequence("sleep")
+end
+
+function defaultAnimation()
+    setMonsterSequence("normal")
 end
