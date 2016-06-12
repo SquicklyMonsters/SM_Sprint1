@@ -1,4 +1,5 @@
 local widget = require( "widget" )
+local composer = require( "composer" )
 require("loadgame")
 -------------------------------------------------------------------------------
 -- Local variables go HERE
@@ -21,11 +22,12 @@ local needsLevels;
 local needsBars;
 local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins
 
-local thoughtCloud;
 local thoughtClouds;
 local checkHungerID;
+local checkTiredID;
 
 local hungerRate = -10;
+local energyRate = -10;
 -- local hungerThoughtCloud;
 -- local energyThoughtCloud;
 -- -------------------------------------------------------------------------------
@@ -114,14 +116,14 @@ function setUpAllIcons()
     mostRecentPlayIcon1 = setUpIcon(iconsDir .. "legomanIcon.png", 0.75)
     mostRecentPlayIcon2 = setUpIcon(iconsDir .. "footballIcon.png", 0.75)
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
-    -- hungerCloudThought = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
-    -- energyCloudThought = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
+
     inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
 
-    thoughtClouds = {}
-    thoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
-    thoughtClouds.hunger = thoughtCloud
-    -- print(thoughtClouds.hunger)
+    
+    hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
+    tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
+    thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
+
 end
 
 function setUpIcon(img, scale, x, y, alpha)
@@ -163,20 +165,19 @@ function changeNeedsLevel(need, change)
 end
 -- -----------------------------------------------------------------------------
 -- Thought Cloud functions
-function isHungry()
-    return needsBars.hunger:getProgress() < 0.4
+function showThoughtCloud(idx)
+    if composer.getSceneName("current") == "home" then
+        transition.fadeIn( thoughtClouds[idx], { time=1500 } )
+    end
 end
 
--- function isTired()
---     return needsBars.energy:getProgress() < 0.4
--- end
-function showThoughtCloud(need)
-    transition.fadeIn( thoughtClouds.hunger, { time=1500 } )
+function hideThoughtCloud(idx)
+    transition.fadeOut( thoughtClouds[idx], { time=1500 } )    
 end
 
 function checkHungerEventHandler(event)
-    if isHungry() then
-        showThoughtCloud("hunger")
+    if needsBars.hunger:getProgress() < 0.4 then
+        showThoughtCloud(1)
     end
     checkHunger()
 end
@@ -190,10 +191,30 @@ function checkHunger()
     local delay = 5000
     if progress > 0.4 then
         delay = ((progress - 0.4) / (-hungerRate/maxNeedsLevels.hunger))*1000
-        transition.fadeOut( thoughtClouds.hunger, { time=1500 } )
+        hideThoughtCloud(1)
     end
-    print ("check", delay, progress)
     checkHungerID = timer.performWithDelay(delay, checkHungerEventHandler, 1)
+end
+
+function checkTiredEventHandler(event)
+    if needsBars.energy:getProgress() < 0.4 then
+        showThoughtCloud(2)
+    end
+    checkTired()
+end
+
+function checkTired()
+    if (checkTiredID ~= nil) then
+        timer.cancel(checkTiredID)
+    end
+
+    local progress = needsBars.energy:getProgress()
+    local delay = 5000
+    if progress > 0.4 then
+        delay = ((progress - 0.4) / (-energyRate/maxNeedsLevels.energy))*1000
+        hideThoughtCloud(2)
+    end
+    checkTiredID = timer.performWithDelay(delay, checkTiredEventHandler, 1)
 end
 
 
@@ -325,10 +346,11 @@ function getInventoryIcon()
     return inventoryIcon
 end
 
-function getThoughtCloud()
-    return thoughtClouds.hunger
+function getHungerThoughtCloud()
+    return thoughtClouds[1]
 end
 
--- function getEnergyCloud()
---     return energyCloudThought
--- end
+function getTiredThoughtCloud()
+    return thoughtClouds[2]
+end
+

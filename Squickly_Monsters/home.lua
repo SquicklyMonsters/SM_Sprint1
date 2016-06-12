@@ -91,7 +91,8 @@ function scene:create( event )
     mostRecentPlayIcon2 = getMostRecentPlayIcon2()
     morePlayIcon = getMorePlayIcon()
     inventoryIcon = getInventoryIcon()
-    thoughtCloud = getThoughtCloud()
+
+ 
     setAutoSaveRate(10000)
 
 	-- Add display objects into group
@@ -107,8 +108,6 @@ function scene:create( event )
     middle:insert(inventoryIcon)
     -- ===========FRONT===============
     front:insert(feedIcon)
-	front:insert(thoughtCloud)
-
     front:insert(sleepIcon)
     front:insert(wakeupIcon)
     front:insert(cleanIcon)
@@ -134,6 +133,14 @@ function scene:show( event )
 	local phase = event.phase
 
     checkHunger()
+    checkTired()
+
+    -- Set up all Thought Clouds
+    hungerThoughtCloud = getHungerThoughtCloud()
+    tiredThoughtCloud = getTiredThoughtCloud()
+    front:insert(hungerThoughtCloud)
+    front:insert(tiredThoughtCloud)
+    
 	if phase == "will" then
         composer.showOverlay("menubar")
         -- composer.showOverlay("inventory")
