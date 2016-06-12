@@ -8,8 +8,6 @@ local background;
 local sleepWakeID;
 
 local inventoryIcon;
-local isTouchAble;
-local inventoryIsShow = false;
 
 -- -------------------------------------------------------------------------------
 
@@ -18,10 +16,6 @@ function cacheVariables()
 
     -- Cache Icons
     inventoryIcon = getInventoryIcon()
-
-    -- Instantiate hide/show icons lock
-    isTouchAble = true
-
 end
 -- -------------------------------------------------------------------------------
 
@@ -43,13 +37,3 @@ end
 -- -------------------------------------------------------------------------------
 -- Add All Event Listeners Here
 
-function addListeners()
-    ---- Tag along ----
-    cacheVariables()
-    setDecrementRate()
-    -------------------
-
-    background:addEventListener("touch", backgroundClicked)
-
-    inventoryIcon:addEventListener("touch", inventoryClicked)
-end

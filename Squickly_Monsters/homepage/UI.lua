@@ -69,7 +69,9 @@ function setNeedsLevel(need, lvl)
     elseif lvl < 0 then
         lvl = 0
     end
-
+    if need == "energy" then
+        print("change in energy", lvl)
+    end
     -- For saving the value
     needsLevels[need] = lvl
     -- Make change on need bar
