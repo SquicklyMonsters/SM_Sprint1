@@ -195,8 +195,7 @@ function mostRecentFood1Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(foodIconsList)
-            local burger = foodList.burger
-            burger:eat()
+            foodList.burger:eat()
         end
     end
 end
@@ -206,6 +205,7 @@ function mostRecentFood2Clicked(event)
         if event.phase == "ended" then
             hideShowAllIcons(foodIconsList)
             changeNeedsLevel("hunger", 1000)
+            foodList.fish:eat()
         end
     end
 end
