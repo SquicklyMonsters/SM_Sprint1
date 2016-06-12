@@ -69,7 +69,9 @@ function setNeedsLevel(need, lvl)
     elseif lvl < 0 then
         lvl = 0
     end
-
+    if need == "energy" then
+        print("change in energy", lvl)
+    end
     -- For saving the value
     needsLevels[need] = lvl
     -- Make change on need bar
@@ -163,8 +165,10 @@ end
 function changeNeedsLevel(need, change)
     setNeedsLevel(need, needsLevels[need] + change)
 end
+
 -- -----------------------------------------------------------------------------
 -- Thought Cloud functions
+
 function showThoughtCloud(idx)
     if composer.getSceneName("current") == "home" then
         transition.fadeIn( thoughtClouds[idx], { time=1500 } )
@@ -179,20 +183,23 @@ function checkHungerEventHandler(event)
     if needsBars.hunger:getProgress() < 0.4 then
         showThoughtCloud(1)
     end
-    checkHunger()
 end
 
-function checkHunger()
+-- Does not need to loop, since we should check again when hunger increase
+function checkHunger(delay)
     if (checkHungerID ~= nil) then
         timer.cancel(checkHungerID)
     end
 
     local progress = needsBars.hunger:getProgress()
-    local delay = 5000
+    local delay = delay or 5000
     if progress > 0.4 then
+        -- Calculate approximate time that the hunger level will be below 40%
+        -- Times 1000 to turn into 1 second, will later need to be change to 1 minute
         delay = ((progress - 0.4) / (-hungerRate/maxNeedsLevels.hunger))*1000
         hideThoughtCloud(1)
     end
+    print("check if hungry next in", delay)
     checkHungerID = timer.performWithDelay(delay, checkHungerEventHandler, 1)
 end
 
@@ -200,42 +207,27 @@ function checkTiredEventHandler(event)
     if needsBars.energy:getProgress() < 0.4 then
         showThoughtCloud(2)
     end
-    checkTired()
+    -- Later will make predict time to check if energy is over 40% 
+    -- due to fix rate of increasing in energy when sleep
+    checkTired() 
 end
 
-function checkTired()
+function checkTired(delay)
     if (checkTiredID ~= nil) then
         timer.cancel(checkTiredID)
     end
 
     local progress = needsBars.energy:getProgress()
-    local delay = 5000
+    local delay = delay or 5000
     if progress > 0.4 then
+        -- Calculate approximate time that the energy level will be below 40%
+        -- Times 1000 to turn into 1 second, will later need to be change to 1 minute
         delay = ((progress - 0.4) / (-energyRate/maxNeedsLevels.energy))*1000
         hideThoughtCloud(2)
     end
+    print("check if tired next in", delay)
     checkTiredID = timer.performWithDelay(delay, checkTiredEventHandler, 1)
 end
-
-
--- checkBar keep checking the hungerBar and energyBar
--- if it less than 40 % then pop up the thoughtcloud
--- function thoughtCloud(need)
---   if need == "hunger" then
---     if needsBars.hunger:getProgress() < 0.4 then
---       transition.fadeIn( hungerCloudThought, {time=1500 } )-- then fade in with icon
---     else
---       transition.fadeOut( hungerCloudThought, { time=1500 } )
---     end
---   end
---   if need == "energy" then
---     if needsBars.energy:getProgress() < 0.4 then
---       transition.fadeIn( energyCloudThought, {time = 1500})
---     else
---       transition.fadeOut( energyCloudThought, {time = 1500})
---     end
---   end
--- end
 
 -- -------------------------------------------------------------------------------
 -- Get needs level

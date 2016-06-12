@@ -132,8 +132,8 @@ function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
 
-    checkHunger()
-    checkTired()
+    checkHunger(1)
+    checkTired(1)
 
     -- Set up all Thought Clouds
     hungerThoughtCloud = getHungerThoughtCloud()

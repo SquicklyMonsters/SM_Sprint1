@@ -78,6 +78,7 @@ end
 -- Setup The Decrement Rate
 
 function setDecrementRate()
+    print("set all rate")
     setRateLongTerm("hunger", 1000, hungerRate)
     setRateLongTerm("happiness", 1000, -10)
     setRateLongTerm("hygiene", 1000, -10)
@@ -195,8 +196,7 @@ function mostRecentFood1Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(foodIconsList)
-            local burger = foodList.burger
-            burger:eat()
+            foodList.burger:eat()
         end
     end
 end
@@ -206,6 +206,7 @@ function mostRecentFood2Clicked(event)
         if event.phase == "ended" then
             hideShowAllIcons(foodIconsList)
             changeNeedsLevel("hunger", 1000)
+            foodList.fish:eat()
         end
     end
 end
@@ -274,7 +275,7 @@ end
 -- Sleep / Wakeup functions
 
 function changeToSleepState()
-    cancelOldLoop()
+    cancelEnergyLoop()
     sleepAnimation()
     sleepWakeID = setRateLongTerm("energy", 1000, 10)
     table.remove(iconsList, 2)
@@ -282,14 +283,14 @@ function changeToSleepState()
 end
 
 function changeToWakeupState()
-    cancelOldLoop()
+    cancelEnergyLoop()
     defaultAnimation()
     sleepWakeID = setRateLongTerm("energy", 1000, -10)
     table.remove(iconsList, 2)
     table.insert(iconsList, 2, sleepIcon)
 end
 
-function cancelOldLoop()
+function cancelEnergyLoop()
     if (sleepWakeID ~= nil) then
         timer.cancel(sleepWakeID)
     end

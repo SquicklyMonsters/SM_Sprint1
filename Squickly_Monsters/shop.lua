@@ -43,7 +43,6 @@ end
 
 function buyNotice()
     buyHolder.alpha = 1
-    background:addEventListener("touch", buyClicked)
 end
 
 function itemClickedEvent(event)
@@ -145,7 +144,6 @@ function scene:create( event )
     shop = setUpShop()
 
     -- Set up all Icons
-    setUpAllIcons()
     inventoryIcon = getInventoryIcon()
     buyHolder = display.newImageRect("img/icons/UIIcons/buy.png", 150, 150)
     buyHolder.x = display.contentCenterX
@@ -165,8 +163,7 @@ function scene:create( event )
     sceneGroup:insert(middle)
     sceneGroup:insert(front)
 
-    -- Set up all Event Listeners
-    addListeners()
+    background:addEventListener("touch", buyClicked)
 end
 
 function scene:show( event )
