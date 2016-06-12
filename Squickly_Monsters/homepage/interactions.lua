@@ -32,6 +32,8 @@ local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins
 local needsLevels;
 local needsBars;
 
+local hungerRate = -10;
+
 local isTouchAble;
 local inventoryIsShow = false;
 -- -------------------------------------------------------------------------------
@@ -76,7 +78,7 @@ end
 -- Setup The Decrement Rate
 
 function setDecrementRate()
-    setRateLongTerm("hunger", 1000, -10)
+    setRateLongTerm("hunger", 1000, hungerRate)
     setRateLongTerm("happiness", 1000, -10)
     setRateLongTerm("hygiene", 1000, -10)
     setRateLongTerm("exp", 1000, 10)
