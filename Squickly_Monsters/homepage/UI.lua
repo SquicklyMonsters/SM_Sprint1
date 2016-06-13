@@ -69,9 +69,9 @@ function setNeedsLevel(need, lvl)
     elseif lvl < 0 then
         lvl = 0
     end
-    if need == "energy" then
-        print("change in energy", lvl)
-    end
+    --if need == "energy" then
+        --print("change in energy", lvl)
+    --end
     -- For saving the value
     needsLevels[need] = lvl
     -- Make change on need bar
@@ -225,7 +225,7 @@ function checkTired(delay)
         delay = ((progress - 0.4) / (-energyRate/maxNeedsLevels.energy))*1000
         hideThoughtCloud(2)
     end
-    print("check if tired next in", delay)
+    --print("check if tired next in", delay)
     checkTiredID = timer.performWithDelay(delay, checkTiredEventHandler, 1)
 end
 

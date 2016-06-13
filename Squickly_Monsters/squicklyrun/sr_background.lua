@@ -1,4 +1,5 @@
 -- -----------------------------------------------------------------------------------------------------------------
+require('currency')
 -- Local variables go Here
 
 --adds an image to our game centered at x and y coordinates
@@ -539,6 +540,7 @@ function checkCollisions()
 			hero.isAlive = false
 			--this simply pauses the current animation
 			hero:pause()
+
 			gameOver.x = display.contentWidth*.65
 			gameOver.y = display.contentHeight/2
 		end
@@ -552,6 +554,10 @@ function checkCollisions()
 				hero.isAlive = false
 				--this simply pauses the current animation
 				hero:pause()
+
+
+				
+
 				gameOver.x = display.contentWidth*.65
 				gameOver.y = display.contentHeight/2
 			end
@@ -566,6 +572,7 @@ function checkCollisions()
 				hero.isAlive = false
 				--this simply pauses the current animation
 				hero:pause()
+
 				gameOver.x = display.contentWidth*.65
 				gameOver.y = display.contentHeight/2
 			end
@@ -580,6 +587,8 @@ function checkCollisions()
 				hero.isAlive = false
 				--this simply pauses the current animation
 				hero:pause()
+				
+
 				gameOver.x = display.contentWidth*.65
 				gameOver.y = display.contentHeight/2
 			end
@@ -705,6 +714,8 @@ function restartGame()
 	--move menu
 	gameOver.x = 0
 	gameOver.y = 500
+	--reward
+	increaseGold(score)
 	--reset the score
 	score = 0
 	--reset the game speed
@@ -760,6 +771,7 @@ end
 --right side of the screen the hero will fire off a little blue bolt
 function touched( event )
 	if(event.x < gameOver.x + 150 and event.x > gameOver.x - 150 and event.y < gameOver.y + 95 and event.y > gameOver.y - 95) then
+
 		restartGame()
 	else
 		if(hero.isAlive == true) then

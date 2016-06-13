@@ -3,9 +3,12 @@ local widget = require( "widget" )
 local composer = require( "composer" )
 local scene = composer.newScene()
 
+require("savegame")
 require("shop.background")
 require("shop.interactions")
 require("inventory.interactions")
+require("currency")
+
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
 -- -----------------------------------------------------------------------------------------------------------------
@@ -22,10 +25,14 @@ local itemQuantities;
 local itemTexts = {};
 
 local buyHolder;
+local cannotbuyHolder;
+
 
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
+
+
 function widget.newPanel(options)                                    
     local background = display.newImage(options.imageDir)
     local container = display.newContainer(options.width, options.height)
@@ -34,27 +41,50 @@ function widget.newPanel(options)
     container.y = display.contentCenterY
     container:scale(2.,1.5)
 
+
     return container
 end
+
+
 
 function buyClicked(event)
     buyHolder.alpha = 0
 end
 
+function cannotbuyClicked(event)
+    cannotbuyHolder.alpha = 0
+end
+
 function buyNotice()
     buyHolder.alpha = 1
+    background:addEventListener("touch", buyClicked)
+end
+
+function cannotbuyNotice()
+    cannotbuyHolder.alpha = 1
+    background:addEventListener("touch",buyClicked)
 end
 
 function itemClickedEvent(event)
     if event.phase == "ended" then
-        buyNotice()
         local item = event.target.item
         local idx = isInInventory(item.name)
-        if idx then
-            increaseQuantity(idx)
+        if checkSufficientGold(item.cost) then
+            buyNotice()     
+            if idx then
+                increaseQuantity(idx)
+            else
+                addToInventory(item.name)
+            end
+            decreaseGold(item.cost)
+            
         else
-            addToInventory(item.name)
+            cannotbuyNotice()
+           
         end
+        
+        goldText.text = "Gold: " .. returnCurrentGold()
+        print("87 " .. returnCurrentGold())
         saveInventoryData()
     end
 end
@@ -144,11 +174,49 @@ function scene:create( event )
     shop = setUpShop()
 
     -- Set up all Icons
+    setUpAllIcons()
     inventoryIcon = getInventoryIcon()
     buyHolder = display.newImageRect("img/icons/UIIcons/buy.png", 150, 150)
     buyHolder.x = display.contentCenterX
     buyHolder.y = display.contentCenterY
     buyHolder.alpha = 0
+
+    cannotbuyHolder = display.newImageRect("img/icons/UIIcons/cannotbuy.png", 150, 150)
+    cannotbuyHolder.x = display.contentCenterX
+    cannotbuyHolder.y = display.contentCenterY
+    cannotbuyHolder.alpha = 0
+    
+    -- Overlay Text
+
+        -- text area to show how much GOLD you have
+    local options =
+    {
+    text = "Gold: " .. returnCurrentGold(),
+    x = 505,
+    y = 30,
+    font = native.systemFontBold,
+    fontSize = 12
+
+}
+
+    goldText = display.newText(options)
+
+    -- text area to show how much PlATINUM you have
+
+    local options =
+    {
+    text = "Platinum: " .. returnCurrentPlatinum(),
+    x = 510,
+    y = 40,
+    font = native.systemFontBold,
+    fontSize = 12
+
+}
+
+    platinumText = display.newText(options)
+    
+
+
 
 	-- Add display objects into group
     -- ============BACK===============
@@ -158,12 +226,17 @@ function scene:create( event )
     middle:insert(inventoryIcon)
     -- ===========FRONT===============
     front:insert(buyHolder)
+    front:insert(cannotbuyHolder)
+    -- money 
+    front:insert(goldText)
+    front:insert(platinumText)
     -- ===============================
     sceneGroup:insert(back)
     sceneGroup:insert(middle)
     sceneGroup:insert(front)
 
-    background:addEventListener("touch", buyClicked)
+    -- Set up all Event Listeners
+    addListeners()
 end
 
 function scene:show( event )

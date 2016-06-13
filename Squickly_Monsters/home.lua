@@ -8,6 +8,7 @@ require("homepage.monster")
 require("homepage.interactions")
 require("homepage.UI")
 require("savegame")
+
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
 -- -----------------------------------------------------------------------------------------------------------------
