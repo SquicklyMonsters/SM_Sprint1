@@ -6,6 +6,7 @@ local scene = composer.newScene()
 require("savegame")
 require("shop.background")
 require("shop.interactions")
+require("inventory")
 require("inventory.interactions")
 require("currency")
 
@@ -25,7 +26,8 @@ local itemQuantities;
 local itemTexts = {};
 
 local buyHolder;
-local cannotbuyHolder;
+local cannotBuyHolder;
+local notifications;
 
 
 -- -------------------------------------------------------------------------------
@@ -40,29 +42,20 @@ function widget.newPanel(options)
     container.x = display.contentCenterX
     container.y = display.contentCenterY
     container:scale(2.,1.5)
-
-
     return container
 end
 
 
-
-function buyClicked(event)
-    buyHolder.alpha = 0
+function notificationClicked(event) --temp
+    if event.phase == "ended" then
+        for i = 1, #notifications do
+            notifications[i].alpha = 0
+        end
+    end
 end
 
-function cannotbuyClicked(event)
-    cannotbuyHolder.alpha = 0
-end
-
-function buyNotice()
-    buyHolder.alpha = 1
-    background:addEventListener("touch", buyClicked)
-end
-
-function cannotbuyNotice()
-    cannotbuyHolder.alpha = 1
-    background:addEventListener("touch",buyClicked)
+function buyNotice(i)
+    notifications[i].alpha = 1
 end
 
 function itemClickedEvent(event)
@@ -70,7 +63,7 @@ function itemClickedEvent(event)
         local item = event.target.item
         local idx = isInInventory(item.name)
         if checkSufficientGold(item.cost) then
-            buyNotice()     
+            buyNotice(1)
             if idx then
                 increaseQuantity(idx)
             else
@@ -79,11 +72,10 @@ function itemClickedEvent(event)
             decreaseGold(item.cost)
             
         else
-            cannotbuyNotice()
-           
+            buyNotice(2)
         end
         
-        goldText.text = "Gold: " .. returnCurrentGold()
+        -- goldText.text = "Gold: " .. returnCurrentGold()
         print("87 " .. returnCurrentGold())
         saveInventoryData()
     end
@@ -148,6 +140,32 @@ function setUpShop()
                 (display.contentHeight/inventory.height)*0.5
                 )
 
+    -- text area to show how much GOLD you have
+    local options = {
+    text = "Gold: " .. returnCurrentGold(),
+    x = startX + 0.3*spacingX,
+    y = startY - 0.3*spacingY,
+    font = native.systemFontBold,
+    fontSize = 25
+    }
+
+    local goldText = display.newText(options)
+    goldText:setFillColor( 255/255, 223/255, 0 )
+    inventory:insert(goldText)
+
+    -- text area to show how much PlATINUM you have
+    local options = {
+    text = "Platinum: " .. returnCurrentPlatinum(),
+    x = startX + 5*spacingX,
+    y = startY - 0.3*spacingY,
+    font = native.systemFontBold,
+    fontSize = 25
+    }
+    
+    local platinumText = display.newText(options)
+    platinumText:setFillColor( 229/255, 228/255, 226/255 )
+    inventory:insert(platinumText)
+
     return inventory
 end
 
@@ -181,42 +199,12 @@ function scene:create( event )
     buyHolder.y = display.contentCenterY
     buyHolder.alpha = 0
 
-    cannotbuyHolder = display.newImageRect("img/icons/UIIcons/cannotbuy.png", 150, 150)
-    cannotbuyHolder.x = display.contentCenterX
-    cannotbuyHolder.y = display.contentCenterY
-    cannotbuyHolder.alpha = 0
-    
-    -- Overlay Text
+    cannotBuyHolder = display.newImageRect("img/icons/UIIcons/cannotbuy.png", 150, 150)
+    cannotBuyHolder.x = display.contentCenterX
+    cannotBuyHolder.y = display.contentCenterY
+    cannotBuyHolder.alpha = 0
 
-        -- text area to show how much GOLD you have
-    local options =
-    {
-    text = "Gold: " .. returnCurrentGold(),
-    x = 505,
-    y = 30,
-    font = native.systemFontBold,
-    fontSize = 12
-
-}
-
-    goldText = display.newText(options)
-
-    -- text area to show how much PlATINUM you have
-
-    local options =
-    {
-    text = "Platinum: " .. returnCurrentPlatinum(),
-    x = 510,
-    y = 40,
-    font = native.systemFontBold,
-    fontSize = 12
-
-}
-
-    platinumText = display.newText(options)
-    
-
-
+    notifications = {buyHolder, cannotBuyHolder}
 
 	-- Add display objects into group
     -- ============BACK===============
@@ -226,10 +214,7 @@ function scene:create( event )
     middle:insert(inventoryIcon)
     -- ===========FRONT===============
     front:insert(buyHolder)
-    front:insert(cannotbuyHolder)
-    -- money 
-    front:insert(goldText)
-    front:insert(platinumText)
+    front:insert(cannotBuyHolder)
     -- ===============================
     sceneGroup:insert(back)
     sceneGroup:insert(middle)
@@ -237,6 +222,7 @@ function scene:create( event )
 
     -- Set up all Event Listeners
     addListeners()
+    background:addEventListener("touch", notificationClicked)
 end
 
 function scene:show( event )
