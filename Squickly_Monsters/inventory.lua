@@ -1,5 +1,4 @@
 require("inventory.interactions")
-require("currency")
 local widget = require("widget")
 local composer = require( "composer" )
 local scene = composer.newScene()
@@ -124,28 +123,28 @@ function setUpInventory()
  				)
 
  	-- text area to show how much GOLD you have
-    local options = {
-    text = "Gold: " .. returnCurrentGold(),
+    local GoldOptions = {
+    text = "Gold: " .. getCurrentGold(),
     x = startX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
     fontSize = 20
     }
 
-    local goldText = display.newText(options)
-    goldText:setFillColor( 255/255, 223/255, 0 )
-    inventory:insert(goldText)
-
     -- text area to show how much PlATINUM you have
-    local options = {
-    text = "Platinum: " .. returnCurrentPlatinum(),
+    local PlatinumOptions = {
+    text = "Platinum: " .. getCurrentPlatinum(),
     x = startX + 2*spacingX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
     fontSize = 20
     }
-    
-    local platinumText = display.newText(options)
+
+    local goldText = display.newText(GoldOptions)
+    goldText:setFillColor( 255/255, 223/255, 0 )
+    inventory:insert(goldText)
+        
+    local platinumText = display.newText(PlatinumOptions)
     platinumText:setFillColor( 229/255, 228/255, 226/255 )
     inventory:insert(platinumText)
 

@@ -6,6 +6,48 @@ local itemTexts = {};
 local maxSize = 9;
 
 -- -------------------------------------------------------------------------------
+local goldMoney = 300 --default goldMoney
+
+
+-- These really do what they say they do, pretty self explanatory
+
+--FOR GOLD
+
+function increaseGold(goldAmount)
+	goldMoney = goldMoney + goldAmount
+end
+
+function decreaseGold(goldAmount)
+	goldMoney = goldMoney - goldAmount
+end
+
+function sufficientGold(goldAmount)
+	return (goldMoney - goldAmount) >= 0
+end
+
+-- -----------------------------------------------------------------------
+--FOR PLATINUM
+
+local platinumMoney = 0 --default platinumMoney
+
+function increasePlatinum(platinumAmount)
+	platinumMoney = platinumMoney + platinumAmount
+end
+
+function decreasePlatinum(platinumAmount)
+	platinumMoney = platinumMoney - platinumAmount
+end
+
+function sufficientPlatinum(platinumAmount)
+	if (platinumMoney - platinumAmount) >= 0 then
+		return true	
+	else
+		return false
+	end
+end
+
+-- -------------------------------------------------------------------------------
+
 --adds new item to inventory
 function addToInventory(itemName)
 	-- If number of item will not exceed limit size: add item
@@ -70,6 +112,14 @@ end
 
 function getItemQuantities()
 	return itemQuantities
+end
+
+function getCurrentGold()
+	return goldMoney
+end
+
+function getCurrentPlatinum()
+	return platinumMoney
 end
 
 -- -------------------------------------------------------------------------------

@@ -3,12 +3,9 @@ local widget = require( "widget" )
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-require("savegame")
 require("shop.background")
--- require("shop.interactions")
-require("inventory")
+require("shop.interactions")
 require("inventory.interactions")
-require("currency")
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
@@ -25,34 +22,25 @@ local itemList;
 local itemQuantities;
 local itemTexts = {};
 
-local buyHolder;
-local cannotBuyHolder;
+-- local buyHolder;
+-- local cannotBuyHolder;
 local notifications;
 
 local currentGold;
 local currentPlatinum;
 
+local goldText;
+local platinumText;
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
 
-function notificationClicked(event) --temp
-    if event.phase == "ended" then
-        for i = 1, #notifications do
-            notifications[i].alpha = 0
-        end
-    end
-end
-
-function buyNotice(i)
-    notifications[i].alpha = 1
-end
-
 function itemClickedEvent(event)
+    -- TODO: Add not enough space case handler
     if event.phase == "ended" then
         local item = event.target.item
         local idx = isInInventory(item.name)
-        if checkSufficientGold(item.gold) and checkSufficientPlatinum(item.platinum) then
+        if sufficientGold(item.gold) and sufficientPlatinum(item.platinum) then
             buyNotice(1)
             if idx then
                 increaseQuantity(idx)
@@ -61,22 +49,12 @@ function itemClickedEvent(event)
             end
             decreaseGold(item.gold)
             decreasePlatinum(item.platinum)
-            currentGold = returnCurrentGold()
-            currentPlatinum = returnCurrentPlatinum()
         else
             buyNotice(2)
         end
         saveInventoryData()
-        updateShop()
+        refreshDisplayCurrency(goldText, platinumText)
     end
-end
-
-function updateShop()
-    -- Pretty much refresh the screen
-    saveInventoryData()
-    shop:removeSelf()
-    inventoryIcon:removeSelf()
-    scene:create()
 end
 
 function widget.newPanel(options)                                    
@@ -162,27 +140,27 @@ function setUpShop()
 
     -- text area to show how much GOLD you have
     local GoldOptions = {
-    text = "Gold: " .. currentGold,
+    text = "Gold: " .. getCurrentGold(),
     x = startX + 0.3*spacingX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
     fontSize = 25
     }
 
-    local goldText = display.newText(GoldOptions)
-    goldText:setFillColor( 255/255, 223/255, 0 )
-    inventory:insert(goldText)
-
     -- text area to show how much PlATINUM you have
     local PlatinumOptions = {
-    text = "Platinum: " .. currentPlatinum,
+    text = "Platinum: " .. getCurrentPlatinum(),
     x = startX + 5*spacingX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
     fontSize = 25
     }
-    
-    local platinumText = display.newText(PlatinumOptions)
+ 
+    goldText = display.newText(GoldOptions)
+    goldText:setFillColor( 255/255, 223/255, 0 )
+    inventory:insert(goldText)
+
+    platinumText = display.newText(PlatinumOptions)
     platinumText:setFillColor( 229/255, 228/255, 226/255 )
     inventory:insert(platinumText)
 
@@ -199,9 +177,6 @@ function scene:create( event )
     -- Retrieve inventory data from save file
     setUpInventoryData()
 
-    currentGold = returnCurrentGold()
-    currentPlatinum = returnCurrentPlatinum()
-
     -- Setup layer
     back = display.newGroup()
     middle = display.newGroup()
@@ -215,19 +190,9 @@ function scene:create( event )
     shop = setUpShop()
 
     -- Set up all Icons
-    setUpAllIcons()
     inventoryIcon = getInventoryIcon()
-    buyHolder = display.newImageRect("img/icons/UIIcons/buy.png", 150, 150)
-    buyHolder.x = display.contentCenterX
-    buyHolder.y = display.contentCenterY
-    buyHolder.alpha = 0
 
-    cannotBuyHolder = display.newImageRect("img/icons/UIIcons/cannotbuy.png", 150, 150)
-    cannotBuyHolder.x = display.contentCenterX
-    cannotBuyHolder.y = display.contentCenterY
-    cannotBuyHolder.alpha = 0
-
-    notifications = {buyHolder, cannotBuyHolder}
+    notifications = setUpNotifications()
 
 	-- Add display objects into group
     -- ============BACK===============
@@ -236,16 +201,14 @@ function scene:create( event )
     middle:insert(shop)
     middle:insert(inventoryIcon)
     -- ===========FRONT===============
-    front:insert(buyHolder)
-    front:insert(cannotBuyHolder)
+    front:insert(notifications[1])
+    front:insert(notifications[2])
     -- ===============================
     sceneGroup:insert(back)
     sceneGroup:insert(middle)
     sceneGroup:insert(front)
 
     -- Set up all Event Listeners
-    addListeners()
-    background:addEventListener("touch", notificationClicked)
 end
 
 function scene:show( event )
