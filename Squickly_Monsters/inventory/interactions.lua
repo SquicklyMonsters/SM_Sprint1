@@ -48,7 +48,7 @@ function reduceQuantity(idx)
 		removeItem(idx)
 		return 0
 	end
-	
+
 end
 
 function removeItem(idx)
