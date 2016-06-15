@@ -8,7 +8,7 @@ local maxSize = 9;
 -- -------------------------------------------------------------------------------
 --functions for currency
 local gold --default goldMoney
-local platinum --default platinumMoney
+local platinum--default platinumMoney
 
 function updateCurrency(goldCost, platinumCost)
 	gold = gold + goldCost

@@ -40,7 +40,7 @@ function saveNeedsData()
     
     local outTable = {maxNeedsLevels, needsLevels}
     local contents = json.encode(outTable)
-    
+        
     writeFile(needsDataFile, contents)
     print("save")
 end
