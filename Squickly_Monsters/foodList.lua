@@ -32,7 +32,8 @@ toy = require("toyClass")
 -- -------------------------------------------------------------------------------
 
 local iconsToyDir = "img/icons/toys/"
-toyList = {"ball", "chucky", "cards", "teddybear"};
+toyList = {}--{"ball", "chucky", "cards", "teddybear"}; --made it empty for now, so it doesnt show in shop
+														--bc its incompatible with inventory functions atm, will fix
 
 -- -------------------------------------------------------------------------------
 
