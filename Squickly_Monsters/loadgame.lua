@@ -7,6 +7,7 @@ local json = require("json")
 -- Set location for saved data
 local needsDataFile = system.pathForFile( "needsData.txt", system.DocumentsDirectory ) -- Default Dir
 local inventoryDataFile = system.pathForFile( "inventoryData.txt", system.DocumentsDirectory )
+local currencyDataFile = system.pathForFile( "currencyData.txt", system.DocumentsDirectory )
 
 -- -------------------------------------------------------------------------------
 -- Get latest Data from Save file
@@ -61,8 +62,8 @@ end
 
 function loadInventoryData()
     local file = io.open( inventoryDataFile, "r" )
-    local itemList = {"burger", "icecream", "fish", "noodles"}
-    local itemQuantities = {2, 3, 4, 5}
+    -- local itemList = {"burger", "icecream", "fish", "noodles"}
+    -- local itemQuantities = {2, 3, 4, 5}
 
     if file then
         local inTable = readFile(file)
@@ -73,3 +74,16 @@ function loadInventoryData()
 
     return itemList, itemQuantities, itemTexts
 end
+
+-- function loadCurrencyData()
+--     local file = io.open( currencyDataFile, "r" )
+
+--     if file then
+--         local inTable = readFile(file)
+--         gold = inTable[1]
+--         platinum = inTable[2]
+--         print("load currency")
+--     end
+
+--     return gold, platinum
+-- end

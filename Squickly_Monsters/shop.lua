@@ -5,7 +5,7 @@ local scene = composer.newScene()
 
 require("savegame")
 require("shop.background")
-require("shop.interactions")
+-- require("shop.interactions")
 require("inventory")
 require("inventory.interactions")
 require("currency")
@@ -29,22 +29,12 @@ local buyHolder;
 local cannotBuyHolder;
 local notifications;
 
+local currentGold;
+local currentPlatinum;
 
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
-
-
-function widget.newPanel(options)                                    
-    local background = display.newImage(options.imageDir)
-    local container = display.newContainer(options.width, options.height)
-    container:insert(background, true)
-    container.x = display.contentCenterX
-    container.y = display.contentCenterY
-    container:scale(2.,1.5)
-    return container
-end
-
 
 function notificationClicked(event) --temp
     if event.phase == "ended" then
@@ -62,23 +52,40 @@ function itemClickedEvent(event)
     if event.phase == "ended" then
         local item = event.target.item
         local idx = isInInventory(item.name)
-        if checkSufficientGold(item.cost) then
+        if checkSufficientGold(item.gold) and checkSufficientPlatinum(item.platinum) then
             buyNotice(1)
             if idx then
                 increaseQuantity(idx)
             else
                 addToInventory(item.name)
             end
-            decreaseGold(item.cost)
-            
+            decreaseGold(item.gold)
+            decreasePlatinum(item.platinum)
+            currentGold = returnCurrentGold()
+            currentPlatinum = returnCurrentPlatinum()
         else
             buyNotice(2)
         end
-        
-        -- goldText.text = "Gold: " .. returnCurrentGold()
-        print("87 " .. returnCurrentGold())
         saveInventoryData()
+        updateShop()
     end
+end
+
+function updateShop()
+    -- Pretty much refresh the screen
+    saveInventoryData()
+    shop:removeSelf()
+    inventoryIcon:removeSelf()
+    scene:create()
+end
+
+function widget.newPanel(options)                                    
+    local background = display.newImage(options.imageDir)
+    local container = display.newContainer(options.width, options.height)
+    container:insert(background, true)
+    container.x = display.contentCenterX
+    container.y = display.contentCenterY
+    return container
 end
 
 function setUpShop()
@@ -87,6 +94,7 @@ function setUpShop()
         height = 400,
         imageDir = "img/bg/shoplist.png"
     }
+    inventory:scale(2.,1.5)
     inventory.x = display.contentCenterX + (display.contentWidth/30)
 
     local startX = -inventory.width*(1/2.45)
@@ -118,21 +126,33 @@ function setUpShop()
         inventory.items[i].idx = i
 
         local textOptions = {
-            text = food.cost, 
-            x = x + 70, 
+            text = food.gold, 
+            x = x + 5,
             y = y + 65, 
             width = 50, 
             height = 50
         }
         print(textOptions.text)
 
-        local text = display.newText(textOptions)
-        text:setFillColor( 1, 1, 0 )
+        local textGold = display.newText(textOptions)
+        textGold:setFillColor( 255/255, 223/255, 0 )
 
-        table.insert(itemTexts, i, text)
+        local textOptions = {
+            text = food.platinum, 
+            x = x + 80,
+            y = y + 65, 
+            width = 50, 
+            height = 50
+        }
+        print(textOptions.text)
+
+        local textPlatinum = display.newText(textOptions)
+        textPlatinum:setFillColor( 229/255, 228/255, 226/255 )
+
+        -- table.insert(itemTexts, i, text)
         inventory:insert(inventory.items[i])
-        inventory:insert(text)
-        inventory:insert(inventory.items[i])
+        inventory:insert(textGold)
+        inventory:insert(textPlatinum)
     end
 
     inventory:scale(
@@ -141,28 +161,28 @@ function setUpShop()
                 )
 
     -- text area to show how much GOLD you have
-    local options = {
-    text = "Gold: " .. returnCurrentGold(),
+    local GoldOptions = {
+    text = "Gold: " .. currentGold,
     x = startX + 0.3*spacingX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
     fontSize = 25
     }
 
-    local goldText = display.newText(options)
+    local goldText = display.newText(GoldOptions)
     goldText:setFillColor( 255/255, 223/255, 0 )
     inventory:insert(goldText)
 
     -- text area to show how much PlATINUM you have
-    local options = {
-    text = "Platinum: " .. returnCurrentPlatinum(),
+    local PlatinumOptions = {
+    text = "Platinum: " .. currentPlatinum,
     x = startX + 5*spacingX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
     fontSize = 25
     }
     
-    local platinumText = display.newText(options)
+    local platinumText = display.newText(PlatinumOptions)
     platinumText:setFillColor( 229/255, 228/255, 226/255 )
     inventory:insert(platinumText)
 
@@ -178,6 +198,9 @@ function scene:create( event )
 
     -- Retrieve inventory data from save file
     setUpInventoryData()
+
+    currentGold = returnCurrentGold()
+    currentPlatinum = returnCurrentPlatinum()
 
     -- Setup layer
     back = display.newGroup()

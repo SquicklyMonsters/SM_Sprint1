@@ -1,5 +1,4 @@
 -- -----------------------------------------------------------------------------------------------------------------
-require('currency')
 -- Local variables go Here
 
 --adds an image to our game centered at x and y coordinates
@@ -47,6 +46,10 @@ end
 
 function getPlayerLayer()
 	return player
+end
+
+function getScore()
+	return score
 end
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -714,8 +717,6 @@ function restartGame()
 	--move menu
 	gameOver.x = 0
 	gameOver.y = 500
-	--reward
-	increaseGold(score)
 	--reset the score
 	score = 0
 	--reset the game speed

@@ -1,5 +1,4 @@
 local goldMoney = 300 --default goldMoney
-local goldAmount
 
 
 -- These really do what they say they do, pretty self explanatory
@@ -8,14 +7,10 @@ local goldAmount
 
 function increaseGold(goldAmount)
 	goldMoney = goldMoney + goldAmount
-	print("goldMoney" .. goldMoney)
 end
 
 function decreaseGold(goldAmount)
-	-- if (goldMoney - goldAmount) >= 0 then
-		goldMoney = goldMoney - goldAmount
-		print("goldMoney" .. goldMoney)	
-	-- end
+	goldMoney = goldMoney - goldAmount
 
 end
 
@@ -28,25 +23,20 @@ function checkSufficientGold(goldAmount)
 end
 
 function returnCurrentGold()
-	return 300--goldMoney
+	return goldMoney
 end
 
 -- -----------------------------------------------------------------------
 --FOR PLATINUM
 
 local platinumMoney = 0 --default platinumMoney
-local platinumAmount
 
 function increasePlatinum(platinumAmount)
 	platinumMoney = platinumMoney + platinumAmount
-	print("platinumMoney" .. goldMoney)
 end
 
 function decreasePlatinum(platinumAmount)
-	if (platinumMoney - platinumAmount) >= 0 then
-		platinumMoney = platinumMoney - platinumAmount
-		print("platinumMoney" .. goldMoney)
-	end
+	platinumMoney = platinumMoney - platinumAmount
 end
 
 function checkSufficientPlatinum(platinumAmount)
@@ -60,3 +50,7 @@ end
 function returnCurrentPlatinum()
 	return platinumMoney
 end
+
+-- function loadCurrency()
+-- 	goldMoney, platinumMoney = loadCurrencyData()
+-- end

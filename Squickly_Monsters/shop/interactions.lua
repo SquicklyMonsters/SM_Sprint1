@@ -1,5 +1,4 @@
 require("savegame") -- For Testing
-require("currency")
 local composer = require("composer")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
@@ -37,5 +36,4 @@ end
 
 -- -------------------------------------------------------------------------------
 -- Add All Event Listeners Here
-
 
