@@ -7,20 +7,20 @@ local maxSize = 9;
 
 -- -------------------------------------------------------------------------------
 --functions for currency
-local goldMoney --default goldMoney
-local platinumMoney --default platinumMoney
+local gold --default goldMoney
+local platinum --default platinumMoney
 
 function updateCurrency(goldAmount, platinumAmount)
-	goldMoney = goldMoney + goldAmount
-	platinumMoney = platinumMoney + platinumAmount
+	gold = gold + goldAmount
+	platinum = platinum + platinumAmount
 end
 
 function sufficientGold(goldAmount)
-	return (goldMoney - goldAmount) >= 0
+	return (gold - goldAmount) >= 0
 end
 
 function sufficientPlatinum(platinumAmount)
-	return (platinumMoney - platinumAmount) >= 0
+	return (platinum - platinumAmount) >= 0
 end
 
 -- -------------------------------------------------------------------------------
@@ -76,8 +76,8 @@ function isInInventory(name)
 end
 
 function setUpInventoryData()
-	itemList, itemQuantities, goldMoney, platinumMoney = loadInventoryData()
-	return itemList, itemQuantities, goldMoney, platinumMoney
+	itemList, itemQuantities, gold, platinum = loadInventoryData()
+	return itemList, itemQuantities, gold, platinum
 end
 
 -- -------------------------------------------------------------------------------
@@ -91,11 +91,11 @@ function getItemQuantities()
 end
 
 function getCurrentGold()
-	return goldMoney
+	return gold
 end
 
 function getCurrentPlatinum()
-	return platinumMoney
+	return platinum
 end
 
 -- -------------------------------------------------------------------------------
