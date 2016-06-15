@@ -178,7 +178,7 @@ function cleanButtonClicked(event)
             changeToWakeupState()
             cleanAnimation()
             changeNeedsLevel("hygiene", 500)
-            giveExpWhenInteract(getHygieneBar(),100)
+            giveTakeCareEXP(100,getHygieneBar())
         end
     end
 end
@@ -235,7 +235,7 @@ function mostRecentPlay1Clicked(event)
             changeToWakeupState()
             playAnimation()
             changeNeedsLevel("happiness", 500)
-            giveExpWhenInteract(getHappinessBar(),250)
+            giveTakeCareEXP(250, getHappinessBar())
         end
     end
 end
@@ -247,7 +247,7 @@ function mostRecentPlay2Clicked(event)
             changeToWakeupState()
             playAnimation()
             changeNeedsLevel("happiness", 1000)
-            giveExpWhenInteract(getHappinessBar(),500)
+            giveTakeCareEXP(500,getHappinessBar())
         end
     end
 end
@@ -272,10 +272,17 @@ function inventoryClicked(event)
     end
 end
 
-function giveExpWhenInteract(getBar,giveExp)
-    if getBar:getProgress() < 0.9 then
-      changeNeedsLevel("exp", giveExp)
+function giveTakeCareEXP(expGain, needBar)
+    if needBar:getProgress() < 0.9 then
+      changeNeedsLevel("exp", expGain)
     end
+end
+
+function increaseEXP(expGain)
+    changeNeedsLevel("exp", expGain)
+    -- if needBars.exp:getProgress() >= 1 then
+      --  levelUp() level up function that will be implemented later
+      -- end
 end
 -- -------------------------------------------------------------------------------
 -- Sleep / Wakeup functions
