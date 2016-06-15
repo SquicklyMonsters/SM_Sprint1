@@ -72,10 +72,6 @@ function loadInventoryData()
         print("load inv")
     end
 
-    print("load")
-    print(itemList)
-    print(itemQuantities)
-
     return itemList, itemQuantities, itemTexts
 end
 

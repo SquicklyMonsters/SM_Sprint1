@@ -101,8 +101,6 @@ end
 
 function setUpInventoryData()
 	itemList, itemQuantities = loadInventoryData()
-	print(itemList)
-	print(itemQuantities)
 	return itemList, itemQuantities
 end
 
