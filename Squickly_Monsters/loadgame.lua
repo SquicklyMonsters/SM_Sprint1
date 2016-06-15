@@ -28,11 +28,11 @@ function readFile(file)
 end
 -- -------------------------------------------------------------------------------
 -- Load functions
-function loadNeedsData() 
+function loadNeedsData()
     local file = io.open( needsDataFile, "r" )
     local needsLevels = {}
     local maxNeedsLevels = {}
-    
+
     if file then
         local inTable = readFile(file)
         maxNeedsLevels = inTable[1]
@@ -71,6 +71,10 @@ function loadInventoryData()
         itemQuantities = inTable[2]
         print("load inv")
     end
+
+    print("load")
+    print(itemList)
+    print(itemQuantities)
 
     return itemList, itemQuantities, itemTexts
 end

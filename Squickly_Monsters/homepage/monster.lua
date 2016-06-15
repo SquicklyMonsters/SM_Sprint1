@@ -49,11 +49,11 @@ function setUpMonster(fileName)
  --                 )
  --    monster:play()
     local options = {
-    width = 4655/8,
+    width = 4651/8,
     height = 5520/6,
     numFrames = 48,
 
-    sheetContentWidth = 4655,
+    sheetContentWidth = 4651,
     sheetContentHeight = 5520,
 
     }

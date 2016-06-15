@@ -40,7 +40,7 @@ end
 
 function sufficientPlatinum(platinumAmount)
 	if (platinumMoney - platinumAmount) >= 0 then
-		return true	
+		return true
 	else
 		return false
 	end
@@ -71,7 +71,7 @@ function reduceQuantity(idx)
 		removeItem(idx)
 		return 0
 	end
-	
+
 end
 
 
@@ -101,6 +101,8 @@ end
 
 function setUpInventoryData()
 	itemList, itemQuantities = loadInventoryData()
+	print(itemList)
+	print(itemQuantities)
 	return itemList, itemQuantities
 end
 
