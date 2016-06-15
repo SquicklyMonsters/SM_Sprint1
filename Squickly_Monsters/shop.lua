@@ -184,7 +184,7 @@ function scene:create( event )
 
 	-- Set background
     setUpBackground()
-    background = getBackground()
+    backgroundShop = getBackground()
 
     -- Set Shop
     shop = setUpShop()
@@ -194,19 +194,6 @@ function scene:create( event )
 
     notifications = setUpNotifications()
 
-	-- Add display objects into group
-    -- ============BACK===============
-    back:insert(background)
-    -- ===========MIDDLE==============
-    middle:insert(shop)
-    middle:insert(inventoryIcon)
-    -- ===========FRONT===============
-    front:insert(notifications[1])
-    front:insert(notifications[2])
-    -- ===============================
-    sceneGroup:insert(back)
-    sceneGroup:insert(middle)
-    sceneGroup:insert(front)
 
     -- Set up all Event Listeners
 end
@@ -214,11 +201,23 @@ end
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-    
 
 	if phase == "will" then
+        -- Add display objects into group
+        -- ============BACK===============
+        back:insert(backgroundShop)
+        -- ===========MIDDLE==============
+        middle:insert(shop)
+        middle:insert(inventoryIcon)
+        -- ===========FRONT===============
+        front:insert(notifications[1])
+        front:insert(notifications[2])
+        -- ===============================
+        sceneGroup:insert(back)
+        sceneGroup:insert(middle)
+        sceneGroup:insert(front)
+
         composer.showOverlay("menubar")
-        -- composer.showOverlay("inventory")
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
 		-- Called when the scene is now on screen
