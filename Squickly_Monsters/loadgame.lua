@@ -71,12 +71,7 @@ function loadInventoryData()
         itemQuantities = inTable[2]
         gold = inTable[3]
         platinum = inTable[4]
-        print("load inv")
     end
-
-    print("LOAD")
-    print(gold)
-    print(platinum)
 
     return itemList, itemQuantities, gold, platinum
 end

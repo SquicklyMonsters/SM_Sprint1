@@ -50,9 +50,6 @@ function saveInventoryData()
     local itemQuantities = getItemQuantities()
     local gold = getCurrentGold()
     local platinum = getCurrentPlatinum()
-    print("SAVE")
-    print(gold)
-    print(platinum)
 
     local outTable = {itemList, itemQuantities, gold, platinum}
     local contents = json.encode(outTable)
