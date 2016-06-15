@@ -6,6 +6,25 @@ local itemTexts = {};
 local maxSize = 9;
 
 -- -------------------------------------------------------------------------------
+--functions for currency
+local gold --default goldMoney
+local platinum--default platinumMoney
+
+function updateCurrency(goldCost, platinumCost)
+	gold = gold + goldCost
+	platinum = platinum + platinumCost
+end
+
+function sufficientGold(goldCost)
+	return (gold - goldCost) >= 0
+end
+
+function sufficientPlatinum(platinumCost)
+	return (platinum - platinumCost) >= 0
+end
+
+-- -------------------------------------------------------------------------------
+
 --adds new item to inventory
 function addToInventory(itemName)
 	-- If number of item will not exceed limit size: add item
@@ -29,9 +48,8 @@ function reduceQuantity(idx)
 		removeItem(idx)
 		return 0
 	end
-	
-end
 
+end
 
 function removeItem(idx)
 	local new_itemList = {}
@@ -58,8 +76,8 @@ function isInInventory(name)
 end
 
 function setUpInventoryData()
-	itemList, itemQuantities = loadInventoryData()
-	return itemList, itemQuantities
+	itemList, itemQuantities, gold, platinum = loadInventoryData()
+	return itemList, itemQuantities, gold, platinum
 end
 
 -- -------------------------------------------------------------------------------
@@ -70,6 +88,14 @@ end
 
 function getItemQuantities()
 	return itemQuantities
+end
+
+function getCurrentGold()
+	return gold
+end
+
+function getCurrentPlatinum()
+	return platinum
 end
 
 -- -------------------------------------------------------------------------------

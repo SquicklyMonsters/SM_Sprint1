@@ -82,7 +82,6 @@ function setDecrementRate()
     setRateLongTerm("hunger", 1000, hungerRate)
     setRateLongTerm("happiness", 1000, -10)
     setRateLongTerm("hygiene", 1000, -10)
-    setRateLongTerm("exp", 1000, 10)
     -- Need sleepWakeID for canceling old loop before assign new one
     sleepWakeID = setRateLongTerm("energy", 1000, -10)
 end
@@ -179,6 +178,7 @@ function cleanButtonClicked(event)
             changeToWakeupState()
             cleanAnimation()
             changeNeedsLevel("hygiene", 500)
+            giveTakeCareEXP(100,getHygieneBar())
         end
     end
 end
@@ -205,7 +205,6 @@ function mostRecentFood2Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(foodIconsList)
-            changeNeedsLevel("hunger", 1000)
             foodList.fish:eat()
         end
     end
@@ -236,6 +235,7 @@ function mostRecentPlay1Clicked(event)
             changeToWakeupState()
             playAnimation()
             changeNeedsLevel("happiness", 500)
+            giveTakeCareEXP(250, getHappinessBar())
         end
     end
 end
@@ -247,6 +247,7 @@ function mostRecentPlay2Clicked(event)
             changeToWakeupState()
             playAnimation()
             changeNeedsLevel("happiness", 1000)
+            giveTakeCareEXP(500,getHappinessBar())
         end
     end
 end
@@ -271,13 +272,25 @@ function inventoryClicked(event)
     end
 end
 
+function giveTakeCareEXP(expGain, needBar)
+    if needBar:getProgress() < 0.9 then
+      changeNeedsLevel("exp", expGain)
+    end
+end
+
+function increaseEXP(expGain)
+    changeNeedsLevel("exp", expGain)
+    -- if needBars.exp:getProgress() >= 1 then
+      --  levelUp() level up function that will be implemented later
+      -- end
+end
 -- -------------------------------------------------------------------------------
 -- Sleep / Wakeup functions
 
 function changeToSleepState()
     cancelEnergyLoop()
     sleepAnimation()
-    sleepWakeID = setRateLongTerm("energy", 1000, 10)
+    sleepWakeID = setRateLongTerm("energy", 100, 10)
     table.remove(iconsList, 2)
     table.insert(iconsList, 2, wakeupIcon)
 end
@@ -295,6 +308,9 @@ function cancelEnergyLoop()
         timer.cancel(sleepWakeID)
     end
 end
+
+-- function addExpTakeCare()
+    -- if
 
 -- -------------------------------------------------------------------------------
 -- Add All Event Listeners Here

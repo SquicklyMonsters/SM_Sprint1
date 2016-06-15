@@ -1,5 +1,4 @@
 require("inventory.interactions")
-require("currency")
 local widget = require("widget")
 local composer = require( "composer" )
 local scene = composer.newScene()
@@ -23,7 +22,7 @@ function itemClickedEvent(event)
 		if quantity > 0 then
 			-- Update display number
 			itemTexts[idx].text = quantity
-		else 
+		else
 			updateInventory()
 		end
 		food:eat()
@@ -47,7 +46,7 @@ function updateInventory()
 end
 -- -------------------------------------------------------------------------------
 
-function widget.newPanel(options)                                    
+function widget.newPanel(options)
     local background = display.newImage(options.imageDir)
     local container = display.newContainer(options.width, options.height)
     container:insert(background, true)
@@ -77,7 +76,9 @@ function setUpInventory()
 
  	for i = 1, #itemList do --loops to create each item on inventory
  		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
- 		local y = startY + (spacingY * (math.floor((i-1) / rows))) 
+ 		local y = startY + (spacingY * (math.floor((i-1) / rows)))
+ 		print("HERE!!!")
+ 		print(itemList[i].name)
  		local food = foodList[itemList[i]]
  		inventory.items[i] = widget.newButton {
  			top = y, -- division of row
@@ -91,10 +92,10 @@ function setUpInventory()
  		inventory.items[i].item = food
  		inventory.items[i].idx = i
  		local textOptions = {
-			text = itemQuantities[i], 
-			x = x + 70, 
-			y = y + 65, 
-			width = 50, 
+			text = itemQuantities[i],
+			x = x + 70,
+			y = y + 65,
+			width = 50,
 			height = 50
  		}
 
@@ -119,33 +120,33 @@ function setUpInventory()
 
  	inventory:insert(inventory.close)
  	inventory:scale(
- 				(display.contentWidth/inventory.width)*0.4, 
+ 				(display.contentWidth/inventory.width)*0.4,
  				(display.contentHeight/inventory.height)*0.5
  				)
 
  	-- text area to show how much GOLD you have
-    local options = {
-    text = "Gold: " .. returnCurrentGold(),
+    local GoldOptions = {
+    text = "Gold: " .. getCurrentGold(),
     x = startX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
     fontSize = 20
     }
 
-    local goldText = display.newText(options)
-    goldText:setFillColor( 255/255, 223/255, 0 )
-    inventory:insert(goldText)
-
     -- text area to show how much PlATINUM you have
-    local options = {
-    text = "Platinum: " .. returnCurrentPlatinum(),
+    local PlatinumOptions = {
+    text = "Platinum: " .. getCurrentPlatinum(),
     x = startX + 2*spacingX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
     fontSize = 20
     }
-    
-    local platinumText = display.newText(options)
+
+    local goldText = display.newText(GoldOptions)
+    goldText:setFillColor( 255/255, 223/255, 0 )
+    inventory:insert(goldText)
+
+    local platinumText = display.newText(PlatinumOptions)
     platinumText:setFillColor( 229/255, 228/255, 226/255 )
     inventory:insert(platinumText)
 
@@ -164,7 +165,7 @@ end
 -- Called when the scene's view does not exist:
 function scene:create( event )
 	local sceneGroup = self.view
-	inventory = setUpInventory()
+	inventory = setUpInventory()	
 	sceneGroup:insert(inventory)
 	print(composer.getSceneName("current"))
 
@@ -173,7 +174,7 @@ end
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-    
+
 
 	if phase == "will" then
 		-- composer.hideOverlay()

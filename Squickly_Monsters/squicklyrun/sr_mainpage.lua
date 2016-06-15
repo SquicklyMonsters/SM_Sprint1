@@ -2,6 +2,7 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 require( "squicklyrun.sr_background" )
+require("currency")
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
@@ -65,6 +66,12 @@ function scene:hide( event )
 end
 
 function scene:destroy( event )
+	--reward
+	increaseGold(getScore())
+	--exp
+	changeNeedsLevel("exp", getScore()*10)
+	changeNeedsLevel("energy", -getScore()*10)
+	saveAllData()
 end
 
 ---------------------------------------------------------------------------------

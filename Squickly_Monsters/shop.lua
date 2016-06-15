@@ -3,12 +3,9 @@ local widget = require( "widget" )
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-require("savegame")
 require("shop.background")
 require("shop.interactions")
-require("inventory")
 require("inventory.interactions")
-require("currency")
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
@@ -25,15 +22,41 @@ local itemList;
 local itemQuantities;
 local itemTexts = {};
 
-local buyHolder;
-local cannotBuyHolder;
+-- local buyHolder;
+-- local cannotBuyHolder;
 local notifications;
 
+local currentGold;
+local currentPlatinum;
 
+local goldText;
+local platinumText;
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
 
+function itemClickedEvent(event)
+    -- TODO: Add not enough space case handler
+    if event.phase == "ended" then
+        local item = event.target.item
+        local idx = isInInventory(item.name)
+        if sufficientGold(item.gold) and sufficientPlatinum(item.platinum) then
+            buyNotice(1)
+            if idx then
+                increaseQuantity(idx)
+            else
+                addToInventory(item.name)
+                -- addToInventory(item)
+            end
+            updateCurrency(-item.gold, -item.platinum)
+            -- updatePlatinum()
+        else
+            buyNotice(2)
+        end
+        saveInventoryData()
+        refreshDisplayCurrency(goldText, platinumText)
+    end
+end
 
 function widget.newPanel(options)                                    
     local background = display.newImage(options.imageDir)
@@ -41,44 +64,7 @@ function widget.newPanel(options)
     container:insert(background, true)
     container.x = display.contentCenterX
     container.y = display.contentCenterY
-    container:scale(2.,1.5)
     return container
-end
-
-
-function notificationClicked(event) --temp
-    if event.phase == "ended" then
-        for i = 1, #notifications do
-            notifications[i].alpha = 0
-        end
-    end
-end
-
-function buyNotice(i)
-    notifications[i].alpha = 1
-end
-
-function itemClickedEvent(event)
-    if event.phase == "ended" then
-        local item = event.target.item
-        local idx = isInInventory(item.name)
-        if checkSufficientGold(item.cost) then
-            buyNotice(1)
-            if idx then
-                increaseQuantity(idx)
-            else
-                addToInventory(item.name)
-            end
-            decreaseGold(item.cost)
-            
-        else
-            buyNotice(2)
-        end
-        
-        -- goldText.text = "Gold: " .. returnCurrentGold()
-        print("87 " .. returnCurrentGold())
-        saveInventoryData()
-    end
 end
 
 function setUpShop()
@@ -87,6 +73,7 @@ function setUpShop()
         height = 400,
         imageDir = "img/bg/shoplist.png"
     }
+    inventory:scale(2.,1.5)
     inventory.x = display.contentCenterX + (display.contentWidth/30)
 
     local startX = -inventory.width*(1/2.45)
@@ -118,21 +105,78 @@ function setUpShop()
         inventory.items[i].idx = i
 
         local textOptions = {
-            text = food.cost, 
-            x = x + 70, 
+            text = food.gold, 
+            x = x + 5,
             y = y + 65, 
             width = 50, 
             height = 50
         }
-        print(textOptions.text)
 
-        local text = display.newText(textOptions)
-        text:setFillColor( 1, 1, 0 )
+        local textGold = display.newText(textOptions)
+        textGold:setFillColor( 255/255, 223/255, 0 )
 
-        table.insert(itemTexts, i, text)
+        local textOptions = {
+            text = food.platinum, 
+            x = x + 80,
+            y = y + 65, 
+            width = 50, 
+            height = 50
+        }
+
+        local textPlatinum = display.newText(textOptions)
+        textPlatinum:setFillColor( 229/255, 228/255, 226/255 )
+
         inventory:insert(inventory.items[i])
-        inventory:insert(text)
-        inventory:insert(inventory.items[i])
+        inventory:insert(textGold)
+        inventory:insert(textPlatinum)
+    end
+
+    local shopList = getToyList()
+    print("NAME")
+    print(shopList["teddybear"].name)
+
+    for i = 1, #shopList do --loops to create each item on inventory
+        local x = startX + (spacingX * (((i + #foodList)-1) - math.floor(((i + #foodList)-1)/cols)*cols))
+        local y = startY + (spacingY * (math.floor(((i + #foodList)-1) / cols))) 
+        local toy = toyList[shopList[i]]
+
+        inventory.items[(i + #foodList)] = widget.newButton {
+            top = y, -- division of row
+            left = x, -- modulo of row
+            width = 50,
+            height = 50,
+            defaultFile = toy.image,
+            onEvent = itemClickedEvent,
+        }
+
+        inventory.items[(i + #foodList)].item = toy
+        inventory.items[(i + #foodList)].idx = i + #foodList
+
+        local textOptions = {
+            text = toy.gold, 
+            x = x + 5,
+            y = y + 65, 
+            width = 50, 
+            height = 50
+        }
+
+        local textGold = display.newText(textOptions)
+        textGold:setFillColor( 255/255, 223/255, 0 )
+
+        local textOptions = {
+            text = toy.platinum, 
+            x = x + 80,
+            y = y + 65, 
+            width = 50, 
+            height = 50
+        }
+
+        local textPlatinum = display.newText(textOptions)
+        textPlatinum:setFillColor( 229/255, 228/255, 226/255 )
+
+        inventory:insert(inventory.items[(i + #foodList)])
+        inventory:insert(textGold)
+        inventory:insert(textPlatinum)
     end
 
     inventory:scale(
@@ -141,28 +185,28 @@ function setUpShop()
                 )
 
     -- text area to show how much GOLD you have
-    local options = {
-    text = "Gold: " .. returnCurrentGold(),
+    local GoldOptions = {
+    text = "Gold: " .. getCurrentGold(),
     x = startX + 0.3*spacingX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
     fontSize = 25
     }
 
-    local goldText = display.newText(options)
-    goldText:setFillColor( 255/255, 223/255, 0 )
-    inventory:insert(goldText)
-
     -- text area to show how much PlATINUM you have
-    local options = {
-    text = "Platinum: " .. returnCurrentPlatinum(),
+    local PlatinumOptions = {
+    text = "Platinum: " .. getCurrentPlatinum(),
     x = startX + 5*spacingX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
     fontSize = 25
     }
-    
-    local platinumText = display.newText(options)
+ 
+    goldText = display.newText(GoldOptions)
+    goldText:setFillColor( 255/255, 223/255, 0 )
+    inventory:insert(goldText)
+
+    platinumText = display.newText(PlatinumOptions)
     platinumText:setFillColor( 229/255, 228/255, 226/255 )
     inventory:insert(platinumText)
 
@@ -186,53 +230,40 @@ function scene:create( event )
 
 	-- Set background
     setUpBackground()
-    background = getBackground()
+    backgroundShop = getBackground()
 
     -- Set Shop
     shop = setUpShop()
 
     -- Set up all Icons
-    setUpAllIcons()
     inventoryIcon = getInventoryIcon()
-    buyHolder = display.newImageRect("img/icons/UIIcons/buy.png", 150, 150)
-    buyHolder.x = display.contentCenterX
-    buyHolder.y = display.contentCenterY
-    buyHolder.alpha = 0
 
-    cannotBuyHolder = display.newImageRect("img/icons/UIIcons/cannotbuy.png", 150, 150)
-    cannotBuyHolder.x = display.contentCenterX
-    cannotBuyHolder.y = display.contentCenterY
-    cannotBuyHolder.alpha = 0
+    notifications = setUpNotifications()
 
-    notifications = {buyHolder, cannotBuyHolder}
-
-	-- Add display objects into group
-    -- ============BACK===============
-    back:insert(background)
-    -- ===========MIDDLE==============
-    middle:insert(shop)
-    middle:insert(inventoryIcon)
-    -- ===========FRONT===============
-    front:insert(buyHolder)
-    front:insert(cannotBuyHolder)
-    -- ===============================
-    sceneGroup:insert(back)
-    sceneGroup:insert(middle)
-    sceneGroup:insert(front)
 
     -- Set up all Event Listeners
-    addListeners()
-    background:addEventListener("touch", notificationClicked)
 end
 
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-    
 
 	if phase == "will" then
+        -- Add display objects into group
+        -- ============BACK===============
+        back:insert(backgroundShop)
+        -- ===========MIDDLE==============
+        middle:insert(shop)
+        middle:insert(inventoryIcon)
+        -- ===========FRONT===============
+        front:insert(notifications[1])
+        front:insert(notifications[2])
+        -- ===============================
+        sceneGroup:insert(back)
+        sceneGroup:insert(middle)
+        sceneGroup:insert(front)
+
         composer.showOverlay("menubar")
-        -- composer.showOverlay("inventory")
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
 		-- Called when the scene is now on screen
