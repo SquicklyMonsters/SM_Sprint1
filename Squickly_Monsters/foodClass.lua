@@ -35,7 +35,7 @@ function food:eat()
 	changeNeedsLevel("happiness", self.happinessAffect)
 	changeNeedsLevel("hygiene", self.hygieneAffect)
 	changeNeedsLevel("energy", self.energyAffect)
-	giveExpWhenInteract(getHungerBar(), self.expAffect)
+	giveTakeCareEXP(self.expAffect, getHungerBar())
 
 	-- Check if Thought Clouds still need to be shown
 	checkHunger(1)
