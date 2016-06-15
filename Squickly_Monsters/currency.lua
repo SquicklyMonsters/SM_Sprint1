@@ -12,10 +12,10 @@ function increaseGold(goldAmount)
 end
 
 function decreaseGold(goldAmount)
-	if (goldMoney - goldAmount) >= 0 then
+	-- if (goldMoney - goldAmount) >= 0 then
 		goldMoney = goldMoney - goldAmount
 		print("goldMoney" .. goldMoney)	
-	end
+	-- end
 
 end
 
@@ -28,7 +28,7 @@ function checkSufficientGold(goldAmount)
 end
 
 function returnCurrentGold()
-	return goldMoney
+	return 300--goldMoney
 end
 
 -- -----------------------------------------------------------------------
