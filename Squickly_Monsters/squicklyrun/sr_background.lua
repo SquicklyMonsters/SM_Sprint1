@@ -48,6 +48,10 @@ function getPlayerLayer()
 	return player
 end
 
+function getScore()
+	return score
+end
+
 -- -----------------------------------------------------------------------------------------------------------------
 --Setup functions
 
@@ -539,6 +543,7 @@ function checkCollisions()
 			hero.isAlive = false
 			--this simply pauses the current animation
 			hero:pause()
+
 			gameOver.x = display.contentWidth*.65
 			gameOver.y = display.contentHeight/2
 		end
@@ -552,6 +557,10 @@ function checkCollisions()
 				hero.isAlive = false
 				--this simply pauses the current animation
 				hero:pause()
+
+
+				
+
 				gameOver.x = display.contentWidth*.65
 				gameOver.y = display.contentHeight/2
 			end
@@ -566,6 +575,7 @@ function checkCollisions()
 				hero.isAlive = false
 				--this simply pauses the current animation
 				hero:pause()
+
 				gameOver.x = display.contentWidth*.65
 				gameOver.y = display.contentHeight/2
 			end
@@ -580,6 +590,8 @@ function checkCollisions()
 				hero.isAlive = false
 				--this simply pauses the current animation
 				hero:pause()
+				
+
 				gameOver.x = display.contentWidth*.65
 				gameOver.y = display.contentHeight/2
 			end
@@ -760,6 +772,7 @@ end
 --right side of the screen the hero will fire off a little blue bolt
 function touched( event )
 	if(event.x < gameOver.x + 150 and event.x > gameOver.x - 150 and event.y < gameOver.y + 95 and event.y > gameOver.y - 95) then
+
 		restartGame()
 	else
 		if(hero.isAlive == true) then

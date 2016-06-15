@@ -52,7 +52,6 @@ function widget.newPanel(options)
     container:insert(background, true)
     container.x = display.contentCenterX
     container.y = display.contentCenterY
-
     return container
 end
 
@@ -60,7 +59,7 @@ function setUpInventory()
  	local inventory = widget.newPanel {
  		width = 300,
  		height = 300,
- 		imageDir = "img/bg/inventory.png"
+ 		imageDir = "img/bg/inventory copy.png"
  	}
 
  	local startX = -inventory.width*(1/3)
@@ -122,6 +121,32 @@ function setUpInventory()
  				(display.contentWidth/inventory.width)*0.4, 
  				(display.contentHeight/inventory.height)*0.5
  				)
+
+ 	-- text area to show how much GOLD you have
+    local GoldOptions = {
+    text = "Gold: " .. getCurrentGold(),
+    x = startX,
+    y = startY - 0.3*spacingY,
+    font = native.systemFontBold,
+    fontSize = 20
+    }
+
+    -- text area to show how much PlATINUM you have
+    local PlatinumOptions = {
+    text = "Platinum: " .. getCurrentPlatinum(),
+    x = startX + 2*spacingX,
+    y = startY - 0.3*spacingY,
+    font = native.systemFontBold,
+    fontSize = 20
+    }
+
+    local goldText = display.newText(GoldOptions)
+    goldText:setFillColor( 255/255, 223/255, 0 )
+    inventory:insert(goldText)
+        
+    local platinumText = display.newText(PlatinumOptions)
+    platinumText:setFillColor( 229/255, 228/255, 226/255 )
+    inventory:insert(platinumText)
 
  	return inventory
 end

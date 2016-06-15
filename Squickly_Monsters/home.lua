@@ -8,6 +8,7 @@ require("homepage.monster")
 require("homepage.interactions")
 require("homepage.UI")
 require("savegame")
+
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
 -- -----------------------------------------------------------------------------------------------------------------
@@ -95,34 +96,6 @@ function scene:create( event )
  
     setAutoSaveRate(10000)
 
-	-- Add display objects into group
-    -- ============BACK===============
-    back:insert(background)
-    -- ===========MIDDLE==============
-    middle:insert(monster)
-    middle:insert(hungerBar)
-    middle:insert(happinessBar)
-    middle:insert(hygieneBar)
-    middle:insert(energyBar)
-    middle:insert(expBar)
-    middle:insert(inventoryIcon)
-    -- ===========FRONT===============
-    front:insert(feedIcon)
-    front:insert(sleepIcon)
-    front:insert(wakeupIcon)
-    front:insert(cleanIcon)
-    front:insert(playIcon)
-    front:insert(mostRecentFoodIcon1)
-    front:insert(mostRecentFoodIcon2)
-    front:insert(moreFoodIcon)
-    front:insert(shopIcon)
-    front:insert(mostRecentPlayIcon1)
-    front:insert(mostRecentPlayIcon2)
-    front:insert(morePlayIcon)
-    -- ===============================
-    sceneGroup:insert(back)
-    sceneGroup:insert(middle)
-    sceneGroup:insert(front)
 
     -- Set up all Event Listeners
     addListeners()
@@ -132,16 +105,46 @@ function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
 
-    checkHunger(1)
-    checkTired(1)
 
-    -- Set up all Thought Clouds
-    hungerThoughtCloud = getHungerThoughtCloud()
-    tiredThoughtCloud = getTiredThoughtCloud()
-    front:insert(hungerThoughtCloud)
-    front:insert(tiredThoughtCloud)
-    
 	if phase == "will" then
+        checkHunger(1)
+        checkTired(1)
+
+        -- Set up all Thought Clouds
+        hungerThoughtCloud = getHungerThoughtCloud()
+        tiredThoughtCloud = getTiredThoughtCloud()
+        
+        -- Add display objects into group
+        -- ============BACK===============
+        back:insert(background)
+        -- ===========MIDDLE==============
+        middle:insert(monster)
+        middle:insert(hungerBar)
+        middle:insert(happinessBar)
+        middle:insert(hygieneBar)
+        middle:insert(energyBar)
+        middle:insert(expBar)
+        middle:insert(inventoryIcon)
+        -- ===========FRONT===============
+        front:insert(feedIcon)
+        front:insert(sleepIcon)
+        front:insert(wakeupIcon)
+        front:insert(cleanIcon)
+        front:insert(playIcon)
+        front:insert(mostRecentFoodIcon1)
+        front:insert(mostRecentFoodIcon2)
+        front:insert(moreFoodIcon)
+        front:insert(shopIcon)
+        front:insert(mostRecentPlayIcon1)
+        front:insert(mostRecentPlayIcon2)
+        front:insert(morePlayIcon)
+
+        front:insert(hungerThoughtCloud)
+        front:insert(tiredThoughtCloud)
+        -- ===============================
+        sceneGroup:insert(back)
+        sceneGroup:insert(middle)
+        sceneGroup:insert(front)
         composer.showOverlay("menubar")
         -- composer.showOverlay("inventory")
 		-- Called when the scene is still off screen and is about to move on screen
