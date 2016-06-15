@@ -77,7 +77,7 @@ end
 
 function setUpInventoryData()
 	itemList, itemQuantities, goldMoney, platinumMoney = loadInventoryData()
-	return itemList, itemQuantities, gold, platinum
+	return itemList, itemQuantities, goldMoney, platinumMoney
 end
 
 -- -------------------------------------------------------------------------------
