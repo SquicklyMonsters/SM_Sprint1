@@ -10,17 +10,17 @@ local maxSize = 9;
 local gold --default goldMoney
 local platinum --default platinumMoney
 
-function updateCurrency(goldAmount, platinumAmount)
-	gold = gold + goldAmount
-	platinum = platinum + platinumAmount
+function updateCurrency(costGold, costPlatinum)
+	gold = gold + costGold
+	platinum = platinum + costPlatinum
 end
 
-function sufficientGold(goldAmount)
-	return (gold - goldAmount) >= 0
+function sufficientGold(costGold)
+	return (gold - costGold) >= 0
 end
 
-function sufficientPlatinum(platinumAmount)
-	return (platinum - platinumAmount) >= 0
+function sufficientPlatinum(costPlatinum)
+	return (platinum - costPlatinum) >= 0
 end
 
 -- -------------------------------------------------------------------------------
