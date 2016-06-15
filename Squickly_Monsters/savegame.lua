@@ -9,6 +9,7 @@ local saveRate;
 -- Set location for saved data
 local needsDataFile = system.pathForFile( "needsData.txt", system.DocumentsDirectory )
 local inventoryDataFile = system.pathForFile( "inventoryData.txt", system.DocumentsDirectory )
+local currencyDataFile = system.pathForFile( "currencyData.txt", system.DocumentsDirectory )
 
 -- -------------------------------------------------------------------------------
 -- Set Auto Save rate
@@ -29,6 +30,7 @@ end
 -- Save functions
 function saveAllData()
     saveNeedsData()
+    -- saveInventoryData()
 end
 
 function saveNeedsData()
@@ -44,13 +46,25 @@ function saveNeedsData()
 end
 
 function saveInventoryData()
-   local itemList = getItemList()
-   local itemQuantities = getItemQuantities()
+    local itemList = getItemList()
+    local itemQuantities = getItemQuantities()
 
-   local outTable = {itemList, itemQuantities}
-   local contents = json.encode(outTable)
+    local outTable = {itemList, itemQuantities}
+    local contents = json.encode(outTable)
 
 
-   writeFile(inventoryDataFile, contents)
-   print("save inv")
+    writeFile(inventoryDataFile, contents)
+    print("save inv")
 end
+
+-- function saveCurrency()
+--     local gold = returnCurrentGold()
+--     local platinum = returnCurrentPlatinum()
+
+--     local outTable = {gold, platinum}
+--     local contents = json.encode(outTable)
+
+
+--     writeFile(currencyDataFile, contents)
+--     print("save inv")
+-- end

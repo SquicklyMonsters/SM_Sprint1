@@ -1,5 +1,4 @@
 -- -------------------------------------------------------------------------------
-
 -- Local variables go HERE
 
 local background;
@@ -39,3 +38,4 @@ end
 function getBackground()
     return background
 end
+

@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
-
+require('currency')
 -- Local variables go HERE
 
-local background;
+local backgroundShop;
 
 -- -------------------------------------------------------------------------------
 
@@ -26,10 +26,10 @@ function setUpBackground()
         loopcount = 0,
         loopdirection = "forward"
     }
-    background = display.newSprite(backgroundSheet, backgroundSequence)
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-    background:scale(
+    backgroundShop = display.newSprite(backgroundSheet, backgroundSequence)
+    backgroundShop.x = display.contentCenterX
+    backgroundShop.y = display.contentCenterY
+    backgroundShop:scale(
                     display.contentWidth/backgroundOption.width, 
                     display.contentHeight/backgroundOption.height
                     )
@@ -37,5 +37,8 @@ function setUpBackground()
 end
 
 function getBackground()
-    return background
+    return backgroundShop
 end
+
+-- -------------------------------------------------------------------------------
+

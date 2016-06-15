@@ -8,10 +8,11 @@ local food_mt = { __index = food }; -- metatable
 -- -------------------------------------------------------------------------------
 
 -- constructor
-function food.new(name, cost, hunger, happiness, hygiene, energy, exp, image)
+function food.new(name, gold, platinum, hunger, happiness, hygiene, energy, exp, image)
 	local newFood = {
 		name = name,
-		cost = cost,
+		gold = gold,
+		platinum = platinum,
 		hungerAffect = hunger,
 		happinessAffect = happiness,
 		hygieneAffect = hygiene,
