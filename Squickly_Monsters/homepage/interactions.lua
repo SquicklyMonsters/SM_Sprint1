@@ -283,7 +283,7 @@ end
 function changeToSleepState()
     cancelEnergyLoop()
     sleepAnimation()
-    sleepWakeID = setRateLongTerm("energy", 1000, 10)
+    sleepWakeID = setRateLongTerm("energy", 100, 10)
     table.remove(iconsList, 2)
     table.insert(iconsList, 2, wakeupIcon)
 end
