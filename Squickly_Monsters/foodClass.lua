@@ -35,7 +35,9 @@ function food:eat()
 	changeNeedsLevel("happiness", self.happinessAffect)
 	changeNeedsLevel("hygiene", self.hygieneAffect)
 	changeNeedsLevel("energy", self.energyAffect)
-	changeNeedsLevel("exp", self.expAffect)
+	if getHungerBar():getProgress() < 0.9 then
+		changeNeedsLevel("exp", self.expAffect)
+	end
 
 	-- Check if Thought Clouds still need to be shown
 	checkHunger(1)

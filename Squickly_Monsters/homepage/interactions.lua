@@ -82,7 +82,7 @@ function setDecrementRate()
     setRateLongTerm("hunger", 1000, hungerRate)
     setRateLongTerm("happiness", 1000, -10)
     setRateLongTerm("hygiene", 1000, -10)
-    setRateLongTerm("exp", 1000, 10)
+    setRateLongTerm("exp", 1000, -10)
     -- Need sleepWakeID for canceling old loop before assign new one
     sleepWakeID = setRateLongTerm("energy", 1000, -10)
 end
@@ -179,6 +179,7 @@ function cleanButtonClicked(event)
             changeToWakeupState()
             cleanAnimation()
             changeNeedsLevel("hygiene", 500)
+            giveExpWhenInteract(getHungerBar(),100)
         end
     end
 end
@@ -235,6 +236,7 @@ function mostRecentPlay1Clicked(event)
             changeToWakeupState()
             playAnimation()
             changeNeedsLevel("happiness", 500)
+            giveExpWhenInteract(getHappinessBar(),250)
         end
     end
 end
@@ -246,6 +248,7 @@ function mostRecentPlay2Clicked(event)
             changeToWakeupState()
             playAnimation()
             changeNeedsLevel("happiness", 1000)
+            giveExpWhenInteract(getHappinessBar(),500)
         end
     end
 end
@@ -270,6 +273,11 @@ function inventoryClicked(event)
     end
 end
 
+function giveExpWhenInteract(getBar,giveExp)
+    if getBar:getProgress() < 0.9 then
+      changeNeedsLevel("exp", giveExp)
+    end
+end
 -- -------------------------------------------------------------------------------
 -- Sleep / Wakeup functions
 
@@ -294,6 +302,9 @@ function cancelEnergyLoop()
         timer.cancel(sleepWakeID)
     end
 end
+
+-- function addExpTakeCare()
+    -- if
 
 -- -------------------------------------------------------------------------------
 -- Add All Event Listeners Here
