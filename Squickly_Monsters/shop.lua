@@ -47,8 +47,8 @@ function itemClickedEvent(event)
             else
                 addToInventory(item.name)
             end
-            decreaseGold(item.gold)
-            decreasePlatinum(item.platinum)
+            updateCurrency(-item.gold, -item.platinum)
+            -- updatePlatinum()
         else
             buyNotice(2)
         end

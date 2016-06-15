@@ -69,21 +69,14 @@ function loadInventoryData()
         local inTable = readFile(file)
         itemList = inTable[1]
         itemQuantities = inTable[2]
+        gold = inTable[3]
+        platinum = inTable[4]
         print("load inv")
     end
 
-    return itemList, itemQuantities, itemTexts
+    print("LOAD")
+    print(gold)
+    print(platinum)
+
+    return itemList, itemQuantities, gold, platinum
 end
-
--- function loadCurrencyData()
---     local file = io.open( currencyDataFile, "r" )
-
---     if file then
---         local inTable = readFile(file)
---         gold = inTable[1]
---         platinum = inTable[2]
---         print("load currency")
---     end
-
---     return gold, platinum
--- end

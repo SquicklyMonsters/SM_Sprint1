@@ -6,44 +6,21 @@ local itemTexts = {};
 local maxSize = 9;
 
 -- -------------------------------------------------------------------------------
-local goldMoney = 300 --default goldMoney
+--functions for currency
+local goldMoney --default goldMoney
+local platinumMoney --default platinumMoney
 
-
--- These really do what they say they do, pretty self explanatory
-
---FOR GOLD
-
-function increaseGold(goldAmount)
+function updateCurrency(goldAmount, platinumAmount)
 	goldMoney = goldMoney + goldAmount
-end
-
-function decreaseGold(goldAmount)
-	goldMoney = goldMoney - goldAmount
+	platinumMoney = platinumMoney + platinumAmount
 end
 
 function sufficientGold(goldAmount)
 	return (goldMoney - goldAmount) >= 0
 end
 
--- -----------------------------------------------------------------------
---FOR PLATINUM
-
-local platinumMoney = 0 --default platinumMoney
-
-function increasePlatinum(platinumAmount)
-	platinumMoney = platinumMoney + platinumAmount
-end
-
-function decreasePlatinum(platinumAmount)
-	platinumMoney = platinumMoney - platinumAmount
-end
-
 function sufficientPlatinum(platinumAmount)
-	if (platinumMoney - platinumAmount) >= 0 then
-		return true	
-	else
-		return false
-	end
+	return (platinumMoney - platinumAmount) >= 0
 end
 
 -- -------------------------------------------------------------------------------
@@ -74,7 +51,6 @@ function reduceQuantity(idx)
 	
 end
 
-
 function removeItem(idx)
 	local new_itemList = {}
 	local new_itemQuantities = {}
@@ -100,8 +76,8 @@ function isInInventory(name)
 end
 
 function setUpInventoryData()
-	itemList, itemQuantities = loadInventoryData()
-	return itemList, itemQuantities
+	itemList, itemQuantities, goldMoney, platinumMoney = loadInventoryData()
+	return itemList, itemQuantities, gold, platinum
 end
 
 -- -------------------------------------------------------------------------------
