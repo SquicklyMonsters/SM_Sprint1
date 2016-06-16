@@ -79,17 +79,17 @@ function setUpInventory()
  	for i = 1, #itemList do --loops to create each item on inventory
  		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
  		local y = startY + (spacingY * (math.floor((i-1) / rows)))
- 		local food = shopList[itemList[i]]
+ 		local item = shopList[itemList[i]]
  		inventory.items[i] = widget.newButton {
  			top = y, -- division of row
 	    	left = x, -- modulo of row
 	    	width = 50,
 	    	height = 50,
-	    	defaultFile = food.image,
+	    	defaultFile = item.image,
 	    	onEvent = itemClickedEvent,
  		}
 
- 		inventory.items[i].item = food
+ 		inventory.items[i].item = item
  		inventory.items[i].idx = i
  		local textOptions = {
 			text = itemQuantities[i],
