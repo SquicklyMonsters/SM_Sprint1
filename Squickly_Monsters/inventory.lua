@@ -25,7 +25,7 @@ function itemClickedEvent(event)
 		else
 			updateInventory()
 		end
-		food:eat()
+		food:use()
 	end
 
 end

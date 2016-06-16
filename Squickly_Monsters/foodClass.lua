@@ -25,7 +25,7 @@ end
 
 -------------------------------------------------
 
-function food:eat()
+function food:use()
 	-- Change to eating animation and wake up monster
 	changeToWakeupState()
     feedAnimation()

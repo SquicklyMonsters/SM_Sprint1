@@ -1,6 +1,5 @@
 require("savegame") -- For Testing
 local composer = require("composer")
-require("foodList")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 

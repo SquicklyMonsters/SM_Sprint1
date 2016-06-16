@@ -25,7 +25,7 @@ end
 
 -------------------------------------------------
 
-function toy:play()
+function toy:use()
 	-- Change to eating animation and wake up monster
 	changeToWakeupState()
     playAnimation()

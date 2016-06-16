@@ -6,6 +6,7 @@ local scene = composer.newScene()
 require("shop.background")
 require("shop.interactions")
 require("inventory.interactions")
+require("shopList")
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
