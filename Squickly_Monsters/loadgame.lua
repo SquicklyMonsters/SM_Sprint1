@@ -71,6 +71,11 @@ function loadInventoryData()
         itemQuantities = inTable[2]
         gold = inTable[3]
         platinum = inTable[4]
+    else
+        itemList = {}
+        itemQuantities = {}
+        gold = 0
+        platinum = 0
     end
 
     return itemList, itemQuantities, gold, platinum
