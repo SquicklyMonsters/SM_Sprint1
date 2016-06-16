@@ -43,9 +43,7 @@ local hygieneBar;
 local energyBar;
 local expBar;
 
-local hungerCloud;
-local energyCloud;
-
+local TamaLevelsText;
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
@@ -93,7 +91,7 @@ function scene:create( event )
     morePlayIcon = getMorePlayIcon()
     inventoryIcon = getInventoryIcon()
 
- 
+
     setAutoSaveRate(10000)
 
 
@@ -110,10 +108,13 @@ function scene:show( event )
         checkHunger(1)
         checkTired(1)
 
+				-- Get Tamagotchi Level
+
         -- Set up all Thought Clouds
         hungerThoughtCloud = getHungerThoughtCloud()
         tiredThoughtCloud = getTiredThoughtCloud()
-        
+				TamaLevelsText = getTamaLevelsText()
+
         -- Add display objects into group
         -- ============BACK===============
         back:insert(background)
@@ -139,6 +140,7 @@ function scene:show( event )
         front:insert(mostRecentPlayIcon2)
         front:insert(morePlayIcon)
 
+				front:insert(TamaLevelsText)
         front:insert(hungerThoughtCloud)
         front:insert(tiredThoughtCloud)
         -- ===============================
