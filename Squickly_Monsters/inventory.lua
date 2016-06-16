@@ -2,6 +2,8 @@ require("inventory.interactions")
 local widget = require("widget")
 local composer = require( "composer" )
 local scene = composer.newScene()
+require("shopList")
+require("itemClass")
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
@@ -16,7 +18,7 @@ local inventory;
 function itemClickedEvent(event)
 	-- Just gonna eat it right away for now
 	if event.phase == "ended" then
-		local food = event.target.item
+		local item = event.target.item
 		local idx = event.target.idx
 		local quantity = reduceQuantity(idx)
 		if quantity > 0 then
@@ -25,7 +27,7 @@ function itemClickedEvent(event)
 		else
 			updateInventory()
 		end
-		food:eat()
+		item:use(item.type)
 	end
 
 end
@@ -77,17 +79,17 @@ function setUpInventory()
  	for i = 1, #itemList do --loops to create each item on inventory
  		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
  		local y = startY + (spacingY * (math.floor((i-1) / rows)))
- 		local food = foodList[itemList[i]]
+ 		local item = shopList[itemList[i]]
  		inventory.items[i] = widget.newButton {
  			top = y, -- division of row
 	    	left = x, -- modulo of row
 	    	width = 50,
 	    	height = 50,
-	    	defaultFile = food.image,
+	    	defaultFile = item.image,
 	    	onEvent = itemClickedEvent,
  		}
 
- 		inventory.items[i].item = food
+ 		inventory.items[i].item = item
  		inventory.items[i].idx = i
  		local textOptions = {
 			text = itemQuantities[i],

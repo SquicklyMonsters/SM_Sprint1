@@ -6,6 +6,7 @@ local scene = composer.newScene()
 require("shop.background")
 require("shop.interactions")
 require("inventory.interactions")
+require("shopList")
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
@@ -47,8 +48,7 @@ function itemClickedEvent(event)
             else
                 addToInventory(item.name)
             end
-            decreaseGold(item.gold)
-            decreasePlatinum(item.platinum)
+            updateCurrency(-item.gold, -item.platinum)
         else
             buyNotice(2)
         end
@@ -82,14 +82,14 @@ function setUpShop()
     local spacingX = (inventory.width)/7.5
     local spacingY = (inventory.height)/3.75
 
-    local shopList = getFoodList()
+    local shopList = getShopList()
 
     inventory.items = {}
 
     for i = 1, #shopList do --loops to create each item on inventory
         local x = startX + (spacingX * ((i-1) - math.floor((i-1)/cols)*cols))
-        local y = startY + (spacingY * (math.floor((i-1) / cols))) 
-        local food = foodList[shopList[i]]
+        local y = startY + (spacingY * (math.floor((i-1) / cols)))
+        local food = shopList[shopList[i]]
 
         inventory.items[i] = widget.newButton {
             top = y, -- division of row
@@ -110,7 +110,6 @@ function setUpShop()
             width = 50, 
             height = 50
         }
-        print(textOptions.text)
 
         local textGold = display.newText(textOptions)
         textGold:setFillColor( 255/255, 223/255, 0 )
@@ -122,12 +121,10 @@ function setUpShop()
             width = 50, 
             height = 50
         }
-        print(textOptions.text)
 
         local textPlatinum = display.newText(textOptions)
         textPlatinum:setFillColor( 229/255, 228/255, 226/255 )
 
-        -- table.insert(itemTexts, i, text)
         inventory:insert(inventory.items[i])
         inventory:insert(textGold)
         inventory:insert(textPlatinum)

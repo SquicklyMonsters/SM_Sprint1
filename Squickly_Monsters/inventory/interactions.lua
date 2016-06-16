@@ -6,44 +6,21 @@ local itemTexts = {};
 local maxSize = 9;
 
 -- -------------------------------------------------------------------------------
-local goldMoney = 300 --default goldMoney
+--functions for currency
+local gold --default goldMoney
+local platinum--default platinumMoney
 
-
--- These really do what they say they do, pretty self explanatory
-
---FOR GOLD
-
-function increaseGold(goldAmount)
-	goldMoney = goldMoney + goldAmount
+function updateCurrency(goldCost, platinumCost)
+	gold = gold + goldCost
+	platinum = platinum + platinumCost
 end
 
-function decreaseGold(goldAmount)
-	goldMoney = goldMoney - goldAmount
+function sufficientGold(goldCost)
+	return (gold - goldCost) >= 0
 end
 
-function sufficientGold(goldAmount)
-	return (goldMoney - goldAmount) >= 0
-end
-
--- -----------------------------------------------------------------------
---FOR PLATINUM
-
-local platinumMoney = 0 --default platinumMoney
-
-function increasePlatinum(platinumAmount)
-	platinumMoney = platinumMoney + platinumAmount
-end
-
-function decreasePlatinum(platinumAmount)
-	platinumMoney = platinumMoney - platinumAmount
-end
-
-function sufficientPlatinum(platinumAmount)
-	if (platinumMoney - platinumAmount) >= 0 then
-		return true
-	else
-		return false
-	end
+function sufficientPlatinum(platinumCost)
+	return (platinum - platinumCost) >= 0
 end
 
 -- -------------------------------------------------------------------------------
@@ -74,7 +51,6 @@ function reduceQuantity(idx)
 
 end
 
-
 function removeItem(idx)
 	local new_itemList = {}
 	local new_itemQuantities = {}
@@ -100,8 +76,8 @@ function isInInventory(name)
 end
 
 function setUpInventoryData()
-	itemList, itemQuantities = loadInventoryData()
-	return itemList, itemQuantities
+	itemList, itemQuantities, gold, platinum = loadInventoryData()
+	return itemList, itemQuantities, gold, platinum
 end
 
 -- -------------------------------------------------------------------------------
@@ -115,11 +91,11 @@ function getItemQuantities()
 end
 
 function getCurrentGold()
-	return goldMoney
+	return gold
 end
 
 function getCurrentPlatinum()
-	return platinumMoney
+	return platinum
 end
 
 -- -------------------------------------------------------------------------------

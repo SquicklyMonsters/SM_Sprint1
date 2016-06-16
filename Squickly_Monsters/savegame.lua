@@ -40,7 +40,7 @@ function saveNeedsData()
     
     local outTable = {maxNeedsLevels, needsLevels}
     local contents = json.encode(outTable)
-    
+        
     writeFile(needsDataFile, contents)
     print("save")
 end
@@ -48,23 +48,13 @@ end
 function saveInventoryData()
     local itemList = getItemList()
     local itemQuantities = getItemQuantities()
+    local gold = getCurrentGold()
+    local platinum = getCurrentPlatinum()
 
-    local outTable = {itemList, itemQuantities}
+    local outTable = {itemList, itemQuantities, gold, platinum}
     local contents = json.encode(outTable)
 
 
     writeFile(inventoryDataFile, contents)
     print("save inv")
 end
-
--- function saveCurrency()
---     local gold = returnCurrentGold()
---     local platinum = returnCurrentPlatinum()
-
---     local outTable = {gold, platinum}
---     local contents = json.encode(outTable)
-
-
---     writeFile(currencyDataFile, contents)
---     print("save inv")
--- end

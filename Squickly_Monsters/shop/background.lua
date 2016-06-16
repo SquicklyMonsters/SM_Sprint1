@@ -1,5 +1,4 @@
 -------------------------------------------------------------------------------
-require('currency')
 -- Local variables go HERE
 
 local backgroundShop;
