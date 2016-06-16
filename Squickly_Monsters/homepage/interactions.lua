@@ -35,6 +35,9 @@ local hungerRate = -10;
 
 local isTouchAble;
 local inventoryIsShow = false;
+
+local TamaLevels = getTamaLevelsNum();
+local TamaLevelsText = getTamaLevelsText();
 -- -------------------------------------------------------------------------------
 
 function cacheVariables()
@@ -271,17 +274,23 @@ function inventoryClicked(event)
     end
 end
 
-function giveTakeCareEXP(expGain, needBar)
-    if needBar:getProgress() < 0.9 then
-      changeNeedsLevel("exp", expGain)
+function giveTakeCareEXP(expGain, needBar) -- Unless the NeedBar is less than 90%,
+    if needBar:getProgress() < 0.9 then     -- this function give exp to our tamagotchi
+      increaseEXP(expGain)
     end
 end
 
-function increaseEXP(expGain)
+function increaseEXP(expGain) -- give exp and check the bar that Level up or not
     changeNeedsLevel("exp", expGain)
-    -- if needBars.exp:getProgress() >= 1 then
-      --  levelUp() level up function that will be implemented later
-      -- end
+    if getExpBar():getProgress() >= 1 then
+       levelUp()
+      end
+end
+
+function levelUp()  -- Level up then change text and set exp bar to = 0
+    TamaLevels = TamaLevels + 1
+    TamaLevelsText.text = "Level: " .. TamaLevels
+    setNeedsLevel("exp", 0)
 end
 -- -------------------------------------------------------------------------------
 -- Sleep / Wakeup functions
@@ -307,9 +316,6 @@ function cancelEnergyLoop()
         timer.cancel(sleepWakeID)
     end
 end
-
--- function addExpTakeCare()
-    -- if
 
 -- -------------------------------------------------------------------------------
 -- Add All Event Listeners Here
