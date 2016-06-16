@@ -2,7 +2,6 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 require( "squicklyrun.sr_background" )
-require("currency")
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
