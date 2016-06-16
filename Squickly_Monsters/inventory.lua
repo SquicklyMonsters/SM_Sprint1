@@ -2,8 +2,8 @@ require("inventory.interactions")
 local widget = require("widget")
 local composer = require( "composer" )
 local scene = composer.newScene()
-require("foodList")
-require("foodClass")
+require("shopList")
+require("itemClass")
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
@@ -27,7 +27,6 @@ function itemClickedEvent(event)
 		else
 			updateInventory()
 		end
-		item = foodList[item.name]
 		item:use(item.type)
 	end
 
@@ -80,7 +79,7 @@ function setUpInventory()
  	for i = 1, #itemList do --loops to create each item on inventory
  		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
  		local y = startY + (spacingY * (math.floor((i-1) / rows)))
- 		local food = foodList[itemList[i]]
+ 		local food = shopList[itemList[i]]
  		inventory.items[i] = widget.newButton {
  			top = y, -- division of row
 	    	left = x, -- modulo of row

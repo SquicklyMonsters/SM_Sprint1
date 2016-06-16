@@ -2,14 +2,14 @@ require("homepage.UI")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
-local food = {};
-local food_mt = { __index = food }; -- metatable
+local item = {};
+local item_mt = { __index = item }; -- metatable
 
 -- -------------------------------------------------------------------------------
 
 -- constructor
-function food.new(name, type, gold, platinum, hunger, happiness, hygiene, energy, exp, image)
-	local newFood = {
+function item.new(name, type, gold, platinum, hunger, happiness, hygiene, energy, exp, image)
+	local newItem = {
 		name = name,
 		type = type,
 		gold = gold,
@@ -21,12 +21,12 @@ function food.new(name, type, gold, platinum, hunger, happiness, hygiene, energy
 		expAffect = exp,
 		image = image
 	}
-	return setmetatable(newFood, food_mt)
+	return setmetatable(newItem, item_mt)
 end
 
 -------------------------------------------------
 
-function food:use(type)
+function item:use(type)
 	-- Change to eating animation and wake up monster
 	print(type)
 	changeToWakeupState()
@@ -53,4 +53,4 @@ end
 
 -------------------------------------------------
 
-return food
+return item
