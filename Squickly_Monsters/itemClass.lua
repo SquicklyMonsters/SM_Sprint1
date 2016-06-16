@@ -32,9 +32,13 @@ function item:use(type)
 	changeToWakeupState()
 
 	if type == "food" then
+		-- Set animation to eating
 		feedAnimation()
 		giveTakeCareEXP(self.expAffect, getHungerBar())
+		-- Check if Thought Clouds still need to be shown
+		checkHunger(1)
 	elseif type == "toy" then
+		-- Set animation to playing
 		playAnimation()
 		giveTakeCareEXP(self.expAffect, getHappinessBar())
 	end
@@ -44,9 +48,6 @@ function item:use(type)
 	changeNeedsLevel("happiness", self.happinessAffect)
 	changeNeedsLevel("hygiene", self.hygieneAffect)
 	changeNeedsLevel("energy", self.energyAffect)
-
-	-- Check if Thought Clouds still need to be shown
-	-- checkHunger(1)
 
 	print("Use " .. self.name .. "!!")
 end

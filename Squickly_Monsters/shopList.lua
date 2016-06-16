@@ -1,11 +1,11 @@
 item = require("itemClass")
 
--- -------------------------------------------------------------------------------
--- -------------------------------------------------------------------------------
-
 local iconsFoodDir = "img/icons/food/"
+local iconsToyDir = "img/icons/toys/"
+
 shopList = {"burger", "noodles", "icecream", "fish", "ball", "chucky", "cards", "teddybear"};
 
+-- -------------------------------------------------------------------------------
 -- -------------------------------------------------------------------------------
 
 -- itemname = food.new(name, gold, platinum, hunger, happiness, hygiene, energy, exp, image)
@@ -19,14 +19,6 @@ local fish = item.new("fish", "food", 30, 0, 250, 50, 0, 0, 0, iconsFoodDir .. "
 shopList.fish = fish
 
 -- -------------------------------------------------------------------------------
-
--- -------------------------------------------------------------------------------
--- -------------------------------------------------------------------------------
-
--- -------------------------------------------------------------------------------
-
-local iconsToyDir = "img/icons/toys/"
-
 -- -------------------------------------------------------------------------------
 
 -- itemname = food.new(name, gold, platinum, hunger, happiness, hygiene, energy, exp, image)
@@ -38,6 +30,9 @@ local cards = item.new("cards", "toy", 150, 0, 0, 250, 0, 0, 0, iconsToyDir .. "
 shopList.cards = cards
 local teddybear = item.new("teddybear", "toy", 350, 0, 0, 300, 0, 50, 0, iconsToyDir .. "teddybear.png")
 shopList.teddybear = teddybear
+
+-- -------------------------------------------------------------------------------
+-- -------------------------------------------------------------------------------
 
 function getShopList()
 	return shopList
