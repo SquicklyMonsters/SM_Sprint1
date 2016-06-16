@@ -284,7 +284,7 @@ function increaseEXP(expGain) -- give exp and check the bar that Level up or not
     changeNeedsLevel("exp", expGain)
     if getExpBar():getProgress() >= 1 then
        levelUp()
-      end
+    end
 end
 
 function levelUp()  -- Level up then change text and set exp bar to = 0
