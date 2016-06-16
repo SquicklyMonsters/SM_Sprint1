@@ -2,15 +2,16 @@ require("homepage.UI")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
-local food = {};
-local food_mt = { __index = food }; -- metatable
+local item = {};
+local item_mt = { __index = item }; -- metatable
 
 -- -------------------------------------------------------------------------------
 
 -- constructor
-function food.new(name, gold, platinum, hunger, happiness, hygiene, energy, exp, image)
-	local newFood = {
+function item.new(name, type, gold, platinum, hunger, happiness, hygiene, energy, exp, image)
+	local newItem = {
 		name = name,
+		type = type,
 		gold = gold,
 		platinum = platinum,
 		hungerAffect = hunger,
@@ -20,29 +21,37 @@ function food.new(name, gold, platinum, hunger, happiness, hygiene, energy, exp,
 		expAffect = exp,
 		image = image
 	}
-	return setmetatable(newFood, food_mt)
+	return setmetatable(newItem, item_mt)
 end
 
 -------------------------------------------------
 
-function food:eat()
+function item:use(type)
 	-- Change to eating animation and wake up monster
+	print(type)
 	changeToWakeupState()
-    feedAnimation()
+
+	if type == "food" then
+		-- Set animation to eating
+		feedAnimation()
+		giveTakeCareEXP(self.expAffect, getHungerBar())
+		-- Check if Thought Clouds still need to be shown
+		checkHunger(1)
+	elseif type == "toy" then
+		-- Set animation to playing
+		playAnimation()
+		giveTakeCareEXP(self.expAffect, getHappinessBar())
+	end
 
     -- Change needs bar according to food affect
 	changeNeedsLevel("hunger", self.hungerAffect)
 	changeNeedsLevel("happiness", self.happinessAffect)
 	changeNeedsLevel("hygiene", self.hygieneAffect)
 	changeNeedsLevel("energy", self.energyAffect)
-	giveTakeCareEXP(self.expAffect, getHungerBar())
 
-	-- Check if Thought Clouds still need to be shown
-	checkHunger(1)
-
-	print("Eat " .. self.name .. "!!")
+	print("Use " .. self.name .. "!!")
 end
 
 -------------------------------------------------
 
-return food
+return item
