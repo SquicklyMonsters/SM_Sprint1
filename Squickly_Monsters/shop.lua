@@ -6,6 +6,7 @@ local scene = composer.newScene()
 require("shop.background")
 require("shop.interactions")
 require("inventory.interactions")
+require("shopList")
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
@@ -46,10 +47,8 @@ function itemClickedEvent(event)
                 increaseQuantity(idx)
             else
                 addToInventory(item.name)
-                -- addToInventory(item)
             end
             updateCurrency(-item.gold, -item.platinum)
-            -- updatePlatinum()
         else
             buyNotice(2)
         end
@@ -83,14 +82,14 @@ function setUpShop()
     local spacingX = (inventory.width)/7.5
     local spacingY = (inventory.height)/3.75
 
-    local shopList = getFoodList()
+    local shopList = getShopList()
 
     inventory.items = {}
 
     for i = 1, #shopList do --loops to create each item on inventory
         local x = startX + (spacingX * ((i-1) - math.floor((i-1)/cols)*cols))
-        local y = startY + (spacingY * (math.floor((i-1) / cols))) 
-        local food = foodList[shopList[i]]
+        local y = startY + (spacingY * (math.floor((i-1) / cols)))
+        local food = shopList[shopList[i]]
 
         inventory.items[i] = widget.newButton {
             top = y, -- division of row
@@ -127,54 +126,6 @@ function setUpShop()
         textPlatinum:setFillColor( 229/255, 228/255, 226/255 )
 
         inventory:insert(inventory.items[i])
-        inventory:insert(textGold)
-        inventory:insert(textPlatinum)
-    end
-
-    local shopList = getToyList()
-    print("NAME")
-    print(shopList["teddybear"].name)
-
-    for i = 1, #shopList do --loops to create each item on inventory
-        local x = startX + (spacingX * (((i + #foodList)-1) - math.floor(((i + #foodList)-1)/cols)*cols))
-        local y = startY + (spacingY * (math.floor(((i + #foodList)-1) / cols))) 
-        local toy = toyList[shopList[i]]
-
-        inventory.items[(i + #foodList)] = widget.newButton {
-            top = y, -- division of row
-            left = x, -- modulo of row
-            width = 50,
-            height = 50,
-            defaultFile = toy.image,
-            onEvent = itemClickedEvent,
-        }
-
-        inventory.items[(i + #foodList)].item = toy
-        inventory.items[(i + #foodList)].idx = i + #foodList
-
-        local textOptions = {
-            text = toy.gold, 
-            x = x + 5,
-            y = y + 65, 
-            width = 50, 
-            height = 50
-        }
-
-        local textGold = display.newText(textOptions)
-        textGold:setFillColor( 255/255, 223/255, 0 )
-
-        local textOptions = {
-            text = toy.platinum, 
-            x = x + 80,
-            y = y + 65, 
-            width = 50, 
-            height = 50
-        }
-
-        local textPlatinum = display.newText(textOptions)
-        textPlatinum:setFillColor( 229/255, 228/255, 226/255 )
-
-        inventory:insert(inventory.items[(i + #foodList)])
         inventory:insert(textGold)
         inventory:insert(textPlatinum)
     end
