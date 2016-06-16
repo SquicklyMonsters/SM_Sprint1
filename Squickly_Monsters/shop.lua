@@ -88,7 +88,7 @@ function setUpShop()
 
     for i = 1, #shopList do --loops to create each item on inventory
         local x = startX + (spacingX * ((i-1) - math.floor((i-1)/cols)*cols))
-        local y = startY + (spacingY * (math.floor((i-1) / cols))) 
+        local y = startY + (spacingY * (math.floor((i-1) / cols)))
         local food = shopList[shopList[i]]
 
         inventory.items[i] = widget.newButton {
