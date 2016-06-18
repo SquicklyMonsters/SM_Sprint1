@@ -1,5 +1,6 @@
 require("savegame") -- For Testing
 local composer = require("composer")
+require("shopList")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
@@ -201,7 +202,7 @@ function mostRecentFood1Clicked(event)
         if event.phase == "ended" then
         
             hideShowAllIcons(foodIconsList)
-            foodList.burger:eat()
+            shopList.burger:use(shopList.burger.type)
         end
     end
 end
@@ -210,7 +211,7 @@ function mostRecentFood2Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(foodIconsList)
-            foodList.fish:eat()
+            shopList.burger:use(shopList.fish.type)
         end
     end
 end

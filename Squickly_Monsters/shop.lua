@@ -89,22 +89,22 @@ function setUpShop()
     for i = 1, #shopList do --loops to create each item on inventory
         local x = startX + (spacingX * ((i-1) - math.floor((i-1)/cols)*cols))
         local y = startY + (spacingY * (math.floor((i-1) / cols)))
-        local food = shopList[shopList[i]]
+        local item = shopList[shopList[i]]
 
         inventory.items[i] = widget.newButton {
             top = y, -- division of row
             left = x, -- modulo of row
             width = 50,
             height = 50,
-            defaultFile = food.image,
+            defaultFile = item.image,
             onEvent = itemClickedEvent,
         }
 
-        inventory.items[i].item = food
+        inventory.items[i].item = item
         inventory.items[i].idx = i
 
         local textOptions = {
-            text = food.gold, 
+            text = item.gold, 
             x = x + 5,
             y = y + 65, 
             width = 50, 
@@ -115,7 +115,7 @@ function setUpShop()
         textGold:setFillColor( 255/255, 223/255, 0 )
 
         local textOptions = {
-            text = food.platinum, 
+            text = item.platinum, 
             x = x + 80,
             y = y + 65, 
             width = 50, 

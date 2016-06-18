@@ -2,6 +2,7 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 require( "squicklyrun.sr_background" )
+require("inventory.interactions")
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
@@ -66,7 +67,11 @@ end
 
 function scene:destroy( event )
 	--reward
-	increaseGold(getScore())
+	print (getScore())
+	if getScore() ~= nil then
+		print("in here!")
+		updateCurrency(getScore(), 0)
+	end
 	--exp
 	changeNeedsLevel("exp", getScore()*10)
 	changeNeedsLevel("energy", -getScore()*10)
