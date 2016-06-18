@@ -149,6 +149,7 @@ end
 function feedButtonClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
+            feedAnimation()
             hideShowAllIcons(iconsList)
             hideShowAllIcons(foodIconsList)
         end
@@ -188,6 +189,7 @@ end
 function playButtonClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
+            playAnimation()
             hideShowAllIcons(iconsList)
             hideShowAllIcons(playIconsList)
         end
@@ -197,6 +199,7 @@ end
 function mostRecentFood1Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
+        
             hideShowAllIcons(foodIconsList)
             foodList.burger:eat()
         end
