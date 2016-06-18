@@ -128,7 +128,7 @@ end
 
 function sadAnimation()
     setMonsterSequence("sad")
-    timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
+    -- timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
 end
 
 function feedAnimation()
