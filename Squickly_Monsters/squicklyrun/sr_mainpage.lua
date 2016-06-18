@@ -67,8 +67,9 @@ end
 
 function scene:destroy( event )
 	--reward
-	-- print (getScore())
+	print (getScore())
 	if getScore() ~= nil then
+		print("in here!")
 		updateCurrency(getScore(), 0)
 	end
 	--exp

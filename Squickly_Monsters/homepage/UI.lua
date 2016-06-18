@@ -30,9 +30,21 @@ local hungerRate = -10;
 local energyRate = -10;
 -- local hungerThoughtCloud;
 -- local energyThoughtCloud;
+local TamaLevels = 1;
+local TamaLevelsText
 -- -------------------------------------------------------------------------------
--- Set up needs bar
 
+-- Display level text
+TamaLevelsText = display.newText({
+  text = "Level: " .. TamaLevels,
+  x = 610,
+  y = 40,
+  font = native.systemFontBold,
+  fontSize = 18,
+  align = "right",});
+TamaLevelsText:setFillColor( 1, 0, 0 ) -- fill the text red
+
+-- Set up needs bar
 function setUpNeedsBar(fileName, left)
     local options = {
         width = 192,
@@ -121,7 +133,7 @@ function setUpAllIcons()
 
     inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
 
-    
+
     hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
     tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
     thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
@@ -176,7 +188,7 @@ function showThoughtCloud(idx)
 end
 
 function hideThoughtCloud(idx)
-    transition.fadeOut( thoughtClouds[idx], { time=1500 } )    
+    transition.fadeOut( thoughtClouds[idx], { time=1500 } )
 end
 
 function checkHungerEventHandler(event)
@@ -207,9 +219,9 @@ function checkTiredEventHandler(event)
     if needsBars.energy:getProgress() < 0.4 then
         showThoughtCloud(2)
     end
-    -- Later will make predict time to check if energy is over 40% 
+    -- Later will make predict time to check if energy is over 40%
     -- due to fix rate of increasing in energy when sleep
-    checkTired() 
+    checkTired()
 end
 
 function checkTired(delay)
@@ -346,3 +358,10 @@ function getTiredThoughtCloud()
     return thoughtClouds[2]
 end
 
+function getTamaLevelsText()
+    return TamaLevelsText
+end
+
+function getTamaLevelsNum()
+    return TamaLevels
+end
