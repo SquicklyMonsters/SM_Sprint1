@@ -181,14 +181,15 @@ function scene:create( event )
 
 	-- Set background
     setUpBackground()
+    local backgroundShop;
     backgroundShop = getBackground()
 
     -- Set Shop
+    local shop;
     shop = setUpShop()
 
     -- Set up all Icons
     inventoryIcon = getInventoryIcon()
-
     notifications = setUpNotifications()
 
 

@@ -1,5 +1,7 @@
 -- -----------------------------------------------------------------------------------------------------------------
 -- Local variables go Here
+require('inventory.interactions')
+require('squicklyrun.sr_interactions')
 
 --adds an image to our game centered at x and y coordinates
 local backbackground;
@@ -18,7 +20,7 @@ local bossSpits;
 --main display groups
 local screen;
 local player;
- 
+
 --setup some variables that we will use to position the ground
 local groundMin;
 local groundMax;
@@ -38,23 +40,27 @@ local score;
 local scoreText;
 local gameOver;
 
--- -----------------------------------------------------------------------------------------------------------------
 
-function getScreenLayer()
-	return screen
-end
+--local variables required for each file
+-- sr_interactions.lua
+-- for get functions
+local screen;
+local player;
+local score;
+-- for others
 
-function getPlayerLayer()
-	return player
-end
 
-function getScore()
-	return score
-end
+
+
+-- SR_INTERACTIONS.LUA--------------------------------------------------------------------------------------------------
+
+-- moved
 
 -- -----------------------------------------------------------------------------------------------------------------
 --Setup functions
 
+
+-- SR_BACKGROUND.LUA  ----------------------------------------------------------------------------------------------
 function setupBackground()
 	screen = display.newGroup()
 
@@ -75,543 +81,50 @@ function setupBackground()
 	backgroundnear2.x = 760
 	backgroundnear2.y = 160
 
-	screen:insert(backbackground)
-	screen:insert(backgroundfar)
-	screen:insert(backgroundnear1)
-	screen:insert(backgroundnear2)
+
 end
 
-function setupGround()
-	blocks = display.newGroup()
-	--setup some variables that we will use to position the ground
-	groundMin = 420
-	groundMax = 340
-	groundLevel = groundMin
-	speed = 5
-
-	--Event identifiers
-	inEvent = 0
-	eventRun = 0
-
-	--this for loop will generate all of your ground pieces, we are going to
-	--make 8 in all.
-	for a = 1, 8, 1 do
-		local newBlock
-		isDone = false
-		numGen = math.random(2) --get a random number between 1 and 2
-		if(numGen == 1 and isDone == false) then
-			newBlock = display.newImage("img/squicklyrun/ground1.png")
-			isDone = true
-		end
-	 
-		if(numGen == 2 and isDone == false) then
-			newBlock = display.newImage("img/squicklyrun/ground2.png")
-			isDone = true
-		end
-	 
-		newBlock.name = ("block" .. a) -- name to keep track of blocks
-		newBlock.id = a
-		 
-		--because a is a variable that is being changed each run we can assign
-		--values to the block based on a. In this case we want the x position to
-		--be positioned the width of a block apart.
-		newBlock.x = (a * 79) - 79
-		newBlock.y = groundLevel
-		blocks:insert(newBlock)
-	end
-	screen:insert(blocks)
+function getBackbackground()
+    return backbackground
 end
 
-function setupScoreAndGameOver()
-	score = 0
-
-	gameOver = display.newImage("img/squicklyrun/gameOver.png")
-	gameOver.name = "gameOver"
-	gameOver.x = 0
-	gameOver.y = 500
-
-	local options = {
-		text = "score: " .. score,
-		x = 50,
-		y = 30,
-		font = native.systemFontBold,   
-		fontSize = 18,
-		align = "left",
-	}
-	scoreText = display.newText(options);
-	screen:insert(gameOver)
-	screen:insert(scoreText)
+function getBackgroundfar()
+    return backgroundfar
 end
 
-function setupSprite()
-	local imgsheetSetup = {
-		width = 100,
-		height = 100,
-		numFrames = 3
-	}
-	local spriteSheet = graphics.newImageSheet("img/squicklyrun/heroSpriteSheet.png", imgsheetSetup);
-	
-	local sequenceData = {
-		{ name = "running", start = 1, count = 6, time = 600, loopCount = 0},
-		{ name = "jumping", start = 7, count = 7, time = 1, loopCount = 1 }
-	}
-	
-	--Hero Animation
-	hero = display.newSprite(spriteSheet, sequenceData);
-	hero:setSequence("running")
-	hero:play()
-
-	-- Hero Attributes
-	hero.x = 60
-	hero.y = 200
-	hero.gravity = -6
-	hero.accel = 0
-	hero.isAlive = true
-
-	--rectangle used for our collision detection it will always be in front of the hero sprite
-	--that way we know if the hero hit into anything
-	collisionRect = display.newRect(hero.x + 36, hero.y, 1, 70)
-	collisionRect.strokeWidth = 1
-	collisionRect:setFillColor(140, 140, 140)
-	collisionRect:setStrokeColor(180, 180, 180)
-	collisionRect.alpha = 0
-
-	screen:insert(hero)
-	screen:insert(collisionRect)
+function getBackgroundnear1()
+    return backgroundnear1
 end
 
-function setupObstaclesAndEnemies()
-	ghosts = display.newGroup()
-	spikes = display.newGroup()
-	blasts = display.newGroup()
-	boss = display.newGroup()
-	bossSpits = display.newGroup()
-
-	--create ghosts and set their position to be off-screen
-	for a = 1, 3, 1 do
-		local ghost = display.newImage("img/squicklyrun/ghost.png")
-		ghost.name = ("ghost" .. a)
-		ghost.id = a
-		ghost.x = 800
-		ghost.y = 600
-		ghost.speed = 0
-			--variable used to determine if they are in play or not
-		ghost.isAlive = false
-			--make the ghosts transparent and more... ghostlike!
-		ghost.alpha = .5
-		ghosts:insert(ghost)
-	end
-	--create spikes
-	for a = 1, 3, 1 do
-		local spike = display.newImage("img/squicklyrun/spikeBlock.png")
-		spike.name = ("spike" .. a)
-		spike.id = a
-		spike.x = 900
-		spike.y = 500
-		spike.isAlive = false
-		spikes:insert(spike)
-	end
-	--create blasts
-	for a=1, 5, 1 do
-		local blast = display.newImage("img/squicklyrun/blast.png")
-		blast.name = ("blast" .. a)
-		blast.id = a
-		blast.x = 800
-		blast.y = 500
-		blast.isAlive = false
-		blasts:insert(blast)
-	end
-
-	boss = display.newImage("img/squicklyrun/boss.png", 150, 150)
-	boss.x = 300
-	boss.y = 550
-	boss.isAlive = false
-	boss.health = 10
-	boss.goingDown = true
-	boss.canShoot = false
-	--spitCycle is the only thing that is not self explantory
-	--every time we move a ground piece back to the right of the
-	--screen we update the score by one. Now we also update the
-	--spite cycle. Every time spitCycle is a multiple of three
-	--the boss will shoot his projectile. This just keeps track
-	--of that for us!
-	boss.spitCycle = 0
-	for a=1, 3, 1 do
-		local bossSpit = display.newImage("img/squicklyrun/bossSpit.png")
-		bossSpit.x = 400
-		bossSpit.y = 550
-		bossSpit.isAlive = false
-		bossSpit.speed = 3
-		bossSpits:insert(bossSpit)
-	end
-
-	screen:insert(spikes)
-	screen:insert(blasts)
-	screen:insert(ghosts)
-	screen:insert(boss)
-	screen:insert(bossSpits)
+function getBackgroundnear2()
+    return backgroundnear2
 end
 
+-- SR_INTERACTIONS.LUA -----------------------------------------------------------------------------------------------------
+
+-- moved
+
+-- SR_UPDATE.LUA ------------------------------------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------------------------------------------
 --Update functions
+-- moved
 
-function update( event )
-	updateBackgrounds()
-	updateSpeed()
-	updateHero()
-	updateBlocks()
-	updateBlasts()
-	updateSpikes()
-	updateGhosts()
-	updateBossSpit()
-	if(boss.isAlive == true) then
-		updateBoss()
-	end
-	checkCollisions()
+-- DON'T KNOW WHERE THIS GOES
+
+function gameOverScreen()
+	--stop the hero
+	speed = 0
+	hero.isAlive = false
+	--this simply pauses the current animation
+	hero:pause()
+	gameOver.x = display.contentWidth*.65
+	gameOver.y = display.contentHeight/2
 end
 
-function updateBackgrounds()
-	--far background movement
-	backgroundfar.x = backgroundfar.x - (speed/55)
-	
-	--near background movement
-	backgroundnear1.x = backgroundnear1.x - (speed/5)
-	if(backgroundnear1.x < -239) then
-		backgroundnear1.x = 760
-	end
-	
-	backgroundnear2.x = backgroundnear2.x - (speed/5)
-	if(backgroundnear2.x < -239) then
-		backgroundnear2.x = 760
-	end
-end
 
-function updateSpeed()
-	speed = speed + .0005
-end
+-- SR_COLLISIONS.LUA----------------------------------------------------------------------------------------------------
 
-function updateHero()
-	--if our hero is jumping then switch to the jumping animation
-	--if not keep playing the running animation
-	if(hero.isAlive == true) then
-		if(onGround) then
-			if(wasOnGround) then
-
-			else
-				hero:setSequence("running")
-				hero:play()
-			end
-		else
-			hero:setSequence("jumping")
-			hero:play()
-		end
-		if(hero.accel > 0) then
-			hero.accel = hero.accel - 1
-		end
-		--update the heros position accel is used for our jump and
-		--gravity keeps the hero coming down. You can play with those 2 variables
-		--to make lots of interesting combinations of gameplay like 'low gravity' situations
-		hero.y = hero.y - hero.accel
-		hero.y = hero.y - hero.gravity
-	 else
-		hero:rotate(5)
-	 end
-	--update the collisionRect to stay in front of the hero
-	collisionRect.y = hero.y
-end
-
-function updateBlocks()
-	for a = 1, blocks.numChildren, 1 do
-		if(a > 1) then
-			newX = (blocks[a - 1]).x + 79
-		else
-			newX = (blocks[8]).x + 79 - speed
-		end
-		if((blocks[a]).x < -40) then
-			--only update the score if the boss is not alive
-			if (boss.isAlive == false) then
-				score = score + 1
-				scoreText.text = "score: " .. score
-			else
-				--have the boss spit every three block passes
-				boss.spitCycle = boss.spitCycle + 1
-				if(boss.y > 100 and boss.y < 300 and boss.spitCycle%3 == 0) then
-					for a=1, bossSpits.numChildren, 1 do
-						if(bossSpits[a].isAlive == false) then
-							bossSpits[a].isAlive = true
-							bossSpits[a].x = boss.x - 35
-							bossSpits[a].y = boss.y + 55
-							bossSpits[a].speed = math.random(5,10)
-							break
-						end
-					end
-				end
-			end
-			if(inEvent == 15) then
-				groundLevel = groundMin
-			end
-
-			if(inEvent == 11) then
-				(blocks[a]).x, (blocks[a]).y = newX, 600
-			else
-				(blocks[a]).x, (blocks[a]).y = newX, groundLevel
-			end
-
-			--by setting up the spikes this way we are guaranteed to
-			--only have 3 spikes out at most at a time.
-			if(inEvent == 12) then
-				for a=1, spikes.numChildren, 1 do
-					if(spikes[a].isAlive == true) then
-						--do nothing
-					else
-						spikes[a].isAlive = true
-						spikes[a].y = groundLevel - 200
-						spikes[a].x = newX
-						break
-					end
-				end
-			end
-			checkEvent()
-		else
-			(blocks[a]):translate(speed * -1, 0)
-		end
-	end
-end
-
-function updateBlasts()
-	--for each blast that we instantiated check to see what it is doing
-	for a = 1, blasts.numChildren, 1 do
-		--if that blast is not in play we don't need to check anything else
-		if(blasts[a].isAlive == true) then
-			(blasts[a]):translate(5, 0)
-			--if the blast has moved off of the screen, then kill it and return it to its original place
-			if(blasts[a].x > 550) then
-				blasts[a].x = 800
-				blasts[a].y = 500
-				blasts[a].isAlive = false
-			end
-		end
-		--check for collisions with the boss
-		if(boss.isAlive == true) then
-			if(blasts[a].y - 25 > boss.y - 120 and blasts[a].y + 25 < boss.y + 120 and boss.x - 40 < blasts[a].x + 25 and boss.x + 40 > blasts[a].x - 25) then
-				blasts[a].x = 800
-				blasts[a].y = 500
-				blasts[a].isAlive = false
-				--everything is the same only 1 hit will not kill the boss so just take a little health away
-				boss.health = boss.health - 1
-			end
-		end
-		--check for collisions between the blasts and the bossSpit
-		for b = 1, bossSpits.numChildren, 1 do
-			if(bossSpits[b].isAlive == true) then
-				if(blasts[a].y - 20 > bossSpits[b].y - 120 and blasts[a].y + 20 < bossSpits[b].y + 120 and bossSpits[b].x - 25 < blasts[a].x + 20 and bossSpits[b].x + 25 > blasts[a].x - 20) then
-					blasts[a].x = 800
-					blasts[a].y = 500
-					blasts[a].isAlive = false
-					bossSpits[b].x = 400
-					bossSpits[b].y = 550
-					bossSpits[b].isAlive = false
-					bossSpits[b].speed = 0
-				end
-			end
-		end
-		--check for collisions between the blasts and the spikes
-		for b = 1, spikes.numChildren, 1 do
-			if(spikes[b].isAlive == true) then
-				if(blasts[a].y - 25 > spikes[b].y - 120 and blasts[a].y + 25 < spikes[b].y + 120 and spikes[b].x - 40 < blasts[a].x + 25 and spikes[b].x + 40 > blasts[a].x - 25) then
-					blasts[a].x = 800
-					blasts[a].y = 500
-					blasts[a].isAlive = false
-					spikes[b].x = 900
-					spikes[b].y = 500
-					spikes[b].isAlive = false
-				end
-			end
-		end
- 
-		--check for collisions between the blasts and the ghosts
-		for b = 1, ghosts.numChildren, 1 do
-			if(ghosts[b].isAlive == true) then
-				if(blasts[a].y - 25 > ghosts[b].y - 120 and blasts[a].y + 25 < ghosts[b].y + 120 and ghosts[b].x - 40 < blasts[a].x + 25 and ghosts[b].x + 40 > blasts[a].x - 25) then
-					blasts[a].x = 800
-					blasts[a].y = 500
-					blasts[a].isAlive = false
-					ghosts[b].x = 800
-					ghosts[b].y = 600
-					ghosts[b].isAlive = false
-					ghosts[b].speed = 0
-				end
-			end
-		end
-	end
-end
-
---check to see if the spikes are alive or not, if they are
---then update them appropriately
-function updateSpikes()
-	for a = 1, spikes.numChildren, 1 do
-		if(spikes[a].isAlive == true) then
-			(spikes[a]):translate(speed * -1, 0)
-			if(spikes[a].x < -80) then
-				spikes[a].x = 900
-				spikes[a].y = 500
-				spikes[a].isAlive = false
-			end
-		end
-	end
-end
-
---update the ghosts if they are alive
-function updateGhosts()
-	for a = 1, ghosts.numChildren, 1 do
-		if(ghosts[a].isAlive == true) then
-			(ghosts[a]):translate(speed * -1, 0)
-			if(ghosts[a].y > hero.y) then
-				ghosts[a].y = ghosts[a].y - 1
-			end
-			if(ghosts[a].y < hero.y) then
-				ghosts[a].y = ghosts[a].y + 1
-			end
-			if(ghosts[a].x < -80) then
-				ghosts[a].x = 800
-				ghosts[a].y = 600
-				ghosts[a].speed = 0
-				ghosts[a].isAlive = false;
-			end
-		end
-	end
-end
-
-function updateBoss()
-	--check to make sure that the boss hasn't been killed
-	if(boss.health > 0) then
-		--check to see if the boss needs to change direction
-		if(boss.y > 210) then
-			boss.goingDown = false
-		end
-		if(boss.y < 100) then
-			boss.goingDown = true
-		end
-		if(boss.goingDown) then
-			boss.y = boss.y + 2
-		else
-			boss.y = boss.y - 2
-		end
-	else
-		--if the boss has been killed make him slowly disappear
-		boss.alpha = boss.alpha - .01
-	end
-	--once the hero has been killed and disappear officially
-	--kill him off and reset him back to where he was
-	if(boss.alpha <= 0) then
-		boss.isAlive = false
-		boss.x = 300
-		boss.y = 550
-		boss.alpha = 1
-		boss.health = 10
-		inEvent = 0
-		boss.spitCycle = 0
-	end
-end
-
-function updateBossSpit()
-	for a = 1, bossSpits.numChildren, 1 do
-		if(bossSpits[a].isAlive) then
-			(bossSpits[a]):translate(speed * -1, 0)
-			if(bossSpits[a].y > hero.y) then
-				bossSpits[a].y = bossSpits[a].y - 1
-			end
-			if(bossSpits[a].y < hero.y) then
-				bossSpits[a].y = bossSpits[a].y + 1
-			end
-			if(bossSpits[a].x < -80) then
-				bossSpits[a].x = 400
-				bossSpits[a].y = 550
-				bossSpits[a].speed = 0
-				bossSpits[a].isAlive = false;
-			end
-		end
-	end
-end
-
-function checkCollisions()
-	wasOnGround = onGround
-	--checks to see if the collisionRect has collided with anything.
-	for a = 1, blocks.numChildren, 1 do
-		if(collisionRect.y - 10 > blocks[a].y - 170 and blocks[a].x - 40 < collisionRect.x and blocks[a].x + 40 > collisionRect.x) then
-			speed = 0
-			hero.isAlive = false
-			--this simply pauses the current animation
-			hero:pause()
-
-			gameOver.x = display.contentWidth*.65
-			gameOver.y = display.contentHeight/2
-		end
-	end
-	--stop the game if the hero runs into a spike wall
-	for a = 1, spikes.numChildren, 1 do
-		if(spikes[a].isAlive == true) then
-			if(collisionRect.y - 10> spikes[a].y - 170 and spikes[a].x - 40 < collisionRect.x and spikes[a].x + 40 > collisionRect.x) then
-				--stop the hero
-				speed = 0
-				hero.isAlive = false
-				--this simply pauses the current animation
-				hero:pause()
-
-
-				
-
-				gameOver.x = display.contentWidth*.65
-				gameOver.y = display.contentHeight/2
-			end
-		end
-	end
-	--make sure the player didn't get hit by a ghost!
-	for a = 1, ghosts.numChildren, 1 do
-		if(ghosts[a].isAlive == true) then
-			if(((  ((hero.y-ghosts[a].y))<70) and ((hero.y - ghosts[a].y) > -70)) and (ghosts[a].x - 40 < collisionRect.x and ghosts[a].x + 40 > collisionRect.x)) then
-				--stop the hero
-				speed = 0
-				hero.isAlive = false
-				--this simply pauses the current animation
-				hero:pause()
-
-				gameOver.x = display.contentWidth*.65
-				gameOver.y = display.contentHeight/2
-			end
-		end
-	end
-	--make sure the player didn't get hit by the boss's spit!
-	for a = 1, bossSpits.numChildren, 1 do
-	if(bossSpits[a].isAlive == true) then
-		if(((  ((hero.y-bossSpits[a].y))<45)) and ((  ((hero.y-bossSpits[a].y))>-45)) and ((  ((hero.x-bossSpits[a].x))>-45)) ) then
-			--stop the hero
-				speed = 0
-				hero.isAlive = false
-				--this simply pauses the current animation
-				hero:pause()
-				
-
-				gameOver.x = display.contentWidth*.65
-				gameOver.y = display.contentHeight/2
-			end
-		end
-	end
-	--this is where we check to see if the hero is on the ground or in the air, if he is in the air then he can't jump(sorry no double
-	--jumping for our little hero, however if you did want him to be able to double jump like Mario then you would just need
-	--to make a small adjustment here, by adding a second variable called something like hasJumped. Set it to false normally, and turn it to
-	--true once the double jump has been made. That way he is limited to 2 hops per jump.
-	--Again we cycle through the blocks group and compare the x and y values of each.
-	for a = 1, blocks.numChildren, 1 do
-		if(hero.y >= blocks[a].y - 170 and blocks[a].x < hero.x + 60 and blocks[a].x > hero.x - 60) then
-			hero.y = blocks[a].y - 171
-			onGround = true
-			break
-		else
-			onGround = false
-		end
-	end
-end
+-- MOVED
 
 -- -----------------------------------------------------------------------------------------------------------------
 --Event Handlers
