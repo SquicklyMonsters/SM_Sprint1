@@ -2,11 +2,12 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-require('inventory.interactions')
-require('squicklyrun.sr_interactions')
-require('squicklyrun.sr_background')
-require('squicklyrun.sr_updates')
---require('squicklyrun.sr_collisions')
+require("inventory.interactions")
+
+require( 'squicklyrun.sr_interactions' )
+require( 'squicklyrun.sr_background' )
+require( 'squicklyrun.sr_update' )
+require( 'squicklyrun.sr_interactions' )
 
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -17,77 +18,50 @@ require('squicklyrun.sr_updates')
 local screen;
 local player;
 
---insert places
-local back;
-local middle;
-local front;
-
---Background
-local backbackground;
-local backgroundfar;
-local backgroundnear1;
-local backgroundnear2;
-
---Ground
-local blocks;
-
---ObstaclesandEnemies
-local spikes;
-local blasts;
-local ghosts;
-local boss;
-local bossSpits;
-
---Sprite
-local hero;
-local collisionRect;
-
---ScoreandGameOver
-local gameOver;
-local scoreText;
-
-
 -- -------------------------------------------------------------------------------
 -- Scene functions go Here
 
 function scene:create( event )
 	local sceneGroup = self.view
 
+    -- Setup layer
     back = display.newGroup()
     middle = display.newGroup()
     front = display.newGroup()
 
-    --Set background
+
+    -- Set background
 	setupBackground()
-    backbackground = getBackbackground()
-    backgroundfar = getBackgroundfar()
-    backgroundnear1 = getBackgroundnear1()
-    backgroundnear2 = getBackgroundnear2()
+	backbackground = getBackbackground()
+	backgroundfar = getBackgroundfar()
+	backgroundnear1 = getBackgroundnear1()
+	backgroundnear2 = getBackgroundnear2()
+
 
 	setupGround()
     blocks = getBlocks()
 
-
-	setupObstaclesAndEnemies()
+    setupObstaclesAndEnemies()
     spikes = getSpikes()
     blasts = getBlasts()
     ghosts = getGhosts()
     boss = getBoss()
     bossSpits = getBossSpits()
 
-	setupSprite()
+    setupSprite()
     hero = getHero()
     collisionRect = getCollisionRect()
 
-	setupScoreAndGameOver()
+    setupScoreAndGameOver()
     gameOver = getGameOver()
     scoreText = getScoreText()
 
 
-	--player = getPlayerLayer()
+	screen = getScreenLayer() --maybe this is useless
+	player = getPlayerLayer() --this too. I am too scared right now
 
 	--sceneGroup:insert( screen )
-	--sceneGroup:insert( player )
+	-- sceneGroup:insert( player )
 
 	timer.performWithDelay(1, update, -1)
 	Runtime:addEventListener("touch", touched, -1)
@@ -98,8 +72,7 @@ function scene:show( event )
 	local phase = event.phase
 
 	if phase == "will" then
-        -- Add display objects into group
-        -- ============BACK===============
+        composer.showOverlay("menubar")
         -- Background
         back:insert(backbackground)
         back:insert(backgroundfar)
@@ -128,6 +101,7 @@ function scene:show( event )
         sceneGroup:insert(front)
 
         restartGame()
+
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
 		-- Called when the scene is now on screen
