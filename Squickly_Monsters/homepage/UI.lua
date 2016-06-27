@@ -177,7 +177,20 @@ end
 function changeNeedsLevel(need, change)
     setNeedsLevel(need, needsLevels[need] + change)
 end
+-- -----------------------------------------------------------------------------
+-- Update most recent icons
 
+function updateMostRecentFoodIcons(latest_food)
+    if isInInventory(latest_food) then
+
+    end
+end
+
+function updateMostRecentPlayIcons(latest_toy)
+    if isInInventory(latest_toy) then
+
+    end
+end
 -- -----------------------------------------------------------------------------
 -- Thought Cloud functions
 

@@ -21,7 +21,7 @@ function itemClickedEvent(event)
 		local item = event.target.item
 		local idx = event.target.idx
 		local quantity = reduceQuantity(idx)
-		if quantity > 0 then
+		if quantity ~= nil then
 			-- Update display number
 			itemTexts[idx].text = quantity
 		else

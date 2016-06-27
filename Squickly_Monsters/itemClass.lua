@@ -37,10 +37,14 @@ function item:use(type)
 		giveTakeCareEXP(self.expAffect, getHungerBar())
 		-- Check if Thought Clouds still need to be shown
 		checkHunger(1)
+		-- Update most food icons
+		updateMostRecentFoodIcons(self.name)
 	elseif type == "toy" then
 		-- Set animation to playing
 		playAnimation()
 		giveTakeCareEXP(self.expAffect, getHappinessBar())
+		-- Update most toy icons
+		updateMostRecentPlayIcons(self.name)
 	end
 
     -- Change needs bar according to food affect
