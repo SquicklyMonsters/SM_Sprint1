@@ -8,6 +8,8 @@ require("itemClass")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 local itemList;
+local foodRecentList;
+local playRecentList;
 local itemQuantities;
 local itemTexts = {};
 
@@ -21,7 +23,7 @@ function itemClickedEvent(event)
 		local item = event.target.item
 		local idx = event.target.idx
 		local quantity = reduceQuantity(idx)
-		if quantity > 0 then
+		if quantity ~= nil then
 			-- Update display number
 			itemTexts[idx].text = quantity
 		else
@@ -29,7 +31,17 @@ function itemClickedEvent(event)
 		end
 		item:use(item.type)
 	end
+end
 
+-- If item is used in a place that is not inventory
+function useItem(item)
+	local idx = isInInventory(item.name)
+	if idx then
+		local quantity = reduceQuantity(idx)
+		itemTexts[idx].text = quantity
+		saveInventoryData()
+		item:use(item.type)
+	end
 end
 
 function closeEvent(event)
