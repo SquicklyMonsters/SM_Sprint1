@@ -36,6 +36,8 @@ local mostRecentPlayIcon2;
 local morePlayIcon;
 
 local inventoryIcon;
+local dailyRewardTrueIcon;
+local dailyRewardFalseIcon;
 
 local hungerBar;
 local happinessBar;
@@ -90,7 +92,8 @@ function scene:create( event )
     mostRecentPlayIcon2 = getMostRecentPlayIcon2()
     morePlayIcon = getMorePlayIcon()
     inventoryIcon = getInventoryIcon()
-
+    dailyRewardTrueIcon = getDailyRewardTrueIcon()
+    dailyRewardFalseIcon = getDailyRewardFalseIcon()
 
     setAutoSaveRate(10000)
 
@@ -127,6 +130,8 @@ function scene:show( event )
         middle:insert(energyBar)
         middle:insert(expBar)
         middle:insert(inventoryIcon)
+        middle:insert(dailyRewardTrueIcon)
+        middle:insert(dailyRewardFalseIcon)
         -- ===========FRONT===============
         front:insert(feedIcon)
         front:insert(sleepIcon)
@@ -141,7 +146,7 @@ function scene:show( event )
         front:insert(mostRecentPlayIcon2)
         front:insert(morePlayIcon)
 
-				front:insert(TamaLevelsText)
+		front:insert(TamaLevelsText)
         front:insert(hungerThoughtCloud)
         front:insert(tiredThoughtCloud)
         -- ===============================
