@@ -1,6 +1,8 @@
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 local itemList;
+local foodRecentList;
+local playRecentList;
 local itemQuantities;
 local itemTexts = {};
 local maxSize = 9;
@@ -47,7 +49,6 @@ function reduceQuantity(idx)
 	else
 		removeItem(idx)
 	end
-
 end
 
 function removeItem(idx)

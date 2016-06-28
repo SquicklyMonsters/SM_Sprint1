@@ -14,10 +14,12 @@ local sleepIcon;
 local wakeupIcon;
 local cleanIcon;
 local playIcon;
+local foodRecentList;
 local mostRecentFoodIcon1;
 local mostRecentFoodIcon2;
 local moreFoodIcon;
 local shopIcon;
+local playRecentList;
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
 local morePlayIcon;
@@ -70,12 +72,31 @@ function cacheVariables()
 
     -- Create lists
     iconsList = {feedIcon, sleepIcon, cleanIcon, playIcon}
-    foodIconsList = {moreFoodIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, shopIcon}
-    playIconsList = {morePlayIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, shopIcon}
+    foodIconsList = {moreFoodIcon, mostRecentFoodIcon2, mostRecentFoodIcon1, shopIcon}
+    playIconsList = {morePlayIcon, mostRecentPlayIcon2, mostRecentPlayIcon1, shopIcon}
 
     -- Instantiate hide/show icons lock
     isTouchAble = true
+end
 
+function updateFoodList(frlist,fr1,fr2)
+    mostRecentFoodIcon1 = fr1
+    mostRecentFoodIcon2 = fr2
+    foodIconsList = {moreFoodIcon, mostRecentFoodIcon2, mostRecentFoodIcon1, shopIcon}
+    foodRecentList = frlist
+
+    mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
+    mostRecentFoodIcon2:addEventListener("touch", mostRecentFood2Clicked)
+end
+
+function updatePlayList(prlist,pr1,pr2)
+    mostRecentPlayIcon1 = pr1
+    mostRecentPlayIcon2 = pr2
+    playIconsList = {morePlayIcon, mostRecentPlayIcon2, mostRecentPlayIcon1, shopIcon}
+    playRecentList = prlist
+
+    mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
+    mostRecentPlayIcon2:addEventListener("touch", mostRecentPlay2Clicked)
 end
 -- -------------------------------------------------------------------------------
 -- Setup The Decrement Rate
@@ -150,7 +171,6 @@ end
 function feedButtonClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
-            feedAnimation()
             hideShowAllIcons(iconsList)
             hideShowAllIcons(foodIconsList)
         end
@@ -200,9 +220,11 @@ end
 function mostRecentFood1Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
-        
             hideShowAllIcons(foodIconsList)
-            shopList.burger:use(shopList.burger.type)
+            if (foodRecentList ~= nil) then
+                feedAnimation()
+                useItem(foodRecentList[1])
+            end
         end
     end
 end
@@ -211,7 +233,13 @@ function mostRecentFood2Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(foodIconsList)
-            shopList.burger:use(shopList.fish.type)
+
+            if (foodRecentList ~= nil) then
+                if (#foodRecentList > 1) then
+                    feedAnimation()
+                    useItem(foodRecentList[2])
+                end
+            end
         end
     end
 end
@@ -238,10 +266,14 @@ function mostRecentPlay1Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(playIconsList)
-            changeToWakeupState()
-            playAnimation()
-            changeNeedsLevel("happiness", 500)
-            giveTakeCareEXP(250, getHappinessBar())
+
+            if (playRecentList ~= nil) then
+                useItem(playRecentList[1])
+            end
+            -- changeToWakeupState()
+            -- playAnimation()
+            -- changeNeedsLevel("happiness", 500)
+            -- giveTakeCareEXP(250, getHappinessBar())
         end
     end
 end
@@ -250,10 +282,16 @@ function mostRecentPlay2Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(playIconsList)
-            changeToWakeupState()
-            playAnimation()
-            changeNeedsLevel("happiness", 1000)
-            giveTakeCareEXP(500,getHappinessBar())
+
+            if (playRecentList ~= nil) then
+                if (#playRecentList > 1) then
+                    useItem(playRecentList[2])
+                end
+            end
+            -- changeToWakeupState()
+            -- playAnimation()
+            -- changeNeedsLevel("happiness", 1000)
+            -- giveTakeCareEXP(500,getHappinessBar())
         end
     end
 end
