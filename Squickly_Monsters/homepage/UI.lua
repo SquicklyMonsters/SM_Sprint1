@@ -197,6 +197,7 @@ function checkHungerEventHandler(event)
     if needsBars.hunger:getProgress() < 0.4 then
         showThoughtCloud(1)
     end
+    checkHunger()
 end
 
 -- Does not need to loop, since we should check again when hunger increase
@@ -213,7 +214,6 @@ function checkHunger(delay)
         delay = ((progress - 0.4) / (-hungerRate/maxNeedsLevels.hunger))*1000
         hideThoughtCloud(1)
     end
-    print("check if hungry next in", delay)
     checkHungerID = timer.performWithDelay(delay, checkHungerEventHandler, 1)
 end
 
@@ -249,10 +249,10 @@ end
 function checkHappinessEventHandler(event)
     if needsBars.happiness:getProgress() < 0.4 then
         if getMonster().sequence ~= "sleep" then
-            print("set to sad")
             sadAnimation()
         end
     end
+    checkHappiness()
 end
 
 -- Does not need to loop, since we should check again when happiness increase
@@ -260,17 +260,15 @@ function checkHappiness(delay)
     if (checkHappinessID ~= nil) then
         timer.cancel(checkHappinessID)
     end
-    print("Check happiness")
+
     local progress = needsBars.happiness:getProgress()
     local delay = delay or 5000
     if progress > 0.4 then
         -- Calculate approximate time that the happiness level will be below 40%
         -- Times 1000 to turn into 1 second, will later need to be change to 1 minute
         delay = ((progress - 0.4) / (-happinessRate/maxNeedsLevels.happiness))*1000
-        print("set to normal")
         defaultAnimation()
     end
-    print("check if sad next in", delay)
     checkHappinessID = timer.performWithDelay(delay, checkHappinessEventHandler, 1)
 end
 -- -------------------------------------------------------------------------------
