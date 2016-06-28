@@ -64,7 +64,7 @@ function scene:create( event )
     background = getBackground()
 
     -- Set Up Monster
-    setUpMonster("img/sprites/griding.png")
+    setUpMonster("img/sprites/fireball.png")
     monster = getMonster()
 
     -- Set up Needs Bar
@@ -107,6 +107,7 @@ function scene:show( event )
 	if phase == "will" then
         checkHunger(1)
         checkTired(1)
+        checkHappiness(1)
 
 				-- Get Tamagotchi Level
 

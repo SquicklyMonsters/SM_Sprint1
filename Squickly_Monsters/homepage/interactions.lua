@@ -35,6 +35,9 @@ local needsLevels;
 local needsBars;
 
 local hungerRate = -10;
+local happinessRate = -10;
+local hygieneRate = -10;
+local energyRate = -10;
 
 local isTouchAble;
 local inventoryIsShow = false;
@@ -104,10 +107,10 @@ end
 function setDecrementRate()
     print("set all rate")
     setRateLongTerm("hunger", 1000, hungerRate)
-    setRateLongTerm("happiness", 1000, -10)
-    setRateLongTerm("hygiene", 1000, -10)
+    setRateLongTerm("happiness", 1000, happinessRate)
+    setRateLongTerm("hygiene", 1000, hygieneRate)
     -- Need sleepWakeID for canceling old loop before assign new one
-    sleepWakeID = setRateLongTerm("energy", 1000, -10)
+    sleepWakeID = setRateLongTerm("energy", 1000, energyRate)
 end
 
 -- -------------------------------------------------------------------------------
