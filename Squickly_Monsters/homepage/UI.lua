@@ -196,8 +196,6 @@ end
 function checkHungerEventHandler(event)
     if needsBars.hunger:getProgress() < 0.4 then
         showThoughtCloud(1)
-        -- sadAnimation() -- HOTFIX
-        -- timer.performWithDelay(1600*20, setSequenceNormal)  -- HOTFIX
     end
 end
 

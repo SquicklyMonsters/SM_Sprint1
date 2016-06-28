@@ -93,6 +93,7 @@ function sadAnimation()
 end
 
 function feedAnimation()
+    print("do feed animation")
     checkHunger()
     setMonsterSequence("eat")
     timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
