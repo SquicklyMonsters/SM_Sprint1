@@ -29,13 +29,19 @@ local playIcon;
 
 local mostRecentFoodIcon1;
 local mostRecentFoodIcon2;
+local foodRecentList;
 local moreFoodIcon;
 local shopIcon;
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
+local playRecentList;
 local morePlayIcon;
-
 local inventoryIcon;
+
+local itemList;
+local itemQuantities;
+local gold;
+local platinum;
 
 local hungerBar;
 local happinessBar;
@@ -91,7 +97,6 @@ function scene:create( event )
     morePlayIcon = getMorePlayIcon()
     inventoryIcon = getInventoryIcon()
 
-
     setAutoSaveRate(10000)
 
 
@@ -109,7 +114,7 @@ function scene:show( event )
         checkTired(1)
         checkHappiness(1)
 
-				-- Get Tamagotchi Level
+		-- Get Tamagotchi Level
 
         -- Set up all Thought Clouds
         hungerThoughtCloud = getHungerThoughtCloud()

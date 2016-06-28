@@ -9,7 +9,6 @@ local saveRate;
 -- Set location for saved data
 local needsDataFile = system.pathForFile( "needsData.txt", system.DocumentsDirectory )
 local inventoryDataFile = system.pathForFile( "inventoryData.txt", system.DocumentsDirectory )
-local currencyDataFile = system.pathForFile( "currencyData.txt", system.DocumentsDirectory )
 
 -- -------------------------------------------------------------------------------
 -- Set Auto Save rate
@@ -30,7 +29,7 @@ end
 -- Save functions
 function saveAllData()
     saveNeedsData()
-    -- saveInventoryData()
+    saveInventoryData()
 end
 
 function saveNeedsData()
@@ -47,11 +46,13 @@ end
 
 function saveInventoryData()
     local itemList = getItemList()
+    local foodRecentList = getFoodRecentList()
+    local playRecentList = getPlayRecentList()
     local itemQuantities = getItemQuantities()
     local gold = getCurrentGold()
     local platinum = getCurrentPlatinum()
 
-    local outTable = {itemList, itemQuantities, gold, platinum}
+    local outTable = {itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum}
     local contents = json.encode(outTable)
 
 

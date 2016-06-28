@@ -172,7 +172,7 @@ function scene:create( event )
 	local sceneGroup = self.view
 
     -- Retrieve inventory data from save file
-    setUpInventoryData()
+    itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
 
     -- Setup layer
     back = display.newGroup()

@@ -7,7 +7,6 @@ local json = require("json")
 -- Set location for saved data
 local needsDataFile = system.pathForFile( "needsData.txt", system.DocumentsDirectory ) -- Default Dir
 local inventoryDataFile = system.pathForFile( "inventoryData.txt", system.DocumentsDirectory )
-local currencyDataFile = system.pathForFile( "currencyData.txt", system.DocumentsDirectory )
 
 -- -------------------------------------------------------------------------------
 -- Get latest Data from Save file
@@ -68,15 +67,19 @@ function loadInventoryData()
     if file then
         local inTable = readFile(file)
         itemList = inTable[1]
-        itemQuantities = inTable[2]
-        gold = inTable[3]
-        platinum = inTable[4]
+        foodRecentList = inTable[2]
+        playRecentList = inTable[3]
+        itemQuantities = inTable[4]
+        gold = inTable[5]
+        platinum = inTable[6]
     else
         itemList = {}
+        foodRecentList = {}
+        playRecentList = {}
         itemQuantities = {}
         gold = 0
         platinum = 0
     end
-
-    return itemList, itemQuantities, gold, platinum
+    
+    return itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum
 end
