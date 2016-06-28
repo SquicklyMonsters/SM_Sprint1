@@ -220,8 +220,6 @@ end
 function checkTiredEventHandler(event)
     if needsBars.energy:getProgress() < 0.4 then
         showThoughtCloud(2)
-        -- sadAnimation() -- HOTFIX
-        -- timer.performWithDelay(1600*20, setSequenceNormal)  -- HOTFIX
     end
     -- Later will make predict time to check if energy is over 40%
     -- due to fix rate of increasing in energy when sleep

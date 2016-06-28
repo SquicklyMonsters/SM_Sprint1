@@ -203,7 +203,6 @@ end
 function mostRecentFood1Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
-        
             hideShowAllIcons(foodIconsList)
             shopList.burger:use(shopList.burger.type)
         end
