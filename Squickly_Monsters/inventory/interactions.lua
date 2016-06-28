@@ -10,6 +10,7 @@ local maxSize = 9;
 local gold --default goldMoney
 local platinum--default platinumMoney
 
+-- Used for changing the amount of Gold and Platinum user has. 
 function updateCurrency(goldCost, platinumCost)
 	gold = gold + goldCost
 	platinum = platinum + platinumCost

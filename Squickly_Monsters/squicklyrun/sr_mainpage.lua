@@ -1,8 +1,14 @@
 -- Import dependency
 local composer = require( "composer" )
 local scene = composer.newScene()
-require( "squicklyrun.sr_background" )
-require("inventory.interactions")
+
+require( 'inventory.interactions' )
+require( 'menubar' )
+
+require( 'squicklyrun.sr_interactions' )
+require( 'squicklyrun.sr_background' )
+require( 'squicklyrun.sr_update' )
+require( 'squicklyrun.sr_interactions' )
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
@@ -18,19 +24,48 @@ local player;
 function scene:create( event )
 	local sceneGroup = self.view
 
+    -- Setup layer
+    back = display.newGroup()
+    middle = display.newGroup()
+    front = display.newGroup()
+
+
+    -- Set background
 	setupBackground()
+	backbackground = getBackbackground()
+	backgroundfar = getBackgroundfar()
+	backgroundnear1 = getBackgroundnear1()
+	backgroundnear2 = getBackgroundnear2()
+
+
+    -- set ground
 	setupGround()
-	setupObstaclesAndEnemies()
-	setupSprite()
-	setupScoreAndGameOver()
+    blocks = getBlocks()
 
-	screen = getScreenLayer()
-	player = getPlayerLayer()
+    -- set obstacles and enemies
+    setupObstaclesAndEnemies()
+    spikes = getSpikes()
+    blasts = getBlasts()
+    ghosts = getGhosts()
+    boss = getBoss()
+    bossSpits = getBossSpits()
 
-	sceneGroup:insert( screen )
-	-- sceneGroup:insert( player )
+    -- set hero
+    setupSprite()
+    hero = getHero()
+    collisionRect = getCollisionRect() --if enemies hit this then gameover, it surrounds him.
+
+    -- set gameover
+    setupScoreAndGameOver()
+    gameOver = getGameOver()
+    scoreText = getScoreText()
+
+    function FuckYou()
+        return PJ
+    end
 
 	timer.performWithDelay(1, update, -1)
+
 	Runtime:addEventListener("touch", touched, -1)
 end
 
@@ -40,7 +75,35 @@ function scene:show( event )
 
 	if phase == "will" then
         composer.showOverlay("menubar")
-		restartGame()
+        -- Background
+        back:insert(backbackground)
+        back:insert(backgroundfar)
+        back:insert(backgroundnear1)
+        back:insert(backgroundnear2)
+        -- ===========MIDDLE==============
+        -- Ground
+        middle:insert(blocks)
+        -- ObstaclesandEnemies
+        middle:insert(spikes)
+        middle:insert(blasts)
+        middle:insert(ghosts)
+        middle:insert(boss)
+        middle:insert(bossSpits)
+        --Sprite
+        middle:insert(hero)
+        middle:insert(collisionRect)
+
+        -- ===========FRONT===============
+        --ScoreAndGameOver
+        front:insert(gameOver)
+        front:insert(scoreText)
+        -- ===============================
+        sceneGroup:insert(back)
+        sceneGroup:insert(middle)
+        sceneGroup:insert(front)
+
+--        restartGame()
+
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
 		-- Called when the scene is now on screen
@@ -67,6 +130,7 @@ end
 
 function scene:destroy( event )
 	--reward
+
 	print (getScore())
 	if getScore() ~= nil then
 		print("in here!")
