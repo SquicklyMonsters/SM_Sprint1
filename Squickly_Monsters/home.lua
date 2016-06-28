@@ -107,6 +107,7 @@ function scene:show( event )
 	if phase == "will" then
         checkHunger(1)
         checkTired(1)
+        checkHappiness(1)
 
 				-- Get Tamagotchi Level
 

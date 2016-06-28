@@ -25,15 +25,20 @@ local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins
 local thoughtClouds;
 local checkHungerID;
 local checkTiredID;
+local checkHappinessID;
 
+-- TODO Move to Data guy
 local hungerRate = -10;
+local happinessRate = -10;
+local hygieneRate = -10;
 local energyRate = -10;
--- local hungerThoughtCloud;
--- local energyThoughtCloud;
+-- -----------------------
+
 local TamaLevels = 1;
-local TamaLevelsText
+local TamaLevelsText;
 -- -------------------------------------------------------------------------------
 
+-- TODO change to function
 -- Display level text
 TamaLevelsText = display.newText({
   text = "Level: " .. TamaLevels,
@@ -43,7 +48,7 @@ TamaLevelsText = display.newText({
   fontSize = 18,
   align = "right",});
 TamaLevelsText:setFillColor( 1, 0, 0 ) -- fill the text red
-
+-- -------------------------------------------------------------------------------
 -- Set up needs bar
 function setUpNeedsBar(fileName, left)
     local options = {
@@ -81,9 +86,6 @@ function setNeedsLevel(need, lvl)
     elseif lvl < 0 then
         lvl = 0
     end
-    --if need == "energy" then
-        --print("change in energy", lvl)
-    --end
     -- For saving the value
     needsLevels[need] = lvl
     -- Make change on need bar
@@ -194,8 +196,8 @@ end
 function checkHungerEventHandler(event)
     if needsBars.hunger:getProgress() < 0.4 then
         showThoughtCloud(1)
-        sadAnimation() -- HOTFIX
-        timer.performWithDelay(1600*20, setSequenceNormal)  -- HOTFIX
+        -- sadAnimation() -- HOTFIX
+        -- timer.performWithDelay(1600*20, setSequenceNormal)  -- HOTFIX
     end
 end
 
@@ -204,7 +206,7 @@ function checkHunger(delay)
     if (checkHungerID ~= nil) then
         timer.cancel(checkHungerID)
     end
-
+    -- print("Check Hunger")
     local progress = needsBars.hunger:getProgress()
     local delay = delay or 5000
     if progress > 0.4 then
@@ -220,8 +222,8 @@ end
 function checkTiredEventHandler(event)
     if needsBars.energy:getProgress() < 0.4 then
         showThoughtCloud(2)
-        sadAnimation() -- HOTFIX
-        timer.performWithDelay(1600*20, setSequenceNormal)  -- HOTFIX
+        -- sadAnimation() -- HOTFIX
+        -- timer.performWithDelay(1600*20, setSequenceNormal)  -- HOTFIX
     end
     -- Later will make predict time to check if energy is over 40%
     -- due to fix rate of increasing in energy when sleep
@@ -245,6 +247,36 @@ function checkTired(delay)
     checkTiredID = timer.performWithDelay(delay, checkTiredEventHandler, 1)
 end
 
+-- -------------------------------------------------------------------------------
+-- Sad Animation
+
+function checkHappinessEventHandler(event)
+    if needsBars.happiness:getProgress() < 0.4 then
+        if getMonster().sequence ~= "sleep" then
+            print("set to sad")
+            sadAnimation()
+        end
+    end
+end
+
+-- Does not need to loop, since we should check again when happiness increase
+function checkHappiness(delay)
+    if (checkHappinessID ~= nil) then
+        timer.cancel(checkHappinessID)
+    end
+    print("Check happiness")
+    local progress = needsBars.happiness:getProgress()
+    local delay = delay or 5000
+    if progress > 0.4 then
+        -- Calculate approximate time that the happiness level will be below 40%
+        -- Times 1000 to turn into 1 second, will later need to be change to 1 minute
+        delay = ((progress - 0.4) / (-happinessRate/maxNeedsLevels.happiness))*1000
+        print("set to normal")
+        defaultAnimation()
+    end
+    print("check if sad next in", delay)
+    checkHappinessID = timer.performWithDelay(delay, checkHappinessEventHandler, 1)
+end
 -- -------------------------------------------------------------------------------
 -- Get needs level
 
