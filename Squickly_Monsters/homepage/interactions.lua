@@ -261,6 +261,7 @@ function shopButtonClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(currentVisibleList)
+            composer.gotoScene("shop", "crossFade", 250)
         end
     end
 end
@@ -381,12 +382,14 @@ function addListeners()
 
     mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
     mostRecentFoodIcon2:addEventListener("touch", mostRecentFood2Clicked)
-    moreFoodIcon:addEventListener("touch", moreFoodClicked)
+    -- moreFoodIcon:addEventListener("touch", moreFoodClicked)
+    moreFoodIcon:addEventListener("touch", inventoryClicked)
     shopIcon:addEventListener("touch", shopButtonClicked)
 
     mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
     mostRecentPlayIcon2:addEventListener("touch", mostRecentPlay2Clicked)
-    morePlayIcon:addEventListener("touch", morePlayClicked)
+    -- morePlayIcon:addEventListener("touch", morePlayClicked)
+    morePlayIcon:addEventListener("touch", inventoryClicked)
 
     inventoryIcon:addEventListener("touch", inventoryClicked)
 end

@@ -128,12 +128,12 @@ function setUpAllIcons()
     wakeupIcon = setUpIcon(iconsDir .. "wakeupIcon.png", 0.7)
     cleanIcon = setUpIcon(iconsDir .. "cleanIcon.png", 0.5)
     playIcon = setUpIcon(iconsDir .. "playIcon.png", 0.75)
-    mostRecentFoodIcon1 = setUpIcon(iconsDir .. "blank.png", 0.6)
-    mostRecentFoodIcon2 = setUpIcon(iconsDir .. "blank.png", 0.6)
+    mostRecentFoodIcon1 = setUpIcon(iconsDir .. "blank.png", 0.57)
+    mostRecentFoodIcon2 = setUpIcon(iconsDir .. "blank.png", 0.57)
     moreFoodIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
     shopIcon = setUpIcon(iconsDir .. "shopIcon.png", 0.5)
-    mostRecentPlayIcon1 = setUpIcon(iconsDir .. "blank.png", 0.6)
-    mostRecentPlayIcon2 = setUpIcon(iconsDir .. "blank.png", 0.6)
+    mostRecentPlayIcon1 = setUpIcon(iconsDir .. "blank.png", 0.57)
+    mostRecentPlayIcon2 = setUpIcon(iconsDir .. "blank.png", 0.57)
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
 
     inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
@@ -221,13 +221,13 @@ function updateMostRecentFood(latest_food)
     if (#foodRecentList > 0) then
         mostRecentFoodIcon1 = setUpIcon(foodRecentList[1].image, 0.75)
     else
-        mostRecentFoodIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.6)
+        mostRecentFoodIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
     end
 
     if (#foodRecentList > 1) then
         mostRecentFoodIcon2 = setUpIcon(foodRecentList[2].image, 0.75)
     else
-        mostRecentFoodIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.6)
+        mostRecentFoodIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
     end
     updateFoodList(foodRecentList,mostRecentFoodIcon1,mostRecentFoodIcon2)
 end
@@ -248,13 +248,13 @@ function updateMostRecentPlay(latest_toy)
     if (#playRecentList > 0) then
         mostRecentPlayIcon1 = setUpIcon(playRecentList[1].image, 0.75)
     else
-        mostRecentPlayIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.6)
+        mostRecentPlayIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
     end
 
     if (#playRecentList > 1) then
         mostRecentPlayIcon2 = setUpIcon(playRecentList[2].image, 0.75)
     else
-        mostRecentPlayIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.6)
+        mostRecentPlayIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
     end
     updatePlayList(playRecentList,mostRecentPlayIcon1,mostRecentPlayIcon2)
 end
