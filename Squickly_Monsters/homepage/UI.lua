@@ -1,6 +1,7 @@
 local widget = require( "widget" )
 local composer = require( "composer" )
 require("loadgame")
+require("inventory.interactions")
 -------------------------------------------------------------------------------
 -- Local variables go HERE
 
@@ -9,10 +10,12 @@ local sleepIcon;
 local wakeupIcon;
 local cleanIcon;
 local playIcon;
+local foodRecentList={};
 local mostRecentFoodIcon1;
 local mostRecentFoodIcon2;
 local moreFoodIcon;
 local shopIcon;
+local playRecentList={};
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
 local morePlayIcon;
@@ -125,12 +128,12 @@ function setUpAllIcons()
     wakeupIcon = setUpIcon(iconsDir .. "wakeupIcon.png", 0.7)
     cleanIcon = setUpIcon(iconsDir .. "cleanIcon.png", 0.5)
     playIcon = setUpIcon(iconsDir .. "playIcon.png", 0.75)
-    mostRecentFoodIcon1 = setUpIcon(iconsDir .. "cupcakeIcon.png", 0.75)
-    mostRecentFoodIcon2 = setUpIcon(iconsDir .. "milkIcon.png", 0.5)
+    mostRecentFoodIcon1 = setUpIcon(iconsDir .. "blank.png", 0.57)
+    mostRecentFoodIcon2 = setUpIcon(iconsDir .. "blank.png", 0.57)
     moreFoodIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
     shopIcon = setUpIcon(iconsDir .. "shopIcon.png", 0.5)
-    mostRecentPlayIcon1 = setUpIcon(iconsDir .. "legomanIcon.png", 0.75)
-    mostRecentPlayIcon2 = setUpIcon(iconsDir .. "footballIcon.png", 0.75)
+    mostRecentPlayIcon1 = setUpIcon(iconsDir .. "blank.png", 0.57)
+    mostRecentPlayIcon2 = setUpIcon(iconsDir .. "blank.png", 0.57)
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
 
     inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
@@ -178,6 +181,82 @@ end
 -- Changing by a certain amount (Still needs to have more calculations later)
 function changeNeedsLevel(need, change)
     setNeedsLevel(need, needsLevels[need] + change)
+end
+-- -----------------------------------------------------------------------------
+-- Update most recent icons
+
+function isInMostRecentFood(name)
+    for i, food in ipairs(foodRecentList) do
+        -- If item exists in inventory: return its index
+        if food.name == name then
+            return i
+        end
+    end
+    return false
+end
+
+function isInMostRecentPlay(name)
+    for i, toy in ipairs(playRecentList) do
+        -- If item exists in inventory: return its index
+        if toy.name == name then
+            return i
+        end
+    end
+    return false
+end
+
+function updateMostRecentFood(latest_food)
+    -- Remove current from recent list first
+    if (#foodRecentList > 0) then
+        recent_idx = isInMostRecentFood(latest_food.name) -- false, if not in inv
+        if recent_idx then
+            table.remove(foodRecentList,recent_idx)
+        end
+    end
+    -- Insert food to head of list if in inventory
+    if isInInventory(latest_food.name) then
+        table.insert(foodRecentList,1,latest_food)
+    end
+
+    if (#foodRecentList > 0) then
+        mostRecentFoodIcon1 = setUpIcon(foodRecentList[1].image, 0.75)
+    else
+        mostRecentFoodIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
+    end
+
+    if (#foodRecentList > 1) then
+        mostRecentFoodIcon2 = setUpIcon(foodRecentList[2].image, 0.75)
+    else
+        mostRecentFoodIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
+    end
+    updateFoodList(foodRecentList,mostRecentFoodIcon1,mostRecentFoodIcon2)
+end
+
+function updateMostRecentPlay(latest_toy)
+    -- Remove current from recent list first
+    if (#playRecentList > 0) then
+        recent_idx = isInMostRecentPlay(latest_toy.name) -- false, if not in inv
+        if recent_idx then
+            table.remove(playRecentList,recent_idx)
+        end
+    end
+    -- Insert food to head of list if in inventory
+    if isInInventory(latest_toy.name) then
+        table.insert(playRecentList,1,latest_toy)
+    end
+
+    if (#playRecentList > 0) then
+        mostRecentPlayIcon1 = setUpIcon(playRecentList[1].image, 0.75)
+    else
+        mostRecentPlayIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
+    end
+
+    if (#playRecentList > 1) then
+        mostRecentPlayIcon2 = setUpIcon(playRecentList[2].image, 0.75)
+    else
+        mostRecentPlayIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
+    end
+    updatePlayList(playRecentList,mostRecentPlayIcon1,mostRecentPlayIcon2)
 end
 
 -- -----------------------------------------------------------------------------

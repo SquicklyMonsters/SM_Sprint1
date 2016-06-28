@@ -114,7 +114,7 @@ function scene:show( event )
         -- Set up all Thought Clouds
         hungerThoughtCloud = getHungerThoughtCloud()
         tiredThoughtCloud = getTiredThoughtCloud()
-				TamaLevelsText = getTamaLevelsText()
+		TamaLevelsText = getTamaLevelsText()
 
         -- Add display objects into group
         -- ============BACK===============
@@ -141,7 +141,7 @@ function scene:show( event )
         front:insert(mostRecentPlayIcon2)
         front:insert(morePlayIcon)
 
-				front:insert(TamaLevelsText)
+		front:insert(TamaLevelsText)
         front:insert(hungerThoughtCloud)
         front:insert(tiredThoughtCloud)
         -- ===============================

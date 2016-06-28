@@ -1,6 +1,8 @@
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 local itemList;
+local foodRecentList;
+local playRecentList;
 local itemQuantities;
 local itemTexts = {};
 local maxSize = 9;
@@ -47,23 +49,12 @@ function reduceQuantity(idx)
 		return itemQuantities[idx]
 	else
 		removeItem(idx)
-		return 0
 	end
-
 end
 
 function removeItem(idx)
-	local new_itemList = {}
-	local new_itemQuantities = {}
-	for i = 1, #itemList do
-		-- Add all the items into new list except the one that ran out
-		if i ~= idx then
-			table.insert(new_itemList, itemList[i])
-			table.insert(new_itemQuantities, itemQuantities[i])
-		end
-	end
-	itemList = new_itemList
-	itemQuantities = new_itemQuantities
+	table.remove(itemList,idx)
+	table.remove(itemQuantities,idx)
 end
 
 function isInInventory(name)
