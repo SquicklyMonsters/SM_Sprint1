@@ -48,13 +48,15 @@ function setUpMonster(fileName)
  --                 display.contentHeight/(options.height*2.5)
  --                 )
  --    monster:play()
+    fileWidth = 2421
+    fileHeight = 4633
     local options = {
-    width = 9464/8,
-    height = 18531/10,
+    width = fileWidth/8,
+    height = fileHeight/10,
     numFrames = 80,
 
-    sheetContentWidth = 9464,
-    sheetContentHeight = 18531,
+    sheetContentWidth = fileWidth,
+    sheetContentHeight = fileHeight,
 
     }
     local imageSheet = graphics.newImageSheet(fileName, options)
@@ -74,7 +76,7 @@ function setUpMonster(fileName)
             name = "sad",
             start = 33,
             count = 16,
-            time = 200*32,
+            time = 200*16,
             loopcount = 0,
             loopdirection = "forward"
         },
@@ -128,7 +130,7 @@ end
 
 function sadAnimation()
     setMonsterSequence("sad")
-    -- timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
+    --timer.performWithDelay(1600, setSequenceNormal) -- reset animation to default
 end
 
 function feedAnimation()
