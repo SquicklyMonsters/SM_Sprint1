@@ -4,7 +4,7 @@ require('squicklyrun.sr_collisions')
 
 
 function update( event )
-    print("WE INTHIS PART 2")
+
     updateBackgrounds()
     updateSpeed()
     updateHero()

@@ -251,7 +251,6 @@ end
 function mostRecentPlay2Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
-            print("mostRecentPlay2Clicked")
             hideShowAllIcons(playIconsList)
             changeToWakeupState()
             playAnimation()

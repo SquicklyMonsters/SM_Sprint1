@@ -1,7 +1,6 @@
 -- -----------------------------------------------------------------------------------------------------------------
--- Local variables go Here
 require('inventory.interactions')
-
+-- Local variables go Here
 
 --adds an image to our game centered at x and y coordinates
 local backbackground;
@@ -42,17 +41,7 @@ local gameOver;
 
 -- -----------------------------------------------------------------------------------------------------------------
 
-function getScreenLayer()
-	return screen
-end
 
-function getPlayerLayer()
-	return player
-end
-
-function getScore()
-	return score
-end
 
 -- -----------------------------------------------------------------------------------------------------------------
 --Setup functions
@@ -97,7 +86,7 @@ function setupGround()
 		newBlock.y = groundLevel
 		blocks:insert(newBlock)
 	end
-	--screen:insert(blocks)
+
 end
 
 function setupScoreAndGameOver()
@@ -119,8 +108,8 @@ function setupScoreAndGameOver()
 		align = "left",
 	}
 	scoreText = display.newText(options);
-	--screen:insert(gameOver)
-	--screen:insert(scoreText)
+
+
 end
 
 function setupSprite()
@@ -158,8 +147,8 @@ function setupSprite()
 	collisionRect:setStrokeColor(180, 180, 180)
 	collisionRect.alpha = 0
 
-	--screen:insert(hero)
-	--screen:insert(collisionRect)
+
+
 end
 
 function setupObstaclesAndEnemies()
@@ -228,11 +217,11 @@ function setupObstaclesAndEnemies()
 		bossSpits:insert(bossSpit)
 	end
 
-	--screen:insert(spikes)
-	--screen:insert(blasts)
-	--screen:insert(ghosts)
-	--screen:insert(boss)
-	--screen:insert(bossSpits)
+
+
+
+
+
 end
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -305,7 +294,6 @@ end
 
 
 
-
 function gameOverScreen()
 	--stop the hero
 	speed = 0
@@ -314,6 +302,7 @@ function gameOverScreen()
 	hero:pause()
 	gameOver.x = display.contentWidth*.65
 	gameOver.y = display.contentHeight/2
+	score = getScore()
 end
 
 

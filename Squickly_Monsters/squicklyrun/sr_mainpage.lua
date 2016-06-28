@@ -2,13 +2,13 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-require("inventory.interactions")
+require( 'inventory.interactions' )
+require( 'menubar' )
 
 require( 'squicklyrun.sr_interactions' )
 require( 'squicklyrun.sr_background' )
 require( 'squicklyrun.sr_update' )
 require( 'squicklyrun.sr_interactions' )
-
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
@@ -38,9 +38,11 @@ function scene:create( event )
 	backgroundnear2 = getBackgroundnear2()
 
 
+    -- set ground
 	setupGround()
     blocks = getBlocks()
 
+    -- set obstacles and enemies
     setupObstaclesAndEnemies()
     spikes = getSpikes()
     blasts = getBlasts()
@@ -48,22 +50,22 @@ function scene:create( event )
     boss = getBoss()
     bossSpits = getBossSpits()
 
+    -- set hero
     setupSprite()
     hero = getHero()
-    collisionRect = getCollisionRect()
+    collisionRect = getCollisionRect() --if enemies hit this then gameover, it surrounds him.
 
+    -- set gameover
     setupScoreAndGameOver()
     gameOver = getGameOver()
     scoreText = getScoreText()
 
-
-	screen = getScreenLayer() --maybe this is useless
-	player = getPlayerLayer() --this too. I am too scared right now
-
-	--sceneGroup:insert( screen )
-	-- sceneGroup:insert( player )
+    function FuckYou()
+        return PJ
+    end
 
 	timer.performWithDelay(1, update, -1)
+
 	Runtime:addEventListener("touch", touched, -1)
 end
 
@@ -100,7 +102,7 @@ function scene:show( event )
         sceneGroup:insert(middle)
         sceneGroup:insert(front)
 
-        restartGame()
+--        restartGame()
 
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
@@ -128,6 +130,7 @@ end
 
 function scene:destroy( event )
 	--reward
+
 	print (getScore())
 	if getScore() ~= nil then
 		print("in here!")
