@@ -2,11 +2,20 @@ local widget = require("widget")
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-local image, text1
+local image;
+local text1;
+local srIcon;
+local sfIcon;
 
 function goToSRGame(event)
 	if ( event.phase == "ended" ) then
 		composer.gotoScene( "squicklyrun.sr_mainpage" )
+    end
+end
+
+function goToSFGame(event)
+	if ( event.phase == "ended" ) then
+		composer.gotoScene( "squicklyfarm.sf_mainpage" )
     end
 end
 
@@ -17,7 +26,7 @@ function scene:create( event )
 	image.x = display.contentCenterX
 	image.y = display.contentCenterY
 	
-	text1 = display.newText( "MiniGame", 0, 0, native.systemFontBold, 24 )
+	text1 = display.newText( "Squickly MiniGames", 0, 0, native.systemFontBold, 30 )
 	text1:setFillColor( 255 )
 	text1.x, text1.y = display.contentWidth * 0.5, 50
 	
@@ -26,14 +35,23 @@ function scene:create( event )
 		height = 100,
 		defaultFile = "img/squicklyrun/srIcon.png",
 	}
-	srIcon.x, srIcon.y = display.contentCenterX-80, display.contentCenterY-20
+	srIcon.x, srIcon.y = display.contentCenterX-75, display.contentCenterY-20
+
+	sfIcon = widget.newButton{
+		width = 100,
+		height = 100,
+		defaultFile = "img/squicklyfarm/sfIcon.png",
+	}
+	sfIcon.x, sfIcon.y = display.contentCenterX+75, display.contentCenterY-20
 
 
 	srIcon:addEventListener('touch',goToSRGame)
+	sfIcon:addEventListener('touch',goToSFGame)
 
 	sceneGroup:insert( image )
 	sceneGroup:insert( text1 )
 	sceneGroup:insert( srIcon )
+	sceneGroup:insert( sfIcon )
 end
 
 function scene:show( event )

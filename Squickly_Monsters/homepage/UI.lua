@@ -144,7 +144,6 @@ function setUpAllIcons()
     updateFoodIcons()
     updatePlayIcons()
 
-
     hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
     tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
     thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
@@ -233,13 +232,13 @@ function isInMostRecentPlay(name)
 end
 
 function updateFoodIcons()
-    if (#foodRecentList > 0) then
+    if (foodRecentList[1] ~= nil) then
         mostRecentFoodIcon1 = setUpIcon(foodRecentList[1].image, 0.75)
     else
         mostRecentFoodIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
     end
 
-    if (#foodRecentList > 1) then
+    if (foodRecentList[2] ~= nil) then
         mostRecentFoodIcon2 = setUpIcon(foodRecentList[2].image, 0.75)
     else
         mostRecentFoodIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
@@ -248,13 +247,13 @@ function updateFoodIcons()
 end
 
 function updatePlayIcons()
-    if (#playRecentList > 0) then
+    if (playRecentList[1] ~= nil) then
         mostRecentPlayIcon1 = setUpIcon(playRecentList[1].image, 0.75)
     else
         mostRecentPlayIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
     end
 
-    if (#playRecentList > 1) then
+    if (playRecentList[2] ~= nil) then
         mostRecentPlayIcon2 = setUpIcon(playRecentList[2].image, 0.75)
     else
         mostRecentPlayIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
