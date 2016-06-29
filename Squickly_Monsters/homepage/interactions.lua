@@ -1,6 +1,7 @@
 require("savegame") -- For Testing
-local composer = require("composer")
+require("data")
 require("shopList")
+local composer = require("composer")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
@@ -28,7 +29,7 @@ local dailyRewardTrueIcon;
 local dailyRewardFalseIcon;
 local rewardTimer;
 
-local iconsList; -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
+local iconsList; -- idx 1=play, 2=clean, 3=sleep/wakeup, 4=feed
 local foodIconsList;
 local playIconsList;
 local currentVisibleList;
@@ -37,16 +38,11 @@ local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins
 local needsLevels;
 local needsBars;
 
-local hungerRate = -10;
-local happinessRate = -10;
-local hygieneRate = -10;
-local energyRate = -10;
-
 local isTouchAble;
 local inventoryIsShow = false;
 
-local TamaLevels = getTamaLevelsNum();
-local TamaLevelsText = getTamaLevelsText();
+local monsterLevel;
+local monsterLevelText;
 -- -------------------------------------------------------------------------------
 
 function cacheVariables()
@@ -79,9 +75,9 @@ function cacheVariables()
     dailyRewardFalseIcon = getDailyRewardFalseIcon()
 
     -- Create lists
-    iconsList = {feedIcon, sleepIcon, cleanIcon, playIcon}
-    foodIconsList = {moreFoodIcon, mostRecentFoodIcon2, mostRecentFoodIcon1, shopIcon}
-    playIconsList = {morePlayIcon, mostRecentPlayIcon2, mostRecentPlayIcon1, shopIcon}
+    iconsList = {playIcon, cleanIcon, sleepIcon, feedIcon}
+    foodIconsList = {shopIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, moreFoodIcon}
+    playIconsList = {shopIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, moreFoodIcon}
 
     -- Instantiate hide/show icons lock
     isTouchAble = true
@@ -90,7 +86,7 @@ end
 function updateFoodList(frlist,fr1,fr2)
     mostRecentFoodIcon1 = fr1
     mostRecentFoodIcon2 = fr2
-    foodIconsList = {moreFoodIcon, mostRecentFoodIcon2, mostRecentFoodIcon1, shopIcon}
+    foodIconsList = {moreFoodIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, shopIcon}
     foodRecentList = frlist
 
     mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
@@ -100,7 +96,7 @@ end
 function updatePlayList(prlist,pr1,pr2)
     mostRecentPlayIcon1 = pr1
     mostRecentPlayIcon2 = pr2
-    playIconsList = {morePlayIcon, mostRecentPlayIcon2, mostRecentPlayIcon1, shopIcon}
+    playIconsList = {morePlayIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, shopIcon}
     playRecentList = prlist
 
     mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
@@ -111,11 +107,11 @@ end
 
 function setDecrementRate()
     print("set all rate")
-    setRateLongTerm("hunger", 1000, hungerRate)
-    setRateLongTerm("happiness", 1000, happinessRate)
-    setRateLongTerm("hygiene", 1000, hygieneRate)
+    setRateLongTerm("hunger", 1000, getHungerRate())
+    setRateLongTerm("happiness", 1000, getHappinessRate())
+    setRateLongTerm("hygiene", 1000, getHygieneRate())
     -- Need sleepWakeID for canceling old loop before assign new one
-    sleepWakeID = setRateLongTerm("energy", 1000, energyRate)
+    sleepWakeID = setRateLongTerm("energy", 1000, getEnergyRate())
 end
 
 -- -------------------------------------------------------------------------------
@@ -126,7 +122,7 @@ function enableTouch()
 end
 
 function hideShowAllIcons(iconsTable)
-    xAxis = {75,30,-30,-75} -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
+    xAxis = {-75,-30,30,75} -- idx 1=play, 2=clean, 3=sleep/wakeup, 4=feed
     yAxis = {65,100,100,65}
     monster = getMonster()
 
@@ -356,6 +352,8 @@ function isItRewardTime() -- calculates how much time is left for reward, return
     currentTime = os.date( '*t' )
 
     if lastTime == false then -- lastTime is false if user has never gotten daily reward before
+        dailyRewardTrueIcon.alpha = 1
+        dailyRewardFalseIcon.alpha = 0
         return false, nil
     end
 
@@ -367,7 +365,7 @@ function isItRewardTime() -- calculates how much time is left for reward, return
     rewardTimer = ( endTime - setTime ) -- difference in seconds
     -- print(rewardTimer)
     -- set to 5 seconds for now for testing
-    limit = 5--24*60*60 -- 24 hours in sec
+    limit = 24*60*60 -- 24 hours in sec
     
     if rewardTimer >= limit then
         dailyRewardTrueIcon.alpha = 1
@@ -382,9 +380,10 @@ function rewardIconClicked(event)
         timeleft = isItRewardTime()
         if timeleft == true or rewardTimer == nil then -- if the timer is done
             -- reward animation
-            
+
             -- add to inventory
             getDailyReward()
+            print("GET REWARD!")
             -- reset timer and save date
             saveRewardTimerData()
             --change visibility
@@ -392,9 +391,11 @@ function rewardIconClicked(event)
             dailyRewardFalseIcon.alpha = 1
         else -- if the timer is still ticking
             -- show timer
-            hours = 0
-            minutes = math.floor(rewardTimer / 60)
-            seconds = rewardTimer - minutes*60
+            tmp = 24*60*60 - rewardTimer
+            print(tmp)
+            hours = math.floor(tmp/(60*60))
+            minutes = math.floor((tmp - (hours*60*60)) / 60)
+            seconds = tmp - (minutes*60) - (hours*60*60)
             timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
             clockText = display.newText(timeDisplay, display.contentCenterX, display.contentCenterY*0.7, native.systemFontBold, 80)
             clockText:setFillColor( 0.7, 0.7, 1 )
@@ -416,11 +417,6 @@ function increaseEXP(expGain) -- give exp and check the bar that Level up or not
     end
 end
 
-function levelUp()  -- Level up then change text and set exp bar to = 0
-    TamaLevels = TamaLevels + 1
-    TamaLevelsText.text = "Level: " .. TamaLevels
-    setNeedsLevel("exp", 0)
-end
 -- -------------------------------------------------------------------------------
 -- Sleep / Wakeup functions
 
@@ -428,16 +424,16 @@ function changeToSleepState()
     cancelEnergyLoop()
     sleepAnimation()
     sleepWakeID = setRateLongTerm("energy", 100, 10)
-    table.remove(iconsList, 2)
-    table.insert(iconsList, 2, wakeupIcon)
+    table.remove(iconsList, 3)
+    table.insert(iconsList, 3, wakeupIcon)
 end
 
 function changeToWakeupState()
     cancelEnergyLoop()
     defaultAnimation()
     sleepWakeID = setRateLongTerm("energy", 1000, -10)
-    table.remove(iconsList, 2)
-    table.insert(iconsList, 2, sleepIcon)
+    table.remove(iconsList, 3)
+    table.insert(iconsList, 3, sleepIcon)
 end
 
 function cancelEnergyLoop()

@@ -68,8 +68,8 @@ function isInInventory(name)
 end
 
 function setUpInventoryData()
-	itemList, itemQuantities, gold, platinum = loadInventoryData()
-	return itemList, itemQuantities, gold, platinum
+	itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = loadInventoryData()
+	return itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum
 end
 
 -- -------------------------------------------------------------------------------
@@ -83,11 +83,11 @@ function getItemQuantities()
 end
 
 function getCurrentGold()
-	return gold
+	return gold or 0
 end
 
 function getCurrentPlatinum()
-	return platinum
+	return platinum or 0
 end
 
 -- -------------------------------------------------------------------------------

@@ -1,7 +1,8 @@
-local widget = require( "widget" )
-local composer = require( "composer" )
+require("data")
 require("loadgame")
 require("inventory.interactions")
+local widget = require( "widget" )
+local composer = require( "composer" )
 -------------------------------------------------------------------------------
 -- Local variables go HERE
 
@@ -10,18 +11,23 @@ local sleepIcon;
 local wakeupIcon;
 local cleanIcon;
 local playIcon;
-local foodRecentList={};
+local foodRecentList;
 local mostRecentFoodIcon1;
 local mostRecentFoodIcon2;
 local moreFoodIcon;
 local shopIcon;
-local playRecentList={};
+local playRecentList;
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
 local morePlayIcon;
 local inventoryIcon;
 local dailyRewardTrueIcon;
 local dailyRewardFalseIcon;
+
+local itemList;
+local itemQuantities;
+local gold;
+local platinum;
 
 local needsLevels;
 local needsBars;
@@ -32,27 +38,13 @@ local checkHungerID;
 local checkTiredID;
 local checkHappinessID;
 
--- TODO Move to Data guy
-local hungerRate = -10;
-local happinessRate = -10;
-local hygieneRate = -10;
-local energyRate = -10;
--- -----------------------
-
-local TamaLevels = 1;
-local TamaLevelsText;
+local monsterLevel;
+local monsterText;
 -- -------------------------------------------------------------------------------
 
 -- TODO change to function
 -- Display level text
-TamaLevelsText = display.newText({
-  text = "Level: " .. TamaLevels,
-  x = 610,
-  y = 40,
-  font = native.systemFontBold,
-  fontSize = 18,
-  align = "right",});
-TamaLevelsText:setFillColor( 1, 0, 0 ) -- fill the text red
+
 -- -------------------------------------------------------------------------------
 -- Set up needs bar
 function setUpNeedsBar(fileName, left)
@@ -111,7 +103,7 @@ function setupAllNeedsBars()
     needsBars.exp = setUpNeedsBar(barsDir .. "EnergyBar.png", startX + spacing*4)
 
     -- Load data from save
-    needsLevels, maxNeedsLevels = getSavedLevels()
+    needsLevels, maxNeedsLevels, monsterLevel = getSavedLevels()
 
     -- Set All Needs Level
     setNeedsLevel("hunger", needsLevels.hunger)
@@ -119,6 +111,7 @@ function setupAllNeedsBars()
     setNeedsLevel("hygiene", needsLevels.hygiene)
     setNeedsLevel("energy", needsLevels.energy)
     setNeedsLevel("exp", needsLevels.exp)
+
 end
 -- -------------------------------------------------------------------------------
 -- Setup All Icons Here
@@ -140,8 +133,17 @@ function setUpAllIcons()
 
     inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
 
-    dailyRewardTrueIcon = setUpIcon(iconsDir .. "RewardTrue.png", 1.5, display.contentWidth*0.06, display.contentHeight*.6, 1)
-    dailyRewardFalseIcon = setUpIcon(iconsDir .. "RewardFalse.png", 1.2, display.contentWidth*0.06, display.contentHeight*.6, 0)
+    dailyRewardTrueIcon = setUpIcon(iconsDir .. "RewardTrue.png", 1.5, display.contentWidth*0.06, display.contentHeight*.6, 0)
+    dailyRewardFalseIcon = setUpIcon(iconsDir .. "RewardFalse.png", 1.2, display.contentWidth*0.06, display.contentHeight*.6, 1)
+
+    hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
+    tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
+    thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
+
+    itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
+    updateFoodIcons()
+    updatePlayIcons()
+
 
     hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
     tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
@@ -157,6 +159,28 @@ function setUpIcon(img, scale, x, y, alpha)
     icon:scale(scale, scale)
     icon.alpha = alpha
     return icon
+end
+
+function setUpMonsterLevel()
+    levelsTextOptions = {
+        text = "Level: " .. monsterLevel,
+        x = display.contentCenterX + display.contentWidth*0.35,
+        y = display.contentCenterY - display.contentHeight*0.4,
+        font = native.systemFontBold,
+        fontSize = 18,
+        align = "right",};
+    levelsText = display.newText(levelsTextOptions)
+    levelsText:setFillColor( 1, 0, 0 ) -- fill the text red
+end
+
+function levelUp()  -- Level up then change text and set exp bar to = 0
+    monsterLevelText = getMonsterLevelText()
+    monsterLevel = getMonsterLevel()
+
+    monsterLevel = monsterLevel + 1
+    monsterLevelText.text = "Level: " .. monsterLevel
+    setNeedsLevel("exp", 0)
+    saveNeedsData()
 end
 
 -- -------------------------------------------------------------------------------
@@ -208,19 +232,7 @@ function isInMostRecentPlay(name)
     return false
 end
 
-function updateMostRecentFood(latest_food)
-    -- Remove current from recent list first
-    if (#foodRecentList > 0) then
-        recent_idx = isInMostRecentFood(latest_food.name) -- false, if not in inv
-        if recent_idx then
-            table.remove(foodRecentList,recent_idx)
-        end
-    end
-    -- Insert food to head of list if in inventory
-    if isInInventory(latest_food.name) then
-        table.insert(foodRecentList,1,latest_food)
-    end
-
+function updateFoodIcons()
     if (#foodRecentList > 0) then
         mostRecentFoodIcon1 = setUpIcon(foodRecentList[1].image, 0.75)
     else
@@ -235,19 +247,7 @@ function updateMostRecentFood(latest_food)
     updateFoodList(foodRecentList,mostRecentFoodIcon1,mostRecentFoodIcon2)
 end
 
-function updateMostRecentPlay(latest_toy)
-    -- Remove current from recent list first
-    if (#playRecentList > 0) then
-        recent_idx = isInMostRecentPlay(latest_toy.name) -- false, if not in inv
-        if recent_idx then
-            table.remove(playRecentList,recent_idx)
-        end
-    end
-    -- Insert food to head of list if in inventory
-    if isInInventory(latest_toy.name) then
-        table.insert(playRecentList,1,latest_toy)
-    end
-
+function updatePlayIcons()
     if (#playRecentList > 0) then
         mostRecentPlayIcon1 = setUpIcon(playRecentList[1].image, 0.75)
     else
@@ -260,6 +260,36 @@ function updateMostRecentPlay(latest_toy)
         mostRecentPlayIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
     end
     updatePlayList(playRecentList,mostRecentPlayIcon1,mostRecentPlayIcon2)
+end
+
+function updateMostRecentFood(latest_food)
+    -- Remove current from recent list first
+    if (#foodRecentList > 0) then
+        recent_idx = isInMostRecentFood(latest_food.name) -- false, if not in inv
+        if recent_idx then
+            table.remove(foodRecentList,recent_idx)
+        end
+    end
+    -- Insert food to head of list if in inventory
+    if isInInventory(latest_food.name) then
+        table.insert(foodRecentList,1,latest_food)
+    end
+    updateFoodIcons()
+end
+
+function updateMostRecentPlay(latest_toy)
+    -- Remove current from recent list first
+    if (#playRecentList > 0) then
+        recent_idx = isInMostRecentPlay(latest_toy.name) -- false, if not in inv
+        if recent_idx then
+            table.remove(playRecentList,recent_idx)
+        end
+    end
+    -- Insert food to head of list if in inventory
+    if isInInventory(latest_toy.name) then
+        table.insert(playRecentList,1,latest_toy)
+    end
+    updatePlayIcons()
 end
 
 -- -----------------------------------------------------------------------------
@@ -293,7 +323,7 @@ function checkHunger(delay)
     if progress > 0.4 then
         -- Calculate approximate time that the hunger level will be below 40%
         -- Times 1000 to turn into 1 second, will later need to be change to 1 minute
-        delay = ((progress - 0.4) / (-hungerRate/maxNeedsLevels.hunger))*1000
+        delay = ((progress - 0.4) / (-getHungerRate()/maxNeedsLevels.hunger))*1000
         hideThoughtCloud(1)
     end
     checkHungerID = timer.performWithDelay(delay, checkHungerEventHandler, 1)
@@ -318,7 +348,7 @@ function checkTired(delay)
     if progress > 0.4 then
         -- Calculate approximate time that the energy level will be below 40%
         -- Times 1000 to turn into 1 second, will later need to be change to 1 minute
-        delay = ((progress - 0.4) / (-energyRate/maxNeedsLevels.energy))*1000
+        delay = ((progress - 0.4) / (-getEnergyRate()/maxNeedsLevels.energy))*1000
         hideThoughtCloud(2)
     end
     --print("check if tired next in", delay)
@@ -348,7 +378,7 @@ function checkHappiness(delay)
     if progress > 0.4 then
         -- Calculate approximate time that the happiness level will be below 40%
         -- Times 1000 to turn into 1 second, will later need to be change to 1 minute
-        delay = ((progress - 0.4) / (-happinessRate/maxNeedsLevels.happiness))*1000
+        delay = ((progress - 0.4) / (-getHappinessRate()/maxNeedsLevels.happiness))*1000
         defaultAnimation()
     end
     checkHappinessID = timer.performWithDelay(delay, checkHappinessEventHandler, 1)
@@ -438,6 +468,10 @@ function getMostRecentFoodIcon2()
     return mostRecentFoodIcon2
 end
 
+function getFoodRecentList()
+    return foodRecentList
+end
+
 function getMoreFoodIcon()
     return moreFoodIcon
 end
@@ -452,6 +486,10 @@ end
 
 function getMostRecentPlayIcon2()
     return mostRecentPlayIcon2
+end
+
+function getPlayRecentList()
+    return playRecentList
 end
 
 function getMorePlayIcon()
@@ -478,10 +516,10 @@ function getTiredThoughtCloud()
     return thoughtClouds[2]
 end
 
-function getTamaLevelsText()
-    return TamaLevelsText
+function getMonsterLevel()
+    return monsterLevel
 end
 
-function getTamaLevelsNum()
-    return TamaLevels
+function getMonsterLevelText()
+    return levelsText
 end

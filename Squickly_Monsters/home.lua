@@ -29,15 +29,21 @@ local playIcon;
 
 local mostRecentFoodIcon1;
 local mostRecentFoodIcon2;
+local foodRecentList;
 local moreFoodIcon;
 local shopIcon;
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
+local playRecentList;
 local morePlayIcon;
-
 local inventoryIcon;
 local dailyRewardTrueIcon;
 local dailyRewardFalseIcon;
+
+local itemList;
+local itemQuantities;
+local gold;
+local platinum;
 
 local hungerBar;
 local happinessBar;
@@ -45,7 +51,7 @@ local hygieneBar;
 local energyBar;
 local expBar;
 
-local TamaLevelsText;
+local monsterLevelText;
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
@@ -76,6 +82,7 @@ function scene:create( event )
     hygieneBar = getHygieneBar()
     energyBar = getEnergyBar()
     expBar = getExpBar()
+    monsterLevelText = setUpMonsterLevel()
 
     -- Set up all Icons
     setUpAllIcons()
@@ -116,7 +123,6 @@ function scene:show( event )
         -- Set up all Thought Clouds
         hungerThoughtCloud = getHungerThoughtCloud()
         tiredThoughtCloud = getTiredThoughtCloud()
-		TamaLevelsText = getTamaLevelsText()
 
         -- Add display objects into group
         -- ============BACK===============
@@ -145,7 +151,7 @@ function scene:show( event )
         front:insert(mostRecentPlayIcon2)
         front:insert(morePlayIcon)
 
-		front:insert(TamaLevelsText)
+		front:insert(levelsText)
         front:insert(hungerThoughtCloud)
         front:insert(tiredThoughtCloud)
         -- ===============================
