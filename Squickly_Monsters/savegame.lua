@@ -13,12 +13,12 @@ local rewardDateDataFile = system.pathForFile( "rewardsData.txt", system.Documen
 
 -- -------------------------------------------------------------------------------
 -- Set Auto Save rate
-function setAutoSaveRate(rate) -- 1000 = 1sec
-	if saveRate~= nil then
-		timer.cancel(saveRate)
-	end
-    saveRate = timer.performWithDelay(rate, saveAllData, -1)
-end
+-- function setAutoSaveRate(rate) -- 1000 = 1sec
+-- 	if saveRate~= nil then
+-- 		timer.cancel(saveRate)
+-- 	end
+--     saveRate = timer.performWithDelay(rate, saveAllData, -1)
+-- end
 
 -- -------------------------------------------------------------------------------
 function writeFile(file, contents)

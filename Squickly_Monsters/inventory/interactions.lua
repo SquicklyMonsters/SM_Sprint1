@@ -8,9 +8,9 @@ local itemTexts = {};
 local maxSize = 9;
 
 -- -------------------------------------------------------------------------------
---functions for currency
-local gold --default goldMoney
-local platinum--default platinumMoney
+-- Functions for currency
+local gold = getGold()
+local platinum = getPlatinum()
 
 -- Used for changing the amount of Gold and Platinum user has. 
 function updateCurrency(goldCost, platinumCost)
@@ -67,10 +67,10 @@ function isInInventory(name)
 	return false
 end
 
-function setUpInventoryData()
-	itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = loadInventoryData()
-	return itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum
-end
+-- function setUpInventoryData()
+-- 	itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = loadInventoryData()
+-- 	return itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum
+-- end
 
 -- -------------------------------------------------------------------------------
 -- Get functions HERE
@@ -82,12 +82,12 @@ function getItemQuantities()
 	return itemQuantities
 end
 
-function getCurrentGold()
-	return gold or 0
-end
+-- function getCurrentGold()
+-- 	return gold or 0
+-- end
 
-function getCurrentPlatinum()
-	return platinum or 0
-end
+-- function getCurrentPlatinum()
+-- 	return platinum or 0
+-- end
 
 -- -------------------------------------------------------------------------------
