@@ -1,9 +1,10 @@
+require("data")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
-local itemList;
+local itemList = getItemList();
 local foodRecentList;
 local playRecentList;
-local itemQuantities;
+local itemQuantities = getItemQuantities();
 local itemTexts = {};
 local maxSize = 9;
 
@@ -16,6 +17,8 @@ local platinum = getPlatinum()
 function updateCurrency(goldCost, platinumCost)
 	gold = gold + goldCost
 	platinum = platinum + platinumCost
+	setGold(gold)
+	setPlatinum(platinum)
 end
 
 function sufficientGold(goldCost)
