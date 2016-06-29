@@ -387,6 +387,7 @@ function rewardIconClicked(event)
 
             -- add to inventory
             getDailyReward()
+            print("GET REWARD!")
             -- reset timer and save date
             saveRewardTimerData()
             --change visibility
