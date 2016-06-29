@@ -67,10 +67,10 @@ function isInInventory(name)
 	return false
 end
 
-function setUpInventoryData()
-	itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = loadInventoryData()
-	return itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum
-end
+-- function setUpInventoryData()
+-- 	itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = loadInventoryData()
+-- 	return itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum
+-- end
 
 -- -------------------------------------------------------------------------------
 -- Get functions HERE

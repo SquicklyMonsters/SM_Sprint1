@@ -30,16 +30,9 @@ function writeFile(file, contents)
 end
 
 function saveData()
-    local itemList = getItemList()
-    local itemQuantities = getItemQuantities()
-    local gold = getCurrentGold()
-    local platinum = getCurrentPlatinum()
-
-    local outTable = {itemList, itemQuantities, gold, platinum}
+    local outTable = {itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum}
     local contents = json.encode(outTable)
-
-
-    writeFile(inventoryDataFile, contents)
+    writeFile(dataFile, contents)
     print("Save by Data Sage")
 end
 
@@ -72,10 +65,15 @@ function loadData()
         gold = 0
         platinum = 0
     end
+
     print("Load by Data Sage")
-    return itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum
 end
 -- -------------------------------------------------------------------------------
+-- Inventory Data
+function getInventoryData()
+	loadData()
+	return itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum
+end
 -- Need Rates
 
 function getHungerRate()

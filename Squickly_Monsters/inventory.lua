@@ -84,7 +84,8 @@ function setUpInventory()
  	local spacingY = inventory.height/4
 
  	-- Retrieve data from save file
- 	itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
+ 	-- itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
+ 	itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = getInventoryData()
 
  	inventory.items = {}
 
