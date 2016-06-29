@@ -11,8 +11,6 @@ local needsDataFile = system.pathForFile( "needsData.txt", system.DocumentsDirec
 local inventoryDataFile = system.pathForFile( "inventoryData.txt", system.DocumentsDirectory )
 local rewardDateDataFile = system.pathForFile( "rewardsData.txt", system.DocumentsDirectory )
 
--- local rewardDateDataFile = system.pathForFile( "squicklydata.txt", system.DocumentsDirectory )
-
 -- -------------------------------------------------------------------------------
 -- Set Auto Save rate
 function setAutoSaveRate(rate) -- 1000 = 1sec
@@ -32,11 +30,11 @@ end
 -- Save functions
 function saveAllData()
     saveNeedsData()
-    saveInventoryData()
-    saveRewardTimerData()
+    -- saveInventoryData()
 end
 
 function saveNeedsData()
+	-- print("saved file")
     local maxNeedsLevels = getMaxNeedsLevels()
     local needsLevels = getCurrentNeedsLevels()
     local monsterLevel = getMonsterLevel()
@@ -45,18 +43,16 @@ function saveNeedsData()
     local contents = json.encode(outTable)
         
     writeFile(needsDataFile, contents)
-    print("save needs")
+    print("save")
 end
 
 function saveInventoryData()
     local itemList = getItemList()
-    local foodRecentList = getFoodRecentList()
-    local playRecentList = getPlayRecentList()
     local itemQuantities = getItemQuantities()
     local gold = getCurrentGold()
     local platinum = getCurrentPlatinum()
 
-    local outTable = {itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum}
+    local outTable = {itemList, itemQuantities, gold, platinum}
     local contents = json.encode(outTable)
 
 
@@ -65,6 +61,7 @@ function saveInventoryData()
 end
 
 function saveRewardTimerData()
+    -- only save when reward is obtained by player
     local currentDate = os.date( '*t' )
 
     local outTable = {currentDate}
