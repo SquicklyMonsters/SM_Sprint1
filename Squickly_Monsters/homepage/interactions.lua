@@ -28,7 +28,7 @@ local dailyRewardTrueIcon;
 local dailyRewardFalseIcon;
 local rewardTimer;
 
-local iconsList; -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
+local iconsList; -- idx 1=play, 2=clean, 3=sleep/wakeup, 4=feed
 local foodIconsList;
 local playIconsList;
 local currentVisibleList;
@@ -79,9 +79,9 @@ function cacheVariables()
     dailyRewardFalseIcon = getDailyRewardFalseIcon()
 
     -- Create lists
-    iconsList = {feedIcon, sleepIcon, cleanIcon, playIcon}
-    foodIconsList = {moreFoodIcon, mostRecentFoodIcon2, mostRecentFoodIcon1, shopIcon}
-    playIconsList = {morePlayIcon, mostRecentPlayIcon2, mostRecentPlayIcon1, shopIcon}
+    iconsList = {playIcon, cleanIcon, sleepIcon, feedIcon}
+    foodIconsList = {shopIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, moreFoodIcon}
+    playIconsList = {shopIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, moreFoodIcon}
 
     -- Instantiate hide/show icons lock
     isTouchAble = true
@@ -90,7 +90,7 @@ end
 function updateFoodList(frlist,fr1,fr2)
     mostRecentFoodIcon1 = fr1
     mostRecentFoodIcon2 = fr2
-    foodIconsList = {moreFoodIcon, mostRecentFoodIcon2, mostRecentFoodIcon1, shopIcon}
+    foodIconsList = {moreFoodIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, shopIcon}
     foodRecentList = frlist
 
     mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
@@ -100,7 +100,7 @@ end
 function updatePlayList(prlist,pr1,pr2)
     mostRecentPlayIcon1 = pr1
     mostRecentPlayIcon2 = pr2
-    playIconsList = {morePlayIcon, mostRecentPlayIcon2, mostRecentPlayIcon1, shopIcon}
+    playIconsList = {morePlayIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, shopIcon}
     playRecentList = prlist
 
     mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
@@ -126,7 +126,7 @@ function enableTouch()
 end
 
 function hideShowAllIcons(iconsTable)
-    xAxis = {75,30,-30,-75} -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
+    xAxis = {-75,-30,30,75} -- idx 1=play, 2=clean, 3=sleep/wakeup, 4=feed
     yAxis = {65,100,100,65}
     monster = getMonster()
 
@@ -424,16 +424,16 @@ function changeToSleepState()
     cancelEnergyLoop()
     sleepAnimation()
     sleepWakeID = setRateLongTerm("energy", 100, 10)
-    table.remove(iconsList, 2)
-    table.insert(iconsList, 2, wakeupIcon)
+    table.remove(iconsList, 3)
+    table.insert(iconsList, 3, wakeupIcon)
 end
 
 function changeToWakeupState()
     cancelEnergyLoop()
     defaultAnimation()
     sleepWakeID = setRateLongTerm("energy", 1000, -10)
-    table.remove(iconsList, 2)
-    table.insert(iconsList, 2, sleepIcon)
+    table.remove(iconsList, 3)
+    table.insert(iconsList, 3, sleepIcon)
 end
 
 function cancelEnergyLoop()

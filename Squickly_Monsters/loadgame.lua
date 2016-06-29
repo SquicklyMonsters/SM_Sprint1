@@ -69,17 +69,21 @@ function loadInventoryData()
     if file then
         local inTable = readFile(file)
         itemList = inTable[1]
-        itemQuantities = inTable[2]
-        gold = inTable[3]
-        platinum = inTable[4]
+        foodRecentList = inTable[2]
+        playRecentList = inTable[3]
+        itemQuantities = inTable[4]
+        gold = inTable[5]
+        platinum = inTable[6]
     else
         itemList = {}
+        foodRecentList = {}
+        playRecentList = {}
         itemQuantities = {}
         gold = 0
         platinum = 0
     end
-
-    return itemList, itemQuantities, gold, platinum
+    
+    return itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum
 end
 -- -------------------------------------------------------------------------------
 

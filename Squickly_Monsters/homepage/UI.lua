@@ -10,18 +10,23 @@ local sleepIcon;
 local wakeupIcon;
 local cleanIcon;
 local playIcon;
-local foodRecentList={};
+local foodRecentList;
 local mostRecentFoodIcon1;
 local mostRecentFoodIcon2;
 local moreFoodIcon;
 local shopIcon;
-local playRecentList={};
+local playRecentList;
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
 local morePlayIcon;
 local inventoryIcon;
 local dailyRewardTrueIcon;
 local dailyRewardFalseIcon;
+
+local itemList;
+local itemQuantities;
+local gold;
+local platinum;
 
 local needsLevels;
 local needsBars;
@@ -140,6 +145,16 @@ function setUpAllIcons()
     hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
     tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
     thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
+
+    itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
+    print(itemList)
+    updateFoodIcons()
+    updatePlayIcons()
+
+
+    hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
+    tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
+    thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
 end
 
 function setUpIcon(img, scale, x, y, alpha)
@@ -224,19 +239,7 @@ function isInMostRecentPlay(name)
     return false
 end
 
-function updateMostRecentFood(latest_food)
-    -- Remove current from recent list first
-    if (#foodRecentList > 0) then
-        recent_idx = isInMostRecentFood(latest_food.name) -- false, if not in inv
-        if recent_idx then
-            table.remove(foodRecentList,recent_idx)
-        end
-    end
-    -- Insert food to head of list if in inventory
-    if isInInventory(latest_food.name) then
-        table.insert(foodRecentList,1,latest_food)
-    end
-
+function updateFoodIcons()
     if (#foodRecentList > 0) then
         mostRecentFoodIcon1 = setUpIcon(foodRecentList[1].image, 0.75)
     else
@@ -251,19 +254,7 @@ function updateMostRecentFood(latest_food)
     updateFoodList(foodRecentList,mostRecentFoodIcon1,mostRecentFoodIcon2)
 end
 
-function updateMostRecentPlay(latest_toy)
-    -- Remove current from recent list first
-    if (#playRecentList > 0) then
-        recent_idx = isInMostRecentPlay(latest_toy.name) -- false, if not in inv
-        if recent_idx then
-            table.remove(playRecentList,recent_idx)
-        end
-    end
-    -- Insert food to head of list if in inventory
-    if isInInventory(latest_toy.name) then
-        table.insert(playRecentList,1,latest_toy)
-    end
-
+function updatePlayIcons()
     if (#playRecentList > 0) then
         mostRecentPlayIcon1 = setUpIcon(playRecentList[1].image, 0.75)
     else
@@ -276,6 +267,36 @@ function updateMostRecentPlay(latest_toy)
         mostRecentPlayIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
     end
     updatePlayList(playRecentList,mostRecentPlayIcon1,mostRecentPlayIcon2)
+end
+
+function updateMostRecentFood(latest_food)
+    -- Remove current from recent list first
+    if (#foodRecentList > 0) then
+        recent_idx = isInMostRecentFood(latest_food.name) -- false, if not in inv
+        if recent_idx then
+            table.remove(foodRecentList,recent_idx)
+        end
+    end
+    -- Insert food to head of list if in inventory
+    if isInInventory(latest_food.name) then
+        table.insert(foodRecentList,1,latest_food)
+    end
+    updateFoodIcons()
+end
+
+function updateMostRecentPlay(latest_toy)
+    -- Remove current from recent list first
+    if (#playRecentList > 0) then
+        recent_idx = isInMostRecentPlay(latest_toy.name) -- false, if not in inv
+        if recent_idx then
+            table.remove(playRecentList,recent_idx)
+        end
+    end
+    -- Insert food to head of list if in inventory
+    if isInInventory(latest_toy.name) then
+        table.insert(playRecentList,1,latest_toy)
+    end
+    updatePlayIcons()
 end
 
 -- -----------------------------------------------------------------------------
@@ -454,6 +475,10 @@ function getMostRecentFoodIcon2()
     return mostRecentFoodIcon2
 end
 
+function getFoodRecentList()
+    return foodRecentList
+end
+
 function getMoreFoodIcon()
     return moreFoodIcon
 end
@@ -468,6 +493,10 @@ end
 
 function getMostRecentPlayIcon2()
     return mostRecentPlayIcon2
+end
+
+function getPlayRecentList()
+    return playRecentList
 end
 
 function getMorePlayIcon()

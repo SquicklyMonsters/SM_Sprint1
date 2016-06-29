@@ -29,15 +29,21 @@ local playIcon;
 
 local mostRecentFoodIcon1;
 local mostRecentFoodIcon2;
+local foodRecentList;
 local moreFoodIcon;
 local shopIcon;
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
+local playRecentList;
 local morePlayIcon;
-
 local inventoryIcon;
 local dailyRewardTrueIcon;
 local dailyRewardFalseIcon;
+
+local itemList;
+local itemQuantities;
+local gold;
+local platinum;
 
 local hungerBar;
 local happinessBar;
