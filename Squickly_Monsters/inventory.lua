@@ -39,7 +39,7 @@ function useItem(item)
 	if idx then
 		local quantity = reduceQuantity(idx)
 		itemTexts[idx].text = quantity
-		saveInventoryData()
+		saveData()
 		item:use(item.type)
 	end
 end
@@ -54,7 +54,7 @@ end
 
 function updateInventory()
 	-- Pretty much refresh the screen
-	saveInventoryData()
+	saveData()
 	inventory:removeSelf()
 	scene:create()
 end
@@ -215,7 +215,7 @@ end
 
 function scene:destroy( event )
 	-- Save data before exit
-	saveInventoryData()
+	saveData()
 end
 
 ---------------------------------------------------------------------------------
