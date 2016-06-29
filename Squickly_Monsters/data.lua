@@ -13,10 +13,10 @@ local maxNeedsLevels;
 
 local monster;
 
-local hungerRate = -10;
-local happinessRate = -10;
-local hygieneRate = -10;
-local energyRate = -10;
+local hungerRate = -50;
+local happinessRate = -50;
+local hygieneRate = -50;
+local energyRate = -50;
 
 -- -------------------------------------------------------------------------------
 
