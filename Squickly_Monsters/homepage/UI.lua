@@ -139,6 +139,7 @@ function setUpAllIcons()
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
 
     inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
+    
     dailyRewardTrueIcon = setUpIcon(iconsDir .. "RewardTrue.png", 1.5, display.contentWidth*0.06, display.contentHeight*.6, 1)
     dailyRewardFalseIcon = setUpIcon(iconsDir .. "RewardFalse.png", 1.5, display.contentWidth*0.06, display.contentHeight*.6, 0)
 

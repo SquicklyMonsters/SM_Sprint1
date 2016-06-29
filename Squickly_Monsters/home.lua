@@ -97,7 +97,6 @@ function scene:create( event )
 
     setAutoSaveRate(10000)
 
-
     -- Set up all Event Listeners
     addListeners()
 end
@@ -112,7 +111,7 @@ function scene:show( event )
         checkTired(1)
         checkHappiness(1)
 
-				-- Get Tamagotchi Level
+		-- Get Tamagotchi Level
 
         -- Set up all Thought Clouds
         hungerThoughtCloud = getHungerThoughtCloud()
