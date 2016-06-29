@@ -33,7 +33,7 @@ function writeFile(file, contents)
 end
 
 function saveData()
-	print(getHungerLevel())
+	print(getHungerLevel(), needsLevels.hunger)
     local outTable = 
     {
     -- UI Data
@@ -84,6 +84,7 @@ function loadData()
     local file = io.open( dataFile, "r" )
 
     if file then
+    	saveData()
         local inTable = readFile(file)
         local UIIdx = 1
         foodRecentList = inTable[UIIdx]
@@ -170,8 +171,8 @@ end
 
 -- --------------------------------
 
-function setNeedsLevels(needsLevels)
-    needsLevels = needsLevels
+function setNeedsLevels(in_needsLevels)
+    needsLevels = in_needsLevels
 end
 
 -- Monster
