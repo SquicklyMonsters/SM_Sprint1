@@ -337,7 +337,6 @@ function getDailyReward()
         else
             addToInventory(item.name)
         end
-        saveInventoryData()
     else
         if p >= 0.25 then
             -- get gold
@@ -349,6 +348,7 @@ function getDailyReward()
             updateCurrency(0, r)
         end
     end
+    saveInventoryData()
 end
 
 function isItRewardTime() -- calculates how much time is left for reward, returns false if done
@@ -382,6 +382,7 @@ function rewardIconClicked(event)
         timeleft = isItRewardTime()
         if timeleft == true or rewardTimer == nil then -- if the timer is done
             -- reward animation
+            
             -- add to inventory
             getDailyReward()
             -- reset timer and save date
