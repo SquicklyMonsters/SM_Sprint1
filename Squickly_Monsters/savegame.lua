@@ -39,8 +39,9 @@ end
 function saveNeedsData()
     local maxNeedsLevels = getMaxNeedsLevels()
     local needsLevels = getCurrentNeedsLevels()
+    local monsterLevel = getMonsterLevel()
     
-    local outTable = {maxNeedsLevels, needsLevels}
+    local outTable = {maxNeedsLevels, needsLevels, monsterLevel}
     local contents = json.encode(outTable)
         
     writeFile(needsDataFile, contents)

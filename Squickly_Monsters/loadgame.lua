@@ -37,6 +37,7 @@ function loadNeedsData()
         local inTable = readFile(file)
         maxNeedsLevels = inTable[1]
         needsLevels = inTable[2]
+        monsterLevel = inTable[3]
         -- print("load")
     else
         -- print ("no file found")
@@ -55,8 +56,10 @@ function loadNeedsData()
             energy = 1440,
             exp = 1440,
         }
+
+        monsterLevel = 1
     end
-    return needsLevels, maxNeedsLevels
+    return needsLevels, maxNeedsLevels, monsterLevel
 end
 -- -------------------------------------------------------------------------------
 
