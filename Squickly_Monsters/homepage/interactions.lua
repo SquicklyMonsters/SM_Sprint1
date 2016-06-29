@@ -356,6 +356,8 @@ function isItRewardTime() -- calculates how much time is left for reward, return
     currentTime = os.date( '*t' )
 
     if lastTime == false then -- lastTime is false if user has never gotten daily reward before
+        dailyRewardTrueIcon.alpha = 1
+        dailyRewardFalseIcon.alpha = 0
         return false, nil
     end
 
