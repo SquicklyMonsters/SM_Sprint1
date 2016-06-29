@@ -9,6 +9,11 @@ local saveRate;
 -- Set location for saved data
 local needsDataFile = system.pathForFile( "needsData.txt", system.DocumentsDirectory )
 local inventoryDataFile = system.pathForFile( "inventoryData.txt", system.DocumentsDirectory )
+<<<<<<< HEAD
+=======
+local currencyDataFile = system.pathForFile( "currencyData.txt", system.DocumentsDirectory )
+local rewardDateDataFile = system.pathForFile( "rewardsData.txt", system.DocumentsDirectory )
+>>>>>>> 251852381882c2ab80990d26fcd713e01e26dc0c
 
 -- -------------------------------------------------------------------------------
 -- Set Auto Save rate
@@ -58,4 +63,15 @@ function saveInventoryData()
 
     writeFile(inventoryDataFile, contents)
     print("save inv")
+end
+
+function saveRewardTimerData()
+    local currentDate = os.date( '*t' )
+
+    local outTable = {currentDate}
+    local contents = json.encode(outTable)
+
+    writeFile(rewardDateDataFile, contents)
+    print( os.date( "%c" ) )
+    print("save date")
 end
