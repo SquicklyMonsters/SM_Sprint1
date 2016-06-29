@@ -393,6 +393,7 @@ function rewardIconClicked(event)
         else -- if the timer is still ticking
             -- show timer
             tmp = 24*60*60 - rewardTimer
+            print(tmp)
             hours = math.floor(tmp/(60*60))
             minutes = math.floor((tmp - (hours*60*60)) / 60)
             seconds = tmp - (minutes*60) - (hours*60*60)
