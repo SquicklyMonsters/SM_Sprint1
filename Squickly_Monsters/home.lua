@@ -36,6 +36,8 @@ local mostRecentPlayIcon2;
 local morePlayIcon;
 
 local inventoryIcon;
+local dailyRewardTrueIcon;
+local dailyRewardFalseIcon;
 
 local hungerBar;
 local happinessBar;
@@ -90,10 +92,10 @@ function scene:create( event )
     mostRecentPlayIcon2 = getMostRecentPlayIcon2()
     morePlayIcon = getMorePlayIcon()
     inventoryIcon = getInventoryIcon()
-
+    dailyRewardTrueIcon = getDailyRewardTrueIcon()
+    dailyRewardFalseIcon = getDailyRewardFalseIcon()
 
     setAutoSaveRate(10000)
-
 
     -- Set up all Event Listeners
     addListeners()
@@ -109,7 +111,7 @@ function scene:show( event )
         checkTired(1)
         checkHappiness(1)
 
-				-- Get Tamagotchi Level
+		-- Get Tamagotchi Level
 
         -- Set up all Thought Clouds
         hungerThoughtCloud = getHungerThoughtCloud()
@@ -127,6 +129,8 @@ function scene:show( event )
         middle:insert(energyBar)
         middle:insert(expBar)
         middle:insert(inventoryIcon)
+        middle:insert(dailyRewardTrueIcon)
+        middle:insert(dailyRewardFalseIcon)
         -- ===========FRONT===============
         front:insert(feedIcon)
         front:insert(sleepIcon)
