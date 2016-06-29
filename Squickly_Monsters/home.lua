@@ -36,6 +36,8 @@ local mostRecentPlayIcon2;
 local morePlayIcon;
 
 local inventoryIcon;
+local dailyRewardTrueIcon;
+local dailyRewardFalseIcon;
 
 local hungerBar;
 local happinessBar;
@@ -64,7 +66,7 @@ function scene:create( event )
     background = getBackground()
 
     -- Set Up Monster
-    setUpMonster("img/sprites/griding.png")
+    setUpMonster("img/sprites/fireball.png")
     monster = getMonster()
 
     -- Set up Needs Bar
@@ -90,10 +92,10 @@ function scene:create( event )
     mostRecentPlayIcon2 = getMostRecentPlayIcon2()
     morePlayIcon = getMorePlayIcon()
     inventoryIcon = getInventoryIcon()
-
+    dailyRewardTrueIcon = getDailyRewardTrueIcon()
+    dailyRewardFalseIcon = getDailyRewardFalseIcon()
 
     setAutoSaveRate(10000)
-
 
     -- Set up all Event Listeners
     addListeners()
@@ -107,13 +109,14 @@ function scene:show( event )
 	if phase == "will" then
         checkHunger(1)
         checkTired(1)
+        checkHappiness(1)
 
-				-- Get Tamagotchi Level
+		-- Get Tamagotchi Level
 
         -- Set up all Thought Clouds
         hungerThoughtCloud = getHungerThoughtCloud()
         tiredThoughtCloud = getTiredThoughtCloud()
-				TamaLevelsText = getTamaLevelsText()
+		TamaLevelsText = getTamaLevelsText()
 
         -- Add display objects into group
         -- ============BACK===============
@@ -126,6 +129,8 @@ function scene:show( event )
         middle:insert(energyBar)
         middle:insert(expBar)
         middle:insert(inventoryIcon)
+        middle:insert(dailyRewardTrueIcon)
+        middle:insert(dailyRewardFalseIcon)
         -- ===========FRONT===============
         front:insert(feedIcon)
         front:insert(sleepIcon)
@@ -140,7 +145,7 @@ function scene:show( event )
         front:insert(mostRecentPlayIcon2)
         front:insert(morePlayIcon)
 
-				front:insert(TamaLevelsText)
+		front:insert(TamaLevelsText)
         front:insert(hungerThoughtCloud)
         front:insert(tiredThoughtCloud)
         -- ===============================

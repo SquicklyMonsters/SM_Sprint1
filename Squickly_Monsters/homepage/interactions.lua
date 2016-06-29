@@ -14,14 +14,19 @@ local sleepIcon;
 local wakeupIcon;
 local cleanIcon;
 local playIcon;
+local foodRecentList;
 local mostRecentFoodIcon1;
 local mostRecentFoodIcon2;
 local moreFoodIcon;
 local shopIcon;
+local playRecentList;
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
 local morePlayIcon;
 local inventoryIcon;
+local dailyRewardTrueIcon;
+local dailyRewardFalseIcon;
+local rewardTimer;
 
 local iconsList; -- idx 1=feed, 2=sleep/wakeup, 3=clean, 4=play
 local foodIconsList;
@@ -33,6 +38,9 @@ local needsLevels;
 local needsBars;
 
 local hungerRate = -10;
+local happinessRate = -10;
+local hygieneRate = -10;
+local energyRate = -10;
 
 local isTouchAble;
 local inventoryIsShow = false;
@@ -67,15 +75,36 @@ function cacheVariables()
     mostRecentPlayIcon2 = getMostRecentPlayIcon2()
     morePlayIcon = getMorePlayIcon()
     inventoryIcon = getInventoryIcon()
+    dailyRewardTrueIcon = getDailyRewardTrueIcon()
+    dailyRewardFalseIcon = getDailyRewardFalseIcon()
 
     -- Create lists
     iconsList = {feedIcon, sleepIcon, cleanIcon, playIcon}
-    foodIconsList = {moreFoodIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, shopIcon}
-    playIconsList = {morePlayIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, shopIcon}
+    foodIconsList = {moreFoodIcon, mostRecentFoodIcon2, mostRecentFoodIcon1, shopIcon}
+    playIconsList = {morePlayIcon, mostRecentPlayIcon2, mostRecentPlayIcon1, shopIcon}
 
     -- Instantiate hide/show icons lock
     isTouchAble = true
+end
 
+function updateFoodList(frlist,fr1,fr2)
+    mostRecentFoodIcon1 = fr1
+    mostRecentFoodIcon2 = fr2
+    foodIconsList = {moreFoodIcon, mostRecentFoodIcon2, mostRecentFoodIcon1, shopIcon}
+    foodRecentList = frlist
+
+    mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
+    mostRecentFoodIcon2:addEventListener("touch", mostRecentFood2Clicked)
+end
+
+function updatePlayList(prlist,pr1,pr2)
+    mostRecentPlayIcon1 = pr1
+    mostRecentPlayIcon2 = pr2
+    playIconsList = {morePlayIcon, mostRecentPlayIcon2, mostRecentPlayIcon1, shopIcon}
+    playRecentList = prlist
+
+    mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
+    mostRecentPlayIcon2:addEventListener("touch", mostRecentPlay2Clicked)
 end
 -- -------------------------------------------------------------------------------
 -- Setup The Decrement Rate
@@ -83,10 +112,10 @@ end
 function setDecrementRate()
     print("set all rate")
     setRateLongTerm("hunger", 1000, hungerRate)
-    setRateLongTerm("happiness", 1000, -10)
-    setRateLongTerm("hygiene", 1000, -10)
+    setRateLongTerm("happiness", 1000, happinessRate)
+    setRateLongTerm("hygiene", 1000, hygieneRate)
     -- Need sleepWakeID for canceling old loop before assign new one
-    sleepWakeID = setRateLongTerm("energy", 1000, -10)
+    sleepWakeID = setRateLongTerm("energy", 1000, energyRate)
 end
 
 -- -------------------------------------------------------------------------------
@@ -150,7 +179,6 @@ end
 function feedButtonClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
-            feedAnimation()
             hideShowAllIcons(iconsList)
             hideShowAllIcons(foodIconsList)
         end
@@ -200,9 +228,11 @@ end
 function mostRecentFood1Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
-        
             hideShowAllIcons(foodIconsList)
-            shopList.burger:use(shopList.burger.type)
+            if (foodRecentList ~= nil) then
+                feedAnimation()
+                useItem(foodRecentList[1])
+            end
         end
     end
 end
@@ -211,7 +241,13 @@ function mostRecentFood2Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(foodIconsList)
-            shopList.burger:use(shopList.fish.type)
+
+            if (foodRecentList ~= nil) then
+                if (#foodRecentList > 1) then
+                    feedAnimation()
+                    useItem(foodRecentList[2])
+                end
+            end
         end
     end
 end
@@ -230,6 +266,7 @@ function shopButtonClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(currentVisibleList)
+            composer.gotoScene("shop", "crossFade", 250)
         end
     end
 end
@@ -238,10 +275,14 @@ function mostRecentPlay1Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(playIconsList)
-            changeToWakeupState()
-            playAnimation()
-            changeNeedsLevel("happiness", 500)
-            giveTakeCareEXP(250, getHappinessBar())
+
+            if (playRecentList ~= nil) then
+                useItem(playRecentList[1])
+            end
+            -- changeToWakeupState()
+            -- playAnimation()
+            -- changeNeedsLevel("happiness", 500)
+            -- giveTakeCareEXP(250, getHappinessBar())
         end
     end
 end
@@ -250,10 +291,16 @@ function mostRecentPlay2Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(playIconsList)
-            changeToWakeupState()
-            playAnimation()
-            changeNeedsLevel("happiness", 1000)
-            giveTakeCareEXP(500,getHappinessBar())
+
+            if (playRecentList ~= nil) then
+                if (#playRecentList > 1) then
+                    useItem(playRecentList[2])
+                end
+            end
+            -- changeToWakeupState()
+            -- playAnimation()
+            -- changeNeedsLevel("happiness", 1000)
+            -- giveTakeCareEXP(500,getHappinessBar())
         end
     end
 end
@@ -274,6 +321,84 @@ function inventoryClicked(event)
         else
             composer.showOverlay("inventory")
             inventoryIsShow = true
+        end
+    end
+end
+
+function getDailyReward()
+    p = math.random()
+    if p >= 0.35 then
+        -- get random item
+        r = math.random(#shopList)
+        item = shopList[shopList[r]]
+        idx = isInInventory(item.name)
+        if idx then
+            increaseQuantity(idx)
+        else
+            addToInventory(item.name)
+        end
+    else
+        if p >= 0.25 then
+            -- get gold
+            r = math.random(100, 1000)
+            updateCurrency(r, 0)
+        else
+            -- get platinum
+            r = math.random(5)
+            updateCurrency(0, r)
+        end
+    end
+    saveInventoryData()
+end
+
+function isItRewardTime() -- calculates how much time is left for reward, returns false if done
+    lastTime = loadLastRewardDate()
+    currentTime = os.date( '*t' )
+
+    if lastTime == false then -- lastTime is false if user has never gotten daily reward before
+        return false, nil
+    end
+
+    setTime = os.time{  year = lastTime.year, month = lastTime.month, day = lastTime.day,
+                        hour = lastTime.hour, min = lastTime.min, sec = lastTime.sec }
+    endTime = os.time{  year = currentTime.year, month = currentTime.month, day = currentTime.day,
+                        hour = currentTime.hour, min = currentTime.min, sec = currentTime.sec }
+
+    rewardTimer = ( endTime - setTime ) -- difference in seconds
+    -- print(rewardTimer)
+    -- set to 5 seconds for now for testing
+    limit = 5--24*60*60 -- 24 hours in sec
+    
+    if rewardTimer >= limit then
+        dailyRewardTrueIcon.alpha = 1
+        dailyRewardFalseIcon.alpha = 0
+        return true, rewardTimer
+    end
+    return false, rewardTimer
+end
+
+function rewardIconClicked(event)
+    if event.phase == "ended" then
+        timeleft = isItRewardTime()
+        if timeleft == true or rewardTimer == nil then -- if the timer is done
+            -- reward animation
+            
+            -- add to inventory
+            getDailyReward()
+            -- reset timer and save date
+            saveRewardTimerData()
+            --change visibility
+            dailyRewardTrueIcon.alpha = 0
+            dailyRewardFalseIcon.alpha = 1
+        else -- if the timer is still ticking
+            -- show timer
+            hours = 0
+            minutes = math.floor(rewardTimer / 60)
+            seconds = rewardTimer - minutes*60
+            timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
+            clockText = display.newText(timeDisplay, display.contentCenterX, display.contentCenterY*0.7, native.systemFontBold, 80)
+            clockText:setFillColor( 0.7, 0.7, 1 )
+            transition.fadeOut( clockText, { time=3000 } )
         end
     end
 end
@@ -340,12 +465,19 @@ function addListeners()
 
     mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
     mostRecentFoodIcon2:addEventListener("touch", mostRecentFood2Clicked)
-    moreFoodIcon:addEventListener("touch", moreFoodClicked)
+    -- moreFoodIcon:addEventListener("touch", moreFoodClicked)
+    moreFoodIcon:addEventListener("touch", inventoryClicked)
     shopIcon:addEventListener("touch", shopButtonClicked)
 
     mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
     mostRecentPlayIcon2:addEventListener("touch", mostRecentPlay2Clicked)
-    morePlayIcon:addEventListener("touch", morePlayClicked)
+    -- morePlayIcon:addEventListener("touch", morePlayClicked)
+    morePlayIcon:addEventListener("touch", inventoryClicked)
 
     inventoryIcon:addEventListener("touch", inventoryClicked)
+
+    dailyRewardTrueIcon:addEventListener("touch", rewardIconClicked)
+    dailyRewardFalseIcon:addEventListener("touch", rewardIconClicked)
+    timer.performWithDelay(1000, isItRewardTime, -1)
+    -- timer.performWithDelay(1000, updateTime, -1 )
 end

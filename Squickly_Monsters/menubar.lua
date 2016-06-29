@@ -30,6 +30,7 @@ function changeSceneButtonEvent(event)
       if currentScene ~= "home" then
         composer.removeScene(currentScene)
       end
+
       composer.gotoScene(scene, chageScenceEffect, chageSceneTime)
     end
   end

@@ -1,6 +1,7 @@
 local widget = require( "widget" )
 local composer = require( "composer" )
 require("loadgame")
+require("inventory.interactions")
 -------------------------------------------------------------------------------
 -- Local variables go HERE
 
@@ -9,14 +10,18 @@ local sleepIcon;
 local wakeupIcon;
 local cleanIcon;
 local playIcon;
+local foodRecentList={};
 local mostRecentFoodIcon1;
 local mostRecentFoodIcon2;
 local moreFoodIcon;
 local shopIcon;
+local playRecentList={};
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
 local morePlayIcon;
 local inventoryIcon;
+local dailyRewardTrueIcon;
+local dailyRewardFalseIcon;
 
 local needsLevels;
 local needsBars;
@@ -25,15 +30,20 @@ local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins
 local thoughtClouds;
 local checkHungerID;
 local checkTiredID;
+local checkHappinessID;
 
+-- TODO Move to Data guy
 local hungerRate = -10;
+local happinessRate = -10;
+local hygieneRate = -10;
 local energyRate = -10;
--- local hungerThoughtCloud;
--- local energyThoughtCloud;
+-- -----------------------
+
 local TamaLevels = 1;
-local TamaLevelsText
+local TamaLevelsText;
 -- -------------------------------------------------------------------------------
 
+-- TODO change to function
 -- Display level text
 TamaLevelsText = display.newText({
   text = "Level: " .. TamaLevels,
@@ -43,7 +53,7 @@ TamaLevelsText = display.newText({
   fontSize = 18,
   align = "right",});
 TamaLevelsText:setFillColor( 1, 0, 0 ) -- fill the text red
-
+-- -------------------------------------------------------------------------------
 -- Set up needs bar
 function setUpNeedsBar(fileName, left)
     local options = {
@@ -81,9 +91,6 @@ function setNeedsLevel(need, lvl)
     elseif lvl < 0 then
         lvl = 0
     end
-    --if need == "energy" then
-        --print("change in energy", lvl)
-    --end
     -- For saving the value
     needsLevels[need] = lvl
     -- Make change on need bar
@@ -123,21 +130,22 @@ function setUpAllIcons()
     wakeupIcon = setUpIcon(iconsDir .. "wakeupIcon.png", 0.7)
     cleanIcon = setUpIcon(iconsDir .. "cleanIcon.png", 0.5)
     playIcon = setUpIcon(iconsDir .. "playIcon.png", 0.75)
-    mostRecentFoodIcon1 = setUpIcon(iconsDir .. "cupcakeIcon.png", 0.75)
-    mostRecentFoodIcon2 = setUpIcon(iconsDir .. "milkIcon.png", 0.5)
+    mostRecentFoodIcon1 = setUpIcon(iconsDir .. "blank.png", 0.57)
+    mostRecentFoodIcon2 = setUpIcon(iconsDir .. "blank.png", 0.57)
     moreFoodIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
     shopIcon = setUpIcon(iconsDir .. "shopIcon.png", 0.5)
-    mostRecentPlayIcon1 = setUpIcon(iconsDir .. "legomanIcon.png", 0.75)
-    mostRecentPlayIcon2 = setUpIcon(iconsDir .. "footballIcon.png", 0.75)
+    mostRecentPlayIcon1 = setUpIcon(iconsDir .. "blank.png", 0.57)
+    mostRecentPlayIcon2 = setUpIcon(iconsDir .. "blank.png", 0.57)
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
 
     inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
 
+    dailyRewardTrueIcon = setUpIcon(iconsDir .. "RewardTrue.png", 1.5, display.contentWidth*0.06, display.contentHeight*.6, 1)
+    dailyRewardFalseIcon = setUpIcon(iconsDir .. "RewardFalse.png", 1.2, display.contentWidth*0.06, display.contentHeight*.6, 0)
 
     hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
     tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
     thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
-
 end
 
 function setUpIcon(img, scale, x, y, alpha)
@@ -177,6 +185,82 @@ end
 function changeNeedsLevel(need, change)
     setNeedsLevel(need, needsLevels[need] + change)
 end
+-- -----------------------------------------------------------------------------
+-- Update most recent icons
+
+function isInMostRecentFood(name)
+    for i, food in ipairs(foodRecentList) do
+        -- If item exists in inventory: return its index
+        if food.name == name then
+            return i
+        end
+    end
+    return false
+end
+
+function isInMostRecentPlay(name)
+    for i, toy in ipairs(playRecentList) do
+        -- If item exists in inventory: return its index
+        if toy.name == name then
+            return i
+        end
+    end
+    return false
+end
+
+function updateMostRecentFood(latest_food)
+    -- Remove current from recent list first
+    if (#foodRecentList > 0) then
+        recent_idx = isInMostRecentFood(latest_food.name) -- false, if not in inv
+        if recent_idx then
+            table.remove(foodRecentList,recent_idx)
+        end
+    end
+    -- Insert food to head of list if in inventory
+    if isInInventory(latest_food.name) then
+        table.insert(foodRecentList,1,latest_food)
+    end
+
+    if (#foodRecentList > 0) then
+        mostRecentFoodIcon1 = setUpIcon(foodRecentList[1].image, 0.75)
+    else
+        mostRecentFoodIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
+    end
+
+    if (#foodRecentList > 1) then
+        mostRecentFoodIcon2 = setUpIcon(foodRecentList[2].image, 0.75)
+    else
+        mostRecentFoodIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
+    end
+    updateFoodList(foodRecentList,mostRecentFoodIcon1,mostRecentFoodIcon2)
+end
+
+function updateMostRecentPlay(latest_toy)
+    -- Remove current from recent list first
+    if (#playRecentList > 0) then
+        recent_idx = isInMostRecentPlay(latest_toy.name) -- false, if not in inv
+        if recent_idx then
+            table.remove(playRecentList,recent_idx)
+        end
+    end
+    -- Insert food to head of list if in inventory
+    if isInInventory(latest_toy.name) then
+        table.insert(playRecentList,1,latest_toy)
+    end
+
+    if (#playRecentList > 0) then
+        mostRecentPlayIcon1 = setUpIcon(playRecentList[1].image, 0.75)
+    else
+        mostRecentPlayIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
+    end
+
+    if (#playRecentList > 1) then
+        mostRecentPlayIcon2 = setUpIcon(playRecentList[2].image, 0.75)
+    else
+        mostRecentPlayIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
+    end
+    updatePlayList(playRecentList,mostRecentPlayIcon1,mostRecentPlayIcon2)
+end
 
 -- -----------------------------------------------------------------------------
 -- Thought Cloud functions
@@ -194,9 +278,8 @@ end
 function checkHungerEventHandler(event)
     if needsBars.hunger:getProgress() < 0.4 then
         showThoughtCloud(1)
-        sadAnimation() -- HOTFIX
-        timer.performWithDelay(1600*20, setSequenceNormal)  -- HOTFIX
     end
+    checkHunger()
 end
 
 -- Does not need to loop, since we should check again when hunger increase
@@ -204,7 +287,7 @@ function checkHunger(delay)
     if (checkHungerID ~= nil) then
         timer.cancel(checkHungerID)
     end
-
+    -- print("Check Hunger")
     local progress = needsBars.hunger:getProgress()
     local delay = delay or 5000
     if progress > 0.4 then
@@ -213,15 +296,12 @@ function checkHunger(delay)
         delay = ((progress - 0.4) / (-hungerRate/maxNeedsLevels.hunger))*1000
         hideThoughtCloud(1)
     end
-    print("check if hungry next in", delay)
     checkHungerID = timer.performWithDelay(delay, checkHungerEventHandler, 1)
 end
 
 function checkTiredEventHandler(event)
     if needsBars.energy:getProgress() < 0.4 then
         showThoughtCloud(2)
-        sadAnimation() -- HOTFIX
-        timer.performWithDelay(1600*20, setSequenceNormal)  -- HOTFIX
     end
     -- Later will make predict time to check if energy is over 40%
     -- due to fix rate of increasing in energy when sleep
@@ -245,6 +325,34 @@ function checkTired(delay)
     checkTiredID = timer.performWithDelay(delay, checkTiredEventHandler, 1)
 end
 
+-- -------------------------------------------------------------------------------
+-- Sad Animation
+
+function checkHappinessEventHandler(event)
+    if needsBars.happiness:getProgress() < 0.4 then
+        if getMonster().sequence ~= "sleep" then
+            sadAnimation()
+        end
+    end
+    checkHappiness()
+end
+
+-- Does not need to loop, since we should check again when happiness increase
+function checkHappiness(delay)
+    if (checkHappinessID ~= nil) then
+        timer.cancel(checkHappinessID)
+    end
+
+    local progress = needsBars.happiness:getProgress()
+    local delay = delay or 5000
+    if progress > 0.4 then
+        -- Calculate approximate time that the happiness level will be below 40%
+        -- Times 1000 to turn into 1 second, will later need to be change to 1 minute
+        delay = ((progress - 0.4) / (-happinessRate/maxNeedsLevels.happiness))*1000
+        defaultAnimation()
+    end
+    checkHappinessID = timer.performWithDelay(delay, checkHappinessEventHandler, 1)
+end
 -- -------------------------------------------------------------------------------
 -- Get needs level
 
@@ -352,6 +460,14 @@ end
 
 function getInventoryIcon()
     return inventoryIcon
+end
+
+function getDailyRewardTrueIcon()
+    return dailyRewardTrueIcon
+end
+
+function getDailyRewardFalseIcon()
+    return dailyRewardFalseIcon
 end
 
 function getHungerThoughtCloud()

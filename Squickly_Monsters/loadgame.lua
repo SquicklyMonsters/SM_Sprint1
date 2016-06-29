@@ -8,6 +8,7 @@ local json = require("json")
 local needsDataFile = system.pathForFile( "needsData.txt", system.DocumentsDirectory ) -- Default Dir
 local inventoryDataFile = system.pathForFile( "inventoryData.txt", system.DocumentsDirectory )
 local currencyDataFile = system.pathForFile( "currencyData.txt", system.DocumentsDirectory )
+local rewardDateDataFile = system.pathForFile( "rewardsData.txt", system.DocumentsDirectory )
 
 -- -------------------------------------------------------------------------------
 -- Get latest Data from Save file
@@ -62,8 +63,6 @@ end
 
 function loadInventoryData()
     local file = io.open( inventoryDataFile, "r" )
-    -- local itemList = {"burger", "icecream", "fish", "noodles"}
-    -- local itemQuantities = {2, 3, 4, 5}
 
     if file then
         local inTable = readFile(file)
@@ -79,4 +78,18 @@ function loadInventoryData()
     end
 
     return itemList, itemQuantities, gold, platinum
+end
+-- -------------------------------------------------------------------------------
+
+function loadLastRewardDate()
+    local file = io.open( rewardDateDataFile, "r" )
+
+    if file then
+        local inTable = readFile(file)
+        lastRewardDate = inTable[1]
+    else
+        lastRewardDate = false
+    end
+
+    return lastRewardDate
 end
