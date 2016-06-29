@@ -98,7 +98,6 @@ function loadData()
         platinum = inTable[invIdx + 3]
 
         local needIdx = 7
-        -- maxNeedsLevels = inTable[needIdx]
         maxNeedsLevels = 
         {
         hunger = inTable[needIdx][1],
@@ -107,7 +106,6 @@ function loadData()
         energy = inTable[needIdx][4],
         exp = inTable[needIdx][5]
     	}
-        -- needsLevels = inTable[needIdx + 1]
         needsLevels = 
         {
         hunger = inTable[needIdx + 1][1],
@@ -116,16 +114,18 @@ function loadData()
         energy = inTable[needIdx + 1][4],
         exp = inTable[needIdx + 1][5]
     	}
-        monsterLevel = inTable[needIdx + 2]
 
+        local monIdx = 9
+        monsterLevel = inTable[monIdx]
+        monsterName = inTable[monIdx + 1]
     else
     	foodRecentList = {}
         playRecentList = {}
 
         itemList = {}
         itemQuantities = {}
-        gold = 9999999
-        platinum = 9999999
+        gold = 99999
+        platinum = 99999
 
         maxNeedsLevels = {
             hunger = 2880,
@@ -162,6 +162,24 @@ end
 
 function getPlatinum()
 	return platinum
+end
+
+function getItemList()
+	return itemList
+end
+
+function getItemQuantities()
+	return itemQuantities
+end
+
+-- --------------------------------
+
+function setGold(in_gold)
+    gold = in_gold
+end
+
+function setPlatinum(in_platinum)
+    platinum = in_platinum
 end
 
 -- Need levels
