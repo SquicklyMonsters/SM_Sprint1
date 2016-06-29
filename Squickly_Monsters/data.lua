@@ -13,6 +13,7 @@ local platinum;
 
 local needsLevels;
 local maxNeedsLevels;
+
 local monsterLevel;
 
 local hungerRate = -50;
@@ -32,6 +33,7 @@ function writeFile(file, contents)
 end
 
 function saveData()
+	print(getHungerLevel())
     local outTable = 
     {
     -- UI Data
@@ -126,6 +128,8 @@ function loadData()
     end
 
     print("Load by Data Sage")
+    print(maxNeedsLevels.hunger)
+    print(needsLevels.hunger)
 end
 -- -------------------------------------------------------------------------------
 -- Inventory Data
@@ -148,10 +152,6 @@ function getHungerLevel()
     return needsLevels.hunger
 end
 
-function setHungerLevel(level)
-    return needsLevels.hunger = level
-end
-
 function getHappinessLevel()
     return needsLevels.happiness
 end
@@ -166,6 +166,12 @@ end
 
 function getExpLevel()
     return needsLevels.exp
+end
+
+-- --------------------------------
+
+function setNeedsLevels(needsLevels)
+    needsLevels = needsLevels
 end
 
 -- Monster

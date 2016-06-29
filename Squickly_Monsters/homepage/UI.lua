@@ -76,7 +76,7 @@ function setUpNeedsBar(fileName, left)
     )
 end
 
-function setNeedsLevel(need, lvl)
+function setNeedLevel(need, lvl)
     -- Prevent lvl going over 100% and below 0%
     if lvl > maxNeedsLevels[need] then
         lvl = maxNeedsLevels[need]
@@ -85,6 +85,7 @@ function setNeedsLevel(need, lvl)
     end
     -- For saving the value
     needsLevels[need] = lvl
+    setNeedsLevels(needsLevels)
     -- Make change on need bar
     needsBars[need]:setProgress(lvl/maxNeedsLevels[need])
 end
@@ -107,11 +108,11 @@ function setupAllNeedsBars()
     maxNeedsLevels = getMaxNeedsLevels()
 
     -- Set All Needs Level
-    setNeedsLevel("hunger", needsLevels.hunger)
-    setNeedsLevel("happiness", needsLevels.happiness)
-    setNeedsLevel("hygiene", needsLevels.hygiene)
-    setNeedsLevel("energy", needsLevels.energy)
-    setNeedsLevel("exp", needsLevels.exp)
+    setNeedLevel("hunger", needsLevels.hunger)
+    setNeedLevel("happiness", needsLevels.happiness)
+    setNeedLevel("hygiene", needsLevels.hygiene)
+    setNeedLevel("energy", needsLevels.energy)
+    setNeedLevel("exp", needsLevels.exp)
 
 end
 -- -------------------------------------------------------------------------------
@@ -165,6 +166,7 @@ function setUpIcon(img, scale, x, y, alpha)
     return icon
 end
 
+-- This should not be here
 function setUpMonsterLevel()
     levelsTextOptions = {
         text = "Level: " .. getMonsterLevel(),
@@ -177,6 +179,7 @@ function setUpMonsterLevel()
     levelsText:setFillColor( 1, 0, 0 ) -- fill the text red
 end
 
+-- This should not be here
 function levelUp()  -- Level up then change text and set exp bar to = 0
     monsterLevelText = getMonsterLevelText()
     monsterLevel = getMonsterLevel()
@@ -211,7 +214,7 @@ end
 -- ------------------------------------------------
 -- Changing by a certain amount (Still needs to have more calculations later)
 function changeNeedsLevel(need, change)
-    setNeedsLevel(need, needsLevels[need] + change)
+    setNeedLevel(need, needsLevels[need] + change)
 end
 -- -----------------------------------------------------------------------------
 -- Update most recent icons
