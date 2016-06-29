@@ -2,13 +2,7 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-require( 'inventory.interactions' )
-require( 'menubar' )
-
-require( 'squicklyrun.sr_interactions' )
-require( 'squicklyrun.sr_background' )
-require( 'squicklyrun.sr_update' )
-require( 'squicklyrun.sr_interactions' )
+require( 'squicklyfarm.sf_background' )
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
@@ -29,39 +23,9 @@ function scene:create( event )
     middle = display.newGroup()
     front = display.newGroup()
 
-
     -- Set background
 	setupBackground()
 	backbackground = getBackbackground()
-	backgroundfar = getBackgroundfar()
-	backgroundnear1 = getBackgroundnear1()
-	backgroundnear2 = getBackgroundnear2()
-
-
-    -- set ground
-	setupGround()
-    blocks = getBlocks()
-
-    -- set obstacles and enemies
-    setupObstaclesAndEnemies()
-    spikes = getSpikes()
-    blasts = getBlasts()
-    ghosts = getGhosts()
-    boss = getBoss()
-    bossSpits = getBossSpits()
-
-    -- set hero
-    setupSprite()
-    hero = getHero()
-    collisionRect = getCollisionRect() --if enemies hit this then gameover, it surrounds him.
-
-    -- set gameover
-    setupScoreAndGameOver()
-    gameOver = getGameOver()
-    scoreText = getScoreText()
-	timer.performWithDelay(1, update, -1)
-
-	Runtime:addEventListener("touch", touched, -1)
 end
 
 function scene:show( event )
@@ -72,26 +36,10 @@ function scene:show( event )
         composer.showOverlay("menubar")
         -- Background
         back:insert(backbackground)
-        back:insert(backgroundfar)
-        back:insert(backgroundnear1)
-        back:insert(backgroundnear2)
         -- ===========MIDDLE==============
-        -- Ground
-        middle:insert(blocks)
-        -- ObstaclesandEnemies
-        middle:insert(spikes)
-        middle:insert(blasts)
-        middle:insert(ghosts)
-        middle:insert(boss)
-        middle:insert(bossSpits)
-        --Sprite
-        middle:insert(hero)
-        middle:insert(collisionRect)
 
         -- ===========FRONT===============
-        --ScoreAndGameOver
-        front:insert(gameOver)
-        front:insert(scoreText)
+
         -- ===============================
         sceneGroup:insert(back)
         sceneGroup:insert(middle)
@@ -124,17 +72,7 @@ function scene:hide( event )
 end
 
 function scene:destroy( event )
-	--reward
-
-	print (getScore())
-	if getScore() ~= nil then
-		print("in here!")
-		updateCurrency(getScore(), 0)
-	end
-	--exp
-	changeNeedsLevel("exp", getScore()*10)
-	changeNeedsLevel("energy", -getScore()*10)
-	saveAllData()
+	saveData()
 end
 
 ---------------------------------------------------------------------------------

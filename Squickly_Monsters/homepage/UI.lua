@@ -120,18 +120,18 @@ end
 
 function setUpAllIcons()
     local iconsDir = "img/icons/UIIcons/"
-    feedIcon = setUpIcon(iconsDir .. "feedIcon.png", 0.75)
+    feedIcon = setUpIcon(iconsDir .. "feedIcon.png", 0.4)
     sleepIcon = setUpIcon(iconsDir .. "sleepIcon.png", 0.5)
-    wakeupIcon = setUpIcon(iconsDir .. "wakeupIcon.png", 0.7)
-    cleanIcon = setUpIcon(iconsDir .. "cleanIcon.png", 0.5)
-    playIcon = setUpIcon(iconsDir .. "playIcon.png", 0.75)
-    mostRecentFoodIcon1 = setUpIcon(iconsDir .. "blank.png", 0.57)
-    mostRecentFoodIcon2 = setUpIcon(iconsDir .. "blank.png", 0.57)
-    moreFoodIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
-    shopIcon = setUpIcon(iconsDir .. "shopIcon.png", 0.5)
-    mostRecentPlayIcon1 = setUpIcon(iconsDir .. "blank.png", 0.57)
-    mostRecentPlayIcon2 = setUpIcon(iconsDir .. "blank.png", 0.57)
-    morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
+    wakeupIcon = setUpIcon(iconsDir .. "wakeupIcon.png", 0.75)
+    cleanIcon = setUpIcon(iconsDir .. "cleanIcon.png", 0.4)
+    playIcon = setUpIcon(iconsDir .. "playIcon.png", 0.4)
+    mostRecentFoodIcon1 = setUpIcon(iconsDir .. "blank.png", 0.4)
+    mostRecentFoodIcon2 = setUpIcon(iconsDir .. "blank.png", 0.4)
+    moreFoodIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.7)
+    shopIcon = setUpIcon(iconsDir .. "shopIcon.png", 0.4)
+    mostRecentPlayIcon1 = setUpIcon(iconsDir .. "blank.png", 0.4)
+    mostRecentPlayIcon2 = setUpIcon(iconsDir .. "blank.png", 0.4)
+    morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.7)
 
     inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
 
@@ -239,13 +239,13 @@ function updateFoodIcons()
     if (foodRecentList[1] ~= nil) then
         mostRecentFoodIcon1 = setUpIcon(foodRecentList[1].image, 0.75)
     else
-        mostRecentFoodIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
+        mostRecentFoodIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
     end
 
     if (foodRecentList[2] ~= nil) then
         mostRecentFoodIcon2 = setUpIcon(foodRecentList[2].image, 0.75)
     else
-        mostRecentFoodIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
+        mostRecentFoodIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
     end
     updateFoodList(foodRecentList,mostRecentFoodIcon1,mostRecentFoodIcon2)
 end
@@ -254,13 +254,13 @@ function updatePlayIcons()
     if (playRecentList[1] ~= nil) then
         mostRecentPlayIcon1 = setUpIcon(playRecentList[1].image, 0.75)
     else
-        mostRecentPlayIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
+        mostRecentPlayIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
     end
 
     if (playRecentList[2] ~= nil) then
         mostRecentPlayIcon2 = setUpIcon(playRecentList[2].image, 0.75)
     else
-        mostRecentPlayIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.57)
+        mostRecentPlayIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
     end
     updatePlayList(playRecentList,mostRecentPlayIcon1,mostRecentPlayIcon2)
 end

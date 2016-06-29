@@ -127,7 +127,7 @@ function setUpInventory()
  		left = startX + (spacingX * 2.7),
  		width = 50,
  		height = 50,
- 		defaultFile = "img/icons/close.png",
+ 		defaultFile = "img/bg/close.png",
  		onEvent = closeEvent,
  	}
 
