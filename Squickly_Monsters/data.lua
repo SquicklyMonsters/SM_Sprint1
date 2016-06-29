@@ -58,6 +58,7 @@ function saveData()
     	},
     -- Monster
     monsterLevel,
+    monsterName,
 	}
     local contents = json.encode(outTable)
     writeFile(dataFile, contents)
@@ -140,7 +141,9 @@ function loadData()
             energy = 1440,
             exp = 1440,
         }
+
         monsterLevel = 1
+        monsterName = "fireball"
 
     end
 
@@ -202,6 +205,9 @@ function getMonsterLevel()
 	return monsterLevel
 end
 
+function getMonsterName()
+	return monsterName
+end
 -- Need Rates
 
 function getHungerRate()
