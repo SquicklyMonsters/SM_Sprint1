@@ -139,9 +139,9 @@ function setUpAllIcons()
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.75)
 
     inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
-    
+
     dailyRewardTrueIcon = setUpIcon(iconsDir .. "RewardTrue.png", 1.5, display.contentWidth*0.06, display.contentHeight*.6, 1)
-    dailyRewardFalseIcon = setUpIcon(iconsDir .. "RewardFalse.png", 1.5, display.contentWidth*0.06, display.contentHeight*.6, 0)
+    dailyRewardFalseIcon = setUpIcon(iconsDir .. "RewardFalse.png", 1.2, display.contentWidth*0.06, display.contentHeight*.6, 0)
 
     hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
     tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
