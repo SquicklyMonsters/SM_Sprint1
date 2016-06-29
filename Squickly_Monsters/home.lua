@@ -62,6 +62,9 @@ local monsterLevelText;
 function scene:create( event )
 	local sceneGroup = self.view
 
+    -- Setup All Data
+    loadData()
+
     -- Setup layer
     back = display.newGroup()
     middle = display.newGroup()
@@ -102,7 +105,7 @@ function scene:create( event )
     dailyRewardTrueIcon = getDailyRewardTrueIcon()
     dailyRewardFalseIcon = getDailyRewardFalseIcon()
 
-    setAutoSaveRate(10000)
+    -- setAutoSaveRate(10000)
 
     -- Set up all Event Listeners
     addListeners()

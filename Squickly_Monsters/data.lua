@@ -13,12 +13,14 @@ local platinum;
 
 local needsLevels;
 local maxNeedsLevels;
+local monsterLevel;
 
 local hungerRate = -50;
 local happinessRate = -50;
 local hygieneRate = -50;
 local energyRate = -50;
 
+local saveRate;
 local dataFile = system.pathForFile( "data.txt", system.DocumentsDirectory )
 
 -- -------------------------------------------------------------------------------
@@ -30,12 +32,42 @@ function writeFile(file, contents)
 end
 
 function saveData()
-    local outTable = {itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum}
+    local outTable = 
+    {
+    -- UI Data
+    foodRecentList, playRecentList, 
+    -- Inventory Data
+    itemList, itemQuantities, gold, platinum,
+    -- Needs Data
+    	{
+    	maxNeedsLevels.hunger, 
+    	maxNeedsLevels.happiness, 
+    	maxNeedsLevels.hygiene, 
+    	maxNeedsLevels.energy, 
+    	maxNeedsLevels.exp
+    	},
+
+    	{
+    	needsLevels.hunger, 
+    	needsLevels.happiness, 
+    	needsLevels.hygiene, 
+    	needsLevels.energy, 
+    	needsLevels.exp    	
+    	},
+    -- Monster
+    monsterLevel,
+	}
     local contents = json.encode(outTable)
     writeFile(dataFile, contents)
     print("Save by Data Sage")
 end
 
+-- function setAutoSaveRate(rate) -- 1000 = 1sec
+-- 	if saveRate ~= nil then
+-- 		timer.cancel(saveRate)
+-- 	end
+--     saveRate = timer.performWithDelay(rate, saveData, -1)
+-- end
 -- -------------------------------------------------------------------------------
 
 function readFile(file)
@@ -51,19 +83,46 @@ function loadData()
 
     if file then
         local inTable = readFile(file)
-        itemList = inTable[1]
-        foodRecentList = inTable[2]
-        playRecentList = inTable[3]
-        itemQuantities = inTable[4]
-        gold = inTable[5]
-        platinum = inTable[6]
+        local UIIdx = 1
+        foodRecentList = inTable[UIIdx]
+        playRecentList = inTable[UIIdx + 1]
+
+        local invIdx = 3
+        itemList = inTable[invIdx]
+        itemQuantities = inTable[invIdx + 1]
+        gold = inTable[invIdx + 2]
+        platinum = inTable[invIdx + 3]
+
+        local needIdx = 7
+        maxNeedsLevels = inTable[needIdx]
+        needsLevels = inTable[needIdx + 1]
+        monsterLevel = inTable[needIdx + 2]
+
     else
-        itemList = {}
-        foodRecentList = {}
+    	foodRecentList = {}
         playRecentList = {}
+
+        itemList = {}
         itemQuantities = {}
-        gold = 0
-        platinum = 0
+        gold = 9999999
+        platinum = 9999999
+
+        maxNeedsLevels = {
+            hunger = 2880,
+            happiness = 2880,
+            hygiene = 2880,
+            energy = 2880,
+            exp = 2880,
+        }
+        needsLevels = {
+            hunger = 1440,
+            happiness = 1440,
+            hygiene = 1440,
+            energy = 1440,
+            exp = 1440,
+        }
+        monsterLevel = 1
+
     end
 
     print("Load by Data Sage")
@@ -74,6 +133,46 @@ function getInventoryData()
 	loadData()
 	return itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum
 end
+
+-- Need levels
+
+function getNeedsLevels()
+    return needsLevels
+end
+
+function getMaxNeedsLevels()
+    return maxNeedsLevels
+end
+
+function getHungerLevel()
+    return needsLevels.hunger
+end
+
+function setHungerLevel(level)
+    return needsLevels.hunger = level
+end
+
+function getHappinessLevel()
+    return needsLevels.happiness
+end
+
+function getHygieneLevel()
+    return needsLevels.hygiene
+end
+
+function getEnergyLevel()
+    return needsLevels.energy
+end
+
+function getExpLevel()
+    return needsLevels.exp
+end
+
+-- Monster
+function getMonsterLevel()
+	return monsterLevel
+end
+
 -- Need Rates
 
 function getHungerRate()

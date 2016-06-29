@@ -103,7 +103,8 @@ function setupAllNeedsBars()
     needsBars.exp = setUpNeedsBar(barsDir .. "EnergyBar.png", startX + spacing*4)
 
     -- Load data from save
-    needsLevels, maxNeedsLevels, monsterLevel = getSavedLevels()
+    needsLevels = getNeedsLevels()
+    maxNeedsLevels = getMaxNeedsLevels()
 
     -- Set All Needs Level
     setNeedsLevel("hunger", needsLevels.hunger)
@@ -166,7 +167,7 @@ end
 
 function setUpMonsterLevel()
     levelsTextOptions = {
-        text = "Level: " .. monsterLevel,
+        text = "Level: " .. getMonsterLevel(),
         x = display.contentCenterX + display.contentWidth*0.35,
         y = display.contentCenterY - display.contentHeight*0.4,
         font = native.systemFontBold,
@@ -387,35 +388,35 @@ function checkHappiness(delay)
     checkHappinessID = timer.performWithDelay(delay, checkHappinessEventHandler, 1)
 end
 -- -------------------------------------------------------------------------------
--- Get needs level
+-- -- Get needs level
 
-function getCurrentNeedsLevels()
-    return needsLevels
-end
+-- function getCurrentNeedsLevels()
+--     return needsLevels
+-- end
 
-function getMaxNeedsLevels()
-    return maxNeedsLevels
-end
+-- function getMaxNeedsLevels()
+--     return maxNeedsLevels
+-- end
 
-function getHungerLevel()
-    return needsLevels.hunger
-end
+-- function getHungerLevel()
+--     return needsLevels.hunger
+-- end
 
-function getHappinessLevel()
-    return needsLevels.happiness
-end
+-- function getHappinessLevel()
+--     return needsLevels.happiness
+-- end
 
-function getHygieneLevel()
-    return needsLevels.hygiene
-end
+-- function getHygieneLevel()
+--     return needsLevels.hygiene
+-- end
 
-function getEnergyLevel()
-    return needsLevels.energy
-end
+-- function getEnergyLevel()
+--     return needsLevels.energy
+-- end
 
-function getExpLevel()
-    return needsLevels.exp
-end
+-- function getExpLevel()
+--     return needsLevels.exp
+-- end
 
 -- -------------------------------------------------------------------------------
 -- Get needs bar
@@ -517,10 +518,6 @@ end
 
 function getTiredThoughtCloud()
     return thoughtClouds[2]
-end
-
-function getMonsterLevel()
-    return monsterLevel
 end
 
 function getMonsterLevelText()
