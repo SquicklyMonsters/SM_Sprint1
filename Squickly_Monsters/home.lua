@@ -98,11 +98,8 @@ function scene:create( event )
     mostRecentPlayIcon2 = getMostRecentPlayIcon2()
     morePlayIcon = getMorePlayIcon()
     inventoryIcon = getInventoryIcon()
-<<<<<<< HEAD
-=======
     dailyRewardTrueIcon = getDailyRewardTrueIcon()
     dailyRewardFalseIcon = getDailyRewardFalseIcon()
->>>>>>> 251852381882c2ab80990d26fcd713e01e26dc0c
 
     setAutoSaveRate(10000)
 

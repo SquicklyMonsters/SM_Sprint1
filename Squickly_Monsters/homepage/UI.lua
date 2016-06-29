@@ -145,22 +145,21 @@ function setUpAllIcons()
 
     inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
 
-<<<<<<< HEAD
     hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
     tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
     thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
 
     itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
+    print(itemList)
     updateFoodIcons()
     updatePlayIcons()
-=======
+
     dailyRewardTrueIcon = setUpIcon(iconsDir .. "RewardTrue.png", 1.5, display.contentWidth*0.06, display.contentHeight*.6, 1)
     dailyRewardFalseIcon = setUpIcon(iconsDir .. "RewardFalse.png", 1.2, display.contentWidth*0.06, display.contentHeight*.6, 0)
 
     hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
     tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
     thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
->>>>>>> 251852381882c2ab80990d26fcd713e01e26dc0c
 end
 
 function setUpIcon(img, scale, x, y, alpha)

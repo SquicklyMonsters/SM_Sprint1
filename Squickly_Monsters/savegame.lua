@@ -9,11 +9,7 @@ local saveRate;
 -- Set location for saved data
 local needsDataFile = system.pathForFile( "needsData.txt", system.DocumentsDirectory )
 local inventoryDataFile = system.pathForFile( "inventoryData.txt", system.DocumentsDirectory )
-<<<<<<< HEAD
-=======
-local currencyDataFile = system.pathForFile( "currencyData.txt", system.DocumentsDirectory )
 local rewardDateDataFile = system.pathForFile( "rewardsData.txt", system.DocumentsDirectory )
->>>>>>> 251852381882c2ab80990d26fcd713e01e26dc0c
 
 -- -------------------------------------------------------------------------------
 -- Set Auto Save rate
