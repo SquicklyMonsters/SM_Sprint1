@@ -83,11 +83,11 @@ function getItemQuantities()
 end
 
 function getCurrentGold()
-	return gold
+	return gold or 0
 end
 
 function getCurrentPlatinum()
-	return platinum
+	return platinum or 0
 end
 
 -- -------------------------------------------------------------------------------
