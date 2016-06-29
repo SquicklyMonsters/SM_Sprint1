@@ -39,7 +39,7 @@ function useItem(item)
 	if idx then
 		local quantity = reduceQuantity(idx)
 		itemTexts[idx].text = quantity
-		saveInventoryData()
+		saveData()
 		item:use(item.type)
 	end
 end
@@ -54,7 +54,7 @@ end
 
 function updateInventory()
 	-- Pretty much refresh the screen
-	saveInventoryData()
+	saveData()
 	inventory:removeSelf()
 	scene:create()
 end
@@ -84,7 +84,8 @@ function setUpInventory()
  	local spacingY = inventory.height/4
 
  	-- Retrieve data from save file
- 	itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
+ 	-- itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
+ 	itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = getInventoryData()
 
  	inventory.items = {}
 
@@ -138,7 +139,7 @@ function setUpInventory()
 
  	-- text area to show how much GOLD you have
     local GoldOptions = {
-    text = "Gold: " .. getCurrentGold(),
+    text = "Gold: " .. getGold(),
     x = startX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
@@ -147,7 +148,7 @@ function setUpInventory()
 
     -- text area to show how much PlATINUM you have
     local PlatinumOptions = {
-    text = "Platinum: " .. getCurrentPlatinum(),
+    text = "Platinum: " .. getPlatinum(),
     x = startX + 2*spacingX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
@@ -215,7 +216,7 @@ end
 
 function scene:destroy( event )
 	-- Save data before exit
-	saveInventoryData()
+	saveData()
 end
 
 ---------------------------------------------------------------------------------

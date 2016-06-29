@@ -102,7 +102,7 @@ function scene:create( event )
     dailyRewardTrueIcon = getDailyRewardTrueIcon()
     dailyRewardFalseIcon = getDailyRewardFalseIcon()
 
-    setAutoSaveRate(10000)
+    -- setAutoSaveRate(10000)
 
     -- Set up all Event Listeners
     addListeners()

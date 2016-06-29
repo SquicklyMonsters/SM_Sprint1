@@ -76,7 +76,7 @@ function setUpNeedsBar(fileName, left)
     )
 end
 
-function setNeedsLevel(need, lvl)
+function setNeedLevel(need, lvl)
     -- Prevent lvl going over 100% and below 0%
     if lvl > maxNeedsLevels[need] then
         lvl = maxNeedsLevels[need]
@@ -85,6 +85,7 @@ function setNeedsLevel(need, lvl)
     end
     -- For saving the value
     needsLevels[need] = lvl
+    setNeedsLevels(needsLevels)
     -- Make change on need bar
     needsBars[need]:setProgress(lvl/maxNeedsLevels[need])
 end
@@ -103,14 +104,15 @@ function setupAllNeedsBars()
     needsBars.exp = setUpNeedsBar(barsDir .. "EnergyBar.png", startX + spacing*4)
 
     -- Load data from save
-    needsLevels, maxNeedsLevels, monsterLevel = getSavedLevels()
+    needsLevels = getNeedsLevels()
+    maxNeedsLevels = getMaxNeedsLevels()
 
     -- Set All Needs Level
-    setNeedsLevel("hunger", needsLevels.hunger)
-    setNeedsLevel("happiness", needsLevels.happiness)
-    setNeedsLevel("hygiene", needsLevels.hygiene)
-    setNeedsLevel("energy", needsLevels.energy)
-    setNeedsLevel("exp", needsLevels.exp)
+    setNeedLevel("hunger", needsLevels.hunger)
+    setNeedLevel("happiness", needsLevels.happiness)
+    setNeedLevel("hygiene", needsLevels.hygiene)
+    setNeedLevel("energy", needsLevels.energy)
+    setNeedLevel("exp", needsLevels.exp)
 
 end
 -- -------------------------------------------------------------------------------
@@ -140,7 +142,7 @@ function setUpAllIcons()
     tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
     thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
 
-    itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
+    itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = getInventoryData()
     updateFoodIcons()
     updatePlayIcons()
 
@@ -161,9 +163,10 @@ function setUpIcon(img, scale, x, y, alpha)
     return icon
 end
 
+-- This should not be here
 function setUpMonsterLevel()
     levelsTextOptions = {
-        text = "Level: " .. monsterLevel,
+        text = "Level: " .. getMonsterLevel(),
         x = display.contentCenterX + display.contentWidth*0.35,
         y = display.contentCenterY - display.contentHeight*0.4,
         font = native.systemFontBold,
@@ -173,6 +176,7 @@ function setUpMonsterLevel()
     levelsText:setFillColor( 1, 0, 0 ) -- fill the text red
 end
 
+-- This should not be here
 function levelUp()  -- Level up then change text and set exp bar to = 0
     monsterLevelText = getMonsterLevelText()
     monsterLevel = getMonsterLevel()
@@ -207,7 +211,7 @@ end
 -- ------------------------------------------------
 -- Changing by a certain amount (Still needs to have more calculations later)
 function changeNeedsLevel(need, change)
-    setNeedsLevel(need, needsLevels[need] + change)
+    setNeedLevel(need, needsLevels[need] + change)
 end
 -- -----------------------------------------------------------------------------
 -- Update most recent icons
@@ -384,35 +388,35 @@ function checkHappiness(delay)
     checkHappinessID = timer.performWithDelay(delay, checkHappinessEventHandler, 1)
 end
 -- -------------------------------------------------------------------------------
--- Get needs level
+-- -- Get needs level
 
-function getCurrentNeedsLevels()
-    return needsLevels
-end
+-- function getCurrentNeedsLevels()
+--     return needsLevels
+-- end
 
-function getMaxNeedsLevels()
-    return maxNeedsLevels
-end
+-- function getMaxNeedsLevels()
+--     return maxNeedsLevels
+-- end
 
-function getHungerLevel()
-    return needsLevels.hunger
-end
+-- function getHungerLevel()
+--     return needsLevels.hunger
+-- end
 
-function getHappinessLevel()
-    return needsLevels.happiness
-end
+-- function getHappinessLevel()
+--     return needsLevels.happiness
+-- end
 
-function getHygieneLevel()
-    return needsLevels.hygiene
-end
+-- function getHygieneLevel()
+--     return needsLevels.hygiene
+-- end
 
-function getEnergyLevel()
-    return needsLevels.energy
-end
+-- function getEnergyLevel()
+--     return needsLevels.energy
+-- end
 
-function getExpLevel()
-    return needsLevels.exp
-end
+-- function getExpLevel()
+--     return needsLevels.exp
+-- end
 
 -- -------------------------------------------------------------------------------
 -- Get needs bar
@@ -514,10 +518,6 @@ end
 
 function getTiredThoughtCloud()
     return thoughtClouds[2]
-end
-
-function getMonsterLevel()
-    return monsterLevel
 end
 
 function getMonsterLevelText()
