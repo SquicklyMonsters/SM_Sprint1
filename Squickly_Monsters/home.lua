@@ -62,9 +62,6 @@ local monsterLevelText;
 function scene:create( event )
 	local sceneGroup = self.view
 
-    -- Setup All Data
-    loadData()
-
     -- Setup layer
     back = display.newGroup()
     middle = display.newGroup()

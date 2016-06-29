@@ -22,7 +22,6 @@ local hygieneRate = -50;
 local energyRate = -50;
 
 local saveRate;
-local firstTime = true;
 local dataFile = system.pathForFile( "data.txt", system.DocumentsDirectory )
 
 -- -------------------------------------------------------------------------------
@@ -63,6 +62,7 @@ function saveData()
     local contents = json.encode(outTable)
     writeFile(dataFile, contents)
     print("Save by Data Sage")
+    print(getHungerLevel(), needsLevels.hunger)
 end
 
 -- function setAutoSaveRate(rate) -- 1000 = 1sec
@@ -82,11 +82,6 @@ function readFile(file)
 end
 
 function loadData()
-	if not firstTime then
-		saveData()
-	else
-		firstTime = false
-	end
     local file = io.open( dataFile, "r" )
 
     if file then
@@ -102,8 +97,24 @@ function loadData()
         platinum = inTable[invIdx + 3]
 
         local needIdx = 7
-        maxNeedsLevels = inTable[needIdx]
-        needsLevels = inTable[needIdx + 1]
+        -- maxNeedsLevels = inTable[needIdx]
+        maxNeedsLevels = 
+        {
+        hunger = inTable[needIdx][1],
+        happiness = inTable[needIdx][2],
+        hygiene = inTable[needIdx][3],
+        energy = inTable[needIdx][4],
+        exp = inTable[needIdx][5]
+    	}
+        -- needsLevels = inTable[needIdx + 1]
+        needsLevels = 
+        {
+        hunger = inTable[needIdx + 1][1],
+        happiness = inTable[needIdx + 1][2],
+        hygiene = inTable[needIdx + 1][3],
+        energy = inTable[needIdx + 1][4],
+        exp = inTable[needIdx + 1][5]
+    	}
         monsterLevel = inTable[needIdx + 2]
 
     else
@@ -134,14 +145,20 @@ function loadData()
     end
 
     print("Load by Data Sage")
-    print(maxNeedsLevels.hunger)
-    print(needsLevels.hunger)
+    print(getHungerLevel(), needsLevels.hunger, gold, platinum)
 end
 -- -------------------------------------------------------------------------------
 -- Inventory Data
 function getInventoryData()
-	loadData()
 	return itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum
+end
+
+function getGold()
+	return gold
+end
+
+function getPlatinum()
+	return platinum
 end
 
 -- Need levels
