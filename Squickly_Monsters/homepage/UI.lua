@@ -183,8 +183,8 @@ function levelUp()  -- Level up then change text and set exp bar to = 0
 
     monsterLevel = monsterLevel + 1
     monsterLevelText.text = "Level: " .. monsterLevel
-    setNeedsLevel("exp", 0)
-    saveNeedsData()
+    setNeedLevel("exp", 0)
+    saveData()
 end
 
 -- -------------------------------------------------------------------------------
