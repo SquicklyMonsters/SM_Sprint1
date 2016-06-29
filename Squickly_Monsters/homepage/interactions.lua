@@ -1,6 +1,7 @@
 require("savegame") -- For Testing
-local composer = require("composer")
+require("data")
 require("shopList")
+local composer = require("composer")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 
@@ -36,11 +37,6 @@ local currentVisibleList;
 local maxNeedsLevels; -- 2880 mins = 2days*24hrs*60mins
 local needsLevels;
 local needsBars;
-
-local hungerRate = -10;
-local happinessRate = -10;
-local hygieneRate = -10;
-local energyRate = -10;
 
 local isTouchAble;
 local inventoryIsShow = false;
@@ -111,11 +107,11 @@ end
 
 function setDecrementRate()
     print("set all rate")
-    setRateLongTerm("hunger", 1000, hungerRate)
-    setRateLongTerm("happiness", 1000, happinessRate)
-    setRateLongTerm("hygiene", 1000, hygieneRate)
+    setRateLongTerm("hunger", 1000, getHungerRate())
+    setRateLongTerm("happiness", 1000, getHappinessRate())
+    setRateLongTerm("hygiene", 1000, getHygieneRate())
     -- Need sleepWakeID for canceling old loop before assign new one
-    sleepWakeID = setRateLongTerm("energy", 1000, energyRate)
+    sleepWakeID = setRateLongTerm("energy", 1000, getEnergyRate())
 end
 
 -- -------------------------------------------------------------------------------

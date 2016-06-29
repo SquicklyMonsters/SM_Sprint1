@@ -1,7 +1,8 @@
-local widget = require( "widget" )
-local composer = require( "composer" )
+require("data")
 require("loadgame")
 require("inventory.interactions")
+local widget = require( "widget" )
+local composer = require( "composer" )
 -------------------------------------------------------------------------------
 -- Local variables go HERE
 
@@ -36,13 +37,6 @@ local thoughtClouds;
 local checkHungerID;
 local checkTiredID;
 local checkHappinessID;
-
--- TODO Move to Data guy
-local hungerRate = -10;
-local happinessRate = -10;
-local hygieneRate = -10;
-local energyRate = -10;
--- -----------------------
 
 local monsterLevel;
 local monsterText;
@@ -330,7 +324,7 @@ function checkHunger(delay)
     if progress > 0.4 then
         -- Calculate approximate time that the hunger level will be below 40%
         -- Times 1000 to turn into 1 second, will later need to be change to 1 minute
-        delay = ((progress - 0.4) / (-hungerRate/maxNeedsLevels.hunger))*1000
+        delay = ((progress - 0.4) / (-getHungerRate()/maxNeedsLevels.hunger))*1000
         hideThoughtCloud(1)
     end
     checkHungerID = timer.performWithDelay(delay, checkHungerEventHandler, 1)
@@ -355,7 +349,7 @@ function checkTired(delay)
     if progress > 0.4 then
         -- Calculate approximate time that the energy level will be below 40%
         -- Times 1000 to turn into 1 second, will later need to be change to 1 minute
-        delay = ((progress - 0.4) / (-energyRate/maxNeedsLevels.energy))*1000
+        delay = ((progress - 0.4) / (-getEnergyRate()/maxNeedsLevels.energy))*1000
         hideThoughtCloud(2)
     end
     --print("check if tired next in", delay)
@@ -385,7 +379,7 @@ function checkHappiness(delay)
     if progress > 0.4 then
         -- Calculate approximate time that the happiness level will be below 40%
         -- Times 1000 to turn into 1 second, will later need to be change to 1 minute
-        delay = ((progress - 0.4) / (-happinessRate/maxNeedsLevels.happiness))*1000
+        delay = ((progress - 0.4) / (-getHappinessRate()/maxNeedsLevels.happiness))*1000
         defaultAnimation()
     end
     checkHappinessID = timer.performWithDelay(delay, checkHappinessEventHandler, 1)
