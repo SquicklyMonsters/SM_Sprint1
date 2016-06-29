@@ -9,8 +9,9 @@ local saveRate;
 -- Set location for saved data
 local needsDataFile = system.pathForFile( "needsData.txt", system.DocumentsDirectory )
 local inventoryDataFile = system.pathForFile( "inventoryData.txt", system.DocumentsDirectory )
-local currencyDataFile = system.pathForFile( "currencyData.txt", system.DocumentsDirectory )
 local rewardDateDataFile = system.pathForFile( "rewardsData.txt", system.DocumentsDirectory )
+
+-- local rewardDateDataFile = system.pathForFile( "squicklydata.txt", system.DocumentsDirectory )
 
 -- -------------------------------------------------------------------------------
 -- Set Auto Save rate
@@ -31,11 +32,11 @@ end
 -- Save functions
 function saveAllData()
     saveNeedsData()
-    -- saveInventoryData()
+    saveInventoryData()
+    saveRewardTimerData()
 end
 
 function saveNeedsData()
-	-- print("saved file")
     local maxNeedsLevels = getMaxNeedsLevels()
     local needsLevels = getCurrentNeedsLevels()
     
@@ -43,16 +44,18 @@ function saveNeedsData()
     local contents = json.encode(outTable)
         
     writeFile(needsDataFile, contents)
-    print("save")
+    print("save needs")
 end
 
 function saveInventoryData()
     local itemList = getItemList()
+    local foodRecentList = getFoodRecentList()
+    local playRecentList = getPlayRecentList()
     local itemQuantities = getItemQuantities()
     local gold = getCurrentGold()
     local platinum = getCurrentPlatinum()
 
-    local outTable = {itemList, itemQuantities, gold, platinum}
+    local outTable = {itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum}
     local contents = json.encode(outTable)
 
 
