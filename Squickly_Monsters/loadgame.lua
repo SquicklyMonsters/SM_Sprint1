@@ -7,7 +7,6 @@ local json = require("json")
 -- Set location for saved data
 local needsDataFile = system.pathForFile( "needsData.txt", system.DocumentsDirectory ) -- Default Dir
 local inventoryDataFile = system.pathForFile( "inventoryData.txt", system.DocumentsDirectory )
-local currencyDataFile = system.pathForFile( "currencyData.txt", system.DocumentsDirectory )
 local rewardDateDataFile = system.pathForFile( "rewardsData.txt", system.DocumentsDirectory )
 
 -- -------------------------------------------------------------------------------
@@ -38,6 +37,7 @@ function loadNeedsData()
         local inTable = readFile(file)
         maxNeedsLevels = inTable[1]
         needsLevels = inTable[2]
+        monsterLevel = inTable[3]
         -- print("load")
     else
         -- print ("no file found")
@@ -56,8 +56,10 @@ function loadNeedsData()
             energy = 1440,
             exp = 1440,
         }
+
+        monsterLevel = 1
     end
-    return needsLevels, maxNeedsLevels
+    return needsLevels, maxNeedsLevels, monsterLevel
 end
 -- -------------------------------------------------------------------------------
 

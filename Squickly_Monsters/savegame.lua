@@ -9,7 +9,6 @@ local saveRate;
 -- Set location for saved data
 local needsDataFile = system.pathForFile( "needsData.txt", system.DocumentsDirectory )
 local inventoryDataFile = system.pathForFile( "inventoryData.txt", system.DocumentsDirectory )
-local currencyDataFile = system.pathForFile( "currencyData.txt", system.DocumentsDirectory )
 local rewardDateDataFile = system.pathForFile( "rewardsData.txt", system.DocumentsDirectory )
 
 -- -------------------------------------------------------------------------------
@@ -38,8 +37,9 @@ function saveNeedsData()
 	-- print("saved file")
     local maxNeedsLevels = getMaxNeedsLevels()
     local needsLevels = getCurrentNeedsLevels()
+    local monsterLevel = getMonsterLevel()
     
-    local outTable = {maxNeedsLevels, needsLevels}
+    local outTable = {maxNeedsLevels, needsLevels, monsterLevel}
     local contents = json.encode(outTable)
         
     writeFile(needsDataFile, contents)

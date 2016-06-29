@@ -45,8 +45,8 @@ local energyRate = -10;
 local isTouchAble;
 local inventoryIsShow = false;
 
-local TamaLevels = getTamaLevelsNum();
-local TamaLevelsText = getTamaLevelsText();
+local monsterLevel;
+local monsterLevelText;
 -- -------------------------------------------------------------------------------
 
 function cacheVariables()
@@ -367,7 +367,7 @@ function isItRewardTime() -- calculates how much time is left for reward, return
     rewardTimer = ( endTime - setTime ) -- difference in seconds
     -- print(rewardTimer)
     -- set to 5 seconds for now for testing
-    limit = 5--24*60*60 -- 24 hours in sec
+    limit = 24*60*60 -- 24 hours in sec
     
     if rewardTimer >= limit then
         dailyRewardTrueIcon.alpha = 1
@@ -382,7 +382,7 @@ function rewardIconClicked(event)
         timeleft = isItRewardTime()
         if timeleft == true or rewardTimer == nil then -- if the timer is done
             -- reward animation
-            
+
             -- add to inventory
             getDailyReward()
             -- reset timer and save date
@@ -392,9 +392,10 @@ function rewardIconClicked(event)
             dailyRewardFalseIcon.alpha = 1
         else -- if the timer is still ticking
             -- show timer
-            hours = 0
-            minutes = math.floor(rewardTimer / 60)
-            seconds = rewardTimer - minutes*60
+            tmp = 24*60*60 - rewardTimer
+            hours = math.floor(tmp/(60*60))
+            minutes = math.floor((tmp - (hours*60*60)) / 60)
+            seconds = tmp - (minutes*60) - (hours*60*60)
             timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
             clockText = display.newText(timeDisplay, display.contentCenterX, display.contentCenterY*0.7, native.systemFontBold, 80)
             clockText:setFillColor( 0.7, 0.7, 1 )
@@ -416,11 +417,6 @@ function increaseEXP(expGain) -- give exp and check the bar that Level up or not
     end
 end
 
-function levelUp()  -- Level up then change text and set exp bar to = 0
-    TamaLevels = TamaLevels + 1
-    TamaLevelsText.text = "Level: " .. TamaLevels
-    setNeedsLevel("exp", 0)
-end
 -- -------------------------------------------------------------------------------
 -- Sleep / Wakeup functions
 

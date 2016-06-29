@@ -39,20 +39,13 @@ local hygieneRate = -10;
 local energyRate = -10;
 -- -----------------------
 
-local TamaLevels = 1;
-local TamaLevelsText;
+local monsterLevel;
+local monsterText;
 -- -------------------------------------------------------------------------------
 
 -- TODO change to function
 -- Display level text
-TamaLevelsText = display.newText({
-  text = "Level: " .. TamaLevels,
-  x = 610,
-  y = 40,
-  font = native.systemFontBold,
-  fontSize = 18,
-  align = "right",});
-TamaLevelsText:setFillColor( 1, 0, 0 ) -- fill the text red
+
 -- -------------------------------------------------------------------------------
 -- Set up needs bar
 function setUpNeedsBar(fileName, left)
@@ -111,7 +104,7 @@ function setupAllNeedsBars()
     needsBars.exp = setUpNeedsBar(barsDir .. "EnergyBar.png", startX + spacing*4)
 
     -- Load data from save
-    needsLevels, maxNeedsLevels = getSavedLevels()
+    needsLevels, maxNeedsLevels, monsterLevel = getSavedLevels()
 
     -- Set All Needs Level
     setNeedsLevel("hunger", needsLevels.hunger)
@@ -119,6 +112,7 @@ function setupAllNeedsBars()
     setNeedsLevel("hygiene", needsLevels.hygiene)
     setNeedsLevel("energy", needsLevels.energy)
     setNeedsLevel("exp", needsLevels.exp)
+
 end
 -- -------------------------------------------------------------------------------
 -- Setup All Icons Here
@@ -140,8 +134,8 @@ function setUpAllIcons()
 
     inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
 
-    dailyRewardTrueIcon = setUpIcon(iconsDir .. "RewardTrue.png", 1.5, display.contentWidth*0.06, display.contentHeight*.6, 1)
-    dailyRewardFalseIcon = setUpIcon(iconsDir .. "RewardFalse.png", 1.2, display.contentWidth*0.06, display.contentHeight*.6, 0)
+    dailyRewardTrueIcon = setUpIcon(iconsDir .. "RewardTrue.png", 1.5, display.contentWidth*0.06, display.contentHeight*.6, 0)
+    dailyRewardFalseIcon = setUpIcon(iconsDir .. "RewardFalse.png", 1.2, display.contentWidth*0.06, display.contentHeight*.6, 1)
 
     hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
     tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
@@ -157,6 +151,28 @@ function setUpIcon(img, scale, x, y, alpha)
     icon:scale(scale, scale)
     icon.alpha = alpha
     return icon
+end
+
+function setUpMonsterLevel()
+    levelsTextOptions = {
+        text = "Level: " .. monsterLevel,
+        x = display.contentCenterX + display.contentWidth*0.35,
+        y = display.contentCenterY - display.contentHeight*0.4,
+        font = native.systemFontBold,
+        fontSize = 18,
+        align = "right",};
+    levelsText = display.newText(levelsTextOptions)
+    levelsText:setFillColor( 1, 0, 0 ) -- fill the text red
+end
+
+function levelUp()  -- Level up then change text and set exp bar to = 0
+    monsterLevelText = getMonsterLevelText()
+    monsterLevel = getMonsterLevel()
+
+    monsterLevel = monsterLevel + 1
+    monsterLevelText.text = "Level: " .. monsterLevel
+    setNeedsLevel("exp", 0)
+    saveNeedsData()
 end
 
 -- -------------------------------------------------------------------------------
@@ -478,10 +494,10 @@ function getTiredThoughtCloud()
     return thoughtClouds[2]
 end
 
-function getTamaLevelsText()
-    return TamaLevelsText
+function getMonsterLevel()
+    return monsterLevel
 end
 
-function getTamaLevelsNum()
-    return TamaLevels
+function getMonsterLevelText()
+    return levelsText
 end
