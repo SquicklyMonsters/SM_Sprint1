@@ -11,6 +11,8 @@ local needsDataFile = system.pathForFile( "needsData.txt", system.DocumentsDirec
 local inventoryDataFile = system.pathForFile( "inventoryData.txt", system.DocumentsDirectory )
 local rewardDateDataFile = system.pathForFile( "rewardsData.txt", system.DocumentsDirectory )
 
+-- local rewardDateDataFile = system.pathForFile( "squicklydata.txt", system.DocumentsDirectory )
+
 -- -------------------------------------------------------------------------------
 -- Set Auto Save rate
 function setAutoSaveRate(rate) -- 1000 = 1sec
@@ -31,10 +33,10 @@ end
 function saveAllData()
     saveNeedsData()
     saveInventoryData()
+    saveRewardTimerData()
 end
 
 function saveNeedsData()
-	-- print("saved file")
     local maxNeedsLevels = getMaxNeedsLevels()
     local needsLevels = getCurrentNeedsLevels()
     
@@ -42,7 +44,7 @@ function saveNeedsData()
     local contents = json.encode(outTable)
         
     writeFile(needsDataFile, contents)
-    print("save")
+    print("save needs")
 end
 
 function saveInventoryData()
