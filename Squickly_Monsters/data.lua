@@ -22,6 +22,7 @@ local hygieneRate = -50;
 local energyRate = -50;
 
 local saveRate;
+local firstTime = true;
 local dataFile = system.pathForFile( "data.txt", system.DocumentsDirectory )
 
 -- -------------------------------------------------------------------------------
@@ -81,10 +82,14 @@ function readFile(file)
 end
 
 function loadData()
+	if not firstTime then
+		saveData()
+	else
+		firstTime = false
+	end
     local file = io.open( dataFile, "r" )
 
     if file then
-    	saveData()
         local inTable = readFile(file)
         local UIIdx = 1
         foodRecentList = inTable[UIIdx]
