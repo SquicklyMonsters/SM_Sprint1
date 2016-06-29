@@ -34,8 +34,8 @@ function setUpNotifications()
 end
 
 function refreshDisplayCurrency(goldText, platinumText)
-    goldText.text = "Gold: " .. getCurrentGold()
-    platinumText.text = "Platinum: " .. getCurrentPlatinum()
+    goldText.text = "Gold: " .. getGold()
+    platinumText.text = "Platinum: " .. getPlatinum()
 end
 -- -------------------------------------------------------------------------------
 

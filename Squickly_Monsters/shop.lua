@@ -53,7 +53,7 @@ function itemClickedEvent(event)
         else
             buyNotice(2)
         end
-        saveInventoryData()
+        saveData()
         refreshDisplayCurrency(goldText, platinumText)
     end
 end
