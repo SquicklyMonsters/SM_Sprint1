@@ -147,7 +147,6 @@ function setUpAllIcons()
     thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
 
     itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
-    print(itemList)
     updateFoodIcons()
     updatePlayIcons()
 

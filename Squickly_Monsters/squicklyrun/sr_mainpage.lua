@@ -59,11 +59,6 @@ function scene:create( event )
     setupScoreAndGameOver()
     gameOver = getGameOver()
     scoreText = getScoreText()
-
-    function FuckYou()
-        return PJ
-    end
-
 	timer.performWithDelay(1, update, -1)
 
 	Runtime:addEventListener("touch", touched, -1)

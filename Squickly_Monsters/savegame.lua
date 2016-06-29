@@ -48,11 +48,13 @@ end
 
 function saveInventoryData()
     local itemList = getItemList()
+    local foodRecentList = getFoodRecentList()
+    local playRecentList = getPlayRecentList()
     local itemQuantities = getItemQuantities()
     local gold = getCurrentGold()
     local platinum = getCurrentPlatinum()
 
-    local outTable = {itemList, itemQuantities, gold, platinum}
+    local outTable = {itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum}
     local contents = json.encode(outTable)
 
 
