@@ -4,6 +4,7 @@ require("itemList")
 local composer = require("composer")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
+local resizer = display.contentHeight/320
 
 local monster;
 local background;
@@ -125,8 +126,8 @@ function enableTouch()
 end
 
 function hideShowAllIcons(iconsTable)
-    xAxis = {-75,-30,30,75} -- idx 1=play, 2=clean, 3=sleep/wakeup, 4=feed
-    yAxis = {65,100,100,65}
+    xAxis = {-75*resizer,-30*resizer,30*resizer,75*resizer} -- idx 1=play, 2=clean, 3=sleep/wakeup, 4=feed
+    yAxis = {65*resizer,100*resizer,100*resizer,65*resizer}
     monster = getMonster()
 
     isTouchAble = false

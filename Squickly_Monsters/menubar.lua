@@ -4,6 +4,7 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
+local resizer = display.contentHeight/320
 
 local menuBar;
 local chageScenceEffect = "crossFade";
