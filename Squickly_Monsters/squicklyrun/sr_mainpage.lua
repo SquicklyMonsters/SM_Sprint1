@@ -134,7 +134,7 @@ function scene:destroy( event )
 	--exp
 	changeNeedsLevel("exp", getScore()*10)
 	changeNeedsLevel("energy", -getScore()*10)
-	saveAllData()
+	saveData()
 end
 
 ---------------------------------------------------------------------------------

@@ -226,8 +226,10 @@ function mostRecentFood1Clicked(event)
         if event.phase == "ended" then
             hideShowAllIcons(foodIconsList)
             if (foodRecentList ~= nil) then
-                feedAnimation()
-                useItem(foodRecentList[1])
+                if (#foodRecentList > 0) then
+                    feedAnimation()
+                    useItem(foodRecentList[1])
+                end
             end
         end
     end
