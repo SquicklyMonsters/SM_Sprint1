@@ -2,24 +2,27 @@
 local json = require("json")
 -------------------------------------------------------------------------------
 -- Local variables go HERE
--- TODO: Add monster data
 
-local itemList;
+local invenList;
 local foodRecentList;
 local playRecentList;
 local itemQuantities;
 local gold;
 local platinum;
+local maxSize = 9;
 
 local needsLevels;
 local maxNeedsLevels;
 
+local monsterName;
 local monsterLevel;
 
 local hungerRate = -50;
 local happinessRate = -50;
 local hygieneRate = -50;
 local energyRate = -50;
+
+local receiveDate;
 
 local saveRate;
 local dataFile = system.pathForFile( "data.txt", system.DocumentsDirectory )
@@ -33,13 +36,12 @@ function writeFile(file, contents)
 end
 
 function saveData()
-	print(getHungerLevel(), needsLevels.hunger)
     local outTable = 
     {
     -- UI Data
     foodRecentList, playRecentList, 
     -- Inventory Data
-    itemList, itemQuantities, gold, platinum,
+    invenList, itemQuantities, gold, platinum,
     -- Needs Data
     	{
     	maxNeedsLevels.hunger, 
@@ -59,19 +61,20 @@ function saveData()
     -- Monster
     monsterLevel,
     monsterName,
+    -- Daily Rewards
+    receiveDate,
 	}
     local contents = json.encode(outTable)
     writeFile(dataFile, contents)
     print("Save by Data Sage")
-    print(getHungerLevel(), needsLevels.hunger)
 end
 
--- function setAutoSaveRate(rate) -- 1000 = 1sec
--- 	if saveRate ~= nil then
--- 		timer.cancel(saveRate)
--- 	end
---     saveRate = timer.performWithDelay(rate, saveData, -1)
--- end
+function setAutoSaveRate(rate) -- 1000 = 1sec
+	if saveRate ~= nil then
+		timer.cancel(saveRate)
+	end
+    saveRate = timer.performWithDelay(rate, saveData, -1)
+end
 -- -------------------------------------------------------------------------------
 
 function readFile(file)
@@ -87,12 +90,13 @@ function loadData()
 
     if file then
         local inTable = readFile(file)
+
         local UIIdx = 1
         foodRecentList = inTable[UIIdx]
         playRecentList = inTable[UIIdx + 1]
 
         local invIdx = 3
-        itemList = inTable[invIdx]
+        invenList = inTable[invIdx]
         itemQuantities = inTable[invIdx + 1]
         gold = inTable[invIdx + 2]
         platinum = inTable[invIdx + 3]
@@ -118,11 +122,15 @@ function loadData()
         local monIdx = 9
         monsterLevel = inTable[monIdx]
         monsterName = inTable[monIdx + 1]
+
+        local rewIdx = 11
+        receiveDate = inTable[rewIdx]
+
     else
     	foodRecentList = {}
         playRecentList = {}
 
-        itemList = {}
+        invenList = {}
         itemQuantities = {}
         gold = 99999
         platinum = 99999
@@ -145,15 +153,67 @@ function loadData()
         monsterLevel = 1
         monsterName = "fireball"
 
+        receiveDate = nil
+
     end
 
     print("Load by Data Sage")
-    print(getHungerLevel(), needsLevels.hunger, gold, platinum)
 end
+-- -------------------------------------------------------------------------------
+-- Inventory Data Modify
+
+-- Adds new item to inventory
+function addToInventory(itemName)
+    -- If number of item will not exceed limit size: add item
+    if #invenList < maxSize then
+        table.insert(invenList, itemName)
+        table.insert(itemQuantities, 1)
+    end
+end
+
+-- Increase quantity of the item if it already exists
+function increaseQuantity(idx)
+    itemQuantities[idx] = itemQuantities[idx] + 1
+end
+
+-- Reduce quantity of the item when use
+function reduceQuantity(idx)
+    itemQuantities[idx] = itemQuantities[idx] - 1
+    if itemQuantities[idx] > 0 then
+        return itemQuantities[idx]
+    else
+        removeItem(idx)
+    end
+end
+
+function removeItem(idx)
+    table.remove(invenList,idx)
+    table.remove(itemQuantities,idx)
+end
+
+function isInInventory(name)
+    for i, itemName in ipairs(invenList) do
+        -- If item exists in inventory: return its index
+        if itemName == name then
+            return i
+        end
+    end
+    return false
+end
+
+function useItem(item)
+    local idx = isInInventory(item.name)
+    if idx then
+        local quantity = reduceQuantity(idx)
+        item:use(item.type)
+        saveData()
+    end
+end
+
 -- -------------------------------------------------------------------------------
 -- Inventory Data
 function getInventoryData()
-	return itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum
+	return invenList, foodRecentList, playRecentList, itemQuantities, gold, platinum
 end
 
 function getGold()
@@ -164,8 +224,8 @@ function getPlatinum()
 	return platinum
 end
 
-function getItemList()
-	return itemList
+function getInvenList()
+	return invenList
 end
 
 function getItemQuantities()
@@ -214,11 +274,12 @@ end
 
 -- --------------------------------
 
-function setNeedsLevels(in_needsLevels)
-    needsLevels = in_needsLevels
+function setNeedsLevels(level)
+    needsLevels = level
 end
 
 -- Monster
+
 function getMonsterLevel()
 	return monsterLevel
 end
@@ -226,6 +287,13 @@ end
 function getMonsterName()
 	return monsterName
 end
+
+-- --------------------------------
+
+function setMonsterLevel(level)
+    monsterLevel = level
+end
+
 -- Need Rates
 
 function getHungerRate()
@@ -244,4 +312,19 @@ function getEnergyRate()
 	return energyRate
 end
 
+-- Daily Rewards
+
+function getReceiveDate()
+    return receiveDate
+end
+
+-- --------------------------------
+
+function setReceiveDate(date)
+    receiveDate = date
+end
+
 -- -------------------------------------------------------------------------------
+
+
+

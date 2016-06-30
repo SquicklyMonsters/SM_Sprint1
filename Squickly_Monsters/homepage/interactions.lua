@@ -1,6 +1,6 @@
 require("savegame") -- For Testing
 require("data")
-require("shopList")
+require("itemList")
 local composer = require("composer")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
@@ -15,19 +15,22 @@ local sleepIcon;
 local wakeupIcon;
 local cleanIcon;
 local playIcon;
-local foodRecentList;
-local mostRecentFoodIcon1;
-local mostRecentFoodIcon2;
 local moreFoodIcon;
 local shopIcon;
-local playRecentList;
+local morePlayIcon;
+local mostRecentFoodIcon1;
+local mostRecentFoodIcon2;
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
-local morePlayIcon;
+
 local inventoryIcon;
+
+local foodRecentList;
+local playRecentList;
+
 local dailyRewardTrueIcon;
 local dailyRewardFalseIcon;
-local rewardTimer;
+-- local rewardTimer;
 
 local iconsList; -- idx 1=play, 2=clean, 3=sleep/wakeup, 4=feed
 local foodIconsList;
@@ -77,7 +80,7 @@ function cacheVariables()
     -- Create lists
     iconsList = {playIcon, cleanIcon, sleepIcon, feedIcon}
     foodIconsList = {shopIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, moreFoodIcon}
-    playIconsList = {shopIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, moreFoodIcon}
+    playIconsList = {shopIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, morePlayIcon}
 
     -- Instantiate hide/show icons lock
     isTouchAble = true
@@ -86,7 +89,7 @@ end
 function updateFoodList(frlist,fr1,fr2)
     mostRecentFoodIcon1 = fr1
     mostRecentFoodIcon2 = fr2
-    foodIconsList = {moreFoodIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, shopIcon}
+    foodIconsList = {shopIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, moreFoodIcon}
     foodRecentList = frlist
 
     mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
@@ -96,7 +99,7 @@ end
 function updatePlayList(prlist,pr1,pr2)
     mostRecentPlayIcon1 = pr1
     mostRecentPlayIcon2 = pr2
-    playIconsList = {morePlayIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, shopIcon}
+    playIconsList = {shopIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, morePlayIcon}
     playRecentList = prlist
 
     mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
@@ -228,7 +231,7 @@ function mostRecentFood1Clicked(event)
             if (foodRecentList ~= nil) then
                 if (#foodRecentList > 0) then
                     feedAnimation()
-                    useItem(foodRecentList[1])
+                    useItem(itemList[foodRecentList[1]])
                 end
             end
         end
@@ -243,7 +246,7 @@ function mostRecentFood2Clicked(event)
             if (foodRecentList ~= nil) then
                 if (#foodRecentList > 1) then
                     feedAnimation()
-                    useItem(foodRecentList[2])
+                    useItem(itemList[foodRecentList[2]])
                 end
             end
         end
@@ -273,14 +276,11 @@ function mostRecentPlay1Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(playIconsList)
-
             if (playRecentList ~= nil) then
-                useItem(playRecentList[1])
+                if (#playRecentList > 0) then
+                    useItem(itemList[playRecentList[1]])
+                end
             end
-            -- changeToWakeupState()
-            -- playAnimation()
-            -- changeNeedsLevel("happiness", 500)
-            -- giveTakeCareEXP(250, getHappinessBar())
         end
     end
 end
@@ -289,16 +289,11 @@ function mostRecentPlay2Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(playIconsList)
-
             if (playRecentList ~= nil) then
                 if (#playRecentList > 1) then
-                    useItem(playRecentList[2])
+                    useItem(itemList[playRecentList[2]])
                 end
             end
-            -- changeToWakeupState()
-            -- playAnimation()
-            -- changeNeedsLevel("happiness", 1000)
-            -- giveTakeCareEXP(500,getHappinessBar())
         end
     end
 end
@@ -323,12 +318,15 @@ function inventoryClicked(event)
     end
 end
 
+-- -------------------------------------------------------------------------------
+-- Daily Reward Functions
+
 function getDailyReward()
     p = math.random()
     if p >= 0.35 then
         -- get random item
-        r = math.random(#shopList)
-        item = shopList[shopList[r]]
+        r = math.random(#itemList)
+        item = itemList[itemList[r]]
         idx = isInInventory(item.name)
         if idx then
             increaseQuantity(idx)
@@ -346,25 +344,26 @@ function getDailyReward()
             updateCurrency(0, r)
         end
     end
-    saveInventoryData()
+    saveData()
 end
 
 function isItRewardTime() -- calculates how much time is left for reward, returns false if done
-    lastTime = loadLastRewardDate()
-    currentTime = os.date( '*t' )
+    -- lastTime = loadLastRewardDate()
+    local receiveDate = getReceiveDate()
+    local currentDate = os.date( '*t' )
 
-    if lastTime == false then -- lastTime is false if user has never gotten daily reward before
+    if receiveDate == nil then -- receiveDate is false if user has never gotten daily reward before
         dailyRewardTrueIcon.alpha = 1
         dailyRewardFalseIcon.alpha = 0
-        return false, nil
+        return false, currentDate, nil
     end
 
-    setTime = os.time{  year = lastTime.year, month = lastTime.month, day = lastTime.day,
-                        hour = lastTime.hour, min = lastTime.min, sec = lastTime.sec }
-    endTime = os.time{  year = currentTime.year, month = currentTime.month, day = currentTime.day,
-                        hour = currentTime.hour, min = currentTime.min, sec = currentTime.sec }
+    setTime = os.time{  year = receiveDate.year, month = receiveDate.month, day = receiveDate.day,
+                        hour = receiveDate.hour, min = receiveDate.min, sec = receiveDate.sec }
+    endTime = os.time{  year = currentDate.year, month = currentDate.month, day = currentDate.day,
+                        hour = currentDate.hour, min = currentDate.min, sec = currentDate.sec }
 
-    rewardTimer = ( endTime - setTime ) -- difference in seconds
+    local rewardTimer = ( endTime - setTime ) -- difference in seconds
     -- print(rewardTimer)
     -- set to 5 seconds for now for testing
     limit = 24*60*60 -- 24 hours in sec
@@ -372,25 +371,30 @@ function isItRewardTime() -- calculates how much time is left for reward, return
     if rewardTimer >= limit then
         dailyRewardTrueIcon.alpha = 1
         dailyRewardFalseIcon.alpha = 0
-        return true, rewardTimer
+        return true, currentDate, rewardTimer 
     end
-    return false, rewardTimer
+    return false, currentDate, rewardTimer
 end
 
 function rewardIconClicked(event)
     if event.phase == "ended" then
-        timeleft = isItRewardTime()
+        timeleft, currentDate, rewardTimer = isItRewardTime()
         if timeleft == true or rewardTimer == nil then -- if the timer is done
             -- reward animation
 
             -- add to inventory
             getDailyReward()
             print("GET REWARD!")
+
             -- reset timer and save date
-            saveRewardTimerData()
+            -- saveRewardTimerData()
+            setReceiveDate(currentDate)
+            
+
             --change visibility
             dailyRewardTrueIcon.alpha = 0
             dailyRewardFalseIcon.alpha = 1
+
         else -- if the timer is still ticking
             -- show timer
             tmp = 24*60*60 - rewardTimer
@@ -406,6 +410,9 @@ function rewardIconClicked(event)
     end
 end
 
+-- -------------------------------------------------------------------------------
+-- EXP functions
+
 function giveTakeCareEXP(expGain, needBar) -- Unless the NeedBar is less than 90%,
     if needBar:getProgress() < 0.9 then     -- this function give exp to our tamagotchi
       increaseEXP(expGain)
@@ -413,9 +420,11 @@ function giveTakeCareEXP(expGain, needBar) -- Unless the NeedBar is less than 90
 end
 
 function increaseEXP(expGain) -- give exp and check the bar that Level up or not
+    local exp = (getExpLevel() + expGain) - getMaxNeedsLevels().exp 
     changeNeedsLevel("exp", expGain)
-    if getExpBar():getProgress() >= 1 then
-       levelUp()
+    if exp >= 0 then
+        levelUp(exp)
+        setNeedLevel("exp", exp)
     end
 end
 

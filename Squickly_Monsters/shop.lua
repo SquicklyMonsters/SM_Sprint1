@@ -6,7 +6,7 @@ local scene = composer.newScene()
 require("shop.background")
 require("shop.interactions")
 require("inventory.interactions")
-require("shopList")
+require("itemList")
 require("data")
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -19,10 +19,10 @@ local back;
 local middle;
 local front;
 
-local inventoryIcon;
-local itemList;
-local itemQuantities;
-local itemTexts = {};
+-- local inventoryIcon;
+-- local itemList;
+-- local itemQuantities;
+-- local itemTexts = {};
 
 -- local buyHolder;
 -- local cannotBuyHolder;
@@ -83,14 +83,14 @@ function setUpShop()
     local spacingX = (inventory.width)/7.5
     local spacingY = (inventory.height)/3.75
 
-    local shopList = getShopList()
+    local itemList = getItemList()
 
     inventory.items = {}
 
-    for i = 1, #shopList do --loops to create each item on inventory
+    for i = 1, #itemList do --loops to create each item on inventory
         local x = startX + (spacingX * ((i-1) - math.floor((i-1)/cols)*cols))
         local y = startY + (spacingY * (math.floor((i-1) / cols)))
-        local item = shopList[shopList[i]]
+        local item = itemList[itemList[i]]
 
         inventory.items[i] = widget.newButton {
             top = y, -- division of row
