@@ -10,6 +10,7 @@ local playRecentList;
 local itemQuantities;
 local gold;
 local platinum;
+local maxSize = 9;
 
 local needsLevels;
 local maxNeedsLevels;
@@ -151,6 +152,57 @@ function loadData()
     print("Load by Data Sage")
     print(getHungerLevel(), needsLevels.hunger, gold, platinum)
 end
+-- -------------------------------------------------------------------------------
+-- Inventory Data Modify
+
+-- Adds new item to inventory
+function addToInventory(itemName)
+    -- If number of item will not exceed limit size: add item
+    if #invenList < maxSize then
+        table.insert(invenList, itemName)
+        table.insert(itemQuantities, 1)
+    end
+end
+
+-- Increase quantity of the item if it already exists
+function increaseQuantity(idx)
+    itemQuantities[idx] = itemQuantities[idx] + 1
+end
+
+-- Reduce quantity of the item when use
+function reduceQuantity(idx)
+    itemQuantities[idx] = itemQuantities[idx] - 1
+    if itemQuantities[idx] > 0 then
+        return itemQuantities[idx]
+    else
+        removeItem(idx)
+    end
+end
+
+function removeItem(idx)
+    table.remove(invenList,idx)
+    table.remove(itemQuantities,idx)
+end
+
+function isInInventory(name)
+    for i, itemName in ipairs(invenList) do
+        -- If item exists in inventory: return its index
+        if itemName == name then
+            return i
+        end
+    end
+    return false
+end
+
+function useItem(item)
+    local idx = isInInventory(item.name)
+    if idx then
+        local quantity = reduceQuantity(idx)
+        item:use(item.type)
+        saveData()
+    end
+end
+
 -- -------------------------------------------------------------------------------
 -- Inventory Data
 function getInventoryData()

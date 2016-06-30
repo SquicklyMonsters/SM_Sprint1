@@ -1,4 +1,4 @@
-require("homepage.UI")
+-- require("homepage.UI")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
 

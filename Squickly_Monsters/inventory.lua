@@ -4,6 +4,7 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 require("itemList")
 require("itemClass")
+require("data")
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
@@ -34,15 +35,15 @@ function itemClickedEvent(event)
 end
 
 -- If item is used in a place that is not inventory
-function useItem(item)
-	local idx = isInInventory(item.name)
-	if idx then
-		local quantity = reduceQuantity(idx)
-		itemTexts[idx].text = quantity
-		item:use(item.type)
-		saveData()
-	end
-end
+-- function useItem(item)
+-- 	local idx = isInInventory(item.name)
+-- 	if idx then
+-- 		local quantity = reduceQuantity(idx)
+-- 		itemTexts[idx].text = quantity
+-- 		item:use(item.type)
+-- 		saveData()
+-- 	end
+-- end
 
 function closeEvent(event)
 	if event.phase == "ended" then
