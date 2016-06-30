@@ -49,11 +49,11 @@ local monsterText;
 -- Set up needs bar
 function setUpNeedsBar(fileName, left)
     local options = {
-        width = 192,
-        height = 64,
+        width = 1004/10,
+        height = 434/10,
         numFrames = 2,
-        sheetContentWidth = 384,
-        sheetContentHeight = 64
+        sheetContentWidth = 2008/10,
+        sheetContentHeight = 434/10,
     }
     local progressSheet = graphics.newImageSheet( fileName, options )
 
@@ -61,16 +61,17 @@ function setUpNeedsBar(fileName, left)
         {
             sheet = progressSheet,
             -- Empty bar frame
-            fillOuterMiddleFrame = 1,
+            fillOuterMiddleFrame = 2,
             fillOuterWidth = 0,
-            fillOuterHeight = display.contentHeight/25,
+            fillOuterHeight = display.contentHeight/10,
             -- Full bar frame
-            fillInnerMiddleFrame = 2,
+            fillInnerMiddleFrame = 1,
             fillWidth = 0,
-            fillHeight = display.contentHeight/25,
+            fillHeight = display.contentHeight/10,
+
             left = left,
             top = 10,
-            width = display.contentWidth/8,
+            width = display.contentWidth/6,
             isAnimated = true
         }
     )
@@ -92,16 +93,16 @@ end
 
 function setupAllNeedsBars()
     -- Starting x-axis and spacing between bars
-    local startX = display.contentWidth/10
-    local spacing = display.contentWidth/6
+    local startX = display.contentWidth/50
+    local spacing = display.contentWidth/5
     local barsDir = "img/bars/"
     -- TODO: Update Bar files
     needsBars = {}
-    needsBars.hunger = setUpNeedsBar(barsDir .. "HappinessBar.png", startX)
-    needsBars.happiness = setUpNeedsBar(barsDir .. "HappinessBar.png", startX + spacing)
-    needsBars.hygiene = setUpNeedsBar(barsDir .. "HygieneBar.png", startX + spacing*2)
-    needsBars.energy = setUpNeedsBar(barsDir .. "EnergyBar.png", startX + spacing*3)
-    needsBars.exp = setUpNeedsBar(barsDir .. "EnergyBar.png", startX + spacing*4)
+    needsBars.hunger = setUpNeedsBar(barsDir .. "HUNGER_BAR.png", startX)
+    needsBars.happiness = setUpNeedsBar(barsDir .. "HAPPINESS_BAR.png", startX + spacing)
+    needsBars.hygiene = setUpNeedsBar(barsDir .. "HYGIENE_BAR.png", startX + spacing*2)
+    needsBars.energy = setUpNeedsBar(barsDir .. "ENERGY_BAR.png", startX + spacing*3)
+    needsBars.exp = setUpNeedsBar(barsDir .. "EXP_BAR.png", startX + spacing*4)
 
     -- Load data from save
     needsLevels = getNeedsLevels()

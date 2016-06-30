@@ -77,7 +77,7 @@ function cacheVariables()
     -- Create lists
     iconsList = {playIcon, cleanIcon, sleepIcon, feedIcon}
     foodIconsList = {shopIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, moreFoodIcon}
-    playIconsList = {shopIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, moreFoodIcon}
+    playIconsList = {shopIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, morePlayIcon}
 
     -- Instantiate hide/show icons lock
     isTouchAble = true
@@ -86,7 +86,7 @@ end
 function updateFoodList(frlist,fr1,fr2)
     mostRecentFoodIcon1 = fr1
     mostRecentFoodIcon2 = fr2
-    foodIconsList = {moreFoodIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, shopIcon}
+    foodIconsList = {shopIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, moreFoodIcon}
     foodRecentList = frlist
 
     mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
@@ -96,7 +96,7 @@ end
 function updatePlayList(prlist,pr1,pr2)
     mostRecentPlayIcon1 = pr1
     mostRecentPlayIcon2 = pr2
-    playIconsList = {morePlayIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, shopIcon}
+    playIconsList = {shopIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, morePlayIcon}
     playRecentList = prlist
 
     mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
