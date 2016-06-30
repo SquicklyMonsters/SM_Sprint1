@@ -2,7 +2,6 @@
 local json = require("json")
 -------------------------------------------------------------------------------
 -- Local variables go HERE
--- TODO: Add monster data
 
 local invenList;
 local foodRecentList;
@@ -126,7 +125,7 @@ function loadData()
 
         local rewIdx = 11
         receiveDate = inTable[rewIdx]
-        
+
     else
     	foodRecentList = {}
         playRecentList = {}
