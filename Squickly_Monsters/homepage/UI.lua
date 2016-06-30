@@ -53,11 +53,11 @@ local monsterText;
 -- Set up needs bar
 function setUpNeedsBar(fileName, fileIcon, left)
     local options = {
-        width = 1004/10,
-        height = 434/10,
+        width = 100,
+        height = 430,
         numFrames = 2,
-        sheetContentWidth = 2008/10,
-        sheetContentHeight = 434/10,
+        sheetContentWidth = 200,
+        sheetContentHeight = 430,
     }
     local progressSheet = graphics.newImageSheet( fileName, options )
 
@@ -74,14 +74,14 @@ function setUpNeedsBar(fileName, fileIcon, left)
             fillHeight = display.contentHeight/10,
 
             left = left,
-            top = 10,
+            top = display.contentHeight/50,
             width = display.contentWidth/7,
             isAnimated = true
         }
     )
 
-    icon = display.newImage(fileIcon, left-10, 25)
-    scale = 0.4
+    icon = display.newImage(fileIcon, left, display.contentHeight/15)
+    scale = display.contentHeight/320
     icon:scale(scale,scale)
     return bar, icon
 end
@@ -102,7 +102,7 @@ end
 
 function setupAllNeedsBars()
     -- Starting x-axis and spacing between bars
-    local startX = display.contentWidth/18
+    local startX = display.contentWidth/20
     local spacing = display.contentWidth/5
     local barsDir = "img/bars/"
     -- TODO: Update Bar files
@@ -112,7 +112,7 @@ function setupAllNeedsBars()
     needsBars.happiness, needsIcons.happiness = setUpNeedsBar(barsDir .. "HAPPINESS_BAR.png", barsDir .. "HAPPINESS_ICON.png", startX + spacing)
     needsBars.hygiene, needsIcons.hygiene = setUpNeedsBar(barsDir .. "HYGIENE_BAR.png", barsDir .. "HYGIENE_ICON.png", startX + spacing*2)
     needsBars.energy, needsIcons.energy = setUpNeedsBar(barsDir .. "ENERGY_BAR.png", barsDir .. "ENERGY_ICON.png", startX + spacing*3)
-    needsBars.exp, needsIcons.exp = setUpNeedsBar(barsDir .. "EXP_BAR.png", barsDir .. "EXP_ICON_NO_LV_NUM.png", startX + spacing*4)
+    needsBars.exp, needsIcons.exp = setUpNeedsBar(barsDir .. "EXP_BAR.png", barsDir .. "EXP_ICON.png", startX + spacing*4)
 
     -- Load data from save
     needsLevels = getNeedsLevels()
@@ -176,12 +176,12 @@ end
 -- This should not be here
 function setUpMonsterLevel()
     levelsTextOptions = {
-        text = "Level: " .. getMonsterLevel(),
-        x = display.contentCenterX + display.contentWidth*0.35,
-        y = display.contentCenterY - display.contentHeight*0.4,
+        text = getMonsterLevel(),
+        x = 17*display.contentWidth/20,
+        y = display.contentHeight/14,
         font = native.systemFontBold,
-        fontSize = 18,
-        align = "right",};
+        fontSize = 18*display.contentHeight/320,
+        align = "center",};
     levelsText = display.newText(levelsTextOptions)
     levelsText:setFillColor( 1, 0, 0 ) -- fill the text red
 end
@@ -192,7 +192,7 @@ function levelUp()  -- Level up then change text and set exp bar to = 0
     monsterLevel = getMonsterLevel()
 
     monsterLevel = monsterLevel + 1
-    monsterLevelText.text = "Level: " .. monsterLevel
+    monsterLevelText.text = monsterLevel
     
     setNeedLevel("exp", exp)
     setMonsterLevel(monsterLevel)
