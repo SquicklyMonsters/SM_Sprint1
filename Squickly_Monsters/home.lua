@@ -114,11 +114,11 @@ function scene:show( event )
 
 
 	if phase == "will" then
+
+        -- Run need levels checker
         checkHunger(1)
         checkTired(1)
         checkHappiness(1)
-
-		-- Get Tamagotchi Level
 
         -- Set up all Thought Clouds
         hungerThoughtCloud = getHungerThoughtCloud()
