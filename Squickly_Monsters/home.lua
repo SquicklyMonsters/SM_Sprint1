@@ -7,7 +7,7 @@ require("homepage.background")
 require("homepage.monster")
 require("homepage.interactions")
 require("homepage.UI")
-require("savegame")
+require("data")
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
@@ -72,7 +72,7 @@ function scene:create( event )
     background = getBackground()
 
     -- Set Up Monster
-    setUpMonster("img/sprites/fireball.png")
+    setUpMonster("img/sprites/" .. getMonsterName() .. ".png")
     monster = getMonster()
 
     -- Set up Needs Bar
@@ -102,7 +102,7 @@ function scene:create( event )
     dailyRewardTrueIcon = getDailyRewardTrueIcon()
     dailyRewardFalseIcon = getDailyRewardFalseIcon()
 
-    setAutoSaveRate(10000)
+    -- setAutoSaveRate(10000)
 
     -- Set up all Event Listeners
     addListeners()

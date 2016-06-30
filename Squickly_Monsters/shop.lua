@@ -7,6 +7,7 @@ require("shop.background")
 require("shop.interactions")
 require("inventory.interactions")
 require("shopList")
+require("data")
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
@@ -52,7 +53,7 @@ function itemClickedEvent(event)
         else
             buyNotice(2)
         end
-        saveInventoryData()
+        saveData()
         refreshDisplayCurrency(goldText, platinumText)
     end
 end
@@ -137,7 +138,7 @@ function setUpShop()
 
     -- text area to show how much GOLD you have
     local GoldOptions = {
-    text = "Gold: " .. getCurrentGold(),
+    text = "Gold: " .. getGold(),
     x = startX + 0.3*spacingX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
@@ -146,7 +147,7 @@ function setUpShop()
 
     -- text area to show how much PlATINUM you have
     local PlatinumOptions = {
-    text = "Platinum: " .. getCurrentPlatinum(),
+    text = "Platinum: " .. getPlatinum(),
     x = startX + 5*spacingX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
@@ -172,7 +173,7 @@ function scene:create( event )
 	local sceneGroup = self.view
 
     -- Retrieve inventory data from save file
-    itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
+    -- itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
 
     -- Setup layer
     back = display.newGroup()
