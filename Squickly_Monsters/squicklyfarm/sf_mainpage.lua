@@ -1,66 +1,52 @@
-local widget = require("widget")
+-- Import dependency
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-local image;
-local text1;
-local srIcon;
-local sfIcon;
+require( 'squicklyfarm.sf_background' )
 
-function goToSRGame(event)
-	if ( event.phase == "ended" ) then
-		composer.gotoScene( "squicklyrun.sr_mainpage" )
-    end
-end
+-- -----------------------------------------------------------------------------------------------------------------
+-- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
+-- -----------------------------------------------------------------------------------------------------------------
+-- Local variables go Here
 
-function goToSFGame(event)
-	if ( event.phase == "ended" ) then
-		composer.gotoScene( "squicklyfarm.sf_mainpage" )
-    end
-end
+local screen;
+local player;
+
+-- -------------------------------------------------------------------------------
+-- Scene functions go Here
 
 function scene:create( event )
 	local sceneGroup = self.view
-	
-	image = display.newImage( "bg2.jpg" )
-	image.x = display.contentCenterX
-	image.y = display.contentCenterY
-	
-	text1 = display.newText( "Squickly MiniGames", 0, 0, native.systemFontBold, 30 )
-	text1:setFillColor( 255 )
-	text1.x, text1.y = display.contentWidth * 0.5, 50
-	
-	srIcon = widget.newButton{
-		width = 100,
-		height = 100,
-		defaultFile = "img/squicklyrun/srIcon.png",
-	}
-	srIcon.x, srIcon.y = display.contentCenterX-75, display.contentCenterY-20
 
-	sfIcon = widget.newButton{
-		width = 100,
-		height = 100,
-		defaultFile = "img/squicklyfarm/sfIcon.png",
-	}
-	sfIcon.x, sfIcon.y = display.contentCenterX+75, display.contentCenterY-20
+    -- Setup layer
+    back = display.newGroup()
+    middle = display.newGroup()
+    front = display.newGroup()
 
-
-	srIcon:addEventListener('touch',goToSRGame)
-	sfIcon:addEventListener('touch',goToSFGame)
-
-	sceneGroup:insert( image )
-	sceneGroup:insert( text1 )
-	sceneGroup:insert( srIcon )
-	sceneGroup:insert( sfIcon )
+    -- Set background
+	setupBackground()
+	backbackground = getBackbackground()
 end
 
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-	
 
 	if phase == "will" then
-		composer.showOverlay("menubar")
+        composer.showOverlay("menubar")
+        -- Background
+        back:insert(backbackground)
+        -- ===========MIDDLE==============
+
+        -- ===========FRONT===============
+
+        -- ===============================
+        sceneGroup:insert(back)
+        sceneGroup:insert(middle)
+        sceneGroup:insert(front)
+
+--        restartGame()
+
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
 		-- Called when the scene is now on screen
@@ -80,12 +66,13 @@ function scene:hide( event )
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
 	elseif phase == "did" then
-		--composer.hideOverlay()
+        --composer.hideOverlay()
 		-- Called when the scene is now off screen
 	end
 end
 
 function scene:destroy( event )
+	saveData()
 end
 
 ---------------------------------------------------------------------------------
