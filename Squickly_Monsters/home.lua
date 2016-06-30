@@ -50,6 +50,11 @@ local happinessBar;
 local hygieneBar;
 local energyBar;
 local expBar;
+local hungerIcon;
+local happinessIcon;
+local hygieneIcon;
+local energyIcon;
+local expIcon;
 
 local monsterLevelText;
 -- -------------------------------------------------------------------------------
@@ -82,6 +87,11 @@ function scene:create( event )
     hygieneBar = getHygieneBar()
     energyBar = getEnergyBar()
     expBar = getExpBar()
+    hungerIcon = getHungerIcon()
+    happinessIcon = getHappinessIcon()
+    hygieneIcon = getHygieneIcon()
+    energyIcon = getEnergyIcon()
+    expIcon = getExpIcon()
     monsterLevelText = setUpMonsterLevel()
 
     -- Set up all Icons
@@ -134,6 +144,11 @@ function scene:show( event )
         middle:insert(hygieneBar)
         middle:insert(energyBar)
         middle:insert(expBar)
+        middle:insert(hungerIcon)
+        middle:insert(happinessIcon)
+        middle:insert(hygieneIcon)
+        middle:insert(energyIcon)
+        middle:insert(expIcon)
         middle:insert(inventoryIcon)
         middle:insert(dailyRewardTrueIcon)
         middle:insert(dailyRewardFalseIcon)
