@@ -1,6 +1,6 @@
 require("savegame") -- For Testing
 require("data")
-require("shopList")
+require("itemList")
 local composer = require("composer")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
@@ -228,7 +228,7 @@ function mostRecentFood1Clicked(event)
             if (foodRecentList ~= nil) then
                 if (#foodRecentList > 0) then
                     feedAnimation()
-                    useItem(foodRecentList[1])
+                    useItem(itemList[foodRecentList[1]])
                 end
             end
         end
@@ -243,7 +243,7 @@ function mostRecentFood2Clicked(event)
             if (foodRecentList ~= nil) then
                 if (#foodRecentList > 1) then
                     feedAnimation()
-                    useItem(foodRecentList[2])
+                    useItem(itemList[foodRecentList[2]])
                 end
             end
         end
@@ -273,14 +273,11 @@ function mostRecentPlay1Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(playIconsList)
-
             if (playRecentList ~= nil) then
-                useItem(playRecentList[1])
+                if (#playRecentList > 0) then
+                    useItem(itemList[playRecentList[1]])
+                end
             end
-            -- changeToWakeupState()
-            -- playAnimation()
-            -- changeNeedsLevel("happiness", 500)
-            -- giveTakeCareEXP(250, getHappinessBar())
         end
     end
 end
@@ -289,16 +286,11 @@ function mostRecentPlay2Clicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(playIconsList)
-
             if (playRecentList ~= nil) then
                 if (#playRecentList > 1) then
-                    useItem(playRecentList[2])
+                    useItem(itemList[playRecentList[2]])
                 end
             end
-            -- changeToWakeupState()
-            -- playAnimation()
-            -- changeNeedsLevel("happiness", 1000)
-            -- giveTakeCareEXP(500,getHappinessBar())
         end
     end
 end
@@ -327,8 +319,8 @@ function getDailyReward()
     p = math.random()
     if p >= 0.35 then
         -- get random item
-        r = math.random(#shopList)
-        item = shopList[shopList[r]]
+        r = math.random(#itemList)
+        item = itemList[itemList[r]]
         idx = isInInventory(item.name)
         if idx then
             increaseQuantity(idx)
@@ -346,7 +338,7 @@ function getDailyReward()
             updateCurrency(0, r)
         end
     end
-    saveInventoryData()
+    saveData()
 end
 
 function isItRewardTime() -- calculates how much time is left for reward, returns false if done
@@ -414,9 +406,14 @@ end
 
 function increaseEXP(expGain) -- give exp and check the bar that Level up or not
     changeNeedsLevel("exp", expGain)
-    if getExpBar():getProgress() >= 1 then
-       levelUp()
+    -- if getExpBar():getProgress() >= 1 then
+    local exp = getExpLevel() - getMaxNeedsLevels().exp
+    if exp >= 0 then
+       levelUp(exp)
+        setNeedLevel("exp", exp)
     end
+
+    print("exp level", getExpLevel())
 end
 
 -- -------------------------------------------------------------------------------

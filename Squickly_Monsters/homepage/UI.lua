@@ -1,5 +1,6 @@
 require("data")
 require("loadgame")
+require("itemList")
 require("inventory.interactions")
 local widget = require( "widget" )
 local composer = require( "composer" )
@@ -24,10 +25,12 @@ local inventoryIcon;
 local dailyRewardTrueIcon;
 local dailyRewardFalseIcon;
 
-local itemList;
+local invenList;
 local itemQuantities;
 local gold;
 local platinum;
+
+local itemList = getItemList();
 
 local needsLevels;
 local needsBars;
@@ -142,7 +145,7 @@ function setUpAllIcons()
     tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
     thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
 
-    itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = getInventoryData()
+    invenList, foodRecentList, playRecentList, itemQuantities, gold, platinum = getInventoryData()
     updateFoodIcons()
     updatePlayIcons()
 
@@ -182,7 +185,9 @@ function levelUp()  -- Level up then change text and set exp bar to = 0
 
     monsterLevel = monsterLevel + 1
     monsterLevelText.text = "Level: " .. monsterLevel
-    setNeedLevel("exp", 0)
+    
+    setNeedLevel("exp", exp)
+    setMonsterLevel(monsterLevel)
     saveData()
 end
 
@@ -216,9 +221,9 @@ end
 -- Update most recent icons
 
 function isInMostRecentFood(name)
-    for i, food in ipairs(foodRecentList) do
+    for i, foodName in ipairs(foodRecentList) do
         -- If item exists in inventory: return its index
-        if food.name == name then
+        if foodName == name then
             return i
         end
     end
@@ -226,9 +231,9 @@ function isInMostRecentFood(name)
 end
 
 function isInMostRecentPlay(name)
-    for i, toy in ipairs(playRecentList) do
+    for i, toyName in ipairs(playRecentList) do
         -- If item exists in inventory: return its index
-        if toy.name == name then
+        if toyName == name then
             return i
         end
     end
@@ -237,13 +242,13 @@ end
 
 function updateFoodIcons()
     if (foodRecentList[1] ~= nil) then
-        mostRecentFoodIcon1 = setUpIcon(foodRecentList[1].image, 0.75)
+        mostRecentFoodIcon1 = setUpIcon(itemList[foodRecentList[1]].image, 0.75)
     else
         mostRecentFoodIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
     end
 
     if (foodRecentList[2] ~= nil) then
-        mostRecentFoodIcon2 = setUpIcon(foodRecentList[2].image, 0.75)
+        mostRecentFoodIcon2 = setUpIcon(itemList[foodRecentList[2]].image, 0.75)
     else
         mostRecentFoodIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
     end
@@ -252,13 +257,13 @@ end
 
 function updatePlayIcons()
     if (playRecentList[1] ~= nil) then
-        mostRecentPlayIcon1 = setUpIcon(playRecentList[1].image, 0.75)
+        mostRecentPlayIcon1 = setUpIcon(itemList[playRecentList[1]].image, 0.75)
     else
         mostRecentPlayIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
     end
 
     if (playRecentList[2] ~= nil) then
-        mostRecentPlayIcon2 = setUpIcon(playRecentList[2].image, 0.75)
+        mostRecentPlayIcon2 = setUpIcon(itemList[playRecentList[2]].image, 0.75)
     else
         mostRecentPlayIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
     end
@@ -275,7 +280,7 @@ function updateMostRecentFood(latest_food)
     end
     -- Insert food to head of list if in inventory
     if isInInventory(latest_food.name) then
-        table.insert(foodRecentList,1,latest_food)
+        table.insert(foodRecentList,1,latest_food.name)
     end
     updateFoodIcons()
 end
@@ -290,7 +295,7 @@ function updateMostRecentPlay(latest_toy)
     end
     -- Insert food to head of list if in inventory
     if isInInventory(latest_toy.name) then
-        table.insert(playRecentList,1,latest_toy)
+        table.insert(playRecentList,1,latest_toy.name)
     end
     updatePlayIcons()
 end
