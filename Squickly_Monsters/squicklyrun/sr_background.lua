@@ -6,15 +6,17 @@ local backgroundnear2;
 
 
 function setupBackground()
+    -- print(display.contentCenterX)
+    -- print(display.contentCenterY)
 
     --adds an image to our game centered at x and y coordinates
     backbackground = display.newImage("img/squicklyrun/background.png")
     backbackground.x = display.contentCenterX
-    backbackground.y = 160
+    backbackground.y = display.contentCenterY
 
     backgroundfar = display.newImage("img/squicklyrun/bgfar1.png")
-    backgroundfar.x = 480
-    backgroundfar.y = 160
+    backgroundfar.x = display.contentCenterX/2
+    backgroundfar.y = display.contentCenterY
 
     backgroundnear1 = display.newImage("img/squicklyrun/bgnear2.png")
     backgroundnear1.x = 240
