@@ -15,12 +15,15 @@ local maxSize = 9;
 local needsLevels;
 local maxNeedsLevels;
 
+local monsterName;
 local monsterLevel;
 
 local hungerRate = -50;
 local happinessRate = -50;
 local hygieneRate = -50;
 local energyRate = -50;
+
+local receiveDate;
 
 local saveRate;
 local dataFile = system.pathForFile( "data.txt", system.DocumentsDirectory )
@@ -34,7 +37,6 @@ function writeFile(file, contents)
 end
 
 function saveData()
-	print(getHungerLevel(), needsLevels.hunger)
     local outTable = 
     {
     -- UI Data
@@ -60,19 +62,20 @@ function saveData()
     -- Monster
     monsterLevel,
     monsterName,
+    -- Daily Rewards
+    receiveDate,
 	}
     local contents = json.encode(outTable)
     writeFile(dataFile, contents)
     print("Save by Data Sage")
-    print(getHungerLevel(), needsLevels.hunger)
 end
 
--- function setAutoSaveRate(rate) -- 1000 = 1sec
--- 	if saveRate ~= nil then
--- 		timer.cancel(saveRate)
--- 	end
---     saveRate = timer.performWithDelay(rate, saveData, -1)
--- end
+function setAutoSaveRate(rate) -- 1000 = 1sec
+	if saveRate ~= nil then
+		timer.cancel(saveRate)
+	end
+    saveRate = timer.performWithDelay(rate, saveData, -1)
+end
 -- -------------------------------------------------------------------------------
 
 function readFile(file)
@@ -120,6 +123,10 @@ function loadData()
         local monIdx = 9
         monsterLevel = inTable[monIdx]
         monsterName = inTable[monIdx + 1]
+
+        local rewIdx = 11
+        receiveDate = inTable[rewIdx]
+        
     else
     	foodRecentList = {}
         playRecentList = {}
@@ -147,10 +154,11 @@ function loadData()
         monsterLevel = 1
         monsterName = "fireball"
 
+        receiveDate = nil
+
     end
 
     print("Load by Data Sage")
-    print(getHungerLevel(), needsLevels.hunger, gold, platinum)
 end
 -- -------------------------------------------------------------------------------
 -- Inventory Data Modify
@@ -272,6 +280,7 @@ function setNeedsLevels(level)
 end
 
 -- Monster
+
 function getMonsterLevel()
 	return monsterLevel
 end
@@ -304,4 +313,19 @@ function getEnergyRate()
 	return energyRate
 end
 
+-- Daily Rewards
+
+function getReceiveDate()
+    return receiveDate
+end
+
+-- --------------------------------
+
+function setReceiveDate(date)
+    receiveDate = date
+end
+
 -- -------------------------------------------------------------------------------
+
+
+
