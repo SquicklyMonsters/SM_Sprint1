@@ -170,8 +170,9 @@ function setUpIcon(img, scale, x, y, alpha)
     icon.alpha = alpha
     return icon
 end
+-- -------------------------------------------------------------------------------
+-- Monster Level Functions
 
--- This should not be here
 function setUpMonsterLevel()
     levelsTextOptions = {
         text = getMonsterLevel(),
@@ -184,8 +185,7 @@ function setUpMonsterLevel()
     levelsText:setFillColor( 1, 0, 0 ) -- fill the text red
 end
 
--- This should not be here
-function levelUp()  -- Level up then change text and set exp bar to = 0
+function levelUp(exp)  -- Level up then change text and set exp bar to = 0
     monsterLevelText = getMonsterLevelText()
     monsterLevel = getMonsterLevel()
 
