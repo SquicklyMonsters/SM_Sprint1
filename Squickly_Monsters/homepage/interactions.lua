@@ -228,6 +228,7 @@ function mostRecentFood1Clicked(event)
             if (foodRecentList ~= nil) then
                 if (#foodRecentList > 0) then
                     feedAnimation()
+                    print(foodRecentList[1].name)
                     useItem(foodRecentList[1])
                 end
             end
@@ -346,7 +347,7 @@ function getDailyReward()
             updateCurrency(0, r)
         end
     end
-    saveInventoryData()
+    saveData()
 end
 
 function isItRewardTime() -- calculates how much time is left for reward, returns false if done

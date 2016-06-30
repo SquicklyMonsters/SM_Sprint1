@@ -39,8 +39,8 @@ function useItem(item)
 	if idx then
 		local quantity = reduceQuantity(idx)
 		itemTexts[idx].text = quantity
-		saveData()
 		item:use(item.type)
+		saveData()
 	end
 end
 

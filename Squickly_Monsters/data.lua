@@ -87,6 +87,7 @@ function loadData()
 
     if file then
         local inTable = readFile(file)
+        
         local UIIdx = 1
         foodRecentList = inTable[UIIdx]
         playRecentList = inTable[UIIdx + 1]
@@ -214,8 +215,8 @@ end
 
 -- --------------------------------
 
-function setNeedsLevels(in_needsLevels)
-    needsLevels = in_needsLevels
+function setNeedsLevels(level)
+    needsLevels = level
 end
 
 -- Monster
@@ -226,6 +227,13 @@ end
 function getMonsterName()
 	return monsterName
 end
+
+-- --------------------------------
+
+function setMonsterLevel(level)
+    monsterLevel = level
+end
+
 -- Need Rates
 
 function getHungerRate()
