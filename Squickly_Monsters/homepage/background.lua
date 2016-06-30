@@ -2,14 +2,13 @@
 -- Local variables go HERE
 
 local background;
-local resizer = display.contentHeight/320
 
 -- -------------------------------------------------------------------------------
 
 function setUpBackground() 
     -- Set Background
-    background = display.newImage("img/bg/trial.png", display.contentCenterX, display.contentCenterY)
-    background:scale(resizer, resizer )
+    background = display.newImage("img/bg/waterfall.png", display.contentCenterX, display.contentCenterY)
+    background:scale(display.contentWidth/background.width, display.contentHeight/background.height )
     -- local backgroundOption = {
     --     width = 500,
     --     height = 243,
