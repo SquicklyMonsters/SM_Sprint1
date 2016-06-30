@@ -179,7 +179,7 @@ function setUpMonsterLevel()
 end
 
 -- This should not be here
-function levelUp()  -- Level up then change text and set exp bar to = 0
+function levelUp(exp)  -- Level up then change text and set exp bar to = 0
     monsterLevelText = getMonsterLevelText()
     monsterLevel = getMonsterLevel()
 

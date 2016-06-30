@@ -405,15 +405,12 @@ function giveTakeCareEXP(expGain, needBar) -- Unless the NeedBar is less than 90
 end
 
 function increaseEXP(expGain) -- give exp and check the bar that Level up or not
+    local exp = (getExpLevel() + expGain) - getMaxNeedsLevels().exp 
     changeNeedsLevel("exp", expGain)
-    -- if getExpBar():getProgress() >= 1 then
-    local exp = getExpLevel() - getMaxNeedsLevels().exp
     if exp >= 0 then
-       levelUp(exp)
+        levelUp(exp)
         setNeedLevel("exp", exp)
     end
-
-    print("exp level", getExpLevel())
 end
 
 -- -------------------------------------------------------------------------------

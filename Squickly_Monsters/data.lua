@@ -272,6 +272,7 @@ function setNeedsLevels(level)
 end
 
 -- Monster
+
 function getMonsterLevel()
 	return monsterLevel
 end
