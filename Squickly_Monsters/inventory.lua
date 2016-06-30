@@ -2,12 +2,12 @@ require("inventory.interactions")
 local widget = require("widget")
 local composer = require( "composer" )
 local scene = composer.newScene()
-require("shopList")
+require("itemList")
 require("itemClass")
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
-local itemList;
+local invenList;
 local foodRecentList;
 local playRecentList;
 local itemQuantities;
@@ -85,14 +85,14 @@ function setUpInventory()
 
  	-- Retrieve data from save file
  	-- itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
- 	itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = getInventoryData()
+ 	invenList, foodRecentList, playRecentList, itemQuantities, gold, platinum = getInventoryData()
 
  	inventory.items = {}
 
- 	for i = 1, #itemList do --loops to create each item on inventory
+ 	for i = 1, #invenList do --loops to create each item on inventory
  		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
  		local y = startY + (spacingY * (math.floor((i-1) / rows)))
- 		local item = shopList[itemList[i]]
+ 		local item = itemList[invenList[i]]
  		inventory.items[i] = widget.newButton {
  			top = y, -- division of row
 	    	left = x, -- modulo of row

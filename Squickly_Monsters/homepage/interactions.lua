@@ -1,6 +1,6 @@
 require("savegame") -- For Testing
 require("data")
-require("shopList")
+require("itemList")
 local composer = require("composer")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
@@ -328,8 +328,8 @@ function getDailyReward()
     p = math.random()
     if p >= 0.35 then
         -- get random item
-        r = math.random(#shopList)
-        item = shopList[shopList[r]]
+        r = math.random(#itemList)
+        item = itemList[itemList[r]]
         idx = isInInventory(item.name)
         if idx then
             increaseQuantity(idx)

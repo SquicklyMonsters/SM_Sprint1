@@ -4,7 +4,7 @@ local json = require("json")
 -- Local variables go HERE
 -- TODO: Add monster data
 
-local itemList;
+local invenList;
 local foodRecentList;
 local playRecentList;
 local itemQuantities;
@@ -39,7 +39,7 @@ function saveData()
     -- UI Data
     foodRecentList, playRecentList, 
     -- Inventory Data
-    itemList, itemQuantities, gold, platinum,
+    invenList, itemQuantities, gold, platinum,
     -- Needs Data
     	{
     	maxNeedsLevels.hunger, 
@@ -87,13 +87,13 @@ function loadData()
 
     if file then
         local inTable = readFile(file)
-        
+
         local UIIdx = 1
         foodRecentList = inTable[UIIdx]
         playRecentList = inTable[UIIdx + 1]
 
         local invIdx = 3
-        itemList = inTable[invIdx]
+        invenList = inTable[invIdx]
         itemQuantities = inTable[invIdx + 1]
         gold = inTable[invIdx + 2]
         platinum = inTable[invIdx + 3]
@@ -123,7 +123,7 @@ function loadData()
     	foodRecentList = {}
         playRecentList = {}
 
-        itemList = {}
+        invenList = {}
         itemQuantities = {}
         gold = 99999
         platinum = 99999
@@ -154,7 +154,7 @@ end
 -- -------------------------------------------------------------------------------
 -- Inventory Data
 function getInventoryData()
-	return itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum
+	return invenList, foodRecentList, playRecentList, itemQuantities, gold, platinum
 end
 
 function getGold()
@@ -165,8 +165,8 @@ function getPlatinum()
 	return platinum
 end
 
-function getItemList()
-	return itemList
+function getInvenList()
+	return invenList
 end
 
 function getItemQuantities()

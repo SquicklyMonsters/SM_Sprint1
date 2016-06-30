@@ -1,7 +1,7 @@
 require("data")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
-local itemList = getItemList();
+local invenList = getInvenList();
 local foodRecentList;
 local playRecentList;
 local itemQuantities = getItemQuantities();
@@ -34,8 +34,8 @@ end
 --adds new item to inventory
 function addToInventory(itemName)
 	-- If number of item will not exceed limit size: add item
-	if #itemList < maxSize then
-		table.insert(itemList, itemName)
+	if #invenList < maxSize then
+		table.insert(invenList, itemName)
 		table.insert(itemQuantities, 1)
 	end
 end
@@ -56,12 +56,12 @@ function reduceQuantity(idx)
 end
 
 function removeItem(idx)
-	table.remove(itemList,idx)
+	table.remove(invenList,idx)
 	table.remove(itemQuantities,idx)
 end
 
 function isInInventory(name)
-	for i, itemName in ipairs(itemList) do
+	for i, itemName in ipairs(invenList) do
 		-- If item exists in inventory: return its index
 		if itemName == name then
 	  		return i
@@ -77,9 +77,9 @@ end
 
 -- -------------------------------------------------------------------------------
 -- Get functions HERE
-function getItemList()
-	return itemList
-end
+-- function getItemList()
+-- 	return itemList
+-- end
 
 function getItemQuantities()
 	return itemQuantities
