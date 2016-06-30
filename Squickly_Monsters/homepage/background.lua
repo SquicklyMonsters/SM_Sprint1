@@ -9,6 +9,7 @@ function setUpBackground()
     -- Set Background
     background = display.newImage("img/bg/waterfall.png", display.contentCenterX, display.contentCenterY)
     background:scale(display.contentWidth/background.width, display.contentHeight/background.height )
+    
     -- local backgroundOption = {
     --     width = 500,
     --     height = 243,

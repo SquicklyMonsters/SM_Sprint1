@@ -53,7 +53,7 @@ local monsterText;
 
 -- -------------------------------------------------------------------------------
 -- Set up needs bar
-function setUpNeedsBar(fileName, fileIcon, left)
+function setUpNeedsBar(fileName, fileIcon, left,i)
     local options = {
         width = 100,
         height = 430,
@@ -76,13 +76,17 @@ function setUpNeedsBar(fileName, fileIcon, left)
             fillHeight = display.contentHeight/10,
 
             left = left,
-            top = display.contentHeight/50,
             width = display.contentWidth/7,
             isAnimated = true
         }
     )
-
-    icon = display.newImage(fileIcon, left, display.contentHeight/15)
+    if i then
+        bar.y = display.contentHeight/15
+        icon = display.newImage(fileIcon, left-(15*resizer), display.contentHeight/15)
+    else
+        bar.y = display.contentHeight/7
+        icon = display.newImage(fileIcon, left-(15*resizer), display.contentHeight/7)
+    end
     icon:scale(resizer,resizer)
     return bar, icon
 end
@@ -103,17 +107,17 @@ end
 
 function setupAllNeedsBars()
     -- Starting x-axis and spacing between bars
-    local startX = display.contentWidth/20
-    local spacing = display.contentWidth/5
+    local startX = display.contentWidth/14.5
+    local spacing = display.contentWidth/5.1
     local barsDir = "img/bars/"
     -- TODO: Update Bar files
     needsBars = {}
     needsIcons = {}
-    needsBars.hunger, needsIcons.hunger = setUpNeedsBar(barsDir .. "HUNGER_BAR.png", barsDir .. "HUNGER_ICON.png", startX)
-    needsBars.happiness, needsIcons.happiness = setUpNeedsBar(barsDir .. "HAPPINESS_BAR.png", barsDir .. "HAPPINESS_ICON.png", startX + spacing)
-    needsBars.hygiene, needsIcons.hygiene = setUpNeedsBar(barsDir .. "HYGIENE_BAR.png", barsDir .. "HYGIENE_ICON.png", startX + spacing*2)
-    needsBars.energy, needsIcons.energy = setUpNeedsBar(barsDir .. "ENERGY_BAR.png", barsDir .. "ENERGY_ICON.png", startX + spacing*3)
-    needsBars.exp, needsIcons.exp = setUpNeedsBar(barsDir .. "EXP_BAR.png", barsDir .. "EXP_ICON.png", startX + spacing*4)
+    needsBars.hunger, needsIcons.hunger = setUpNeedsBar(barsDir .. "HUNGER_BAR.png", barsDir .. "HUNGER_ICON.png", startX,true)
+    needsBars.happiness, needsIcons.happiness = setUpNeedsBar(barsDir .. "HAPPINESS_BAR.png", barsDir .. "HAPPINESS_ICON.png", startX + spacing,false)
+    needsBars.hygiene, needsIcons.hygiene = setUpNeedsBar(barsDir .. "HYGIENE_BAR.png", barsDir .. "HYGIENE_ICON.png", startX + spacing*2,true)
+    needsBars.energy, needsIcons.energy = setUpNeedsBar(barsDir .. "ENERGY_BAR.png", barsDir .. "ENERGY_ICON.png", startX + spacing*3,false)
+    needsBars.exp, needsIcons.exp = setUpNeedsBar(barsDir .. "EXP_BAR.png", barsDir .. "EXP_ICON.png", startX + spacing*4,true)
 
     -- Load data from save
     needsLevels = getNeedsLevels()
@@ -175,7 +179,7 @@ end
 function setUpMonsterLevel()
     levelsTextOptions = {
         text = getMonsterLevel(),
-        x = 17*display.contentWidth/20,
+        x = 16.5*display.contentWidth/20,
         y = display.contentHeight/14,
         font = native.systemFontBold,
         fontSize = 18*display.contentHeight/320,
