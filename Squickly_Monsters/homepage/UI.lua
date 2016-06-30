@@ -130,36 +130,34 @@ end
 -- Setup All Icons Here
 
 function setUpAllIcons()
+    local resizer = display.contentHeight/320
+
     local iconsDir = "img/icons/UIIcons/"
-    feedIcon = setUpIcon(iconsDir .. "feedIcon.png", 0.4)
-    sleepIcon = setUpIcon(iconsDir .. "sleepIcon.png", 0.5)
-    wakeupIcon = setUpIcon(iconsDir .. "wakeupIcon.png", 0.75)
-    cleanIcon = setUpIcon(iconsDir .. "cleanIcon.png", 0.4)
-    playIcon = setUpIcon(iconsDir .. "playIcon.png", 0.4)
-    mostRecentFoodIcon1 = setUpIcon(iconsDir .. "blank.png", 0.4)
-    mostRecentFoodIcon2 = setUpIcon(iconsDir .. "blank.png", 0.4)
-    moreFoodIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.7)
-    shopIcon = setUpIcon(iconsDir .. "shopIcon.png", 0.4)
-    mostRecentPlayIcon1 = setUpIcon(iconsDir .. "blank.png", 0.4)
-    mostRecentPlayIcon2 = setUpIcon(iconsDir .. "blank.png", 0.4)
-    morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.7)
+    feedIcon = setUpIcon(iconsDir .. "feedIcon.png", 0.4*resizer)
+    sleepIcon = setUpIcon(iconsDir .. "sleepIcon.png", 0.5*resizer)
+    wakeupIcon = setUpIcon(iconsDir .. "wakeupIcon.png", 0.75*resizer)
+    cleanIcon = setUpIcon(iconsDir .. "cleanIcon.png", 0.4*resizer)
+    playIcon = setUpIcon(iconsDir .. "playIcon.png", 0.4*resizer)
+    mostRecentFoodIcon1 = setUpIcon(iconsDir .. "blank.png", 0.4*resizer)
+    mostRecentFoodIcon2 = setUpIcon(iconsDir .. "blank.png", 0.4*resizer)
+    moreFoodIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.7*resizer)
+    shopIcon = setUpIcon(iconsDir .. "shopIcon.png", 0.4*resizer)
+    mostRecentPlayIcon1 = setUpIcon(iconsDir .. "blank.png", 0.4*resizer)
+    mostRecentPlayIcon2 = setUpIcon(iconsDir .. "blank.png", 0.4*resizer)
+    morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.7*resizer)
 
-    inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 2, display.contentWidth*0.06, display.contentHeight*0.84, 1)
+    inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 1.2*resizer, display.contentWidth*0.06, display.contentHeight*0.84, 1)
 
-    dailyRewardTrueIcon = setUpIcon(iconsDir .. "RewardTrue.png", 1.5, display.contentWidth*0.06, display.contentHeight*.6, 0)
-    dailyRewardFalseIcon = setUpIcon(iconsDir .. "RewardFalse.png", 1.2, display.contentWidth*0.06, display.contentHeight*.6, 1)
+    dailyRewardTrueIcon = setUpIcon(iconsDir .. "RewardTrue.png", 1*resizer, display.contentWidth*0.06, display.contentHeight*.6, 0)
+    dailyRewardFalseIcon = setUpIcon(iconsDir .. "RewardFalse.png", 0.8*resizer, display.contentWidth*0.06, display.contentHeight*.6, 1)
 
-    hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
-    tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
+    hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75*resizer, getMonster().x + 60*resizer, getMonster().y - 20*resizer)
+    tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75*resizer, getMonster().x - 35*resizer, getMonster().y - 20*resizer)
     thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
-
+    
     invenList, foodRecentList, playRecentList, itemQuantities, gold, platinum = getInventoryData()
     updateFoodIcons()
     updatePlayIcons()
-
-    hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75, getMonster().x +60, getMonster().y -20)
-    tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75, getMonster().x -35, getMonster().y -20)
-    thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
 end
 
 function setUpIcon(img, scale, x, y, alpha)
