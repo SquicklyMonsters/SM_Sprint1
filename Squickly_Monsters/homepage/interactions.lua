@@ -15,19 +15,22 @@ local sleepIcon;
 local wakeupIcon;
 local cleanIcon;
 local playIcon;
-local foodRecentList;
-local mostRecentFoodIcon1;
-local mostRecentFoodIcon2;
 local moreFoodIcon;
 local shopIcon;
-local playRecentList;
+local morePlayIcon;
+local mostRecentFoodIcon1;
+local mostRecentFoodIcon2;
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
-local morePlayIcon;
+
 local inventoryIcon;
+
+local foodRecentList;
+local playRecentList;
+
 local dailyRewardTrueIcon;
 local dailyRewardFalseIcon;
-local rewardTimer;
+-- local rewardTimer;
 
 local iconsList; -- idx 1=play, 2=clean, 3=sleep/wakeup, 4=feed
 local foodIconsList;
@@ -345,21 +348,22 @@ function getDailyReward()
 end
 
 function isItRewardTime() -- calculates how much time is left for reward, returns false if done
-    lastTime = loadLastRewardDate()
-    currentTime = os.date( '*t' )
+    -- lastTime = loadLastRewardDate()
+    local receiveDate = getReceiveDate()
+    local currentDate = os.date( '*t' )
 
-    if lastTime == false then -- lastTime is false if user has never gotten daily reward before
+    if receiveDate == nil then -- receiveDate is false if user has never gotten daily reward before
         dailyRewardTrueIcon.alpha = 1
         dailyRewardFalseIcon.alpha = 0
-        return false, nil
+        return false, currentDate, nil
     end
 
-    setTime = os.time{  year = lastTime.year, month = lastTime.month, day = lastTime.day,
-                        hour = lastTime.hour, min = lastTime.min, sec = lastTime.sec }
-    endTime = os.time{  year = currentTime.year, month = currentTime.month, day = currentTime.day,
-                        hour = currentTime.hour, min = currentTime.min, sec = currentTime.sec }
+    setTime = os.time{  year = receiveDate.year, month = receiveDate.month, day = receiveDate.day,
+                        hour = receiveDate.hour, min = receiveDate.min, sec = receiveDate.sec }
+    endTime = os.time{  year = currentDate.year, month = currentDate.month, day = currentDate.day,
+                        hour = currentDate.hour, min = currentDate.min, sec = currentDate.sec }
 
-    rewardTimer = ( endTime - setTime ) -- difference in seconds
+    local rewardTimer = ( endTime - setTime ) -- difference in seconds
     -- print(rewardTimer)
     -- set to 5 seconds for now for testing
     limit = 24*60*60 -- 24 hours in sec
@@ -367,25 +371,30 @@ function isItRewardTime() -- calculates how much time is left for reward, return
     if rewardTimer >= limit then
         dailyRewardTrueIcon.alpha = 1
         dailyRewardFalseIcon.alpha = 0
-        return true, rewardTimer
+        return true, currentDate, rewardTimer 
     end
-    return false, rewardTimer
+    return false, currentDate, rewardTimer
 end
 
 function rewardIconClicked(event)
     if event.phase == "ended" then
-        timeleft = isItRewardTime()
+        timeleft, currentDate, rewardTimer = isItRewardTime()
         if timeleft == true or rewardTimer == nil then -- if the timer is done
             -- reward animation
 
             -- add to inventory
             getDailyReward()
             print("GET REWARD!")
+
             -- reset timer and save date
-            saveRewardTimerData()
+            -- saveRewardTimerData()
+            setReceiveDate(currentDate)
+            
+
             --change visibility
             dailyRewardTrueIcon.alpha = 0
             dailyRewardFalseIcon.alpha = 1
+
         else -- if the timer is still ticking
             -- show timer
             tmp = 24*60*60 - rewardTimer

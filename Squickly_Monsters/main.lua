@@ -13,8 +13,10 @@ native.setProperty( "androidSystemUiVisibility", "immersiveSticky" )
 -- include the Corona "composer" module
 local composer = require "composer"
 require("data")
--- Setup All Data
+
+-- Setup All Data and Auto Save
 loadData()
+setAutoSaveRate(5000)
 
 -- load menu screen
 composer.gotoScene( "home" )
