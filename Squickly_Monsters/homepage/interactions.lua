@@ -315,6 +315,9 @@ function inventoryClicked(event)
     end
 end
 
+-- -------------------------------------------------------------------------------
+-- Daily Reward Functions
+
 function getDailyReward()
     p = math.random()
     if p >= 0.35 then
@@ -397,6 +400,9 @@ function rewardIconClicked(event)
         end
     end
 end
+
+-- -------------------------------------------------------------------------------
+-- EXP functions
 
 function giveTakeCareEXP(expGain, needBar) -- Unless the NeedBar is less than 90%,
     if needBar:getProgress() < 0.9 then     -- this function give exp to our tamagotchi
