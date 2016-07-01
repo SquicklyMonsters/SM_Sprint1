@@ -8,6 +8,8 @@ require("data")
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
+local resizer = display.contentHeight/320
+
 local invenList;
 local foodRecentList;
 local playRecentList;
@@ -144,7 +146,7 @@ function setUpInventory()
     x = startX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
-    fontSize = 20
+    fontSize = 20,
     }
 
     -- text area to show how much PlATINUM you have
@@ -153,7 +155,7 @@ function setUpInventory()
     x = startX + 2*spacingX,
     y = startY - 0.3*spacingY,
     font = native.systemFontBold,
-    fontSize = 20
+    fontSize = 20,
     }
 
     local goldText = display.newText(GoldOptions)
