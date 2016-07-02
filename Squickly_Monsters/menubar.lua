@@ -4,6 +4,7 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE
+local resizer = display.contentHeight/320
 
 local menuBar;
 local chageScenceEffect = "crossFade";
@@ -42,10 +43,11 @@ end
 function widget.newPanel( options )                                    
     local background = display.newImage(options.imageDir)
 
-    local container = display.newContainer(options.width, display.contentHeight)
+    local container = display.newContainer(background.width, background.height)
+    container:scale(resizer, resizer )
     -- Start as a hide bar state
     container.completeState = "hidden"
-    container.x = display.contentWidth + 30
+    container.x = display.contentWidth + 30*resizer
     container.y = display.contentCenterY
     container:insert(background, true)
 
@@ -54,7 +56,7 @@ function widget.newPanel( options )
             time = options.speed,
             transition = options.inEasing
         }
-        options.x = display.contentWidth - 30
+        options.x = display.contentWidth - 30*resizer
         self.completeState = "shown"
         transition.to(self, options)
     end
@@ -64,7 +66,7 @@ function widget.newPanel( options )
             time = options.speed,
             transition = options.outEasing
         }
-        options.x = display.contentWidth + 30
+        options.x = display.contentWidth + 30*resizer
         self.completeState = "hidden"
         transition.to(self, options)
     end
@@ -76,8 +78,6 @@ end
 function setUpMenuBar()
   menuBar = widget.newPanel{
     speed = 1000,
-    width = 110,
-    height = 480,
     inEasing = easing.outBack,
     outEasing = easing.outCubic,
     imageDir = "img/bg/menuBar.png"

@@ -1,6 +1,7 @@
 -- -----------------------------------------------------------------------------------------------------------------
 require('inventory.interactions')
 -- Local variables go Here
+local resizer = display.contentHeight/320;
 
 --adds an image to our game centered at x and y coordinates
 local backbackground;
@@ -49,8 +50,8 @@ local gameOver;
 function setupGround()
 	blocks = display.newGroup()
 	--setup some variables that we will use to position the ground
-	groundMin = 420
-	groundMax = 340
+	groundMin = 420*resizer
+	groundMax = 340*resizer
 	groundLevel = groundMin
 	speed = 5
 
@@ -63,14 +64,22 @@ function setupGround()
 	for a = 1, 8, 1 do
 		local newBlock
 		isDone = false
-		numGen = math.random(2) --get a random number between 1 and 2
+		numGen = math.random(3) --get a random number between 1 and 2
 		if(numGen == 1 and isDone == false) then
 			newBlock = display.newImage("img/squicklyrun/ground1.png")
+			newBlock:scale(resizer,resizer)
 			isDone = true
 		end
 	 
 		if(numGen == 2 and isDone == false) then
 			newBlock = display.newImage("img/squicklyrun/ground2.png")
+			newBlock:scale(resizer,resizer)
+			isDone = true
+		end
+	 
+		if(numGen == 3 and isDone == false) then
+			newBlock = display.newImage("img/squicklyrun/ground3.png")
+			newBlock:scale(resizer,resizer)
 			isDone = true
 		end
 	 
@@ -80,7 +89,7 @@ function setupGround()
 		--because a is a variable that is being changed each run we can assign
 		--values to the block based on a. In this case we want the x position to
 		--be positioned the width of a block apart.
-		newBlock.x = (a * 79) - 79
+		newBlock.x = a*newBlock.width - newBlock.width
 		newBlock.y = groundLevel
 		blocks:insert(newBlock)
 	end
@@ -91,17 +100,18 @@ function setupScoreAndGameOver()
 
 	gameOver = getGameOver()
 	gameOver = display.newImage("img/squicklyrun/gameOver.png")
+	gameOver:scale(resizer,resizer)
 	gameOver.name = "gameOver"
-	gameOver.x = -100
-	gameOver.y = -100
 	gameOver.alpha = 0
+	gameOver.x = 0*resizer
+	gameOver.y = 500*resizer
 
 	local options = {
 		text = "score: " .. score,
-		x = 50,
-		y = 30,
+		x = 50*resizer,
+		y = 30*resizer,
 		font = native.systemFontBold,   
-		fontSize = 18,
+		fontSize = 18*resizer,
 		align = "left",
 	}
 	scoreText = display.newText(options);
@@ -123,12 +133,13 @@ function setupSprite()
 	--Hero Animation
 	hero = getHero()
 	hero = display.newSprite(spriteSheet, sequenceData);
+	hero:scale(resizer,resizer)
 	hero:setSequence("running")
 	hero:play()
 
 	-- Hero Attributes
-	hero.x = 60
-	hero.y = 200
+	hero.x = 60*resizer
+	hero.y = 200*resizer
 	hero.gravity = -6
 	hero.accel = 0
 	hero.isAlive = true
@@ -136,7 +147,8 @@ function setupSprite()
 	--rectangle used for our collision detection it will always be in front of the hero sprite
 	--that way we know if the hero hit into anything
 	collisionRect = getCollisionRect()
-	collisionRect = display.newRect(hero.x + 36, hero.y, 1, 70)
+	collisionRect = display.newRect(hero.x + 36*resizer, hero.y, 1, 70)
+	collisionRect:scale(resizer,resizer)
 	collisionRect.strokeWidth = 1
 	collisionRect:setFillColor(140, 140, 140)
 	collisionRect:setStrokeColor(180, 180, 180)
@@ -153,10 +165,11 @@ function setupObstaclesAndEnemies()
 	--create ghosts and set their position to be off-screen
 	for a = 1, 3, 1 do
 		local ghost = display.newImage("img/squicklyrun/ghost.png")
+		ghost:scale(resizer,resizer)
 		ghost.name = ("ghost" .. a)
 		ghost.id = a
-		ghost.x = 800
-		ghost.y = 600
+		ghost.x = 800*resizer
+		ghost.y = 600*resizer
 		ghost.speed = 0
 			--variable used to determine if they are in play or not
 		ghost.isAlive = false
@@ -166,10 +179,11 @@ function setupObstaclesAndEnemies()
 	--create spikes
 	for a = 1, 3, 1 do
 		local spike = display.newImage("img/squicklyrun/spikeBlock.png")
+		spike:scale(resizer,resizer)
 		spike.name = ("spike" .. a)
 		spike.id = a
-		spike.x = 900
-		spike.y = 500
+		spike.x = 900*resizer
+		spike.y = 500*resizer
 		spike.isAlive = false
 		spike.alpha = 0
 		spikes:insert(spike)
@@ -178,18 +192,20 @@ function setupObstaclesAndEnemies()
 	blasts = getBlasts()
 	for a=1, 5, 1 do
 		local blast = display.newImage("img/squicklyrun/blast.png")
+		blast:scale(resizer,resizer)
 		blast.name = ("blast" .. a)
 		blast.id = a
-		blast.x = 800
-		blast.y = 500
+		blast.x = 800*resizer
+		blast.y = 500*resizer
 		blast.isAlive = false
 		blast.alpha = 0
 		blasts:insert(blast)
 	end
 
 	boss = display.newImage("img/squicklyrun/boss.png", 150, 150)
-	boss.x = 300
-	boss.y = 550
+	boss:scale(resizer,resizer)
+	boss.x = 300*resizer
+	boss.y = 550*resizer
 	boss.isAlive = false
 	boss.alpha = 0
 	boss.health = 10
@@ -204,8 +220,9 @@ function setupObstaclesAndEnemies()
 	boss.spitCycle = 0
 	for a=1, 3, 1 do
 		local bossSpit = display.newImage("img/squicklyrun/bossSpit.png")
-		bossSpit.x = 400
-		bossSpit.y = 550
+		bossSpit:scale(resizer,resizer)
+		bossSpit.x = 400*resizer
+		bossSpit.y = 550*resizer
 		bossSpit.isAlive = false
 		bossSpit.alpha = 0
 		bossSpit.speed = 3
