@@ -46,8 +46,6 @@ local gameOver;
 -- -----------------------------------------------------------------------------------------------------------------
 --Setup functions
 
-
-
 function setupGround()
 	blocks = display.newGroup()
 	--setup some variables that we will use to position the ground
@@ -86,18 +84,16 @@ function setupGround()
 		newBlock.y = groundLevel
 		blocks:insert(newBlock)
 	end
-
 end
 
 function setupScoreAndGameOver()
-	score = getScore()
 	score = 0
 
 	gameOver = getGameOver()
 	gameOver = display.newImage("img/squicklyrun/gameOver.png")
 	gameOver.name = "gameOver"
-	gameOver.x = 0
-	gameOver.y = 500
+	gameOver.x = -100
+	gameOver.y = -100
 	gameOver.alpha = 0
 
 	local options = {
@@ -109,7 +105,6 @@ function setupScoreAndGameOver()
 		align = "left",
 	}
 	scoreText = display.newText(options);
-
 end
 
 function setupSprite()
@@ -146,9 +141,6 @@ function setupSprite()
 	collisionRect:setFillColor(140, 140, 140)
 	collisionRect:setStrokeColor(180, 180, 180)
 	collisionRect.alpha = 0
-
-
-
 end
 
 function setupObstaclesAndEnemies()
@@ -219,12 +211,6 @@ function setupObstaclesAndEnemies()
 		bossSpit.speed = 3
 		bossSpits:insert(bossSpit)
 	end
-
-
-
-
-
-
 end
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -310,15 +296,6 @@ function gameOverScreen()
 	gameOver.alpha = 1
 	score = getScore()
 end
-
-
--- -------COLLISIONS------------------------------------------------------------------------------------------------
-
-
-
-
-
-
 
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -433,10 +410,25 @@ function runEvent()
 	end
 end
 
+--function that gives reward to player when dead or leave the game
+function getReward()
+	reward = getScore()
+	print(reward)
+	if reward ~= nil then
+		updateCurrency(reward, 0)
+		changeNeedsLevel("exp", reward*10)
+		changeNeedsLevel("energy", -reward*10)
+	end
+	saveData()
+end
+
 function restartGame()
+	--give the player their reward for their progress
+	getReward()
+
 	--move menu
-	gameOver.x = 0
-	gameOver.y = 500
+	gameOver.x = -100
+	gameOver.y = -100
 	gameOver.alpha = 0
 	--reset the score
 	score = 0
