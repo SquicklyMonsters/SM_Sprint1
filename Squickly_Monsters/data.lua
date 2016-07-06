@@ -4,12 +4,13 @@ local json = require("json")
 -- Local variables go HERE
 
 local invenList;
-local foodRecentList;
-local playRecentList;
 local itemQuantities;
 local gold;
 local platinum;
 local maxSize = 9;
+
+local foodRecentList;
+local playRecentList;
 
 local needsLevels;
 local maxNeedsLevels;

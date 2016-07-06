@@ -11,8 +11,11 @@ require("data")
 local resizer = display.contentHeight/320
 
 local invenList;
-local tabList;
 local itemQuantities;
+
+-- local tabList;
+-- local tabQuantities;
+
 local itemTexts = {};
 
 local inventory;
@@ -44,6 +47,7 @@ end
 function foodTabClickEvent(event)
 	if event.phase == "ended" then
 		print("ft clicked")
+		toTab("food")
 	end
 end
 
@@ -56,11 +60,12 @@ function updateInventory()
 	scene:create()
 end
 
-function allocateItems(inventory, startX, spacingX, startY, spacingY, rows, invenList)
-	for i = 1, #invenList do --loops to create each item on inventory
+function allocateItems(list, quantities)
+	for i = 1, #list do --loops to create each item on inventory
  		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
  		local y = startY + (spacingY * (math.floor((i-1) / rows)))
- 		local item = itemList[invenList[i]]
+ 		local item = itemList[list[i]]
+ 		print(item.name, "____")
  		inventory.items[i] = widget.newButton {
  			top = y, -- division of row
 	    	left = x, -- modulo of row
@@ -73,7 +78,7 @@ function allocateItems(inventory, startX, spacingX, startY, spacingY, rows, inve
  		inventory.items[i].item = item
  		inventory.items[i].idx = i
  		local textOptions = {
-			text = itemQuantities[i],
+			text = quantities[i],
 			x = x + 70,
 			y = y + 65,
 			width = 50,
@@ -91,12 +96,20 @@ function allocateItems(inventory, startX, spacingX, startY, spacingY, rows, inve
  	end	
 end
 
--- function toTab(invenList)
--- 	tabList = {}
--- 	for i = 1, #invenList do
--- 		local item = itemList[invenList[i]]
--- 		table.insert(tabList, itemName)
--- end
+function toTab(tabType)
+	-- local tabList = itemList
+	-- local tabQuantities = itemQuantities
+	for i = 1, #invenList do
+		local item = itemList[invenList[i]]
+		if item.type ~= tabType then
+			print(item.name, "****")
+		    table.remove(invenList, i)
+		    table.remove(itemQuantities, i)
+		end
+	end
+	-- updateInventory()
+	allocateItems(invenList, itemQuantities)
+end
 -- -------------------------------------------------------------------------------
 
 function widget.newPanel(options)
@@ -109,7 +122,7 @@ function widget.newPanel(options)
 end
 
 function setUpInventory()
- 	local inventory = widget.newPanel {
+ 	inventory = widget.newPanel {
  		width = 300,
  		height = 300,
  		imageDir = "img/bg/inventory copy.png"
@@ -121,15 +134,15 @@ function setUpInventory()
 
  	inventory.items = {}
 
- 	local startX = -inventory.width*(1/3)
- 	local startY = -inventory.height*(1/3)
+ 	startX = -inventory.width*(1/3)
+ 	startY = -inventory.height*(1/3)
 
- 	local spacingX = inventory.width/4
- 	local spacingY = inventory.height/4
+ 	spacingX = inventory.width/4
+ 	spacingY = inventory.height/4
 
- 	local rows = 3
+ 	rows = 3
  	
- 	allocateItems(inventory, startX, spacingX, startY, spacingY, rows, invenList)
+ 	allocateItems(invenList, itemQuantities)
 
  	inventory.close = widget.newButton {
  		top = startY - (spacingY * 0.6),
