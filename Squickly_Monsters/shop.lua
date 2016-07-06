@@ -61,7 +61,11 @@ end
 function widget.newPanel(options)                                    
     local background = display.newImage(options.imageDir)
     local container = display.newContainer(options.width, options.height)
-    container:insert(background, true)
+    
+    -- print(background.width, background.height, display.contentWidth, display.contentHeight)
+    background:scale(options.width/background.width, options.height/background.height )
+    container:insert(background)
+    print(display.contentWidth, background.width)
     container.x = display.contentCenterX
     container.y = display.contentCenterY
     return container
@@ -69,18 +73,16 @@ end
 
 function setUpShop()
     local shop = widget.newPanel {
-        width = 820,
-        height = 400,
+        width = 749,
+        height = 374,
         imageDir = "img/bg/shoplist.png"
     }
-    shop:scale(2.,1.5)
-    shop.x = display.contentCenterX + (display.contentWidth/30)
 
-    local startX = -shop.width*(1/2.45)
+    local startX = -shop.width*(1/2.5)
     local startY = -shop.height*(1/3)
 
     local cols = 6
-    local spacingX = (shop.width)/7.5
+    local spacingX = (shop.width)/6.8
     local spacingY = (shop.height)/3.75
 
     local itemList = getItemList()
@@ -132,8 +134,8 @@ function setUpShop()
     end
 
     shop:scale(
-                (display.contentWidth/shop.width)*0.4, 
-                (display.contentHeight/shop.height)*0.5
+                (display.contentWidth/shop.width)*0.8, 
+                (display.contentHeight/shop.height)*0.8
                 )
 
     -- text area to show how much GOLD you have
