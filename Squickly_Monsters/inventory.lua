@@ -36,20 +36,15 @@ function itemClickedEvent(event)
 	end
 end
 
--- If item is used in a place that is not inventory
--- function useItem(item)
--- 	local idx = isInInventory(item.name)
--- 	if idx then
--- 		local quantity = reduceQuantity(idx)
--- 		itemTexts[idx].text = quantity
--- 		item:use(item.type)
--- 		saveData()
--- 	end
--- end
-
-function closeEvent(event)
+function closeClickEvent(event)
 	if event.phase == "ended" then
 		inventoryClicked(event)
+	end
+end
+
+function foodTabClickEvent(event)
+	if event.phase == "ended" then
+		print("ft clicked")
 	end
 end
 
@@ -60,6 +55,41 @@ function updateInventory()
 	saveData()
 	inventory:removeSelf()
 	scene:create()
+end
+
+function allocateItems(obj, startX, spacingX, startY, spacingY, rows, list)
+	for i = 1, #list do --loops to create each item on inventory
+ 		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
+ 		local y = startY + (spacingY * (math.floor((i-1) / rows)))
+ 		local item = itemList[list[i]]
+ 		obj.items[i] = widget.newButton {
+ 			top = y, -- division of row
+	    	left = x, -- modulo of row
+	    	width = 50,
+	    	height = 50,
+	    	defaultFile = item.image,
+	    	onEvent = itemClickedEvent,
+ 		}
+
+ 		obj.items[i].item = item
+ 		obj.items[i].idx = i
+ 		local textOptions = {
+			text = itemQuantities[i],
+			x = x + 70,
+			y = y + 65,
+			width = 50,
+			height = 50
+ 		}
+
+ 		local text = display.newText(textOptions)
+ 		text:setFillColor( 0, 1, 0 )
+
+ 		table.insert(itemTexts, i, text)
+ 		obj:insert(obj.items[i])
+ 		obj:insert(text)
+
+ 		--another smaller frame for quantity
+ 	end	
 end
 -- -------------------------------------------------------------------------------
 
@@ -79,51 +109,21 @@ function setUpInventory()
  		imageDir = "img/bg/inventory copy.png"
  	}
 
- 	local startX = -inventory.width*(1/3)
- 	local startY = -inventory.height*(1/3)
-
- 	local rows = 3
- 	local spacingX = (inventory.width)/4
- 	local spacingY = inventory.height/4
-
  	-- Retrieve data from save file
  	-- itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
  	invenList, foodRecentList, playRecentList, itemQuantities, gold, platinum = getInventoryData()
 
  	inventory.items = {}
 
- 	for i = 1, #invenList do --loops to create each item on inventory
- 		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
- 		local y = startY + (spacingY * (math.floor((i-1) / rows)))
- 		local item = itemList[invenList[i]]
- 		inventory.items[i] = widget.newButton {
- 			top = y, -- division of row
-	    	left = x, -- modulo of row
-	    	width = 50,
-	    	height = 50,
-	    	defaultFile = item.image,
-	    	onEvent = itemClickedEvent,
- 		}
+ 	local startX = -inventory.width*(1/3)
+ 	local startY = -inventory.height*(1/3)
 
- 		inventory.items[i].item = item
- 		inventory.items[i].idx = i
- 		local textOptions = {
-			text = itemQuantities[i],
-			x = x + 70,
-			y = y + 65,
-			width = 50,
-			height = 50
- 		}
+ 	local spacingX = inventory.width/4
+ 	local spacingY = inventory.height/4
 
- 		local text = display.newText(textOptions)
- 		text:setFillColor( 0, 1, 0 )
-
- 		table.insert(itemTexts, i, text)
- 		inventory:insert(inventory.items[i])
- 		inventory:insert(text)
-
- 		--another smaller frame for quantity
- 	end
+ 	local rows = 3
+ 	
+ 	allocateItems(inventory, startX, spacingX, startY, spacingY, rows, invenList)
 
  	inventory.close = widget.newButton {
  		top = startY - (spacingY * 0.6),
@@ -131,10 +131,20 @@ function setUpInventory()
  		width = 50,
  		height = 50,
  		defaultFile = "img/bg/close.png",
- 		onEvent = closeEvent,
+ 		onEvent = closeClickEvent,
+ 	}
+
+ 	inventory.foodTab = widget.newButton {
+ 		top = startY - (spacingY * 0.6),
+ 		left = startX,
+ 		width = 50,
+ 		height = 50,
+ 		defaultFile = "img/icons/UIIcons/feedIcon.png",
+ 		onEvent = foodTabClickEvent,
  	}
 
  	inventory:insert(inventory.close)
+ 	inventory:insert(inventory.foodTab)
  	inventory:scale(
  				(display.contentWidth/inventory.width)*0.4,
  				(display.contentHeight/inventory.height)*0.5

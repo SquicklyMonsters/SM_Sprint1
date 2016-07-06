@@ -8,8 +8,8 @@ local monster;
 -- Set get Monster
 function setUpMonster(fileName)
 	-- Set Monster
-    fileWidth = 2421
-    fileHeight = 4633
+    fileWidth = 2416
+    fileHeight = 4630
     local options = {
     width = fileWidth/8,
     height = fileHeight/10,
