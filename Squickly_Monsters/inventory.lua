@@ -11,8 +11,7 @@ require("data")
 local resizer = display.contentHeight/320
 
 local invenList;
-local foodRecentList;
-local playRecentList;
+local tabList;
 local itemQuantities;
 local itemTexts = {};
 
@@ -57,12 +56,12 @@ function updateInventory()
 	scene:create()
 end
 
-function allocateItems(obj, startX, spacingX, startY, spacingY, rows, list)
-	for i = 1, #list do --loops to create each item on inventory
+function allocateItems(inventory, startX, spacingX, startY, spacingY, rows, invenList)
+	for i = 1, #invenList do --loops to create each item on inventory
  		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
  		local y = startY + (spacingY * (math.floor((i-1) / rows)))
- 		local item = itemList[list[i]]
- 		obj.items[i] = widget.newButton {
+ 		local item = itemList[invenList[i]]
+ 		inventory.items[i] = widget.newButton {
  			top = y, -- division of row
 	    	left = x, -- modulo of row
 	    	width = 50,
@@ -71,8 +70,8 @@ function allocateItems(obj, startX, spacingX, startY, spacingY, rows, list)
 	    	onEvent = itemClickedEvent,
  		}
 
- 		obj.items[i].item = item
- 		obj.items[i].idx = i
+ 		inventory.items[i].item = item
+ 		inventory.items[i].idx = i
  		local textOptions = {
 			text = itemQuantities[i],
 			x = x + 70,
@@ -85,12 +84,19 @@ function allocateItems(obj, startX, spacingX, startY, spacingY, rows, list)
  		text:setFillColor( 0, 1, 0 )
 
  		table.insert(itemTexts, i, text)
- 		obj:insert(obj.items[i])
- 		obj:insert(text)
+ 		inventory:insert(inventory.items[i])
+ 		inventory:insert(text)
 
  		--another smaller frame for quantity
  	end	
 end
+
+-- function toTab(invenList)
+-- 	tabList = {}
+-- 	for i = 1, #invenList do
+-- 		local item = itemList[invenList[i]]
+-- 		table.insert(tabList, itemName)
+-- end
 -- -------------------------------------------------------------------------------
 
 function widget.newPanel(options)
@@ -111,7 +117,7 @@ function setUpInventory()
 
  	-- Retrieve data from save file
  	-- itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
- 	invenList, foodRecentList, playRecentList, itemQuantities, gold, platinum = getInventoryData()
+ 	invenList, itemQuantities, gold, platinum = getInventoryData()
 
  	inventory.items = {}
 

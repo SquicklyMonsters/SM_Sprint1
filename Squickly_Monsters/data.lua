@@ -213,7 +213,7 @@ end
 -- -------------------------------------------------------------------------------
 -- Inventory Data
 function getInventoryData()
-	return invenList, foodRecentList, playRecentList, itemQuantities, gold, platinum
+	return invenList, itemQuantities, gold, platinum
 end
 
 function getGold()
@@ -232,7 +232,7 @@ function getItemQuantities()
 	return itemQuantities
 end
 
--- --------------------------------
+-- --
 
 function setGold(in_gold)
     gold = in_gold
@@ -272,10 +272,16 @@ function getExpLevel()
     return needsLevels.exp
 end
 
--- --------------------------------
+-- --
 
 function setNeedsLevels(level)
     needsLevels = level
+end
+
+-- UI
+
+function getRecentList()
+    return foodRecentList, playRecentList
 end
 
 -- Monster
@@ -288,7 +294,7 @@ function getMonsterName()
 	return monsterName
 end
 
--- --------------------------------
+-- --
 
 function setMonsterLevel(level)
     monsterLevel = level
@@ -318,7 +324,7 @@ function getReceiveDate()
     return receiveDate
 end
 
--- --------------------------------
+-- --
 
 function setReceiveDate(date)
     receiveDate = date
