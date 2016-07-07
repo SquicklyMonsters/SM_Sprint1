@@ -11,9 +11,11 @@ require("data")
 local resizer = display.contentHeight/320
 
 local invenList;
-local foodRecentList;
-local playRecentList;
 local itemQuantities;
+
+-- local tabList;
+-- local tabQuantities;
+
 local itemTexts = {};
 
 local inventory;
@@ -36,20 +38,16 @@ function itemClickedEvent(event)
 	end
 end
 
--- If item is used in a place that is not inventory
--- function useItem(item)
--- 	local idx = isInInventory(item.name)
--- 	if idx then
--- 		local quantity = reduceQuantity(idx)
--- 		itemTexts[idx].text = quantity
--- 		item:use(item.type)
--- 		saveData()
--- 	end
--- end
-
-function closeEvent(event)
+function closeClickEvent(event)
 	if event.phase == "ended" then
 		inventoryClicked(event)
+	end
+end
+
+function foodTabClickEvent(event)
+	if event.phase == "ended" then
+		print("ft clicked")
+		toTab("food")
 	end
 end
 
@@ -61,41 +59,13 @@ function updateInventory()
 	inventory:removeSelf()
 	scene:create()
 end
--- -------------------------------------------------------------------------------
 
-function widget.newPanel(options)
-    local background = display.newImage(options.imageDir)
-    local container = display.newContainer(options.width, options.height)
-    container:insert(background, true)
-    container.x = display.contentCenterX
-    container.y = display.contentCenterY
-    return container
-end
-
-function setUpInventory()
- 	local inventory = widget.newPanel {
- 		width = 300,
- 		height = 300,
- 		imageDir = "img/bg/inventory copy.png"
- 	}
-
- 	local startX = -inventory.width*(1/3)
- 	local startY = -inventory.height*(1/3)
-
- 	local rows = 3
- 	local spacingX = (inventory.width)/4
- 	local spacingY = inventory.height/4
-
- 	-- Retrieve data from save file
- 	-- itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
- 	invenList, foodRecentList, playRecentList, itemQuantities, gold, platinum = getInventoryData()
-
- 	inventory.items = {}
-
- 	for i = 1, #invenList do --loops to create each item on inventory
+function allocateItems(list, quantities)
+	for i = 1, #list do --loops to create each item on inventory
  		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
  		local y = startY + (spacingY * (math.floor((i-1) / rows)))
- 		local item = itemList[invenList[i]]
+ 		local item = itemList[list[i]]
+ 		print(item.name, "____")
  		inventory.items[i] = widget.newButton {
  			top = y, -- division of row
 	    	left = x, -- modulo of row
@@ -108,7 +78,7 @@ function setUpInventory()
  		inventory.items[i].item = item
  		inventory.items[i].idx = i
  		local textOptions = {
-			text = itemQuantities[i],
+			text = quantities[i],
 			x = x + 70,
 			y = y + 65,
 			width = 50,
@@ -123,7 +93,56 @@ function setUpInventory()
  		inventory:insert(text)
 
  		--another smaller frame for quantity
- 	end
+ 	end	
+end
+
+function toTab(tabType)
+	-- local tabList = itemList
+	-- local tabQuantities = itemQuantities
+	for i = 1, #invenList do
+		local item = itemList[invenList[i]]
+		if item.type ~= tabType then
+			print(item.name, "****")
+		    table.remove(invenList, i)
+		    table.remove(itemQuantities, i)
+		end
+	end
+	-- updateInventory()
+	allocateItems(invenList, itemQuantities)
+end
+-- -------------------------------------------------------------------------------
+
+function widget.newPanel(options)
+    local background = display.newImage(options.imageDir)
+    local container = display.newContainer(options.width, options.height)
+    container:insert(background, true)
+    container.x = display.contentCenterX
+    container.y = display.contentCenterY
+    return container
+end
+
+function setUpInventory()
+ 	inventory = widget.newPanel {
+ 		width = 300,
+ 		height = 300,
+ 		imageDir = "img/bg/inventory copy.png"
+ 	}
+
+ 	-- Retrieve data from save file
+ 	-- itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
+ 	invenList, itemQuantities, gold, platinum = getInventoryData()
+
+ 	inventory.items = {}
+
+ 	startX = -inventory.width*(1/3)
+ 	startY = -inventory.height*(1/3)
+
+ 	spacingX = inventory.width/4
+ 	spacingY = inventory.height/4
+
+ 	rows = 3
+ 	
+ 	allocateItems(invenList, itemQuantities)
 
  	inventory.close = widget.newButton {
  		top = startY - (spacingY * 0.6),
@@ -131,10 +150,20 @@ function setUpInventory()
  		width = 50,
  		height = 50,
  		defaultFile = "img/bg/close.png",
- 		onEvent = closeEvent,
+ 		onEvent = closeClickEvent,
+ 	}
+
+ 	inventory.foodTab = widget.newButton {
+ 		top = startY - (spacingY * 0.6),
+ 		left = startX,
+ 		width = 50,
+ 		height = 50,
+ 		defaultFile = "img/icons/UIIcons/feedIcon.png",
+ 		onEvent = foodTabClickEvent,
  	}
 
  	inventory:insert(inventory.close)
+ 	inventory:insert(inventory.foodTab)
  	inventory:scale(
  				(display.contentWidth/inventory.width)*0.4,
  				(display.contentHeight/inventory.height)*0.5
