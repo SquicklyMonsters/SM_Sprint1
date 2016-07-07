@@ -158,7 +158,9 @@ function setUpAllIcons()
     tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 1*resizer, getMonster().x - 35*resizer, getMonster().y - 20*resizer)
     thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
     
-    invenList, foodRecentList, playRecentList, itemQuantities, gold, platinum = getInventoryData()
+    invenList, itemQuantities, gold, platinum = getInventoryData()
+    foodRecentList, playRecentList = getRecentList()
+    
     updateFoodIcons()
     updatePlayIcons()
 end
