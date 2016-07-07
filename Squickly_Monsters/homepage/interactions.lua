@@ -405,8 +405,8 @@ function rewardIconClicked(event)
             seconds = tmp - (minutes*60) - (hours*60*60)
             timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
             clockText = display.newText(timeDisplay, display.contentCenterX, display.contentCenterY*0.7, native.systemFontBold, 80)
-            clockText:setFillColor( 0.7, 0.7, 1 )
-            transition.fadeOut( clockText, { time=3000 } )
+            clockText:setFillColor( 0.0, 0.0, 0.0 )
+            transition.fadeOut( clockText, { time=1500 } )
         end
     end
 end
