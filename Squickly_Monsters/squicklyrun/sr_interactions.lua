@@ -121,22 +121,24 @@ function setupScoreAndGameOver()
 end
 
 function setupSprite()
+	fileWidth = 2421
+	fileHeight = 4633
 	local imgsheetSetup = {
-		width = 100,
-		height = 100,
-		numFrames = 3
+		width = fileWidth/8,
+		height = fileHeight/10,
+		numFrames = 80
 	}
-	local spriteSheet = graphics.newImageSheet("img/squicklyrun/heroSpriteSheet.png", imgsheetSetup);
+	local spriteSheet = graphics.newImageSheet("img/squicklyrun/sr_fireball.png", imgsheetSetup);
 	
 	local sequenceData = {
 		{ name = "running", start = 1, count = 6, time = 600, loopCount = 0},
-		{ name = "jumping", start = 7, count = 7, time = 1, loopCount = 1 }
+		{ name = "jumping", start = 95, count = 95, time = 1, loopCount = 1 }
 	}
 	
 	--Hero Animation
 	hero = getHero()
 	hero = display.newSprite(spriteSheet, sequenceData);
-	hero:scale(resizer,resizer)
+	hero:scale(0.2*resizer,0.2*resizer)
 	hero:setSequence("running")
 	hero:play()
 
