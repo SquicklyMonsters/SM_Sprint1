@@ -7,10 +7,10 @@ local background;
 
 function setUpBackground() 
     -- Set Background
-    background = display.newImage("img/bg/mountains.jpg", display.contentCenterX, display.contentCenterY)
+    -- background = display.newImage("img/bg/mountains.jpg", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/waterfall.png", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/hotday.png", display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/ice.png", display.contentCenterX, display.contentCenterY)
+    background = display.newImage("img/bg/ice.png", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/planets.png", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/underwater.jpg", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/underwater2.jpg", display.contentCenterX, display.contentCenterY)
