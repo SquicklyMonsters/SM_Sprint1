@@ -184,7 +184,7 @@ function setupObstaclesAndEnemies()
 	end
 	--create spikes
 	for a = 1, 3, 1 do
-		local spike = display.newImage("img/squicklyrun/spikeBlock.png")
+		local spike = display.newImage("img/squicklyrun/icecream.png")
 		spike:scale(resizer,resizer)
 		spike.name = ("spike" .. a)
 		spike.id = a
@@ -196,8 +196,8 @@ function setupObstaclesAndEnemies()
 	--create blasts
 	blasts = getBlasts()
 	for a=1, 5, 1 do
-		local blast = display.newImage("img/squicklyrun/blast.png")
-		blast:scale(resizer,resizer)
+		local blast = display.newImage("img/squicklyrun/fireball.png")
+		blast:scale(resizer*0.1,resizer*0.1)
 		blast.name = ("blast" .. a)
 		blast.id = a
 		blast.x = 800*resizer
@@ -491,14 +491,14 @@ function restartGame()
 	backgroundnear1= getBackgroundnear1()
 	backgroundnear2 = getBackgroundnear2()
 
-	backgroundfar.x = 480
-	backgroundfar.y = 160
+	--backgroundfar.x = 480
+	--backgroundfar.y = 160
 
-	backgroundnear1.x = 240
-	backgroundnear1.y = 160
+	--backgroundnear1.x = 240
+	--backgroundnear1.y = 160
 
-	backgroundnear2.x = 760
-	backgroundnear2.y = 160
+	--backgroundnear2.x = 760
+	--backgroundnear2.y = 160
 end
 
 --the only difference in the touched function is now if you touch the
