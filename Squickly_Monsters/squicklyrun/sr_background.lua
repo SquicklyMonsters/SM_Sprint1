@@ -6,6 +6,8 @@ local backgroundnear2;
 local resizer = display.contentHeight/320;
 
 function setupBackground()
+    -- print(display.contentCenterX)
+    -- print(display.contentCenterY)
 
     --adds an image to our game centered at x and y coordinates
     backbackground = display.newImage("img/squicklyrun/background.png")
