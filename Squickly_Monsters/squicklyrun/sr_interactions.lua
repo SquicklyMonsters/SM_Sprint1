@@ -308,8 +308,8 @@ function gameOverScreen()
 	hero.isAlive = false
 	--this simply pauses the current animation
 	hero:pause()
-	gameOver.x = display.contentCenterX
-	gameOver.y = display.contentCenterY
+	gameOver.x = display.contentWidth*.65
+	gameOver.y = display.contentHeight/2
 	gameOver.alpha = 1
 	score = getScore()
 end
