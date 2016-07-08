@@ -1,13 +1,13 @@
 local monsterDir = "img/sprites/"
 
-local monsterList =  {"fireball","pikachu","cat"};
+local monsterList =  {"fireball","pikachu","cat","egg"};
 
 -- -------------------------------------------------------------------------------
 -- Monster Img + State Attr
 
 local monsterImageAttr = {
 	{ --fireball
-		monsterDir.."fireball2.png",3120,4630,8,10,80,0.3,
+		monsterDir.."fireball.png",3104,4600,8,10,80,0.3,
 	}, 
 	{ --pikachu
 		monsterDir.."pikachu.png",780,255,6,2,12,1,
@@ -15,14 +15,17 @@ local monsterImageAttr = {
 	{ --cat
 		monsterDir.."cat.png",500,300,10,6,60,3,
 	}, 
+	{ --egg
+		monsterDir.."egg.png",2400,600,8,2,16,0.5,
+	}, 
 }
 
 local monsterStates = {
 	{ --fireball
-	    {"normal",1,32,200*32,0,"forward"},
-	    {"sad",33,16,200*16,0,"forward"},
-	    {"sleep",49,16,200*16,0,"forward"},
-	    {"eat",65,16,200*16,0,"forward"},
+	    {"normal",1,32,150*32,0,"forward"},
+	    {"sad",33,16,150*16,0,"forward"},
+	    {"sleep",49,16,150*16,0,"forward"},
+	    {"eat",65,16,150*16,0,"forward"},
 	},
 	{ --pikachu
 	    {"normal",1,6,200*6,0,"forward"},
@@ -30,9 +33,14 @@ local monsterStates = {
 	},
 	{ --cat
 	    {"normal",4,28,200*14,0,"forward"},
-	    {"sad",32,18,200*9,0,"forward"},
+	    -- {"sad",32,18,200*9,0,"forward"},
 	    {"sleep",32,18,200*9,0,"forward"},
 	    {"eat",41,40,200*20,0,"forward"},
+	},
+	{ --egg
+	    {"normal",1,8,200*8,0,"forward"},
+	    {"sleep",9,8,200*8,0,"forward"},
+	    {"eat",9,8,200*8,0,"forward"},
 	},
 }
 
