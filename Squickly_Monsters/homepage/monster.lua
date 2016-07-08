@@ -1,12 +1,15 @@
+require("monsterList")
 -- -------------------------------------------------------------------------------
 
 -- Local variables go HERE
 
 local monster;
+local resizer = display.contentHeight/320
 
 -- -------------------------------------------------------------------------------
 -- Set get Monster
-function setUpMonster(imageAttr, statesInfo)
+function setUpMonster(monsterName)
+    imageAttr,statesInfo = getMonsterInfo(monsterName)
     fileName,fileWidth,fileHeight,rows,columns,nFrames = imageAttr[1],imageAttr[2],imageAttr[3],imageAttr[4],imageAttr[5],imageAttr[6]
 
     local options = {
@@ -18,7 +21,7 @@ function setUpMonster(imageAttr, statesInfo)
         sheetContentHeight = fileHeight,
 
     }
-    local imageSheet = graphics.newImageSheet("img/sprites/" .. fileName, options)
+    local imageSheet = graphics.newImageSheet(fileName, options)
 
     -- Setup seqences for each animation
     local sequence = {}
@@ -35,12 +38,7 @@ function setUpMonster(imageAttr, statesInfo)
     end
 
     monster = display.newSprite(imageSheet, sequence)
-    monster.x = display.contentCenterX
-    monster.y = display.contentCenterY*25/16
-    monster:scale(
-                 display.contentWidth/(options.width*7),
-                 display.contentHeight/(options.height*2.5)
-                 )
+    monster:scale(0.3,0.3)
     monster:play()
 end
 
@@ -48,6 +46,11 @@ function getMonster()
     return monster
 end
 -- -------------------------------------------------------------------------------
+
+function setMonsterLocation(offset_x,offset_y)
+    monster.x = display.contentCenterX+offset_x*resizer
+    monster.y = display.contentCenterY+offset_y*resizer
+end
 
 function setMonsterSequence(sequence)
     monster:setSequence(sequence)

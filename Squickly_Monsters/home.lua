@@ -77,8 +77,9 @@ function scene:create( event )
     background = getBackground()
 
     -- Set Up Monster
-    setUpMonster(getMonsterImageAttr(), getMonsterStates())
+    setUpMonster(getMonsterName())
     monster = getMonster()
+    setMonsterLocation(0,70)
 
     -- Set up Needs Bar
     setupAllNeedsBars()
@@ -133,6 +134,9 @@ function scene:show( event )
         -- Set up all Thought Clouds
         hungerThoughtCloud = getHungerThoughtCloud()
         tiredThoughtCloud = getTiredThoughtCloud()
+
+        --Set Monster Position
+        setMonsterLocation(0,70)
 
         -- Add display objects into group
         -- ============BACK===============

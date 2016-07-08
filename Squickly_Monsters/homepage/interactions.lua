@@ -126,7 +126,7 @@ function enableTouch()
 end
 
 function hideShowAllIcons(iconsTable)
-    xAxis = {-90*resizer,-30*resizer,50*resizer,110*resizer} -- idx 1=play, 2=clean, 3=sleep/wakeup, 4=feed
+    xAxis = {-110*resizer,-45*resizer,45*resizer,110*resizer} -- idx 1=play, 2=clean, 3=sleep/wakeup, 4=feed
     yAxis = {70*resizer,120*resizer,120*resizer,70*resizer}
     monster = getMonster()
 
