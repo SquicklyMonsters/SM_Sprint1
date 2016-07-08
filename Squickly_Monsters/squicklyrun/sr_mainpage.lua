@@ -18,6 +18,8 @@ require( 'squicklyrun.sr_interactions' )
 local screen;
 local player;
 
+local updateTimer
+
 -- -------------------------------------------------------------------------------
 -- Scene functions go Here
 
@@ -60,7 +62,7 @@ function scene:create( event )
     gameOver = getGameOver()
     scoreText = getScoreText()
 
-	timer.performWithDelay(1, update, -1)
+	updateTimer = timer.performWithDelay(1, update, 0)
 
 	Runtime:addEventListener("touch", touched, -1)
 end
@@ -126,6 +128,7 @@ end
 
 function scene:destroy( event )
 	getReward()
+    timer.cancel(updateTimer)
 end
 
 ---------------------------------------------------------------------------------
