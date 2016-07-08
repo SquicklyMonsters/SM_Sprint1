@@ -6,59 +6,33 @@ local monster;
 
 -- -------------------------------------------------------------------------------
 -- Set get Monster
-function setUpMonster(fileName)
-	-- Set Monster
-    fileWidth = 2416
-    fileHeight = 4630
-    local options = {
-    width = fileWidth/8,
-    height = fileHeight/10,
-    numFrames = 80,
+function setUpMonster(imageAttr, statesInfo)
+    fileName,fileWidth,fileHeight,rows,columns,nFrames = imageAttr[1],imageAttr[2],imageAttr[3],imageAttr[4],imageAttr[5],imageAttr[6]
 
-    sheetContentWidth = fileWidth,
-    sheetContentHeight = fileHeight,
+    local options = {
+        width = fileWidth/rows,
+        height = fileHeight/columns,
+        numFrames = nFrames,
+
+        sheetContentWidth = fileWidth,
+        sheetContentHeight = fileHeight,
 
     }
-    local imageSheet = graphics.newImageSheet(fileName, options)
+    local imageSheet = graphics.newImageSheet("img/sprites/" .. fileName, options)
 
     -- Setup seqences for each animation
-    local sequence = {
-        {
-            name = "normal",
-            start = 1,
-            count = 32,
-            time = 200*32,
-            loopcount = 0,
-            loopdirection = "forward"
-        },
-
-        {
-            name = "sad",
-            start = 33,
-            count = 16,
-            time = 200*16,
-            loopcount = 0,
-            loopdirection = "forward"
-        },
-
-        {
-            name = "sleep",
-            start = 49,
-            count = 16,
-            time = 200*16,
-            loopcount = 0,
-            loopdirection = "forward"
-        },
-
-        {
-            name = "eat",
-            start = 65,
-            count = 16,
-            time = 200*16,
-            loopcount = 0,
-            loopdirection = "forward"
-        },
-    }
+    local sequence = {}
+    for i = 1, #statesInfo do
+        local state = {
+            name = statesInfo[i][1],
+            start = statesInfo[i][2],
+            count = statesInfo[i][3],
+            time = statesInfo[i][4],
+            loopcount = statesInfo[i][5],
+            loopdirection = statesInfo[i][6],
+        }
+        table.insert( sequence, state )
+    end
 
     monster = display.newSprite(imageSheet, sequence)
     monster.x = display.contentCenterX
