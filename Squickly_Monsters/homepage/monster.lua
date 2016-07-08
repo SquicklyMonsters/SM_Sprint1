@@ -10,7 +10,7 @@ local resizer = display.contentHeight/320
 -- Set get Monster
 function setUpMonster(monsterName)
     imageAttr,statesInfo = getMonsterInfo(monsterName)
-    fileName,fileWidth,fileHeight,rows,columns,nFrames = imageAttr[1],imageAttr[2],imageAttr[3],imageAttr[4],imageAttr[5],imageAttr[6]
+    fileName,fileWidth,fileHeight,rows,columns,nFrames,scaling = imageAttr[1],imageAttr[2],imageAttr[3],imageAttr[4],imageAttr[5],imageAttr[6],imageAttr[7]
 
     local options = {
         width = fileWidth/rows,
@@ -38,7 +38,7 @@ function setUpMonster(monsterName)
     end
 
     monster = display.newSprite(imageSheet, sequence)
-    monster:scale(0.3,0.3)
+    monster:scale(scaling*resizer,scaling*resizer)
     monster:play()
 end
 

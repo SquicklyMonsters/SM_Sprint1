@@ -157,6 +157,9 @@ function scene:show( event )
         middle:insert(dailyRewardTrueIcon)
         middle:insert(dailyRewardFalseIcon)
         -- ===========FRONT===============
+        front:insert(hungerThoughtCloud)
+        front:insert(tiredThoughtCloud)
+        
         front:insert(feedIcon)
         front:insert(sleepIcon)
         front:insert(wakeupIcon)
@@ -171,8 +174,6 @@ function scene:show( event )
         front:insert(morePlayIcon)
 
 		front:insert(levelsText)
-        front:insert(hungerThoughtCloud)
-        front:insert(tiredThoughtCloud)
         -- ===============================
         sceneGroup:insert(back)
         sceneGroup:insert(middle)

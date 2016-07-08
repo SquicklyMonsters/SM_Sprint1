@@ -4,6 +4,7 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 
 require("custompage.cp_background")
+require("data")
 
 -- -----------------------------------------------------------------------------------------------------------------
 
@@ -32,6 +33,7 @@ function scene:create( event )
 	-- Set background
     setUpBackground()
     cp_background = getBackground()
+
 end
 
 function scene:show( event )
@@ -40,8 +42,7 @@ function scene:show( event )
 
     -- Get Latest Monster
     monster = getMonster()
-    setMonsterLocation(80,20)
-	defaultAnimation()
+    setMonsterLocation(100,20)
     
 	 -- Add display objects into group
     -- ============BACK===============

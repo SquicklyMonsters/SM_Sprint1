@@ -152,7 +152,7 @@ function loadData()
         }
 
         monsterLevel = 1
-        monsterName = "fireball"
+        monsterName = "cat"
         receiveDate = nil
 
     end
