@@ -1,6 +1,6 @@
 local monsterDir = "img/sprites/"
 
-local monsterList =  {"fireball","pikachu","cat","egg"};
+local monsterList =  {"fireball","pikachu","cat","egg","electrode"};
 
 -- -------------------------------------------------------------------------------
 -- Monster Img + State Attr
@@ -17,6 +17,9 @@ local monsterImageAttr = {
 	}, 
 	{ --egg
 		monsterDir.."egg.png",2400,600,8,2,16,0.5,
+	}, 
+	{ --electrode
+		monsterDir.."electrode.png",496,276,9,5,38,1.5,
 	}, 
 }
 
@@ -41,6 +44,12 @@ local monsterStates = {
 	    {"normal",1,8,200*8,0,"forward"},
 	    {"sleep",9,8,200*8,0,"forward"},
 	    {"eat",9,8,200*8,0,"forward"},
+	},
+	{ --electrode
+	    {"normal",1,8,159*8,0,"forward"},
+	    {"sad",9,1,50*1,0,"forward"},
+	    {"sleep",10,17,50*17,0,"forward"},
+	    {"eat",27,12,50*12,0,"forward"},
 	},
 }
 

@@ -121,8 +121,12 @@ end
 -- -------------------------------------------------------------------------------
 -- Hide / Show Icons with Lock
 
-function enableTouch()
+function enableHomeTouch()
     isTouchAble = true
+end
+
+function disableHomeTouch()
+    isTouchAble = false
 end
 
 function hideShowAllIcons(iconsTable)
@@ -148,7 +152,7 @@ function hideShowAllIcons(iconsTable)
         currentVisibleList = nil
     end
     -- Release lock after icons transition is finish
-    timer.performWithDelay(250, enableTouch)
+    timer.performWithDelay(250, enableHomeTouch)
 end
 -- -------------------------------------------------------------------------------
 -- Set reaction when press button

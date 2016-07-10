@@ -125,6 +125,7 @@ function scene:show( event )
 
 
 	if phase == "will" then
+        enableHomeTouch()
 
         -- Run need levels checker
         checkHunger(1)
@@ -198,6 +199,7 @@ function scene:hide( event )
 		--
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
+        disableHomeTouch()
 	elseif phase == "did" then
         --composer.hideOverlay()
 		-- Called when the scene is now off screen
