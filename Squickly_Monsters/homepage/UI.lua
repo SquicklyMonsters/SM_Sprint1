@@ -154,10 +154,10 @@ function setUpAllIcons()
     hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75*resizer, getMonster().x + 60*resizer, getMonster().y - 20*resizer)
     tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75*resizer, getMonster().x - 35*resizer, getMonster().y - 20*resizer)
     thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
-    
+
     invenList, foodRecentList, playRecentList, itemQuantities, gold, platinum = getInventoryData()
-    updateFoodIcons()
-    updatePlayIcons()
+    -- updateFoodIcons()
+    -- updatePlayIcons()
 end
 
 function setUpIcon(img, scale, x, y, alpha)
@@ -191,7 +191,7 @@ function levelUp(exp)  -- Level up then change text and set exp bar to = 0
 
     monsterLevel = monsterLevel + 1
     monsterLevelText.text = monsterLevel
-    
+
     setNeedLevel("exp", exp)
     setMonsterLevel(monsterLevel)
     saveData()
@@ -246,35 +246,35 @@ function isInMostRecentPlay(name)
     return false
 end
 
-function updateFoodIcons()
-    if (foodRecentList[1] ~= nil) then
-        mostRecentFoodIcon1 = setUpIcon(itemList[foodRecentList[1]].image, 0.75)
-    else
-        mostRecentFoodIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
-    end
+-- function updateFoodIcons()
+--     if (foodRecentList[1] ~= nil) then
+--         mostRecentFoodIcon1 = setUpIcon(itemList[foodRecentList[1]].image, 0.75)
+--     else
+--         mostRecentFoodIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
+--     end
+--
+--     if (foodRecentList[2] ~= nil) then
+--         mostRecentFoodIcon2 = setUpIcon(itemList[foodRecentList[2]].image, 0.75)
+--     else
+--         mostRecentFoodIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
+--     end
+--     updateFoodList(foodRecentList,mostRecentFoodIcon1,mostRecentFoodIcon2)
+-- end
 
-    if (foodRecentList[2] ~= nil) then
-        mostRecentFoodIcon2 = setUpIcon(itemList[foodRecentList[2]].image, 0.75)
-    else
-        mostRecentFoodIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
-    end
-    updateFoodList(foodRecentList,mostRecentFoodIcon1,mostRecentFoodIcon2)
-end
-
-function updatePlayIcons()
-    if (playRecentList[1] ~= nil) then
-        mostRecentPlayIcon1 = setUpIcon(itemList[playRecentList[1]].image, 0.75)
-    else
-        mostRecentPlayIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
-    end
-
-    if (playRecentList[2] ~= nil) then
-        mostRecentPlayIcon2 = setUpIcon(itemList[playRecentList[2]].image, 0.75)
-    else
-        mostRecentPlayIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
-    end
-    updatePlayList(playRecentList,mostRecentPlayIcon1,mostRecentPlayIcon2)
-end
+-- function updatePlayIcons()
+--     if (playRecentList[1] ~= nil) then
+--         mostRecentPlayIcon1 = setUpIcon(itemList[playRecentList[1]].image, 0.75)
+--     else
+--         mostRecentPlayIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
+--     end
+--
+--     if (playRecentList[2] ~= nil) then
+--         mostRecentPlayIcon2 = setUpIcon(itemList[playRecentList[2]].image, 0.75)
+--     else
+--         mostRecentPlayIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
+--     end
+--     updatePlayList(playRecentList,mostRecentPlayIcon1,mostRecentPlayIcon2)
+-- end
 
 function updateMostRecentFood(latest_food)
     -- Remove current from recent list first

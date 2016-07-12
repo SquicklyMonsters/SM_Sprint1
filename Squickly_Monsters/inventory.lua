@@ -179,7 +179,7 @@ end
 -- Called when the scene's view does not exist:
 function scene:create( event )
 	local sceneGroup = self.view
-	inventory = setUpInventory()	
+	inventory = setUpInventory()
 	sceneGroup:insert(inventory)
 	print(composer.getSceneName("current"))
 

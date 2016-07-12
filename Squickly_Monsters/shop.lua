@@ -58,7 +58,7 @@ function itemClickedEvent(event)
     end
 end
 
-function widget.newPanel(options)                                    
+function widget.newPanel(options)
     local background = display.newImage(options.imageDir)
     local container = display.newContainer(options.width, options.height)
     container:insert(background, true)
@@ -105,10 +105,10 @@ function setUpShop()
         inventory.items[i].idx = i
 
         local textOptions = {
-            text = item.gold, 
+            text = item.gold,
             x = x + 5,
-            y = y + 65, 
-            width = 50, 
+            y = y + 65,
+            width = 50,
             height = 50
         }
 
@@ -116,10 +116,10 @@ function setUpShop()
         textGold:setFillColor( 255/255, 223/255, 0 )
 
         local textOptions = {
-            text = item.platinum, 
+            text = item.platinum,
             x = x + 80,
-            y = y + 65, 
-            width = 50, 
+            y = y + 65,
+            width = 50,
             height = 50
         }
 
@@ -132,7 +132,7 @@ function setUpShop()
     end
 
     inventory:scale(
-                (display.contentWidth/inventory.width)*0.4, 
+                (display.contentWidth/inventory.width)*0.4,
                 (display.contentHeight/inventory.height)*0.5
                 )
 
@@ -153,7 +153,7 @@ function setUpShop()
     font = native.systemFontBold,
     fontSize = 25
     }
- 
+
     goldText = display.newText(GoldOptions)
     goldText:setFillColor( 255/255, 223/255, 0 )
     inventory:insert(goldText)
@@ -191,7 +191,7 @@ function scene:create( event )
 
     -- Set up all Icons
     inventoryIcon = getInventoryIcon()
-    
+
     notifications = setUpNotifications()
 
 
