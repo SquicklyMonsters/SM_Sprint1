@@ -278,7 +278,7 @@ function updateBlocks()
 							bossSpits[a].alpha = 1
 							bossSpits[a].x = boss.x - 35
 							bossSpits[a].y = boss.y + 55
-							bossSpits[a].speed = 4 + (math.floor(score/30))
+							bossSpits[a].speed = 4 + (math.floor(score/30)*2)
 							if (math.random(5) >= 3) then
 								break
 							end
@@ -539,7 +539,7 @@ function touched( event )
 						hero.accel = hero.accel + 20
 					end
 				else
-					if pauseGame == false then
+					-- if pauseGame == false then
 						for a=1, blasts.numChildren, 1 do
 							if(blasts[a].isAlive == false) then
 								blasts[a].isAlive = true
@@ -549,7 +549,7 @@ function touched( event )
 								break
 							end
 						end
-					end
+					-- end
 				end
 			end
 		end
@@ -562,6 +562,7 @@ function paused(event)
 		if pauseGame == false then
 			hero:pause()
 			speed = 0
+			timer.pause( updateTimer )
 
 			-- setting speed to 0 actually doesnt do anything to the speed of the object??
 			-- for a = 1, blasts.numChildren, 1 do
@@ -594,7 +595,8 @@ end
 function resume()
 	hero:play()
 	speed = 5
-
+	timer.resume( updateTimer )
+	
 	composer.gotoScene(composer.getSceneName("current"))
 	pauseGame = false
 end
