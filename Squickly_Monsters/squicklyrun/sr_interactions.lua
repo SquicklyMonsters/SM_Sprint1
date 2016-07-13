@@ -268,7 +268,7 @@ function updateBlocks()
 			else
 				--have the boss spit every three block passes
 				boss = getBoss()
-				boss.spitCycle = boss.spitCycle + math.floor(score/30)
+				boss.spitCycle = boss.spitCycle + math.floor(score/30)*2
 				if(boss.y > 100 and boss.y < 300 and boss.spitCycle%5 == 0) then
 					for a=1, bossSpits.numChildren, 1 do
 						if(bossSpits[a].isAlive == false) then
@@ -276,7 +276,7 @@ function updateBlocks()
 							bossSpits[a].alpha = 1
 							bossSpits[a].x = boss.x - 35
 							bossSpits[a].y = boss.y + 55
-							bossSpits[a].speed = 7 + (math.floor(score/30))
+							bossSpits[a].speed = 7 + (math.floor(score/30)*2)
 							break
 						end
 					end
