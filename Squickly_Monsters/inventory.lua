@@ -91,7 +91,7 @@ function allocateItems(list, quantities)
 		    	defaultFile = item.image,
 		    	onEvent = itemClickedEvent,
 	 		}
-	 		-- at index i in inventory slot, but at idex j in actual inventory list
+	 		-- Item at index i of inventory slot, but at idex j of actual inventory list
 	 		inventory.items[i].item = item
 	 		inventory.items[i].idxJ = j
 	 		inventory.items[i].idxI = i
