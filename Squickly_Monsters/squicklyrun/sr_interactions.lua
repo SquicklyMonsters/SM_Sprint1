@@ -132,22 +132,24 @@ function setupScoreAndGameOver()
 end
 
 function setupSprite()
+	fileWidth = 2421
+	fileHeight = 4633
 	local imgsheetSetup = {
-		width = 100,
-		height = 100,
-		numFrames = 3
+		width = fileWidth/8,
+		height = fileHeight/10,
+		numFrames = 80
 	}
-	local spriteSheet = graphics.newImageSheet("img/squicklyrun/heroSpriteSheet.png", imgsheetSetup);
+	local spriteSheet = graphics.newImageSheet("img/squicklyrun/sr_fireball.png", imgsheetSetup);
 	
 	local sequenceData = {
 		{ name = "running", start = 1, count = 6, time = 600, loopCount = 0},
-		{ name = "jumping", start = 7, count = 7, time = 1, loopCount = 1 }
+		{ name = "jumping", start = 95, count = 95, time = 1, loopCount = 1 }
 	}
 	
 	--Hero Animation
 	hero = getHero()
 	hero = display.newSprite(spriteSheet, sequenceData);
-	hero:scale(resizer,resizer)
+	hero:scale(0.2*resizer,0.2*resizer)
 	hero:setSequence("running")
 	hero:play()
 
@@ -192,7 +194,7 @@ function setupObstaclesAndEnemies()
 	end
 	--create spikes
 	for a = 1, 3, 1 do
-		local spike = display.newImage("img/squicklyrun/spikeBlock.png")
+		local spike = display.newImage("img/squicklyrun/icecream.png")
 		spike:scale(resizer,resizer)
 		spike.name = ("spike" .. a)
 		spike.id = a
@@ -205,8 +207,8 @@ function setupObstaclesAndEnemies()
 	--create blasts
 	blasts = getBlasts()
 	for a=1, 5, 1 do
-		local blast = display.newImage("img/squicklyrun/blast.png")
-		blast:scale(resizer,resizer)
+		local blast = display.newImage("img/squicklyrun/fireball.png")
+		blast:scale(resizer*0.1,resizer*0.1)
 		blast.name = ("blast" .. a)
 		blast.id = a
 		blast.x = 800*resizer
@@ -216,8 +218,8 @@ function setupObstaclesAndEnemies()
 		blasts:insert(blast)
 	end
 
-	boss = display.newImage("img/squicklyrun/boss.png", 150, 150)
-	boss:scale(resizer,resizer)
+	boss = display.newImage("img/squicklyrun/snowboss.png", 150, 150)
+	boss:scale(resizer*0.4,resizer*0.4)
 	boss.x = 300*resizer
 	boss.y = 550*resizer
 	boss.isAlive = false
@@ -233,8 +235,8 @@ function setupObstaclesAndEnemies()
 	--of that for us!
 	boss.spitCycle = 0
 	for a=1, 3, 1 do
-		local bossSpit = display.newImage("img/squicklyrun/bossSpit.png")
-		bossSpit:scale(resizer,resizer)
+		local bossSpit = display.newImage("img/squicklyrun/snowball.png")
+		bossSpit:scale(resizer*0.2,resizer*0.2)
 		bossSpit.x = 400*resizer
 		bossSpit.y = 550*resizer
 		bossSpit.isAlive = false
@@ -512,14 +514,14 @@ function restartGame()
 	backgroundnear1= getBackgroundnear1()
 	backgroundnear2 = getBackgroundnear2()
 
-	backgroundfar.x = 480
-	backgroundfar.y = 160
+	--backgroundfar.x = 480
+	--backgroundfar.y = 160
 
-	backgroundnear1.x = 240
-	backgroundnear1.y = 160
+	--backgroundnear1.x = 240
+	--backgroundnear1.y = 160
 
-	backgroundnear2.x = 760
-	backgroundnear2.y = 160
+	--backgroundnear2.x = 760
+	--backgroundnear2.y = 160
 end
 
 --the only difference in the touched function is now if you touch the
