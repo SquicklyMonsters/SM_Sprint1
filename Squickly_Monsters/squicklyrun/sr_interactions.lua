@@ -270,16 +270,18 @@ function updateBlocks()
 			else
 				--have the boss spit every three block passes
 				boss = getBoss()
-				boss.spitCycle = boss.spitCycle + math.floor(score/30)*2
-				if(boss.y > 100 and boss.y < 300 and boss.spitCycle%5 == 0) then
+				boss.spitCycle = boss.spitCycle + math.floor(score/30)*3
+				if(boss.y > 100 and boss.y < 300 and boss.spitCycle%3 == 0) then
 					for a=1, bossSpits.numChildren, 1 do
 						if(bossSpits[a].isAlive == false) then
 							bossSpits[a].isAlive = true
 							bossSpits[a].alpha = 1
 							bossSpits[a].x = boss.x - 35
 							bossSpits[a].y = boss.y + 55
-							bossSpits[a].speed = 7 + (math.floor(score/30)*2)
-							break
+							bossSpits[a].speed = 4 + (math.floor(score/30)*2)
+							if (math.random(5) >= 3) then
+								break
+							end
 						end
 					end
 				end
@@ -417,10 +419,10 @@ function checkEvent()
 			if(ghosts[a].isAlive == false) then
 				ghosts[a].isAlive = true
 				--make the ghosts transparent and more... ghostlike!
-				ghosts[a].isAlive = 0.5
+				ghosts[a].alpha = 0.5
 				ghosts[a].x = 500
 				ghosts[a].y = math.random(-50, 400)
-				ghosts[a].speed = math.random(2,4)
+				ghosts[a].speed = math.random(2,8)
 				break
 			end
 		end
@@ -447,7 +449,6 @@ end
 --function that gives reward to player when dead or leave the game
 function getReward()
 	reward = getScore()
-	print(reward)
 	if reward ~= nil then
 		updateCurrency(reward, 0)
 		changeNeedsLevel("exp", reward*10)
@@ -538,18 +539,17 @@ function touched( event )
 						hero.accel = hero.accel + 20
 					end
 				else
-					if pauseGame == false then
+					-- if pauseGame == false then
 						for a=1, blasts.numChildren, 1 do
 							if(blasts[a].isAlive == false) then
 								blasts[a].isAlive = true
 								blasts[a].alpha = 1
 								blasts[a].x = hero.x + 50
 								blasts[a].y = hero.y
-								print(blasts[a].name)
 								break
 							end
 						end
-					end
+					-- end
 				end
 			end
 		end
@@ -562,6 +562,7 @@ function paused(event)
 		if pauseGame == false then
 			hero:pause()
 			speed = 0
+			timer.pause( updateTimer )
 
 			-- setting speed to 0 actually doesnt do anything to the speed of the object??
 			-- for a = 1, blasts.numChildren, 1 do
@@ -594,7 +595,8 @@ end
 function resume()
 	hero:play()
 	speed = 5
-
+	timer.resume( updateTimer )
+	
 	composer.gotoScene(composer.getSceneName("current"))
 	pauseGame = false
 end
