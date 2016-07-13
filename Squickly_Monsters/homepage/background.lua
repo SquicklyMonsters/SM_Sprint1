@@ -22,6 +22,8 @@ function setUpBackground()
     -- background = display.newImage("img/bg/swiss.png", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/village.jpeg", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/dragon.jpg", display.contentCenterX, display.contentCenterY)
+    -- background = display.newImage("img/bg/grassland.png", display.contentCenterX, display.contentCenterY)
+    -- background = display.newImage("img/bg/opera.png", display.contentCenterX, display.contentCenterY)
     background:scale(display.contentWidth/background.width, display.contentHeight/background.height )
     
     -- local backgroundOption = {

@@ -16,8 +16,7 @@ local needsLevels;
 local maxNeedsLevels;
 
 local monsterLevel;
-local monsterImageAttr;
-local monsterStates;
+local monsterName;
 
 local hungerRate = -50;
 local happinessRate = -50;
@@ -62,8 +61,7 @@ function saveData()
     	},
     -- Monster
     monsterLevel,
-    monsterImageAttr,
-    monsterStates,
+    monsterName,
     -- Daily Rewards
     receiveDate,
 	}
@@ -124,10 +122,9 @@ function loadData()
 
         local monIdx = 9
         monsterLevel = inTable[monIdx]
-        monsterImageAttr = inTable[monIdx + 1]
-        monsterStates = inTable[monIdx + 2]
+        monsterName = inTable[monIdx + 1]
 
-        local rewIdx = 12
+        local rewIdx = 11
         receiveDate = inTable[rewIdx]
 
     else
@@ -155,14 +152,7 @@ function loadData()
         }
 
         monsterLevel = 1
-        monsterImageAttr = {"fireball.png",2421,4633,8,10,80}
-        monsterStates = {
-            {"normal",1,32,200*32,0,"forward"},
-            {"sad",33,16,200*16,0,"forward"},
-            {"sleep",49,16,200*16,0,"forward"},
-            {"eat",65,16,200*16,0,"forward"},
-        }
-
+        monsterName = "voltorb"
         receiveDate = nil
 
     end
@@ -300,12 +290,8 @@ function getMonsterLevel()
 	return monsterLevel
 end
 
-function getMonsterImageAttr()
-    return monsterImageAttr
-end
-
-function getMonsterStates()
-    return monsterStates
+function getMonsterName()
+    return monsterName
 end
 
 -- --
