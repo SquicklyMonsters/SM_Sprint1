@@ -27,11 +27,12 @@ function itemClickedEvent(event)
 	-- Just gonna eat it right away for now
 	if event.phase == "ended" then
 		local item = event.target.item
-		local idx = event.target.idx
-		local quantity = reduceQuantity(idx)
+		local idxJ = event.target.idxJ
+		local idxI = event.target.idxI
+		local quantity = reduceQuantity(idxJ)
 		if quantity ~= nil then
 			-- Update display number
-			itemTexts[idx].text = quantity
+			itemTexts[idxI].text = quantity
 		else
 			updateInventory(tab)
 		end
@@ -92,7 +93,8 @@ function allocateItems(list, quantities)
 	 		}
 	 		-- at index i in inventory slot, but at idex j in actual inventory list
 	 		inventory.items[i].item = item
-	 		inventory.items[i].idx = j
+	 		inventory.items[i].idxJ = j
+	 		inventory.items[i].idxI = i
 	 		local textOptions = {
 				text = quantities[j],
 				x = x + 70,
