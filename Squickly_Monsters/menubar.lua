@@ -122,12 +122,12 @@ function setUpMenuBar()
     onEvent = changeSceneButtonEvent,
   }
 
-  menuBar.settingsButton = widget.newButton{
+  menuBar.customizeButton = widget.newButton{
     top = startX + spacingX*3,
     left = middleY,
     width = 50,
     height = 50,
-    defaultFile = iconsDir .. "settingsIcon.png",
+    defaultFile = iconsDir .. "customizeIcon.png",
     onEvent = changeSceneButtonEvent,
   }
 
@@ -135,13 +135,13 @@ function setUpMenuBar()
   menuBar.homeButton.scene = "home"
   menuBar.shopButton.scene = "shop"
   menuBar.miniGameButton.scene = "miniGame"
-  menuBar.settingsButton.scene = "settings"
+  menuBar.customizeButton.scene = "customize"
 
   menuBar:insert(menuBar.slideButton)
   menuBar:insert(menuBar.homeButton)
   menuBar:insert(menuBar.shopButton)
   menuBar:insert(menuBar.miniGameButton)
-  menuBar:insert(menuBar.settingsButton)
+  menuBar:insert(menuBar.customizeButton)
 
 end
 -- -------------------------------------------------------------------------------

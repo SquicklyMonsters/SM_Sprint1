@@ -15,8 +15,8 @@ local playRecentList;
 local needsLevels;
 local maxNeedsLevels;
 
-local monsterName;
 local monsterLevel;
+local monsterName;
 
 local hungerRate = -50;
 local happinessRate = -50;
@@ -152,8 +152,7 @@ function loadData()
         }
 
         monsterLevel = 1
-        monsterName = "fireball"
-
+        monsterName = "voltorb"
         receiveDate = nil
 
     end
@@ -292,7 +291,7 @@ function getMonsterLevel()
 end
 
 function getMonsterName()
-	return monsterName
+    return monsterName
 end
 
 -- --

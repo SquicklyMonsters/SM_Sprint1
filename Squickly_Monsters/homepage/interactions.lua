@@ -121,12 +121,16 @@ end
 -- -------------------------------------------------------------------------------
 -- Hide / Show Icons with Lock
 
-function enableTouch()
+function enableHomeTouch()
     isTouchAble = true
 end
 
+function disableHomeTouch()
+    isTouchAble = false
+end
+
 function hideShowAllIcons(iconsTable)
-    xAxis = {-90*resizer,-30*resizer,50*resizer,110*resizer} -- idx 1=play, 2=clean, 3=sleep/wakeup, 4=feed
+    xAxis = {-110*resizer,-45*resizer,45*resizer,110*resizer} -- idx 1=play, 2=clean, 3=sleep/wakeup, 4=feed
     yAxis = {70*resizer,120*resizer,120*resizer,70*resizer}
     monster = getMonster()
 
@@ -148,7 +152,7 @@ function hideShowAllIcons(iconsTable)
         currentVisibleList = nil
     end
     -- Release lock after icons transition is finish
-    timer.performWithDelay(250, enableTouch)
+    timer.performWithDelay(250, enableHomeTouch)
 end
 -- -------------------------------------------------------------------------------
 -- Set reaction when press button
@@ -313,7 +317,8 @@ function inventoryClicked(event)
             composer.gotoScene(composer.getSceneName("current"))
             inventoryIsShow = false
         else
-            composer.showOverlay("inventory")
+            local options = {params = {tab = "all"}}
+            composer.showOverlay("inventory", options)
             inventoryIsShow = true
         end
     end
@@ -405,8 +410,8 @@ function rewardIconClicked(event)
             seconds = tmp - (minutes*60) - (hours*60*60)
             timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
             clockText = display.newText(timeDisplay, display.contentCenterX, display.contentCenterY*0.7, native.systemFontBold, 80)
-            clockText:setFillColor( 0.7, 0.7, 1 )
-            transition.fadeOut( clockText, { time=3000 } )
+            clockText:setFillColor( 0.0, 0.0, 0.0 )
+            transition.fadeOut( clockText, { time=1500 } )
         end
     end
 end

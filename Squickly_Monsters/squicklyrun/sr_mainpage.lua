@@ -18,6 +18,8 @@ require( 'squicklyrun.sr_interactions' )
 local screen;
 local player;
 
+local updateTimer
+
 -- -------------------------------------------------------------------------------
 -- Scene functions go Here
 
@@ -59,7 +61,8 @@ function scene:create( event )
     setupScoreAndGameOver()
     gameOver = getGameOver()
     scoreText = getScoreText()
-	timer.performWithDelay(1, update, -1)
+
+	updateTimer = timer.performWithDelay(1, update, 0)
 
 	Runtime:addEventListener("touch", touched, -1)
 end
@@ -124,17 +127,8 @@ function scene:hide( event )
 end
 
 function scene:destroy( event )
-	--reward
-
-	print (getScore())
-	if getScore() ~= nil then
-		print("in here!")
-		updateCurrency(getScore(), 0)
-	end
-	--exp
-	changeNeedsLevel("exp", getScore()*10)
-	changeNeedsLevel("energy", -getScore()*10)
-	saveData()
+	getReward()
+    timer.cancel(updateTimer)
 end
 
 ---------------------------------------------------------------------------------

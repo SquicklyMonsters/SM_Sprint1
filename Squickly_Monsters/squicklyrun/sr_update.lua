@@ -89,6 +89,7 @@ function updateBlasts()
                 blasts[a].x = 800*resizer
                 blasts[a].y = 500*resizer
                 blasts[a].isAlive = false
+                blasts[a].alpha = 0
             end
         end
         --check for collisions with the boss
@@ -98,6 +99,7 @@ function updateBlasts()
                 blasts[a].x = 800*resizer
                 blasts[a].y = 500*resizer
                 blasts[a].isAlive = false
+                blasts[a].alpha = 0
                 --everything is the same only 1 hit will not kill the boss so just take a little health away
                 boss.health = boss.health - 1
             end
@@ -110,9 +112,11 @@ function updateBlasts()
                     blasts[a].x = 800*resizer
                     blasts[a].y = 500*resizer
                     blasts[a].isAlive = false
+                    blasts[a].alpha = 0
                     bossSpits[b].x = 400*resizer
                     bossSpits[b].y = 550*resizer
                     bossSpits[b].isAlive = false
+                    bossSpits[b].alpha = 0
                     bossSpits[b].speed = 0
                 end
             end
@@ -125,9 +129,11 @@ function updateBlasts()
                     blasts[a].x = 800*resizer
                     blasts[a].y = 500*resizer
                     blasts[a].isAlive = false
+                    blasts[a].alpha = 0
                     spikes[b].x = 900*resizer
                     spikes[b].y = 500*resizer
                     spikes[b].isAlive = false
+                    spikes[b].alpha = 0
                 end
             end
         end
@@ -140,9 +146,11 @@ function updateBlasts()
                     blasts[a].x = 800*resizer
                     blasts[a].y = 500*resizer
                     blasts[a].isAlive = false
+                    blasts[a].alpha = 0
                     ghosts[b].x = 800*resizer
                     ghosts[b].y = 600*resizer
                     ghosts[b].isAlive = false
+                    ghosts[b].alpha = 0
                     ghosts[b].speed = 0
                 end
             end
@@ -160,6 +168,7 @@ function updateSpikes()
                 spikes[a].x = 900*resizer
                 spikes[a].y = 500*resizer
                 spikes[a].isAlive = false
+                spikes[a].alpha = 0
             end
         end
     end
@@ -181,6 +190,7 @@ function updateGhosts()
                 ghosts[a].y = 600*resizer
                 ghosts[a].speed = 0
                 ghosts[a].isAlive = false;
+                ghosts[a].alpha = 0
             end
         end
     end
@@ -209,6 +219,7 @@ function updateBoss()
     --kill him off and reset him back to where he was
     if(boss.alpha <= 0) then
         boss.isAlive = false
+        boss.alpha = 0
         boss.x = 300*resizer
         boss.y = 550*resizer
         boss.alpha = 1
@@ -233,6 +244,7 @@ function updateBossSpit()
                 bossSpits[a].y = 550*resizer
                 bossSpits[a].speed = 0
                 bossSpits[a].isAlive = false;
+                bossSpits[a].alpha = 0
             end
         end
     end

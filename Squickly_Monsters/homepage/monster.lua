@@ -1,72 +1,44 @@
+require("monsterList")
 -- -------------------------------------------------------------------------------
 
 -- Local variables go HERE
 
 local monster;
+local resizer = display.contentHeight/320
 
 -- -------------------------------------------------------------------------------
 -- Set get Monster
-function setUpMonster(fileName)
-	-- Set Monster
-    fileWidth = 2416
-    fileHeight = 4630
-    local options = {
-    width = fileWidth/8,
-    height = fileHeight/10,
-    numFrames = 80,
+function setUpMonster(monsterName)
+    imageAttr,statesInfo = getMonsterInfo(monsterName)
+    fileName,fileWidth,fileHeight,rows,columns,nFrames,scaling = imageAttr[1],imageAttr[2],imageAttr[3],imageAttr[4],imageAttr[5],imageAttr[6],imageAttr[7]
 
-    sheetContentWidth = fileWidth,
-    sheetContentHeight = fileHeight,
+    local options = {
+        width = fileWidth/rows,
+        height = fileHeight/columns,
+        numFrames = nFrames,
+
+        sheetContentWidth = fileWidth,
+        sheetContentHeight = fileHeight,
 
     }
     local imageSheet = graphics.newImageSheet(fileName, options)
 
     -- Setup seqences for each animation
-    local sequence = {
-        {
-            name = "normal",
-            start = 1,
-            count = 32,
-            time = 200*32,
-            loopcount = 0,
-            loopdirection = "forward"
-        },
-
-        {
-            name = "sad",
-            start = 33,
-            count = 16,
-            time = 200*16,
-            loopcount = 0,
-            loopdirection = "forward"
-        },
-
-        {
-            name = "sleep",
-            start = 49,
-            count = 16,
-            time = 200*16,
-            loopcount = 0,
-            loopdirection = "forward"
-        },
-
-        {
-            name = "eat",
-            start = 65,
-            count = 16,
-            time = 200*16,
-            loopcount = 0,
-            loopdirection = "forward"
-        },
-    }
+    local sequence = {}
+    for i = 1, #statesInfo do
+        local state = {
+            name = statesInfo[i][1],
+            start = statesInfo[i][2],
+            count = statesInfo[i][3],
+            time = statesInfo[i][4],
+            loopcount = statesInfo[i][5],
+            loopdirection = statesInfo[i][6],
+        }
+        table.insert( sequence, state )
+    end
 
     monster = display.newSprite(imageSheet, sequence)
-    monster.x = display.contentCenterX
-    monster.y = display.contentCenterY*25/16
-    monster:scale(
-                 display.contentWidth/(options.width*7),
-                 display.contentHeight/(options.height*2.5)
-                 )
+    monster:scale(scaling*resizer,scaling*resizer)
     monster:play()
 end
 
@@ -74,6 +46,11 @@ function getMonster()
     return monster
 end
 -- -------------------------------------------------------------------------------
+
+function setMonsterLocation(offset_x,offset_y)
+    monster.x = display.contentCenterX+offset_x*resizer
+    monster.y = display.contentCenterY+offset_y*resizer
+end
 
 function setMonsterSequence(sequence)
     monster:setSequence(sequence)

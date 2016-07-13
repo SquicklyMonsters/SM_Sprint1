@@ -47,8 +47,6 @@ local gameOver;
 -- -----------------------------------------------------------------------------------------------------------------
 --Setup functions
 
-
-
 function setupGround()
 	blocks = display.newGroup()
 	--setup some variables that we will use to position the ground
@@ -95,17 +93,16 @@ function setupGround()
 		newBlock.y = groundLevel
 		blocks:insert(newBlock)
 	end
-
 end
 
 function setupScoreAndGameOver()
-	score = getScore()
 	score = 0
 
 	gameOver = getGameOver()
 	gameOver = display.newImage("img/squicklyrun/gameOver.png")
 	gameOver:scale(resizer,resizer)
 	gameOver.name = "gameOver"
+	gameOver.alpha = 0
 	gameOver.x = 0*resizer
 	gameOver.y = 500*resizer
 
@@ -178,8 +175,7 @@ function setupObstaclesAndEnemies()
 		ghost.speed = 0
 			--variable used to determine if they are in play or not
 		ghost.isAlive = false
-			--make the ghosts transparent and more... ghostlike!
-		ghost.alpha = .5
+		ghost.alpha = 0
 		ghosts:insert(ghost)
 	end
 	--create spikes
@@ -191,6 +187,7 @@ function setupObstaclesAndEnemies()
 		spike.x = 900*resizer
 		spike.y = 500*resizer
 		spike.isAlive = false
+		spike.alpha = 0
 		spikes:insert(spike)
 	end
 	--create blasts
@@ -203,6 +200,7 @@ function setupObstaclesAndEnemies()
 		blast.x = 800*resizer
 		blast.y = 500*resizer
 		blast.isAlive = false
+		blast.alpha = 0
 		blasts:insert(blast)
 	end
 
@@ -211,6 +209,7 @@ function setupObstaclesAndEnemies()
 	boss.x = 300*resizer
 	boss.y = 550*resizer
 	boss.isAlive = false
+	boss.alpha = 0
 	boss.health = 10
 	boss.goingDown = true
 	boss.canShoot = false
@@ -227,15 +226,10 @@ function setupObstaclesAndEnemies()
 		bossSpit.x = 400*resizer
 		bossSpit.y = 550*resizer
 		bossSpit.isAlive = false
+		bossSpit.alpha = 0
 		bossSpit.speed = 3
 		bossSpits:insert(bossSpit)
 	end
-
-
-
-
-
-
 end
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -266,6 +260,7 @@ function updateBlocks()
 					for a=1, bossSpits.numChildren, 1 do
 						if(bossSpits[a].isAlive == false) then
 							bossSpits[a].isAlive = true
+							bossSpits[a].alpha = 1
 							bossSpits[a].x = boss.x - 35
 							bossSpits[a].y = boss.y + 55
 							bossSpits[a].speed = math.random(5,10)
@@ -293,6 +288,7 @@ function updateBlocks()
 						--do nothing
 					else
 						spikes[a].isAlive = true
+						spikes[a].alpha = 1
 						spikes[a].y = groundLevel - 200
 						spikes[a].x = newX
 						break
@@ -316,17 +312,9 @@ function gameOverScreen()
 	hero:pause()
 	gameOver.x = display.contentWidth*.65
 	gameOver.y = display.contentHeight/2
+	gameOver.alpha = 1
 	score = getScore()
 end
-
-
--- -------COLLISIONS------------------------------------------------------------------------------------------------
-
-
-
-
-
-
 
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -364,6 +352,7 @@ function checkEvent()
 		--also control the boss's health from here
 		if(boss.isAlive == false and score%30 == 0) then
 			boss.isAlive = true
+			boss.alpha = 1
 			boss.x = 400
 			boss.y = -200
 			boss.health = 10
@@ -412,6 +401,8 @@ function checkEvent()
 		for a=1, ghosts.numChildren, 1 do
 			if(ghosts[a].isAlive == false) then
 				ghosts[a].isAlive = true
+				--make the ghosts transparent and more... ghostlike!
+				ghosts[a].isAlive = 0.5
 				ghosts[a].x = 500
 				ghosts[a].y = math.random(-50, 400)
 				ghosts[a].speed = math.random(2,4)
@@ -438,10 +429,26 @@ function runEvent()
 	end
 end
 
+--function that gives reward to player when dead or leave the game
+function getReward()
+	reward = getScore()
+	print(reward)
+	if reward ~= nil then
+		updateCurrency(reward, 0)
+		changeNeedsLevel("exp", reward*10)
+		changeNeedsLevel("energy", -reward*10)
+	end
+	saveData()
+end
+
 function restartGame()
+	--give the player their reward for their progress
+	getReward()
+
 	--move menu
-	gameOver.x = 0
-	gameOver.y = 500
+	gameOver.x = -100
+	gameOver.y = -100
+	gameOver.alpha = 0
 	--reset the score
 	score = 0
 	--reset the game speed
@@ -477,6 +484,7 @@ function restartGame()
 	end
 	--reset the boss
 	boss.isAlive = false
+	boss.alpha = 0
 	boss.x = 300
 	boss.y = 550
 	--reset the boss's spit
@@ -518,6 +526,7 @@ function touched( event )
 					for a=1, blasts.numChildren, 1 do
 						if(blasts[a].isAlive == false) then
 							blasts[a].isAlive = true
+							blasts[a].alpha = 1
 							blasts[a].x = hero.x + 50
 							blasts[a].y = hero.y
 							break

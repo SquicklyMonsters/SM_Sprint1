@@ -19,6 +19,7 @@ local itemQuantities;
 local itemTexts = {};
 
 local inventory;
+local tab;
 -- -------------------------------------------------------------------------------
 -- Set all Event listeners HERE
 
@@ -32,7 +33,7 @@ function itemClickedEvent(event)
 			-- Update display number
 			itemTexts[idx].text = quantity
 		else
-			updateInventory()
+			updateInventory(tab)
 		end
 		item:use(item.type)
 	end
@@ -44,71 +45,72 @@ function closeClickEvent(event)
 	end
 end
 
-function foodTabClickEvent(event)
+function allTabClickEvent(event)
 	if event.phase == "ended" then
-		print("ft clicked")
-		toTab("food")
+		updateInventory("all")
 	end
 end
 
+function foodTabClickEvent(event)
+	if event.phase == "ended" then
+		updateInventory("food")
+	end
+end
+
+function toyTabClickEvent(event)
+	if event.phase == "ended" then
+		updateInventory("toy")
+	end
+end
 -- -------------------------------------------------------------------------------
 
-function updateInventory()
+function updateInventory(tab)
 	-- Pretty much refresh the screen
 	saveData()
 	inventory:removeSelf()
-	scene:create()
+	local event = {params = {tab = tab}}
+	scene:create(event)
 end
 
 function allocateItems(list, quantities)
-	for i = 1, #list do --loops to create each item on inventory
- 		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
- 		local y = startY + (spacingY * (math.floor((i-1) / rows)))
- 		local item = itemList[list[i]]
- 		print(item.name, "____")
- 		inventory.items[i] = widget.newButton {
- 			top = y, -- division of row
-	    	left = x, -- modulo of row
-	    	width = 50,
-	    	height = 50,
-	    	defaultFile = item.image,
-	    	onEvent = itemClickedEvent,
- 		}
+	-- i is for correctly indexing inventory slots
+	-- j is for correctly recognize items
+	local i = 1
+	for j = 1, #list do --loops to create each item on inventory
+		local item = itemList[list[j]]
+		if tab == "all" or item.type == tab then
+	 		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
+	 		local y = startY + (spacingY * (math.floor((i-1) / rows)))
 
- 		inventory.items[i].item = item
- 		inventory.items[i].idx = i
- 		local textOptions = {
-			text = quantities[i],
-			x = x + 70,
-			y = y + 65,
-			width = 50,
-			height = 50
- 		}
+	 		inventory.items[i] = widget.newButton {
+	 			top = y, -- division of row
+		    	left = x, -- modulo of row
+		    	width = 50,
+		    	height = 50,
+		    	defaultFile = item.image,
+		    	onEvent = itemClickedEvent,
+	 		}
+	 		-- at index i in inventory slot, but at idex j in actual inventory list
+	 		inventory.items[i].item = item
+	 		inventory.items[i].idx = j
+	 		local textOptions = {
+				text = quantities[j],
+				x = x + 70,
+				y = y + 65,
+				width = 50,
+				height = 50
+	 		}
 
- 		local text = display.newText(textOptions)
- 		text:setFillColor( 0, 1, 0 )
+	 		local text = display.newText(textOptions)
+	 		text:setFillColor( 0, 1, 0 )
 
- 		table.insert(itemTexts, i, text)
- 		inventory:insert(inventory.items[i])
- 		inventory:insert(text)
-
+	 		table.insert(itemTexts, i, text)
+	 		inventory:insert(inventory.items[i])
+	 		inventory:insert(text)
+	 		i = i + 1
+	 	end
  		--another smaller frame for quantity
  	end	
-end
-
-function toTab(tabType)
-	-- local tabList = itemList
-	-- local tabQuantities = itemQuantities
-	for i = 1, #invenList do
-		local item = itemList[invenList[i]]
-		if item.type ~= tabType then
-			print(item.name, "****")
-		    table.remove(invenList, i)
-		    table.remove(itemQuantities, i)
-		end
-	end
-	-- updateInventory()
-	allocateItems(invenList, itemQuantities)
 end
 -- -------------------------------------------------------------------------------
 
@@ -153,17 +155,38 @@ function setUpInventory()
  		onEvent = closeClickEvent,
  	}
 
+ 	inventory.allTab = widget.newButton {
+ 		top = startY,
+ 		left = startX - (spacingX * 0.65),
+ 		width = 50,
+ 		height = 50,
+ 		defaultFile = "img/icons/UIIcons/allIcon.png",
+ 		onEvent = allTabClickEvent,
+ 	}
+
  	inventory.foodTab = widget.newButton {
- 		top = startY - (spacingY * 0.6),
- 		left = startX,
+ 		top = startY + (spacingY),
+ 		left = startX - (spacingX * 0.65),
  		width = 50,
  		height = 50,
  		defaultFile = "img/icons/UIIcons/feedIcon.png",
  		onEvent = foodTabClickEvent,
  	}
 
+ 	 inventory.toyTab = widget.newButton {
+ 		top = startY + (spacingY * 2),
+ 		left = startX - (spacingX * 0.65),
+ 		width = 50,
+ 		height = 50,
+ 		defaultFile = "img/icons/UIIcons/playIcon.png",
+ 		onEvent = toyTabClickEvent,
+ 	}
+
+
  	inventory:insert(inventory.close)
+ 	inventory:insert(inventory.allTab)
  	inventory:insert(inventory.foodTab)
+ 	inventory:insert(inventory.toyTab)
  	inventory:scale(
  				(display.contentWidth/inventory.width)*0.4,
  				(display.contentHeight/inventory.height)*0.5
@@ -210,9 +233,10 @@ end
 -- Called when the scene's view does not exist:
 function scene:create( event )
 	local sceneGroup = self.view
+	local params = event.params
+	tab = params.tab
 	inventory = setUpInventory()	
 	sceneGroup:insert(inventory)
-	print(composer.getSceneName("current"))
 
 end
 

@@ -1,39 +1,59 @@
----------------------------------------------------------------------------------
---
--- scene3.lua
---
----------------------------------------------------------------------------------
-
+-- Import dependency
+local widget = require( "widget" )
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-local image, text1, text2, text3, memTimer
+require("custompage.cp_background")
+require("data")
 
+-- -----------------------------------------------------------------------------------------------------------------
 
+-- Local variables go Here
+
+local resizer = display.contentHeight/320
+
+local back;
+local middle;
+local front;
+
+local monster;
+
+local cp_background;
+
+-- -----------------------------------------------------------------------------------------------------------------
 
 function scene:create( event )
 	local sceneGroup = self.view
-	
-	image = display.newImage( "bg3.jpg" )
-	image.x = display.contentCenterX
-	image.y = display.contentCenterY
-	
-	sceneGroup:insert( image )
-	
-	image.touch = onSceneTouch
-	
-	text1 = display.newText( "Settings", 0, 0, native.systemFontBold, 24 )
-	text1:setFillColor( 255 )
-	text1.x, text1.y = display.contentWidth * 0.5, 50
-	sceneGroup:insert( text1 )
 
-	print( "\n3: create event")
+    -- Setup layer
+    back = display.newGroup()
+    middle = display.newGroup()
+    front = display.newGroup()
+
+	-- Set background
+    setUpBackground()
+    cp_background = getBackground()
+
 end
 
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
+
+    -- Get Latest Monster
+    monster = getMonster()
+    setMonsterLocation(100,20)
     
+	 -- Add display objects into group
+    -- ============BACK===============
+    back:insert(cp_background)
+    -- ===========MIDDLE==============
+    middle:insert(monster)
+    -- ===========FRONT===============
+    -- ===============================
+    sceneGroup:insert(back)
+    sceneGroup:insert(middle)
+    sceneGroup:insert(front)
 
 	if phase == "will" then
         composer.showOverlay("menubar")
