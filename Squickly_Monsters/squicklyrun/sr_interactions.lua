@@ -1,5 +1,7 @@
 -- -----------------------------------------------------------------------------------------------------------------
 require('inventory.interactions')
+require('squicklyrun.sr_pause')
+local composer = require("composer")
 -- Local variables go Here
 local resizer = display.contentHeight/320;
 
@@ -20,6 +22,7 @@ local bossSpits;
 --main display groups
 local screen;
 local player;
+local pauseButton;
 
 --setup some variables that we will use to position the ground
 local groundMin;
@@ -39,6 +42,9 @@ local eventRun;
 local score;
 local scoreText;
 local gameOver;
+
+--Variable to keep track of pause state
+pauseGame = false
 
 -- -----------------------------------------------------------------------------------------------------------------
 
@@ -96,9 +102,8 @@ function setupGround()
 end
 
 function setupScoreAndGameOver()
-	score = 0
-
-	gameOver = getGameOver()
+	
+	--setup gameover pic
 	gameOver = display.newImage("img/squicklyrun/gameOver.png")
 	gameOver:scale(resizer,resizer)
 	gameOver.name = "gameOver"
@@ -106,6 +111,8 @@ function setupScoreAndGameOver()
 	gameOver.x = 0*resizer
 	gameOver.y = 500*resizer
 
+	--setup score
+	score = 0
 	local options = {
 		text = "score: " .. score,
 		x = 50*resizer,
@@ -115,6 +122,13 @@ function setupScoreAndGameOver()
 		align = "left",
 	}
 	scoreText = display.newText(options);
+
+	--setup pause button
+	pauseButton = display.newImage("img/squicklyrun/playpause.png")
+	pauseButton:scale(0.25*resizer, 0.25*resizer)
+	pauseButton.x = (display.contentCenterX + display.contentWidth/2.25)--*resizer
+	print(display.contentHeight)
+	pauseButton.y = (display.contentCenterY - display.contentHeight/2.5)--*resizer
 end
 
 function setupSprite()
@@ -310,8 +324,8 @@ function gameOverScreen()
 	hero.isAlive = false
 	--this simply pauses the current animation
 	hero:pause()
-	gameOver.x = display.contentWidth*.65
-	gameOver.y = display.contentHeight/2
+	gameOver.x = display.contentCenterX
+	gameOver.y = display.contentCenterY
 	gameOver.alpha = 1
 	score = getScore()
 end
@@ -355,7 +369,7 @@ function checkEvent()
 			boss.alpha = 1
 			boss.x = 400
 			boss.y = -200
-			boss.health = 10
+			boss.health = 5 * (math.floor(score/30))
 		end
 
 		--if the boss is alive then keep the event set to 15
@@ -489,7 +503,7 @@ function restartGame()
 	boss.y = 550
 	--reset the boss's spit
 	for a = 1, bossSpits.numChildren, 1 do
-	bossSpits[a].x = 400
+		bossSpits[a].x = 400
 		bossSpits[a].y = 550
 		bossSpits[a].isAlive = false
 	end
@@ -538,6 +552,49 @@ function touched( event )
 	end
 end
 
+function paused(event)
+	print("pausing..")
+	if event.phase == "ended" then
+		if pauseGame == false then
+			hero:pause()
+			speed = 0
+
+			-- setting speed to 0 actually doesnt do anything to the speed of the object??
+			-- for a = 1, blasts.numChildren, 1 do
+			-- 	-- if (blasts[a].isAlive == true) then
+			-- 		blasts[a].speed = 0
+			-- 	-- end
+			-- end
+
+			-- for a = 1, bossSpits.numChildren, 1 do
+			-- 	-- if (bossSpits[a].isAlive == true) then
+			-- 		bossSpits[a].speed = 0
+			-- 	-- end
+			-- end
+	
+			-- for a = 1, ghosts.numChildren, 1 do
+			-- 	-- if(ghosts[a].isAlive == true) then
+			-- 		ghosts[a].speed = 0
+			-- 	-- end
+			-- end
+
+            composer.showOverlay("squicklyrun.sr_pause")
+			pauseGame = true
+		
+		else
+			resume()
+		end
+	end
+end
+
+function resume()
+	hero:play()
+	speed = 5
+
+	composer.gotoScene(composer.getSceneName("current"))
+	pauseGame = false
+end
+
 -- GET FUNCTIONS BELOW-------------------------------------------------------------
 
 function getScore()
@@ -559,6 +616,10 @@ end
 
 function getScoreText()
 	return scoreText
+end
+
+function getPauseButton()
+	return pauseButton
 end
 
 function getHero()
