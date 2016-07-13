@@ -77,8 +77,9 @@ function scene:create( event )
     background = getBackground()
 
     -- Set Up Monster
-    setUpMonster(getMonsterImageAttr(), getMonsterStates())
+    setUpMonster(getMonsterName())
     monster = getMonster()
+    setMonsterLocation(0,70)
 
     -- Set up Needs Bar
     setupAllNeedsBars()
@@ -124,6 +125,7 @@ function scene:show( event )
 
 
 	if phase == "will" then
+        enableHomeTouch()
 
         -- Run need levels checker
         checkHunger(1)
@@ -133,6 +135,9 @@ function scene:show( event )
         -- Set up all Thought Clouds
         hungerThoughtCloud = getHungerThoughtCloud()
         tiredThoughtCloud = getTiredThoughtCloud()
+
+        --Set Monster Position
+        setMonsterLocation(0,70)
 
         -- Add display objects into group
         -- ============BACK===============
@@ -153,6 +158,9 @@ function scene:show( event )
         middle:insert(dailyRewardTrueIcon)
         middle:insert(dailyRewardFalseIcon)
         -- ===========FRONT===============
+        front:insert(hungerThoughtCloud)
+        front:insert(tiredThoughtCloud)
+        
         front:insert(feedIcon)
         front:insert(sleepIcon)
         front:insert(wakeupIcon)
@@ -167,8 +175,6 @@ function scene:show( event )
         front:insert(morePlayIcon)
 
 		front:insert(levelsText)
-        front:insert(hungerThoughtCloud)
-        front:insert(tiredThoughtCloud)
         -- ===============================
         sceneGroup:insert(back)
         sceneGroup:insert(middle)
@@ -193,6 +199,7 @@ function scene:hide( event )
 		--
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
+        disableHomeTouch()
 	elseif phase == "did" then
         --composer.hideOverlay()
 		-- Called when the scene is now off screen
