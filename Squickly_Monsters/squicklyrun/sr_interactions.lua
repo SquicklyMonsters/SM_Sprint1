@@ -204,8 +204,8 @@ function setupObstaclesAndEnemies()
 		blasts:insert(blast)
 	end
 
-	boss = display.newImage("img/squicklyrun/boss.png", 150, 150)
-	boss:scale(resizer,resizer)
+	boss = display.newImage("img/squicklyrun/snowboss.png", 150, 150)
+	boss:scale(resizer*0.4,resizer*0.4)
 	boss.x = 300*resizer
 	boss.y = 550*resizer
 	boss.isAlive = false
@@ -221,8 +221,8 @@ function setupObstaclesAndEnemies()
 	--of that for us!
 	boss.spitCycle = 0
 	for a=1, 3, 1 do
-		local bossSpit = display.newImage("img/squicklyrun/bossSpit.png")
-		bossSpit:scale(resizer,resizer)
+		local bossSpit = display.newImage("img/squicklyrun/snowball.png")
+		bossSpit:scale(resizer*0.2,resizer*0.2)
 		bossSpit.x = 400*resizer
 		bossSpit.y = 550*resizer
 		bossSpit.isAlive = false
