@@ -73,7 +73,6 @@ function updateInventory(tab)
 end
 
 function allocateItems(list, quantities)
-	print("alloc", tab)
 	-- i is for correctly indexing inventory slots
 	-- j is for correctly recognize items
 	local i = 1
@@ -82,7 +81,6 @@ function allocateItems(list, quantities)
 		if tab == "all" or item.type == tab then
 	 		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
 	 		local y = startY + (spacingY * (math.floor((i-1) / rows)))
-	 		print(item.type, "____", i)
 
 	 		inventory.items[i] = widget.newButton {
 	 			top = y, -- division of row
@@ -236,12 +234,9 @@ end
 function scene:create( event )
 	local sceneGroup = self.view
 	local params = event.params
-	print(event, event.params)
 	tab = params.tab
-	print(tab)
 	inventory = setUpInventory()	
 	sceneGroup:insert(inventory)
-	print(composer.getSceneName("current"))
 
 end
 
