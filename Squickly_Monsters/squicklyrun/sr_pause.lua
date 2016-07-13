@@ -18,9 +18,10 @@ end
 
 function quitClickEvent(event)
 	if event.phase == "ended" then
-		composer.removeScene("minigame")
-		composer.gotoScene("home", "crossFade", 250)
 		restartGame()
+		composer.removeScene("squicklyrun.sr_mainpage")
+		composer.gotoScene("home", "crossFade", 250)
+		
 	end
 end
 
@@ -41,9 +42,6 @@ function setUpPause()
  		height = 563,
  		imageDir = "img/bg/pausebg.png"
  	}
-
- 	print(pause.width)
- 	print(pause.height)
 
  	pause.resume = widget.newButton {
  		top = 0,

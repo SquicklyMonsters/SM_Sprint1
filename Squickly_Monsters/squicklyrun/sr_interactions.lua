@@ -367,7 +367,7 @@ function checkEvent()
 			boss.alpha = 1
 			boss.x = 400
 			boss.y = -200
-			boss.health = 10
+			boss.health = 5 * (math.floor(score/30))
 		end
 
 		--if the boss is alive then keep the event set to 15
