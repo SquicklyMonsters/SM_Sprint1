@@ -63,6 +63,31 @@ local monsterStates = {
 }
 
 -- -------------------------------------------------------------------------------
+-- Monster Info
+-- In order: Name, Height, Weight, Description, levelToEvolve, nextEvolution
+
+local monsterInfo = {
+	{ --fireball
+	    "Fireball", 2.0, 15, "Heat Up Your Life With this Adorable Creature", nil, nil,
+	},
+	{ --pikachu
+	    "Pikachu", 3.0, 18, "Pika-Pika-Pikachuuuuu", nil, nil,
+	},
+	{ --cat
+	    "Ninja Cat", 1.0, 9, "Wax On, Wax Off, repeat", 3, 2, -- pikachu
+	},
+	{ --egg
+	    "Egg", 0.8, 8, "I wonder who's inside?", 2, 5, --voltorb
+	},
+	{ --voltorb
+	    "Voltorb", 0.6, 11, "Beware of elctrocution", 5, 6, --electrode
+	},
+	{ --electrode
+	    "Electrode", 1.3, 22, "Danger: High Voltage", nil, nil,
+	},
+}
+
+-- -------------------------------------------------------------------------------
 -- Get Monster Attr Info
 
 function getMonsterInfo(monsterName)
