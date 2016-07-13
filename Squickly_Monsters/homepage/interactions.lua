@@ -317,7 +317,8 @@ function inventoryClicked(event)
             composer.gotoScene(composer.getSceneName("current"))
             inventoryIsShow = false
         else
-            composer.showOverlay("inventory")
+            local options = {params = {tab = "all"}}
+            composer.showOverlay("inventory", options)
             inventoryIsShow = true
         end
     end
