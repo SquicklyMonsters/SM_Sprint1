@@ -250,6 +250,7 @@ end
 --THIS IS THE ONLY UPDATE FUNCTION THAT STAYS HERE FOR NOW IF YOU MOVE IT'LL GLITCH REAL HARD. I AM LAZY TO FIGURE OUT
 --WHY FOR NOW.
 function updateBlocks()
+	score = getScore()
 	blocks = getBlocks()
 	for a = 1, blocks.numChildren, 1 do
 		if(a > 1) then
@@ -267,15 +268,15 @@ function updateBlocks()
 			else
 				--have the boss spit every three block passes
 				boss = getBoss()
-				boss.spitCycle = boss.spitCycle + 1
-				if(boss.y > 100 and boss.y < 300 and boss.spitCycle%3 == 0) then
+				boss.spitCycle = boss.spitCycle + math.floor(score/30)
+				if(boss.y > 100 and boss.y < 300 and boss.spitCycle%5 == 0) then
 					for a=1, bossSpits.numChildren, 1 do
 						if(bossSpits[a].isAlive == false) then
 							bossSpits[a].isAlive = true
 							bossSpits[a].alpha = 1
 							bossSpits[a].x = boss.x - 35
 							bossSpits[a].y = boss.y + 55
-							bossSpits[a].speed = math.random(5,10)
+							bossSpits[a].speed = 7 + (math.floor(score/30))
 							break
 						end
 					end
@@ -535,13 +536,16 @@ function touched( event )
 						hero.accel = hero.accel + 20
 					end
 				else
-					for a=1, blasts.numChildren, 1 do
-						if(blasts[a].isAlive == false) then
-							blasts[a].isAlive = true
-							blasts[a].alpha = 1
-							blasts[a].x = hero.x + 50
-							blasts[a].y = hero.y
-							break
+					if pauseGame == false then
+						for a=1, blasts.numChildren, 1 do
+							if(blasts[a].isAlive == false) then
+								blasts[a].isAlive = true
+								blasts[a].alpha = 1
+								blasts[a].x = hero.x + 50
+								blasts[a].y = hero.y
+								print(blasts[a].name)
+								break
+							end
 						end
 					end
 				end

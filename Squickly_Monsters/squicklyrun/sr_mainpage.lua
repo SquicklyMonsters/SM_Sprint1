@@ -129,7 +129,6 @@ function scene:hide( event )
 end
 
 function scene:destroy( event )
-    print("DESTROYED!")
 	getReward()
     timer.cancel(updateTimer)
     pauseButton:removeEventListener("touch", paused)
