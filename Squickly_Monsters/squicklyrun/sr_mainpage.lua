@@ -18,8 +18,7 @@ require( 'squicklyrun.sr_pause' )
 
 local screen;
 local player;
-
-local updateTimer
+updateTimer = timer.performWithDelay(1, update, 0);
 
 -- -------------------------------------------------------------------------------
 -- Scene functions go Here
@@ -64,7 +63,7 @@ function scene:create( event )
     scoreText = getScoreText()
     pauseButton = getPauseButton()
 
-	updateTimer = timer.performWithDelay(1, update, 0)
+	-- updateTimer = timer.performWithDelay(1, update, 0)
 
     pauseButton:addEventListener("touch", paused)
 	Runtime:addEventListener("touch", touched, -1)

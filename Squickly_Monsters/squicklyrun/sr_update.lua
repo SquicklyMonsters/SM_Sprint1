@@ -178,7 +178,7 @@ end
 function updateGhosts()
     for a = 1, ghosts.numChildren, 1 do
         if(ghosts[a].isAlive == true) then
-            (ghosts[a]):translate(speed * -1*resizer, 0)
+            (ghosts[a]):translate(ghosts[a].speed * -1*resizer, 0)
             if(ghosts[a].y > hero.y) then
                 ghosts[a].y = ghosts[a].y - 1*resizer
             end
@@ -207,9 +207,9 @@ function updateBoss()
             boss.goingDown = true
         end
         if(boss.goingDown) then
-            boss.y = boss.y + 2*resizer
+            boss.y = boss.y + 4*resizer
         else
-            boss.y = boss.y - 2*resizer
+            boss.y = boss.y - 4*resizer
         end
     else
         --if the boss has been killed make him slowly disappear
@@ -232,7 +232,7 @@ end
 function updateBossSpit()
     for a = 1, bossSpits.numChildren, 1 do
         if(bossSpits[a].isAlive) then
-            (bossSpits[a]):translate(speed * -1, 0)
+            (bossSpits[a]):translate(bossSpits[a].speed * -1, 0)
             if(bossSpits[a].y > hero.y) then
                 bossSpits[a].y = bossSpits[a].y - 1*resizer
             end
