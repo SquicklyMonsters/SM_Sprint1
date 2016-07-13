@@ -3,12 +3,13 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 
 require( 'inventory.interactions' )
-require( 'menubar' )
+-- require( 'menubar' )
 
 require( 'squicklyrun.sr_interactions' )
 require( 'squicklyrun.sr_background' )
 require( 'squicklyrun.sr_update' )
 require( 'squicklyrun.sr_interactions' )
+require( 'squicklyrun.sr_pause' )
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
@@ -61,9 +62,11 @@ function scene:create( event )
     setupScoreAndGameOver()
     gameOver = getGameOver()
     scoreText = getScoreText()
+    pauseButton = getPauseButton()
 
 	updateTimer = timer.performWithDelay(1, update, 0)
 
+    pauseButton:addEventListener("touch", paused)
 	Runtime:addEventListener("touch", touched, -1)
 end
 
@@ -72,7 +75,7 @@ function scene:show( event )
 	local phase = event.phase
 
 	if phase == "will" then
-        composer.showOverlay("menubar")
+        -- composer.showOverlay("menubar")
         -- Background
         back:insert(backbackground)
         back:insert(backgroundfar)
@@ -95,12 +98,11 @@ function scene:show( event )
         --ScoreAndGameOver
         front:insert(gameOver)
         front:insert(scoreText)
+        front:insert(pauseButton)
         -- ===============================
         sceneGroup:insert(back)
         sceneGroup:insert(middle)
         sceneGroup:insert(front)
-
---        restartGame()
 
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
