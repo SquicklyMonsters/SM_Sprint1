@@ -140,10 +140,7 @@ function setUpShop()
     
     allocateItems(startX, startY, spacingX, spacingY)
 
-    shop:scale(
-                (display.contentWidth/shop.width)*0.8, 
-                (display.contentHeight/shop.height)*0.8
-                )
+
 
     -- text area to show how much GOLD you have
     local GoldOptions = {
@@ -163,13 +160,19 @@ function setUpShop()
     fontSize = 25
     }
  
-    goldText = display.newText(GoldOptions)
+    local goldText = display.newText(GoldOptions)
+    local platinumText = display.newText(PlatinumOptions)
+    
     goldText:setFillColor( 255/255, 223/255, 0 )
-    shop:insert(goldText)
-
-    platinumText = display.newText(PlatinumOptions)
     platinumText:setFillColor( 229/255, 228/255, 226/255 )
+
+    shop:insert(goldText)
     shop:insert(platinumText)
+
+    shop:scale(
+            (display.contentWidth/shop.width)*0.8, 
+            (display.contentHeight/shop.height)*0.8
+            )
 
     return shop
 end

@@ -184,16 +184,6 @@ function setUpInventory()
  		onEvent = toyTabClickEvent,
  	}
 
-
- 	inventory:insert(inventory.close)
- 	inventory:insert(inventory.allTab)
- 	inventory:insert(inventory.foodTab)
- 	inventory:insert(inventory.toyTab)
- 	inventory:scale(
- 				(display.contentWidth/inventory.width)*0.4,
- 				(display.contentHeight/inventory.height)*0.5
- 				)
-
  	-- text area to show how much GOLD you have
     local GoldOptions = {
     text = "Gold: " .. getGold(),
@@ -213,12 +203,23 @@ function setUpInventory()
     }
 
     local goldText = display.newText(GoldOptions)
-    goldText:setFillColor( 255/255, 223/255, 0 )
-    inventory:insert(goldText)
-
     local platinumText = display.newText(PlatinumOptions)
+    
+    goldText:setFillColor( 255/255, 223/255, 0 )
     platinumText:setFillColor( 229/255, 228/255, 226/255 )
+
+    inventory:insert(goldText)
     inventory:insert(platinumText)
+
+    inventory:insert(inventory.close)
+ 	inventory:insert(inventory.allTab)
+ 	inventory:insert(inventory.foodTab)
+ 	inventory:insert(inventory.toyTab)
+
+ 	inventory:scale(
+ 				(display.contentWidth/inventory.width)*0.4,
+ 				(display.contentHeight/inventory.height)*0.5
+ 				)
 
  	return inventory
 end
