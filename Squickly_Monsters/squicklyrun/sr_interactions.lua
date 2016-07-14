@@ -180,8 +180,8 @@ function setupObstaclesAndEnemies()
 
 	--create ghosts and set their position to be off-screen
 	for a = 1, 3, 1 do
-		local ghost = display.newImage("img/squicklyrun/ghost.png")
-		ghost:scale(resizer,resizer)
+		local ghost = display.newImage("img/squicklyrun/swirl.png")
+		ghost:scale(resizer*0.6,resizer*0.6)
 		ghost.name = ("ghost" .. a)
 		ghost.id = a
 		ghost.x = 800*resizer
