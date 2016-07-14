@@ -20,6 +20,7 @@ local middle;
 local front;
 
 local notifications;
+local inventoryIcon;
 
 local currentGold;
 local currentPlatinum;
@@ -58,7 +59,6 @@ end
 -- function allTabClickEvent(event)
 --     if event.phase == "ended" then
 --         if tab ~= "all" then
---             tab = "all"
 --             updateShop("all")
 --         end
 --     end
@@ -67,7 +67,6 @@ end
 -- function foodTabClickEvent(event)
 --     if event.phase == "ended" then
 --         if tab ~= "food" then
---             -- tab = "food"
 --             updateShop("food")
 --         end
 --     end
@@ -76,19 +75,20 @@ end
 -- function toyTabClickEvent(event)
 --     if event.phase == "ended" then
 --         if tab ~= "toy" then
---             -- tab = "toy"
 --             updateShop("toy")
 --         end
 --     end
 -- end
 -- -------------------------------------------------------------------------------
--- function updateShop(tab)
---     -- Pretty much refresh the screen
---     composer.hideOverlay()
---     composer.removeScene("shop")
---     local event = {params = {tab = tab}}
---     scene:create(event)
--- end
+function updateShop(in_tab)
+    -- Pretty much refresh the screen
+    -- composer.hideOverlay()
+    composer.removeScene(composer.getSceneName("current"))
+    -- local event = {params = {tab = tab}}
+    -- scene:create(event)
+    local options = { params = {tab = in_tab} }
+    composer.gotoScene("shop", options)
+end
 
 function allocateItems(startX, startY, spacingX, spacingY)
     local cols = 6
@@ -246,13 +246,9 @@ end
 
 function scene:create( event )
 	local sceneGroup = self.view
-    print('e',event)
-    print('o',event.options)
     local params = event.params
-    print('p',params)
     tab = params.tab
     print('t',tab)
-    -- tab = "toy"
 
     -- Setup layer
     back = display.newGroup()
@@ -265,11 +261,11 @@ function scene:create( event )
     backgroundShop = getBackground()
 
     -- Set Shop
-
     shop = setUpShop()
 
     -- Set up all Icons
     inventoryIcon = getInventoryIcon()
+    -- print(inventoryIcon)
     
     notifications = setUpNotifications()
 
@@ -323,6 +319,7 @@ end
 
 function scene:destroy( event )
 	local sceneGroup = self.view
+    print("oh no i die")
 	-- Called prior to the removal of scene's "view" (sceneGroup)
 	--
 	-- INSERT code here to cleanup the scene
