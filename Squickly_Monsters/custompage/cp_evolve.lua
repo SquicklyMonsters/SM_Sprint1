@@ -19,6 +19,10 @@ function closeClickEvent(event)
 	end
 end
 
+function evolveNow()
+	
+end
+
 -- -------------------------------------------------------------------------------
 
 function askEvolveConfirmation()
@@ -52,7 +56,22 @@ function setUpEvolveBackground()
  		onEvent = closeClickEvent,
  	}
 
+ 	evolveBackgroud.evolve = widget.newButton {
+ 		x = 170,
+ 		y = 80,
+ 		defaultFile = "img/icons/UIIcons/megaevolve.png",
+ 		onEvent = evolveNow,
+ 	}
+
+ 	evolveBackgroud.clickhere = widget.newButton {
+ 		x = 170,
+ 		y = 10,
+ 		defaultFile = "img/others/clickHere.png",
+ 	}
+
  	evolveBackgroud:insert(evolveBackgroud.close)
+ 	evolveBackgroud:insert(evolveBackgroud.evolve)
+ 	evolveBackgroud:insert(evolveBackgroud.clickhere)
 
  	evolveBackgroud:scale(resizer,resizer)
 
@@ -83,7 +102,7 @@ function scene:create( event )
 	evolveBackgroud = setUpEvolveBackground()	
 	sceneGroup:insert(evolveBackgroud)
 
-	local curr_monster = getMonster()
+	curr_monster = getMonster()
     setMonsterLocation(0,-30)	
  	sceneGroup:insert(curr_monster)
 end
@@ -107,6 +126,7 @@ function scene:hide( event )
 	local sceneGroup = self.view
 	local phase = event.phase
 	if event.phase == "will" then
+		sceneGroup:insert(curr_monster)
 		-- Called when the scene is on screen and is about to move off screen
 		--
 		-- INSERT code here to pause the scene
@@ -118,8 +138,6 @@ function scene:hide( event )
 end
 
 function scene:destroy( event )
-	-- Save data before exit
-	saveData()
 end
 
 ---------------------------------------------------------------------------------

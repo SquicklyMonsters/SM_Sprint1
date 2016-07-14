@@ -19,9 +19,8 @@ local front;
 
 local monster;
 local mint;
--- local strawberry;
--- local banana;
--- local strawberry2;
+local strawberry;
+local banana;
 
 local evolveIcon;
 local name_display;
@@ -46,7 +45,6 @@ function scene:create( event )
 
     -- Get Latest Monster
     monster = getMonster()
-    setMonsterLocation(100,20)
 
     -- Display Monster Descriptions
     evolveIcon, name_display, HW_display, disc_display = displayAllMonsterDescriptions(getMonsterName())
@@ -69,6 +67,10 @@ function scene:show( event )
 	local phase = event.phase
 
 	if phase == "will" then
+        --Set Monster Loc
+        setUpMonster(getMonsterName())
+        monster = getMonster()
+        setMonsterLocation(100,20)
         
          -- Add display objects into group
         -- ============BACK===============

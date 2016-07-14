@@ -18,8 +18,18 @@ local levelToEvolve;
 local nextEvolution;
 
 local evolveIsShow = false;
+local isTouchAble;
 
 -- -------------------------------------------------------------------------------
+
+function enableEvolveTouch()
+    isTouchAble = true
+end
+
+function disableEvolveTouch()
+    isTouchAble = false
+end
+
 
 function displayAllMonsterDescriptions(monsterName)
     local displayTable = getMonsterDescription(monsterName)
@@ -28,6 +38,7 @@ function displayAllMonsterDescriptions(monsterName)
     name_display = setUpText(DisplayName, 20, display.contentCenterX-100*resizer, display.contentCenterY-115*resizer, 1)
     HW_display = setUpText("H: "..Height.."cm, W: "..Weight.."kg", 20, display.contentCenterX-100*resizer, display.contentCenterY-15*resizer, 1)
     disc_display = setUpText(Description,  20, display.contentCenterX-100*resizer, display.contentCenterY+85*resizer, 1)
+    isTouchAble = true
     return evolveIcon, name_display, HW_display, disc_display
 end
 
@@ -65,14 +76,18 @@ end
 -- Set reaction when press button
 
 function evolveButtonClicked(event)
-    if event.phase == "ended" then
-        if evolveIsShow then
-            composer.gotoScene(composer.getSceneName("current"))
-            evolveIsShow = false
-        else
-            composer.showOverlay("custompage.cp_evolve")
-            evolveIsShow = true
+    if isTouchAble then
+        if event.phase == "ended" then
+            if evolveIsShow then
+                composer.gotoScene(composer.getSceneName("current"))
+                evolveIsShow = false
+            else
+                disableEvolveTouch()
+                composer.showOverlay("custompage.cp_evolve")
+                evolveIsShow = true
+            end
         end
+        timer.performWithDelay(500, enableEvolveTouch)
     end
 end
 
