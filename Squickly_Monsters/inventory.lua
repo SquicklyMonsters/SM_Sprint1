@@ -73,10 +73,11 @@ function updateInventory(tab)
 	scene:create(event)
 end
 
-function allocateItems(list, quantities)
+function allocateItems(list, quantities, startX, startY, spacingX, spacingY)
 	-- i is for correctly indexing inventory slots
 	-- j is for correctly recognize items
 	local i = 1
+	local rows = 3
 	for j = 1, #list do --loops to create each item on inventory
 		local item = itemList[list[j]]
 		if tab == "all" or item.type == tab then
@@ -138,15 +139,13 @@ function setUpInventory()
 
  	inventory.items = {}
 
- 	startX = -inventory.width*(1/3)
- 	startY = -inventory.height*(1/3)
+ 	local startX = -inventory.width*(1/3)
+ 	local startY = -inventory.height*(1/3)
 
- 	spacingX = inventory.width/4
- 	spacingY = inventory.height/4
-
- 	rows = 3
+ 	local spacingX = inventory.width/4
+ 	local spacingY = inventory.height/4
  	
- 	allocateItems(invenList, itemQuantities)
+ 	allocateItems(invenList, itemQuantities, startX, startY, spacingX, spacingY)
 
  	inventory.close = widget.newButton {
  		top = startY - (spacingY * 0.6),

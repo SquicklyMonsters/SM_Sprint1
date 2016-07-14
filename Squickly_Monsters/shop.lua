@@ -26,6 +26,10 @@ local currentPlatinum;
 
 local goldText;
 local platinumText;
+
+local shop;
+
+local tab;
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
@@ -53,11 +57,14 @@ end
 
 -- -------------------------------------------------------------------------------
 
-function allocateItems()
+function allocateItems(startX, startY, spacingX, spacingY)
+    local cols = 6
+
     for i = 1, #itemList do --loops to create each item on shop
         local item = itemList[itemList[i]]
         local shopIdx = 1
         if tab == "all" or item.type == tab then
+            print(item.name)
             local x = startX + (spacingX * ((shopIdx-1) - math.floor((shopIdx-1)/cols)*cols))
             local y = startY + (spacingY * (math.floor((shopIdx-1) / cols)))
 
@@ -94,7 +101,7 @@ function allocateItems()
             local textPlatinum = display.newText(textOptions)
             textPlatinum:setFillColor( 229/255, 228/255, 226/255 )
 
-            shop:insert(shop.items[i])
+            shop:insert(shop.items[shopIdx])
             shop:insert(textGold)
             shop:insert(textPlatinum)
             shopIdx = shopIdx + 1
@@ -118,7 +125,7 @@ function widget.newPanel(options)
 end
 
 function setUpShop()
-    local shop = widget.newPanel {
+    shop = widget.newPanel {
         width = 749,
         height = 374,
         imageDir = "img/bg/shoplist.png"
@@ -127,13 +134,14 @@ function setUpShop()
     local startX = -shop.width*(1/2.5)
     local startY = -shop.height*(1/3)
 
-    local cols = 6
     local spacingX = (shop.width)/6.8
     local spacingY = (shop.height)/3.75
-
+    
     local itemList = getItemList()
 
     shop.items = {}
+    
+    allocateItems()
 
     shop:scale(
                 (display.contentWidth/shop.width)*0.8, 
@@ -175,6 +183,7 @@ end
 
 function scene:create( event )
 	local sceneGroup = self.view
+    tab = "all"
 
     -- Setup layer
     back = display.newGroup()
