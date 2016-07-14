@@ -2,7 +2,6 @@
 local widget = require("widget")
 local composer = require( "composer" )
 local scene = composer.newScene()
-require("inventory")
 require("itemList")
 require("itemClass")
 require("data")
@@ -35,8 +34,8 @@ function isItRewardTime() -- calculates how much time is left for reward, return
 	local currentDate = os.date( '*t' )
 
 	if receiveDate == nil then -- receiveDate is false if user has never gotten daily reward before
-			dailyRewardTrueIcon.alpha = 1
-			dailyRewardFalseIcon.alpha = 0
+			-- dailyRewardTrueIcon.alpha = 1
+			-- dailyRewardFalseIcon.alpha = 0
 			return false, currentDate, nil
 	end
 
@@ -49,11 +48,11 @@ function isItRewardTime() -- calculates how much time is left for reward, return
 	local rewardTimer = ( endTime - setTime ) -- difference in seconds
 	-- print(rewardTimer)
 	-- set to 5 seconds for now for testing
-	limit = 24*60*60 -- 24 hours in sec
-
+	-- limit = 24*60*60 -- 24 hours in sec
+		limit = 1
 	if rewardTimer >= limit then
-		dailyRewardTrueIcon.alpha = 1
-		dailyRewardFalseIcon.alpha = 0
+		-- dailyRewardTrueIcon.alpha = 1
+		-- dailyRewardFalseIcon.alpha = 0
 		return true, currentDate, rewardTimer
 	end
 
@@ -99,45 +98,28 @@ function closeEvent(event)
   end
 end
 
-function getDailyReward(event)
-	if event.phase == "ended" then
-		timeleft, currentDate, rewardTimer = isItRewardTime()
-		if timeleft == true or rewardTimer == nil then -- if the timer is done
-			-- reward animation
-			-- add to inventory
-			local getItem = itemList[itemsOfReward[stackLogInCount]]
-			local idx = isInInventory(getItem.name)
-			if idx then
-					increaseQuantity(idx)
-			else
-					addToInventory(item.name)
-			end
-			print("GET REWARD!")
-
-			-- reset timer and save date
-			-- saveRewardTimerData()
-			setReceiveDate(currentDate)
 
 
-			--change visibility
-			-- dailyRewardTrueIcon.alpha = 0
-			-- dailyRewardFalseIcon.alpha = 1
+-- function suddenReward(event)
+-- 	if event.phase == "ended" then
+-- 			timeleft = true
+-- 			rewardTimer = nil
+-- 			hours = 0
+-- 			minutes = 0
+-- 			seconds = 0
+-- 			timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
+-- 			clockText.text = timeDisplay
+-- 		end
+-- 	end
 
-		end
-	end
+function widget.newPanel(options)
+	  local background = display.newImage(options.imageDir)
+	  local container = display.newContainer(options.width, options.height)
+	  container:insert(background, true)
+	  container.x = display.contentCenterX
+	  container.y = display.contentCenterY
+	  return container
 end
-
-function suddenReward(event)
-	if event.phase == "ended" then
-			timeleft = true
-			rewardTimer = nil
-			hours = 0
-			minutes = 0
-			seconds = 0
-			timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
-			clockText.text = timeDisplay
-		end
-	end
 
 function setUpDailyReward()
   dailyRewardPanel = widget.newPanel {
@@ -158,15 +140,53 @@ function setUpDailyReward()
     local x = startX
     local y = startY
 		local item = itemList[itemsOfReward[t]] -- get all item in the itemsOfReward
-    local new = widget.newButton {
-            top = y, -- division of row
-            left = (x+5) + spacingX*(t), -- modulo of row
-            width = 40,
-            height = 40,
-            defaultFile = item.image,
-        }
+    -- local new = widget.newButton {
+    --         top = y, -- division of row
+    --         left = (x+5) + spacingX*(t), -- modulo of row
+    --         width = 40,
+    --         height = 40,
+    --         defaultFile = item.image,
+    --     }
+		local new = display.newImage(item.image, ((x+5) + spacingX*(t))+20, y+20)
+		new:scale(0.8, 0.8)
     dailyRewardPanel:insert(new)
   end
+
+	function getDailyReward(event)
+		if event.phase == "ended" then
+			timeleft, currentDate, rewardTimer = isItRewardTime()
+			if timeleft == true or rewardTimer == nil then -- if the timer is done
+				-- reward animation
+				-- add to inventory
+				local getItem = itemList[itemsOfReward[stackLogInCount]]
+				local idx = isInInventory(getItem.name)
+				if idx then
+						increaseQuantity(idx)
+				else
+						addToInventory(item.name)
+				end
+
+
+				print("GET REWARD!")
+
+				-- reset timer and save date
+				-- saveRewardTimerData()
+				setReceiveDate(currentDate)
+				for i = 1, stackLogInCount do
+					local x = startX
+			    local y = startY
+					local new2 = display.newImage("img/others/cross.png", ((x+5) + spacingX*(i))+20, y+20)
+					new2:scale(0.1, 0.1)
+			    dailyRewardPanel:insert(new2)
+			  end
+				stackLogInCount = stackLogInCount 1
+				--change visibility
+				-- dailyRewardTrueIcon.alpha = 0
+				-- dailyRewardFalseIcon.alpha = 1
+
+			end
+		end
+	end
 -- ------------------------------------------------------------
 -- Create close button and create claim reward button
   dailyRewardPanel.close = widget.newButton {
@@ -177,14 +197,14 @@ function setUpDailyReward()
     defaultFile = "img/bg/close.png",
     onEvent = closeEvent,
   }
-	dailyRewardPanel.close2 = widget.newButton {
-		top = startY,
-		left = startX + (spacingX*7.5),
-		width = 50,
-		height = 50,
-		defaultFile = "img/bg/close.png",
-		onEvent = suddenReward,
-	}
+	-- dailyRewardPanel.close2 = widget.newButton {
+	-- 	top = startY,
+	-- 	left = startX + (spacingX*7.5),
+	-- 	width = 50,
+	-- 	height = 50,
+	-- 	defaultFile = "img/bg/close.png",
+	-- 	onEvent = suddenReward,
+	-- }
 
   dailyRewardPanel.claim = widget.newButton {
     top = startY - (spacingY*-1.1),
@@ -199,7 +219,7 @@ function setUpDailyReward()
 	setUpRewardTime()
 	dailyRewardPanel:insert(dailyRewardPanel.close)
   dailyRewardPanel:insert(dailyRewardPanel.claim)
-	dailyRewardPanel:insert(dailyRewardPanel.close2)
+	-- dailyRewardPanel:insert(dailyRewardPanel.close2)
 	dailyRewardPanel:insert(clockText)
 
   -- dailyRewardPanel:scale(
