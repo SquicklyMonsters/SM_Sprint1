@@ -59,12 +59,10 @@ end
 
 function allocateItems(startX, startY, spacingX, spacingY)
     local cols = 6
-
+    local shopIdx = 1
     for i = 1, #itemList do --loops to create each item on shop
         local item = itemList[itemList[i]]
-        local shopIdx = 1
         if tab == "all" or item.type == tab then
-            print(item.name)
             local x = startX + (spacingX * ((shopIdx-1) - math.floor((shopIdx-1)/cols)*cols))
             local y = startY + (spacingY * (math.floor((shopIdx-1) / cols)))
 
@@ -118,7 +116,6 @@ function widget.newPanel(options)
     -- print(background.width, background.height, display.contentWidth, display.contentHeight)
     background:scale(options.width/background.width, options.height/background.height )
     container:insert(background)
-    print(display.contentWidth, background.width)
     container.x = display.contentCenterX
     container.y = display.contentCenterY
     return container
@@ -136,12 +133,12 @@ function setUpShop()
 
     local spacingX = (shop.width)/6.8
     local spacingY = (shop.height)/3.75
-    
+
     local itemList = getItemList()
 
     shop.items = {}
     
-    allocateItems()
+    allocateItems(startX, startY, spacingX, spacingY)
 
     shop:scale(
                 (display.contentWidth/shop.width)*0.8, 
@@ -183,7 +180,13 @@ end
 
 function scene:create( event )
 	local sceneGroup = self.view
-    tab = "all"
+    print('e',event)
+    print('o',event.options)
+    local params = event.params
+    print('p',params)
+    tab = params.tab
+    print('t',tab)
+    -- tab = "toy"
 
     -- Setup layer
     back = display.newGroup()
