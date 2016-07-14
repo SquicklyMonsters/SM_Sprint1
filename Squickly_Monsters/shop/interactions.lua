@@ -1,4 +1,3 @@
-require("savegame") -- For Testing
 local composer = require("composer")
 -- -------------------------------------------------------------------------------
 -- Local variables go HERE

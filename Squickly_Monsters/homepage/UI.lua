@@ -1,5 +1,4 @@
 require("data")
-require("loadgame")
 require("itemList")
 require("inventory.interactions")
 local widget = require( "widget" )

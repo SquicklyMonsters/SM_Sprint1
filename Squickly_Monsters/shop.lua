@@ -19,13 +19,6 @@ local back;
 local middle;
 local front;
 
--- local inventoryIcon;
--- local itemList;
--- local itemQuantities;
--- local itemTexts = {};
-
--- local buyHolder;
--- local cannotBuyHolder;
 local notifications;
 
 local currentGold;
@@ -58,6 +51,59 @@ function itemClickedEvent(event)
     end
 end
 
+-- -------------------------------------------------------------------------------
+
+function allocateItems()
+    for i = 1, #itemList do --loops to create each item on shop
+        local item = itemList[itemList[i]]
+        local shopIdx = 1
+        if tab == "all" or item.type == tab then
+            local x = startX + (spacingX * ((shopIdx-1) - math.floor((shopIdx-1)/cols)*cols))
+            local y = startY + (spacingY * (math.floor((shopIdx-1) / cols)))
+
+            shop.items[shopIdx] = widget.newButton {
+                top = y, -- division of row
+                left = x, -- modulo of row
+                width = 50,
+                height = 50,
+                defaultFile = item.image,
+                onEvent = itemClickedEvent,
+            }
+
+            shop.items[shopIdx].item = item
+
+            local textOptions = {
+                text = item.gold, 
+                x = x + 5,
+                y = y + 65, 
+                width = 50, 
+                height = 50
+            }
+
+            local textGold = display.newText(textOptions)
+            textGold:setFillColor( 255/255, 223/255, 0 )
+
+            local textOptions = {
+                text = item.platinum, 
+                x = x + 80,
+                y = y + 65, 
+                width = 50, 
+                height = 50
+            }
+
+            local textPlatinum = display.newText(textOptions)
+            textPlatinum:setFillColor( 229/255, 228/255, 226/255 )
+
+            shop:insert(shop.items[i])
+            shop:insert(textGold)
+            shop:insert(textPlatinum)
+            shopIdx = shopIdx + 1
+        end
+    end
+end
+
+-- -------------------------------------------------------------------------------
+
 function widget.newPanel(options)                                    
     local background = display.newImage(options.imageDir)
     local container = display.newContainer(options.width, options.height)
@@ -88,50 +134,6 @@ function setUpShop()
     local itemList = getItemList()
 
     shop.items = {}
-
-    for i = 1, #itemList do --loops to create each item on shop
-        local x = startX + (spacingX * ((i-1) - math.floor((i-1)/cols)*cols))
-        local y = startY + (spacingY * (math.floor((i-1) / cols)))
-        local item = itemList[itemList[i]]
-
-        shop.items[i] = widget.newButton {
-            top = y, -- division of row
-            left = x, -- modulo of row
-            width = 50,
-            height = 50,
-            defaultFile = item.image,
-            onEvent = itemClickedEvent,
-        }
-
-        shop.items[i].item = item
-        shop.items[i].idx = i
-
-        local textOptions = {
-            text = item.gold, 
-            x = x + 5,
-            y = y + 65, 
-            width = 50, 
-            height = 50
-        }
-
-        local textGold = display.newText(textOptions)
-        textGold:setFillColor( 255/255, 223/255, 0 )
-
-        local textOptions = {
-            text = item.platinum, 
-            x = x + 80,
-            y = y + 65, 
-            width = 50, 
-            height = 50
-        }
-
-        local textPlatinum = display.newText(textOptions)
-        textPlatinum:setFillColor( 229/255, 228/255, 226/255 )
-
-        shop:insert(shop.items[i])
-        shop:insert(textGold)
-        shop:insert(textPlatinum)
-    end
 
     shop:scale(
                 (display.contentWidth/shop.width)*0.8, 

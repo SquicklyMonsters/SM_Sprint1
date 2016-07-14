@@ -1,4 +1,3 @@
-require("savegame") -- For Testing
 require("data")
 require("itemList")
 local composer = require("composer")
