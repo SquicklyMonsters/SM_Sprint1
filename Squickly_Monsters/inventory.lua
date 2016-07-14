@@ -27,12 +27,12 @@ function itemClickedEvent(event)
 	-- Just gonna eat it right away for now
 	if event.phase == "ended" then
 		local item = event.target.item
-		local idxJ = event.target.idxJ
-		local idxI = event.target.idxI
-		local quantity = reduceQuantity(idxJ)
+		local invDataIdx = event.target.invDataIdx
+		local invSlotIdx = event.target.invSlotIdx
+		local quantity = reduceQuantity(invDataIdx)
 		if quantity ~= nil then
 			-- Update display number
-			itemTexts[idxI].text = quantity
+			itemTexts[invSlotIdx].text = quantity
 		else
 			updateInventory(tab)
 		end
@@ -74,17 +74,17 @@ function updateInventory(tab)
 end
 
 function allocateItems(list, quantities, startX, startY, spacingX, spacingY)
-	-- i is for correctly indexing inventory slots
-	-- j is for correctly recognize items
-	local i = 1
+	-- invSlotIdx is for correctly indexing inventory slots
+	-- invDataIdx is for correctly recognize items
 	local rows = 3
-	for j = 1, #list do --loops to create each item on inventory
-		local item = itemList[list[j]]
+	local invSlotIdx = 1
+	for invDataIdx = 1, #list do --loops to create each item on inventory
+		local item = itemList[list[invDataIdx]]
 		if tab == "all" or item.type == tab then
-	 		local x = startX + (spacingX * ((i-1) - math.floor((i-1)/rows)*rows))
-	 		local y = startY + (spacingY * (math.floor((i-1) / rows)))
+	 		local x = startX + (spacingX * ((invSlotIdx-1) - math.floor((invSlotIdx-1)/rows)*rows))
+	 		local y = startY + (spacingY * (math.floor((invSlotIdx-1) / rows)))
 
-	 		inventory.items[i] = widget.newButton {
+	 		inventory.items[invSlotIdx] = widget.newButton {
 	 			top = y, -- division of row
 		    	left = x, -- modulo of row
 		    	width = 50,
@@ -92,12 +92,13 @@ function allocateItems(list, quantities, startX, startY, spacingX, spacingY)
 		    	defaultFile = item.image,
 		    	onEvent = itemClickedEvent,
 	 		}
-	 		-- Item at index i of inventory slot, but at idex j of actual inventory list
-	 		inventory.items[i].item = item
-	 		inventory.items[i].idxJ = j
-	 		inventory.items[i].idxI = i
+	 		
+	 		inventory.items[invSlotIdx].item = item
+	 		inventory.items[invSlotIdx].invSlotIdx = invSlotIdx
+	 		inventory.items[invSlotIdx].invDataIdx = invDataIdx
+
 	 		local textOptions = {
-				text = quantities[j],
+				text = quantities[invSlotIdx],
 				x = x + 70,
 				y = y + 65,
 				width = 50,
@@ -107,10 +108,10 @@ function allocateItems(list, quantities, startX, startY, spacingX, spacingY)
 	 		local text = display.newText(textOptions)
 	 		text:setFillColor( 0, 1, 0 )
 
-	 		table.insert(itemTexts, i, text)
-	 		inventory:insert(inventory.items[i])
+	 		table.insert(itemTexts, invSlotIdx, text)
+	 		inventory:insert(inventory.items[invSlotIdx])
 	 		inventory:insert(text)
-	 		i = i + 1
+	 		invSlotIdx = invSlotIdx + 1
 	 	end
  		--another smaller frame for quantity
  	end	
