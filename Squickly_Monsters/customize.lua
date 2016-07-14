@@ -18,12 +18,13 @@ local middle;
 local front;
 
 local monster;
--- local mint;
+local mint;
 -- local strawberry;
 -- local banana;
 -- local strawberry2;
 
 local evolveIcon;
+local name_display;
 local HW_display;
 local disc_display;
 
@@ -43,17 +44,23 @@ function scene:create( event )
     setUpBackground()
     cp_background = getBackground()
 
-    -- mint = display.newImage("img/others/mint/dialog.png", display.contentCenterX-135*resizer, display.contentCenterY-115*resizer)
-    -- mint:scale(0.3*resizer, 0.3*resizer )
+    -- Get Latest Monster
+    monster = getMonster()
+    setMonsterLocation(100,20)
 
-    -- strawberry = display.newImage("img/others/strawberry/dialog.png", display.contentCenterX-135*resizer, display.contentCenterY-40*resizer)
-    -- strawberry:scale(0.3*resizer, 0.3*resizer )
+    -- Display Monster Descriptions
+    evolveIcon, name_display, HW_display, disc_display = displayAllMonsterDescriptions(getMonsterName())
+
+    addListeners()
+
+    mint = display.newImage("img/others/mint/dialog.png", display.contentCenterX-120*resizer, display.contentCenterY-100*resizer)
+    mint:scale(0.3*resizer, 0.3*resizer )
+
+    strawberry = display.newImage("img/others/strawberry/dialog.png", display.contentCenterX-120*resizer, display.contentCenterY-0*resizer)
+    strawberry:scale(0.3*resizer, 0.3*resizer )
     
-    -- banana = display.newImage("img/others/banana/dialog.png", display.contentCenterX-135*resizer, display.contentCenterY+35*resizer)
-    -- banana:scale(0.3*resizer, 0.3*resizer )
-
-    -- strawberry2 = display.newImage("img/others/strawberry/dialog.png", display.contentCenterX-135*resizer, display.contentCenterY+110*resizer)
-    -- strawberry2:scale(0.3*resizer, 0.3*resizer )
+    banana = display.newImage("img/others/banana/dialog.png", display.contentCenterX-120*resizer, display.contentCenterY+100*resizer)
+    banana:scale(0.3*resizer, 0.3*resizer )
 
 end
 
@@ -62,27 +69,20 @@ function scene:show( event )
 	local phase = event.phase
 
 	if phase == "will" then
-
-        -- Get Latest Monster
-        monster = getMonster()
-        setMonsterLocation(100,20)
-
-        -- Display Monster Descriptions
-        evolveIcon, HW_display, disc_display = displayAllMonsterDescriptions(getMonsterName())
         
          -- Add display objects into group
         -- ============BACK===============
         back:insert(cp_background)
         -- ===========MIDDLE==============
         middle:insert(monster)
-        -- middle:insert(mint)
-        -- middle:insert(strawberry)
-        -- middle:insert(banana)
-        -- middle:insert(strawberry2)
+        middle:insert(mint)
+        middle:insert(strawberry)
+        middle:insert(banana)
         -- ===========FRONT===============
         if evolveIcon~=nil then
             front:insert(evolveIcon)
         end
+        front:insert(name_display)
         front:insert(HW_display)
         front:insert(disc_display)
         -- ===============================

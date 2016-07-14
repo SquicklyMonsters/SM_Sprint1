@@ -6,6 +6,7 @@ require("monsterList")
 local resizer = display.contentHeight/320
 
 local evolveIcon;
+local name_display;
 local HW_display;
 local disc_display;
 
@@ -16,15 +17,18 @@ local Description;
 local levelToEvolve;
 local nextEvolution;
 
+local evolveIsShow = false;
+
 -- -------------------------------------------------------------------------------
 
 function displayAllMonsterDescriptions(monsterName)
     local displayTable = getMonsterDescription(monsterName)
     DisplayName, Height, Weight, Description, levelToEvolve, nextEvolution = displayTable[1],displayTable[2],displayTable[3],displayTable[4],displayTable[5],displayTable[6]
     evolveIcon = displayEvolveIcon(levelToEvolve, nextEvolution)
-    HW_display = setUpText("H: "..Height.."cm, W: "..Weight.."kg", 20, display.contentCenterX-150*resizer, display.contentCenterY-50*resizer, 1)
-    disc_display = setUpText(Description,  20, display.contentCenterX-150*resizer, display.contentCenterY-100*resizer, 1)
-    return evolveIcon, HW_display, disc_display
+    name_display = setUpText(DisplayName, 20, display.contentCenterX-100*resizer, display.contentCenterY-115*resizer, 1)
+    HW_display = setUpText("H: "..Height.."cm, W: "..Weight.."kg", 20, display.contentCenterX-100*resizer, display.contentCenterY-15*resizer, 1)
+    disc_display = setUpText(Description,  20, display.contentCenterX-100*resizer, display.contentCenterY+85*resizer, 1)
+    return evolveIcon, name_display, HW_display, disc_display
 end
 
 -- -------------------------------------------------------------------------------
@@ -38,7 +42,7 @@ function setUpIcon(img, scale, x, y, alpha)
 end
 
 function setUpText(text, size, x, y, alpha)
-    displayText = display.newText(text, x, y, native.systemFontBold, size)
+    displayText = display.newText(text, x, y, 300*resizer, 0, native.systemFontBold, size*resizer, "left")
     displayText:setFillColor( 1.0, 1.0, 1.0 )
     displayText.alpha = alpha
     return displayText
@@ -61,9 +65,13 @@ end
 -- Set reaction when press button
 
 function evolveButtonClicked(event)
-    if isTouchAble then
-        if event.phase == "ended" then
-            
+    if event.phase == "ended" then
+        if evolveIsShow then
+            composer.gotoScene(composer.getSceneName("current"))
+            evolveIsShow = false
+        else
+            composer.showOverlay("custompage.cp_evolve")
+            evolveIsShow = true
         end
     end
 end
