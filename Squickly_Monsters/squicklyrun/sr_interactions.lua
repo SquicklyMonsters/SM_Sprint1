@@ -132,25 +132,26 @@ function setupScoreAndGameOver()
 end
 
 function setupSprite()
-	fileWidth = 2421
-	fileHeight = 4633
-	local imgsheetSetup = {
-		width = fileWidth/8,
-		height = fileHeight/10,
-		numFrames = 80
-	}
-	local spriteSheet = graphics.newImageSheet("img/squicklyrun/sr_fireball.png", imgsheetSetup);
+	-- fileWidth = 3104
+	-- fileHeight = 4600
+	-- local imgsheetSetup = {
+	-- 	width = fileWidth/8,
+	-- 	height = fileHeight/10,
+	-- 	numFrames = 20
+	-- }
+	-- local spriteSheet = graphics.newImageSheet("img/squicklyrun/sr_fireball.png", imgsheetSetup);
 	
-	local sequenceData = {
-		{ name = "running", start = 1, count = 6, time = 600, loopCount = 0},
-		{ name = "jumping", start = 95, count = 95, time = 1, loopCount = 1 }
-	}
+	-- local sequenceData = {
+	-- 	{ name = "running", start = 1, count = 6, time = 600, loopCount = 0},
+	-- 	{ name = "jumping", start = 16, count = 16, time = 1, loopCount = 1 }
+	-- }
 	
-	--Hero Animation
-	hero = getHero()
-	hero = display.newSprite(spriteSheet, sequenceData);
-	hero:scale(0.2*resizer,0.2*resizer)
-	hero:setSequence("running")
+	-- --Hero Animation
+	-- hero = getHero()
+	-- hero = display.newSprite(spriteSheet, sequenceData);
+	-- hero:scale(0.2*resizer,0.2*resizer)
+	-- hero:setSequence("running")
+	hero = getMonster()
 	hero:play()
 
 	-- Hero Attributes
