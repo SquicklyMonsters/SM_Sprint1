@@ -47,21 +47,27 @@ function closeClickEvent(event)
 end
 
 function allTabClickEvent(event)
-	if event.phase == "ended" then
-		updateInventory("all")
-	end
+    if event.phase == "ended" then
+        if tab ~= "all" then
+            updateInventory("all")
+        end
+    end
 end
 
 function foodTabClickEvent(event)
-	if event.phase == "ended" then
-		updateInventory("food")
-	end
+    if event.phase == "ended" then
+        if tab ~= "food" then
+            updateInventory("food")
+        end
+    end
 end
 
 function toyTabClickEvent(event)
-	if event.phase == "ended" then
-		updateInventory("toy")
-	end
+    if event.phase == "ended" then
+        if tab ~= "toy" then
+            updateInventory("toy")
+        end
+    end
 end
 -- -------------------------------------------------------------------------------
 
