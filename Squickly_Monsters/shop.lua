@@ -65,7 +65,6 @@ function widget.newPanel(options)
     -- print(background.width, background.height, display.contentWidth, display.contentHeight)
     background:scale(options.width/background.width, options.height/background.height )
     container:insert(background)
-    print(display.contentWidth, background.width)
     container.x = display.contentCenterX
     container.y = display.contentCenterY
     return container
