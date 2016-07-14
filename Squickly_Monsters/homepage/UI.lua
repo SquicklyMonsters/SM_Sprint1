@@ -7,6 +7,8 @@ local composer = require( "composer" )
 -------------------------------------------------------------------------------
 -- Local variables go HERE
 
+local resizer = display.contentHeight/320
+
 local feedIcon;
 local sleepIcon;
 local wakeupIcon;
@@ -51,7 +53,7 @@ local monsterText;
 
 -- -------------------------------------------------------------------------------
 -- Set up needs bar
-function setUpNeedsBar(fileName, fileIcon, left)
+function setUpNeedsBar(fileName, fileIcon, left,i)
     local options = {
         width = 100,
         height = 430,
@@ -74,15 +76,18 @@ function setUpNeedsBar(fileName, fileIcon, left)
             fillHeight = display.contentHeight/10,
 
             left = left,
-            top = display.contentHeight/50,
             width = display.contentWidth/7,
             isAnimated = true
         }
     )
-
-    icon = display.newImage(fileIcon, left, display.contentHeight/15)
-    scale = display.contentHeight/320
-    icon:scale(scale,scale)
+    if i then
+        bar.y = display.contentHeight/15
+        icon = display.newImage(fileIcon, left-(15*resizer), display.contentHeight/15)
+    else
+        bar.y = display.contentHeight/7
+        icon = display.newImage(fileIcon, left-(15*resizer), display.contentHeight/7)
+    end
+    icon:scale(resizer,resizer)
     return bar, icon
 end
 
@@ -102,17 +107,17 @@ end
 
 function setupAllNeedsBars()
     -- Starting x-axis and spacing between bars
-    local startX = display.contentWidth/20
-    local spacing = display.contentWidth/5
+    local startX = display.contentWidth/14.5
+    local spacing = display.contentWidth/5.1
     local barsDir = "img/bars/"
     -- TODO: Update Bar files
     needsBars = {}
     needsIcons = {}
-    needsBars.hunger, needsIcons.hunger = setUpNeedsBar(barsDir .. "HUNGER_BAR.png", barsDir .. "HUNGER_ICON.png", startX)
-    needsBars.happiness, needsIcons.happiness = setUpNeedsBar(barsDir .. "HAPPINESS_BAR.png", barsDir .. "HAPPINESS_ICON.png", startX + spacing)
-    needsBars.hygiene, needsIcons.hygiene = setUpNeedsBar(barsDir .. "HYGIENE_BAR.png", barsDir .. "HYGIENE_ICON.png", startX + spacing*2)
-    needsBars.energy, needsIcons.energy = setUpNeedsBar(barsDir .. "ENERGY_BAR.png", barsDir .. "ENERGY_ICON.png", startX + spacing*3)
-    needsBars.exp, needsIcons.exp = setUpNeedsBar(barsDir .. "EXP_BAR.png", barsDir .. "EXP_ICON.png", startX + spacing*4)
+    needsBars.hunger, needsIcons.hunger = setUpNeedsBar(barsDir .. "HUNGER_BAR.png", barsDir .. "HUNGER_ICON.png", startX,true)
+    needsBars.happiness, needsIcons.happiness = setUpNeedsBar(barsDir .. "HAPPINESS_BAR.png", barsDir .. "HAPPINESS_ICON.png", startX + spacing,false)
+    needsBars.hygiene, needsIcons.hygiene = setUpNeedsBar(barsDir .. "HYGIENE_BAR.png", barsDir .. "HYGIENE_ICON.png", startX + spacing*2,true)
+    needsBars.energy, needsIcons.energy = setUpNeedsBar(barsDir .. "ENERGY_BAR.png", barsDir .. "ENERGY_ICON.png", startX + spacing*3,false)
+    needsBars.exp, needsIcons.exp = setUpNeedsBar(barsDir .. "EXP_BAR.png", barsDir .. "EXP_ICON.png", startX + spacing*4,true)
 
     -- Load data from save
     needsLevels = getNeedsLevels()
@@ -130,34 +135,34 @@ end
 -- Setup All Icons Here
 
 function setUpAllIcons()
-    local resizer = display.contentHeight/320
-
     local iconsDir = "img/icons/UIIcons/"
-    feedIcon = setUpIcon(iconsDir .. "feedIcon.png", 0.4*resizer)
-    sleepIcon = setUpIcon(iconsDir .. "sleepIcon.png", 0.5*resizer)
-    wakeupIcon = setUpIcon(iconsDir .. "wakeupIcon.png", 0.75*resizer)
-    cleanIcon = setUpIcon(iconsDir .. "cleanIcon.png", 0.4*resizer)
-    playIcon = setUpIcon(iconsDir .. "playIcon.png", 0.4*resizer)
-    mostRecentFoodIcon1 = setUpIcon(iconsDir .. "blank.png", 0.4*resizer)
-    mostRecentFoodIcon2 = setUpIcon(iconsDir .. "blank.png", 0.4*resizer)
-    moreFoodIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.7*resizer)
-    shopIcon = setUpIcon(iconsDir .. "shopIcon.png", 0.4*resizer)
-    mostRecentPlayIcon1 = setUpIcon(iconsDir .. "blank.png", 0.4*resizer)
-    mostRecentPlayIcon2 = setUpIcon(iconsDir .. "blank.png", 0.4*resizer)
-    morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 0.7*resizer)
+    feedIcon = setUpIcon(iconsDir .. "feedIcon.png", 1*resizer)
+    sleepIcon = setUpIcon(iconsDir .. "sleepIcon.png", 1*resizer)
+    wakeupIcon = setUpIcon(iconsDir .. "wakeupIcon.png", 1*resizer)
+    cleanIcon = setUpIcon(iconsDir .. "cleanIcon.png", 1*resizer)
+    playIcon = setUpIcon(iconsDir .. "playIcon.png", 1*resizer)
+    mostRecentFoodIcon1 = setUpIcon(iconsDir .. "blank.png", 1*resizer)
+    mostRecentFoodIcon2 = setUpIcon(iconsDir .. "blank.png", 1*resizer)
+    moreFoodIcon = setUpIcon(iconsDir .. "optionsIcon.png", 1*resizer)
+    shopIcon = setUpIcon(iconsDir .. "shopIcon.png", 1*resizer)
+    mostRecentPlayIcon1 = setUpIcon(iconsDir .. "blank.png", 1*resizer)
+    mostRecentPlayIcon2 = setUpIcon(iconsDir .. "blank.png", 1*resizer)
+    morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 1*resizer)
 
-    inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 1.2*resizer, display.contentWidth*0.06, display.contentHeight*0.84, 1)
+    inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 1*resizer, display.contentWidth/15, display.contentHeight*0.85, 1)
 
-    dailyRewardTrueIcon = setUpIcon(iconsDir .. "RewardTrue.png", 1*resizer, display.contentWidth*0.06, display.contentHeight*.6, 0)
-    dailyRewardFalseIcon = setUpIcon(iconsDir .. "RewardFalse.png", 0.8*resizer, display.contentWidth*0.06, display.contentHeight*.6, 1)
+    dailyRewardTrueIcon = setUpIcon(iconsDir .. "RewardTrue.png", 1*resizer, display.contentWidth/15, display.contentHeight*0.65, 0)
+    dailyRewardFalseIcon = setUpIcon(iconsDir .. "RewardFalse.png", 1*resizer, display.contentWidth/15, display.contentHeight*0.65, 1)
 
-    hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 0.75*resizer, getMonster().x + 60*resizer, getMonster().y - 20*resizer)
-    tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 0.75*resizer, getMonster().x - 35*resizer, getMonster().y - 20*resizer)
+    hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 1*resizer, getMonster().x + 60*resizer, getMonster().y - 20*resizer)
+    tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 1*resizer, getMonster().x - 35*resizer, getMonster().y - 20*resizer)
     thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
 
-    invenList, foodRecentList, playRecentList, itemQuantities, gold, platinum = getInventoryData()
-    -- updateFoodIcons()
-    -- updatePlayIcons()
+    invenList, itemQuantities, gold, platinum = getInventoryData()
+    foodRecentList, playRecentList = getRecentList()
+
+    updateFoodIcons()
+    updatePlayIcons()
 end
 
 function setUpIcon(img, scale, x, y, alpha)
@@ -176,7 +181,7 @@ end
 function setUpMonsterLevel()
     levelsTextOptions = {
         text = getMonsterLevel(),
-        x = 17*display.contentWidth/20,
+        x = 16.5*display.contentWidth/20,
         y = display.contentHeight/14,
         font = native.systemFontBold,
         fontSize = 18*display.contentHeight/320,
@@ -246,35 +251,35 @@ function isInMostRecentPlay(name)
     return false
 end
 
--- function updateFoodIcons()
---     if (foodRecentList[1] ~= nil) then
---         mostRecentFoodIcon1 = setUpIcon(itemList[foodRecentList[1]].image, 0.75)
---     else
---         mostRecentFoodIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
---     end
---
---     if (foodRecentList[2] ~= nil) then
---         mostRecentFoodIcon2 = setUpIcon(itemList[foodRecentList[2]].image, 0.75)
---     else
---         mostRecentFoodIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
---     end
---     updateFoodList(foodRecentList,mostRecentFoodIcon1,mostRecentFoodIcon2)
--- end
+function updateFoodIcons()
+    if (foodRecentList[1] ~= nil) then
+        mostRecentFoodIcon1 = setUpIcon(itemList[foodRecentList[1]].image, 1*resizer)
+    else
+        mostRecentFoodIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 1*resizer)
+    end
 
--- function updatePlayIcons()
---     if (playRecentList[1] ~= nil) then
---         mostRecentPlayIcon1 = setUpIcon(itemList[playRecentList[1]].image, 0.75)
---     else
---         mostRecentPlayIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
---     end
---
---     if (playRecentList[2] ~= nil) then
---         mostRecentPlayIcon2 = setUpIcon(itemList[playRecentList[2]].image, 0.75)
---     else
---         mostRecentPlayIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 0.47)
---     end
---     updatePlayList(playRecentList,mostRecentPlayIcon1,mostRecentPlayIcon2)
--- end
+    if (foodRecentList[2] ~= nil) then
+        mostRecentFoodIcon2 = setUpIcon(itemList[foodRecentList[2]].image, 1*resizer)
+    else
+        mostRecentFoodIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 1*resizer)
+    end
+    updateFoodList(foodRecentList,mostRecentFoodIcon1,mostRecentFoodIcon2)
+end
+
+function updatePlayIcons()
+    if (playRecentList[1] ~= nil) then
+        mostRecentPlayIcon1 = setUpIcon(itemList[playRecentList[1]].image, 1*resizer)
+    else
+        mostRecentPlayIcon1 = setUpIcon("img/icons/UIIcons/blank.png", 1*resizer)
+    end
+
+    if (playRecentList[2] ~= nil) then
+        mostRecentPlayIcon2 = setUpIcon(itemList[playRecentList[2]].image, 1*resizer)
+    else
+        mostRecentPlayIcon2 = setUpIcon("img/icons/UIIcons/blank.png", 1*resizer)
+    end
+    updatePlayList(playRecentList,mostRecentPlayIcon1,mostRecentPlayIcon2)
+end
 
 function updateMostRecentFood(latest_food)
     -- Remove current from recent list first

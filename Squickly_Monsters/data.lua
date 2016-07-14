@@ -4,18 +4,20 @@ local json = require("json")
 -- Local variables go HERE
 
 local invenList;
-local foodRecentList;
-local playRecentList;
 local itemQuantities;
 local gold;
 local platinum;
 local maxSize = 9;
 
+local foodRecentList;
+local playRecentList;
+
 local needsLevels;
 local maxNeedsLevels;
 
-local monsterName;
 local monsterLevel;
+local monsterImageAttr;
+local monsterStates;
 
 local hungerRate = -50;
 local happinessRate = -50;
@@ -60,7 +62,8 @@ function saveData()
     	},
     -- Monster
     monsterLevel,
-    monsterName,
+    monsterImageAttr,
+    monsterStates,
     -- Daily Rewards
     receiveDate,
 	}
@@ -121,9 +124,10 @@ function loadData()
 
         local monIdx = 9
         monsterLevel = inTable[monIdx]
-        monsterName = inTable[monIdx + 1]
+        monsterImageAttr = inTable[monIdx + 1]
+        monsterStates = inTable[monIdx + 2]
 
-        local rewIdx = 11
+        local rewIdx = 12
         receiveDate = inTable[rewIdx]
 
     else
@@ -151,7 +155,13 @@ function loadData()
         }
 
         monsterLevel = 1
-        monsterName = "fireball"
+        monsterImageAttr = {"fireball.png",2421,4633,8,10,80}
+        monsterStates = {
+            {"normal",1,32,200*32,0,"forward"},
+            {"sad",33,16,200*16,0,"forward"},
+            {"sleep",49,16,200*16,0,"forward"},
+            {"eat",65,16,200*16,0,"forward"},
+        }
 
         receiveDate = nil
 
@@ -213,7 +223,7 @@ end
 -- -------------------------------------------------------------------------------
 -- Inventory Data
 function getInventoryData()
-	return invenList, foodRecentList, playRecentList, itemQuantities, gold, platinum
+	return invenList, itemQuantities, gold, platinum
 end
 
 function getGold()
@@ -232,7 +242,7 @@ function getItemQuantities()
 	return itemQuantities
 end
 
--- --------------------------------
+-- --
 
 function setGold(in_gold)
     gold = in_gold
@@ -272,10 +282,16 @@ function getExpLevel()
     return needsLevels.exp
 end
 
--- --------------------------------
+-- --
 
 function setNeedsLevels(level)
     needsLevels = level
+end
+
+-- UI
+
+function getRecentList()
+    return foodRecentList, playRecentList
 end
 
 -- Monster
@@ -284,11 +300,15 @@ function getMonsterLevel()
 	return monsterLevel
 end
 
-function getMonsterName()
-	return monsterName
+function getMonsterImageAttr()
+    return monsterImageAttr
 end
 
--- --------------------------------
+function getMonsterStates()
+    return monsterStates
+end
+
+-- --
 
 function setMonsterLevel(level)
     monsterLevel = level
@@ -318,7 +338,7 @@ function getReceiveDate()
     return receiveDate
 end
 
--- --------------------------------
+-- --
 
 function setReceiveDate(date)
     receiveDate = date

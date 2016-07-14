@@ -61,38 +61,40 @@ end
 function widget.newPanel(options)
     local background = display.newImage(options.imageDir)
     local container = display.newContainer(options.width, options.height)
-    container:insert(background, true)
+
+    -- print(background.width, background.height, display.contentWidth, display.contentHeight)
+    background:scale(options.width/background.width, options.height/background.height )
+    container:insert(background)
+    print(display.contentWidth, background.width)
     container.x = display.contentCenterX
     container.y = display.contentCenterY
     return container
 end
 
 function setUpShop()
-    local inventory = widget.newPanel {
-        width = 820,
-        height = 400,
+    local shop = widget.newPanel {
+        width = 749,
+        height = 374,
         imageDir = "img/bg/shoplist.png"
     }
-    inventory:scale(2.,1.5)
-    inventory.x = display.contentCenterX + (display.contentWidth/30)
 
-    local startX = -inventory.width*(1/2.45)
-    local startY = -inventory.height*(1/3)
+    local startX = -shop.width*(1/2.5)
+    local startY = -shop.height*(1/3)
 
     local cols = 6
-    local spacingX = (inventory.width)/7.5
-    local spacingY = (inventory.height)/3.75
+    local spacingX = (shop.width)/6.8
+    local spacingY = (shop.height)/3.75
 
     local itemList = getItemList()
 
-    inventory.items = {}
+    shop.items = {}
 
-    for i = 1, #itemList do --loops to create each item on inventory
+    for i = 1, #itemList do --loops to create each item on shop
         local x = startX + (spacingX * ((i-1) - math.floor((i-1)/cols)*cols))
         local y = startY + (spacingY * (math.floor((i-1) / cols)))
         local item = itemList[itemList[i]]
 
-        inventory.items[i] = widget.newButton {
+        shop.items[i] = widget.newButton {
             top = y, -- division of row
             left = x, -- modulo of row
             width = 50,
@@ -101,8 +103,8 @@ function setUpShop()
             onEvent = itemClickedEvent,
         }
 
-        inventory.items[i].item = item
-        inventory.items[i].idx = i
+        shop.items[i].item = item
+        shop.items[i].idx = i
 
         local textOptions = {
             text = item.gold,
@@ -126,14 +128,14 @@ function setUpShop()
         local textPlatinum = display.newText(textOptions)
         textPlatinum:setFillColor( 229/255, 228/255, 226/255 )
 
-        inventory:insert(inventory.items[i])
-        inventory:insert(textGold)
-        inventory:insert(textPlatinum)
+        shop:insert(shop.items[i])
+        shop:insert(textGold)
+        shop:insert(textPlatinum)
     end
 
-    inventory:scale(
-                (display.contentWidth/inventory.width)*0.4,
-                (display.contentHeight/inventory.height)*0.5
+    shop:scale(
+                (display.contentWidth/shop.width)*0.8,
+                (display.contentHeight/shop.height)*0.8
                 )
 
     -- text area to show how much GOLD you have
@@ -156,13 +158,13 @@ function setUpShop()
 
     goldText = display.newText(GoldOptions)
     goldText:setFillColor( 255/255, 223/255, 0 )
-    inventory:insert(goldText)
+    shop:insert(goldText)
 
     platinumText = display.newText(PlatinumOptions)
     platinumText:setFillColor( 229/255, 228/255, 226/255 )
-    inventory:insert(platinumText)
+    shop:insert(platinumText)
 
-    return inventory
+    return shop
 end
 
 -- -------------------------------------------------------------------------------
@@ -171,9 +173,6 @@ end
 
 function scene:create( event )
 	local sceneGroup = self.view
-
-    -- Retrieve inventory data from save file
-    -- itemList, foodRecentList, playRecentList, itemQuantities, gold, platinum = setUpInventoryData()
 
     -- Setup layer
     back = display.newGroup()

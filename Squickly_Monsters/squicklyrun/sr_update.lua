@@ -1,6 +1,7 @@
 require('squicklyrun.sr_interactions')
 require('squicklyrun.sr_background')
 require('squicklyrun.sr_collisions')
+local resizer = display.contentHeight/320;
 
 
 function update( event )
@@ -26,13 +27,13 @@ function updateBackgrounds()
 
     --near background movement
     backgroundnear1.x = backgroundnear1.x - (speed/5)
-    if(backgroundnear1.x < -239) then
-        backgroundnear1.x = 760
+    if(backgroundnear1.x < -239*resizer) then
+        backgroundnear1.x = 760*resizer
     end
 
     backgroundnear2.x = backgroundnear2.x - (speed/5)
-    if(backgroundnear2.x < -239) then
-        backgroundnear2.x = 760
+    if(backgroundnear2.x < -239*resizer) then
+        backgroundnear2.x = 760*resizer
     end
 end
 
@@ -84,19 +85,21 @@ function updateBlasts()
         if(blasts[a].isAlive == true) then
             (blasts[a]):translate(5, 0)
             --if the blast has moved off of the screen, then kill it and return it to its original place
-            if(blasts[a].x > 550) then
-                blasts[a].x = 800
-                blasts[a].y = 500
+            if(blasts[a].x > 550*resizer) then
+                blasts[a].x = 800*resizer
+                blasts[a].y = 500*resizer
                 blasts[a].isAlive = false
+                blasts[a].alpha = 0
             end
         end
         --check for collisions with the boss
         boss = getBoss()
         if(boss.isAlive == true) then
-            if(blasts[a].y - 25 > boss.y - 120 and blasts[a].y + 25 < boss.y + 120 and boss.x - 40 < blasts[a].x + 25 and boss.x + 40 > blasts[a].x - 25) then
-                blasts[a].x = 800
-                blasts[a].y = 500
+            if(blasts[a].y - 25*resizer > boss.y - 120*resizer and blasts[a].y + 25*resizer < boss.y + 120*resizer and boss.x - 40*resizer < blasts[a].x + 25*resizer and boss.x + 40*resizer > blasts[a].x - 25*resizer) then
+                blasts[a].x = 800*resizer
+                blasts[a].y = 500*resizer
                 blasts[a].isAlive = false
+                blasts[a].alpha = 0
                 --everything is the same only 1 hit will not kill the boss so just take a little health away
                 boss.health = boss.health - 1
             end
@@ -105,13 +108,15 @@ function updateBlasts()
         bossSpits=getBossSpits()
         for b = 1, bossSpits.numChildren, 1 do
             if(bossSpits[b].isAlive == true) then
-                if(blasts[a].y - 20 > bossSpits[b].y - 120 and blasts[a].y + 20 < bossSpits[b].y + 120 and bossSpits[b].x - 25 < blasts[a].x + 20 and bossSpits[b].x + 25 > blasts[a].x - 20) then
-                    blasts[a].x = 800
-                    blasts[a].y = 500
+                if(blasts[a].y - 20*resizer > bossSpits[b].y - 120*resizer and blasts[a].y + 20*resizer < bossSpits[b].y + 120*resizer and bossSpits[b].x - 25*resizer < blasts[a].x + 20*resizer and bossSpits[b].x + 25*resizer > blasts[a].x - 20*resizer) then
+                    blasts[a].x = 800*resizer
+                    blasts[a].y = 500*resizer
                     blasts[a].isAlive = false
-                    bossSpits[b].x = 400
-                    bossSpits[b].y = 550
+                    blasts[a].alpha = 0
+                    bossSpits[b].x = 400*resizer
+                    bossSpits[b].y = 550*resizer
                     bossSpits[b].isAlive = false
+                    bossSpits[b].alpha = 0
                     bossSpits[b].speed = 0
                 end
             end
@@ -120,13 +125,15 @@ function updateBlasts()
         spikes = getSpikes()
         for b = 1, spikes.numChildren, 1 do
             if(spikes[b].isAlive == true) then
-                if(blasts[a].y - 25 > spikes[b].y - 120 and blasts[a].y + 25 < spikes[b].y + 120 and spikes[b].x - 40 < blasts[a].x + 25 and spikes[b].x + 40 > blasts[a].x - 25) then
-                    blasts[a].x = 800
-                    blasts[a].y = 500
+                if(blasts[a].y - 25*resizer > spikes[b].y - 120*resizer and blasts[a].y + 25*resizer < spikes[b].y + 120*resizer and spikes[b].x - 40*resizer < blasts[a].x + 25*resizer and spikes[b].x + 40*resizer > blasts[a].x - 25*resizer) then
+                    blasts[a].x = 800*resizer
+                    blasts[a].y = 500*resizer
                     blasts[a].isAlive = false
-                    spikes[b].x = 900
-                    spikes[b].y = 500
+                    blasts[a].alpha = 0
+                    spikes[b].x = 900*resizer
+                    spikes[b].y = 500*resizer
                     spikes[b].isAlive = false
+                    spikes[b].alpha = 0
                 end
             end
         end
@@ -135,13 +142,15 @@ function updateBlasts()
         ghosts = getGhosts()
         for b = 1, ghosts.numChildren, 1 do
             if(ghosts[b].isAlive == true) then
-                if(blasts[a].y - 25 > ghosts[b].y - 120 and blasts[a].y + 25 < ghosts[b].y + 120 and ghosts[b].x - 40 < blasts[a].x + 25 and ghosts[b].x + 40 > blasts[a].x - 25) then
-                    blasts[a].x = 800
-                    blasts[a].y = 500
+                if(blasts[a].y - 25*resizer > ghosts[b].y - 120*resizer and blasts[a].y + 25*resizer < ghosts[b].y + 120*resizer and ghosts[b].x - 40*resizer < blasts[a].x + 25*resizer and ghosts[b].x + 40*resizer > blasts[a].x - 25*resizer) then
+                    blasts[a].x = 800*resizer
+                    blasts[a].y = 500*resizer
                     blasts[a].isAlive = false
-                    ghosts[b].x = 800
-                    ghosts[b].y = 600
+                    blasts[a].alpha = 0
+                    ghosts[b].x = 800*resizer
+                    ghosts[b].y = 600*resizer
                     ghosts[b].isAlive = false
+                    ghosts[b].alpha = 0
                     ghosts[b].speed = 0
                 end
             end
@@ -155,10 +164,11 @@ function updateSpikes()
     for a = 1, spikes.numChildren, 1 do
         if(spikes[a].isAlive == true) then
             (spikes[a]):translate(speed * -1, 0)
-            if(spikes[a].x < -80) then
-                spikes[a].x = 900
-                spikes[a].y = 500
+            if(spikes[a].x < -80*resizer) then
+                spikes[a].x = 900*resizer
+                spikes[a].y = 500*resizer
                 spikes[a].isAlive = false
+                spikes[a].alpha = 0
             end
         end
     end
@@ -168,18 +178,19 @@ end
 function updateGhosts()
     for a = 1, ghosts.numChildren, 1 do
         if(ghosts[a].isAlive == true) then
-            (ghosts[a]):translate(speed * -1, 0)
+            (ghosts[a]):translate(speed * -1*resizer, 0)
             if(ghosts[a].y > hero.y) then
-                ghosts[a].y = ghosts[a].y - 1
+                ghosts[a].y = ghosts[a].y - 1*resizer
             end
             if(ghosts[a].y < hero.y) then
-                ghosts[a].y = ghosts[a].y + 1
+                ghosts[a].y = ghosts[a].y + 1*resizer
             end
-            if(ghosts[a].x < -80) then
-                ghosts[a].x = 800
-                ghosts[a].y = 600
+            if(ghosts[a].x < -80*resizer) then
+                ghosts[a].x = 800*resizer
+                ghosts[a].y = 600*resizer
                 ghosts[a].speed = 0
                 ghosts[a].isAlive = false;
+                ghosts[a].alpha = 0
             end
         end
     end
@@ -189,16 +200,16 @@ function updateBoss()
     --check to make sure that the boss hasn't been killed
     if(boss.health > 0) then
         --check to see if the boss needs to change direction
-        if(boss.y > 210) then
+        if(boss.y > 210*resizer) then
             boss.goingDown = false
         end
-        if(boss.y < 100) then
+        if(boss.y < 100*resizer) then
             boss.goingDown = true
         end
         if(boss.goingDown) then
-            boss.y = boss.y + 2
+            boss.y = boss.y + 2*resizer
         else
-            boss.y = boss.y - 2
+            boss.y = boss.y - 2*resizer
         end
     else
         --if the boss has been killed make him slowly disappear
@@ -208,8 +219,9 @@ function updateBoss()
     --kill him off and reset him back to where he was
     if(boss.alpha <= 0) then
         boss.isAlive = false
-        boss.x = 300
-        boss.y = 550
+        boss.alpha = 0
+        boss.x = 300*resizer
+        boss.y = 550*resizer
         boss.alpha = 1
         boss.health = 10
         inEvent = 0
@@ -222,16 +234,17 @@ function updateBossSpit()
         if(bossSpits[a].isAlive) then
             (bossSpits[a]):translate(speed * -1, 0)
             if(bossSpits[a].y > hero.y) then
-                bossSpits[a].y = bossSpits[a].y - 1
+                bossSpits[a].y = bossSpits[a].y - 1*resizer
             end
             if(bossSpits[a].y < hero.y) then
-                bossSpits[a].y = bossSpits[a].y + 1
+                bossSpits[a].y = bossSpits[a].y + 1*resizer
             end
-            if(bossSpits[a].x < -80) then
-                bossSpits[a].x = 400
-                bossSpits[a].y = 550
+            if(bossSpits[a].x < -80*resizer) then
+                bossSpits[a].x = 400*resizer
+                bossSpits[a].y = 550*resizer
                 bossSpits[a].speed = 0
                 bossSpits[a].isAlive = false;
+                bossSpits[a].alpha = 0
             end
         end
     end
