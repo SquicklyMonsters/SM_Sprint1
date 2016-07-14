@@ -13,15 +13,19 @@ local sleepIcon;
 local wakeupIcon;
 local cleanIcon;
 local playIcon;
+
 local foodRecentList;
 local mostRecentFoodIcon1;
 local mostRecentFoodIcon2;
 local moreFoodIcon;
-local shopIcon;
+local foodShopIcon;
+
 local playRecentList;
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
 local morePlayIcon;
+local toyShopIcon;
+
 local inventoryIcon;
 local dailyRewardTrueIcon;
 local dailyRewardFalseIcon;
@@ -140,13 +144,16 @@ function setUpAllIcons()
     wakeupIcon = setUpIcon(iconsDir .. "wakeupIcon.png", 1*resizer)
     cleanIcon = setUpIcon(iconsDir .. "cleanIcon.png", 1*resizer)
     playIcon = setUpIcon(iconsDir .. "playIcon.png", 1*resizer)
+
     mostRecentFoodIcon1 = setUpIcon(iconsDir .. "blank.png", 1*resizer)
     mostRecentFoodIcon2 = setUpIcon(iconsDir .. "blank.png", 1*resizer)
     moreFoodIcon = setUpIcon(iconsDir .. "optionsIcon.png", 1*resizer)
-    shopIcon = setUpIcon(iconsDir .. "shopIcon.png", 1*resizer)
+    foodShopIcon = setUpIcon(iconsDir .. "shopIcon.png", 1*resizer)
+
     mostRecentPlayIcon1 = setUpIcon(iconsDir .. "blank.png", 1*resizer)
     mostRecentPlayIcon2 = setUpIcon(iconsDir .. "blank.png", 1*resizer)
     morePlayIcon = setUpIcon(iconsDir .. "optionsIcon.png", 1*resizer)
+    toyShopIcon =setUpIcon(iconsDir .. "shopIcon.png", 1*resizer)
 
     inventoryIcon  = setUpIcon(iconsDir .. "inventoryIcon.png", 1*resizer, display.contentWidth/15, display.contentHeight*0.85, 1)
 
@@ -514,8 +521,8 @@ function getMoreFoodIcon()
     return moreFoodIcon
 end
 
-function getShopIcon()
-    return shopIcon
+function getFoodShopIcon()
+    return foodShopIcon
 end
 
 function getMostRecentPlayIcon1()
@@ -532,6 +539,10 @@ end
 
 function getMorePlayIcon()
     return morePlayIcon
+end
+
+function getToyShopIcon()
+    return toyShopIcon
 end
 
 function getInventoryIcon()

@@ -210,7 +210,7 @@ function setUpInventory()
 
     local goldText = display.newText(GoldOptions)
     local platinumText = display.newText(PlatinumOptions)
-    
+
     goldText:setFillColor( 255/255, 223/255, 0 )
     platinumText:setFillColor( 229/255, 228/255, 226/255 )
 
@@ -241,6 +241,7 @@ end
 
 -- Called when the scene's view does not exist:
 function scene:create( event )
+	-- print("i am inv")
 	local sceneGroup = self.view
 	local params = event.params
 	tab = params.tab
