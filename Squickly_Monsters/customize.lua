@@ -18,6 +18,7 @@ local middle;
 local front;
 
 local monster;
+local monsterName;
 local mint;
 local strawberry;
 local banana;
@@ -68,7 +69,8 @@ function scene:show( event )
 
 	if phase == "will" then
         --Set Monster Loc
-        setUpMonster(getMonsterName())
+        monsterName = getMonsterName()
+        setUpMonster(monsterName)
         monster = getMonster()
         setMonsterLocation(100,20)
         
@@ -81,6 +83,7 @@ function scene:show( event )
         middle:insert(strawberry)
         middle:insert(banana)
         -- ===========FRONT===============
+        updateAllMonsterDescriptions(monsterName)
         if evolveIcon~=nil then
             front:insert(evolveIcon)
         end

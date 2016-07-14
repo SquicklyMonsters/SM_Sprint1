@@ -17,6 +17,7 @@ local nextMonsterDesc;
 local curr_monster;
 local evo_animation;
 local evolveBackgroud;
+local evolveDescription;
 
 local evo1;
 local evo2;
@@ -76,6 +77,7 @@ end
 function evolveSeq4(event)
 	evo3.alpha = 0
 	enableEvolveTouch()
+	evolveDescription.text = doneEvolution()
 end
 
 function evolveNow(event)
@@ -93,6 +95,10 @@ end
 
 function askEvolveConfirmation()
 	return "Are you sure you want to evolve\n"..currMonsterDesc[1].." to "..nextMonsterDesc[1].."?"
+end
+
+function doneEvolution()
+	return "Congratulations on your new\n"..currMonsterDesc[1].."!!!"
 end
 
 -- -------------------------------------------------------------------------------
@@ -212,7 +218,7 @@ function setUpEvolveBackground()
 	    align = "left",
     }
 
-    local evolveDescription = display.newText(evolveDescriptionOptions)
+    evolveDescription = display.newText(evolveDescriptionOptions)
 
     evolveDescription:setFillColor( 229/255, 228/255, 226/255 )
     evolveBackgroud:insert(evolveDescription)
