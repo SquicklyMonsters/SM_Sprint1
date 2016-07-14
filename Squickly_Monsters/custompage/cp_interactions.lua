@@ -38,7 +38,7 @@ function updateAllMonsterDescriptions(monsterName)
     local displayTable = getMonsterDescription(monsterName)
     DisplayName, Height, Weight, Description, levelToEvolve, nextEvolution = displayTable[1],displayTable[2],displayTable[3],displayTable[4],displayTable[5],displayTable[6]
     evolveIcon = displayEvolveIcon(levelToEvolve, nextEvolution)
-    name_display.text = DisplayName
+    name_display.text = "Name: "..DisplayName
     HW_display.text = "H: "..Height.."cm, W: "..Weight.."kg"
     disc_display.text = Description
 
