@@ -22,6 +22,10 @@ local isTouchAble;
 
 -- -------------------------------------------------------------------------------
 
+function isTouchAbleFunc()
+    return isTouchAble
+end
+
 function enableEvolveTouch()
     isTouchAble = true
 end
@@ -72,7 +76,7 @@ function displayEvolveIcon(levelToEvolve, nextEvolution)
     if nextEvolution ~= nil then
         if getMonsterLevel() >= levelToEvolve then
             local iconFile
-            if string.starts(nextEvolution, "egg") then
+            if string.starts(getMonsterName(), "egg") then
                 iconFile = "img/icons/UIIcons/hatchEggIcon.png"
             else
                 iconFile = "img/icons/UIIcons/evolveNow.png"
@@ -91,12 +95,10 @@ function evolveButtonClicked(event)
                 composer.gotoScene(composer.getSceneName("current"))
                 evolveIsShow = false
             else
-                disableEvolveTouch()
                 composer.showOverlay("custompage.cp_evolve")
                 evolveIsShow = true
             end
         end
-        timer.performWithDelay(500, enableEvolveTouch)
     end
 end
 

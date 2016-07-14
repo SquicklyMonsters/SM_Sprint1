@@ -49,6 +49,7 @@ function scene:create( event )
 
     -- Display Monster Descriptions
     evolveIcon, name_display, HW_display, disc_display = displayAllMonsterDescriptions(getMonsterName())
+    enableEvolveTouch()
 
     addListeners()
 

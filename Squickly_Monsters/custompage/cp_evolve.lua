@@ -76,17 +76,20 @@ end
 
 function evolveSeq4(event)
 	evo3.alpha = 0
-	enableEvolveTouch()
 	evolveDescription.text = doneEvolution()
+	timer.performWithDelay( 4000, closeClickEvent ) -- auto close after evolve
+	timer.performWithDelay( 5000, enableEvolveTouch ) 
 end
 
 function evolveNow(event)
-	if event.phase == "ended" then
-		disableEvolveTouch()
-		timer.performWithDelay( 2000, evolveSeq1 )
-		timer.performWithDelay( 6000, evolveSeq2 )
-		timer.performWithDelay( 10000, evolveSeq3 )
-		timer.performWithDelay( 14000, evolveSeq4 )
+	if isTouchAbleFunc() then
+		if event.phase == "ended" then
+			disableEvolveTouch()
+			timer.performWithDelay( 2000, evolveSeq1 )
+			timer.performWithDelay( 6000, evolveSeq2 )
+			timer.performWithDelay( 10000, evolveSeq3 )
+			timer.performWithDelay( 14000, evolveSeq4 )
+		end
 	end
 end
 
@@ -94,7 +97,13 @@ end
 -- Update Text Here
 
 function askEvolveConfirmation()
-	return "Are you sure you want to evolve\n"..currMonsterDesc[1].." to "..nextMonsterDesc[1].."?"
+	local toEvolveTo
+	if string.starts(currMonsterName, "egg") then
+        toEvolveTo = "<MYSTERY>"
+    else
+        toEvolveTo = nextMonsterDesc[1]
+    end
+	return "Are you sure you want to evolve\n"..currMonsterDesc[1].." to "..toEvolveTo.."?"
 end
 
 function doneEvolution()

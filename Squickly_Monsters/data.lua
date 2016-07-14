@@ -152,7 +152,7 @@ function loadData()
         }
 
         monsterLevel = 1
-        monsterName = "cat"
+        monsterName = "egg_electric"
         receiveDate = nil
 
     end
