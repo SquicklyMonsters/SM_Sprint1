@@ -9,7 +9,33 @@ require("data")
 -- Local variables go HERE
 local resizer = display.contentHeight/320
 
+local currMonsterName;
+local nextMonsterName;
+local currMonsterDesc;
+local nextMonsterDesc;
+
+local curr_monster;
+local evo_animation;
 local evolveBackgroud;
+
+local evo1;
+local evo2;
+local evo3;
+
+-- -------------------------------------------------------------------------------
+-- Caching Monster Desc
+
+function cacheMonsterInfo()
+	currMonsterName = getMonsterName()
+	currMonsterDesc = getMonsterDescription(currMonsterName)
+	nextMonsterName = currMonsterDesc[6]
+	nextMonsterDesc = getMonsterDescription(nextMonsterName)
+
+	curr_monster = getMonster()
+	curr_monster.alpha = 0
+    setMonsterLocation(0,-30)
+end
+
 -- -------------------------------------------------------------------------------
 -- Set all Event listeners HERE
 
@@ -19,15 +45,53 @@ function closeClickEvent(event)
 	end
 end
 
-function evolveNow()
-	
+function evolveSeq1(event)
+	evo1.alpha = 1
+	evo1:play()
+	transition.fadeOut( curr_monster, { time=4000 } )
+end
+
+function evolveSeq2(event)
+	evo1.alpha = 0
+	evo2.alpha = 1
+	evo2:play()
+
+	-- Set New Monster
+	setMonsterName(nextMonsterName)
+	setUpMonster(nextMonsterName)
+	saveData()
+
+	--Update to Latest Data
+	cacheMonsterInfo()
+end
+
+function evolveSeq3(event)
+	evo2.alpha = 0
+	evo3.alpha = 1
+	evo3:play()
+
+	transition.fadeIn( curr_monster, { time=4000 } )
+end
+
+function evolveSeq4(event)
+	evo3.alpha = 0
+	enableEvolveTouch()
+end
+
+function evolveNow(event)
+	if event.phase == "ended" then
+		disableEvolveTouch()
+		timer.performWithDelay( 2000, evolveSeq1 )
+		timer.performWithDelay( 6000, evolveSeq2 )
+		timer.performWithDelay( 10000, evolveSeq3 )
+		timer.performWithDelay( 14000, evolveSeq4 )
+	end
 end
 
 -- -------------------------------------------------------------------------------
+-- Update Text Here
 
 function askEvolveConfirmation()
-	local currMonsterDesc = getMonsterDescription(getMonsterName())
-	local nextMonsterDesc = getMonsterDescription(currMonsterDesc[6])
 	return "Are you sure you want to evolve\n"..currMonsterDesc[1].." to "..nextMonsterDesc[1].."?"
 end
 
@@ -40,6 +104,67 @@ function widget.newPanel(options)
     container.x = display.contentCenterX
     container.y = display.contentCenterY
     return container
+end
+
+function setUpEvolveAnimation()
+    local options = {
+        width = 192,
+        height = 192,
+        numFrames = 50,
+    }
+    local imageSheet = graphics.newImageSheet("img/others/effects/water.png", options)
+    local sequenceData = {
+	    name="normal",
+	    start=1,
+	    count=50,
+	    time=75*50,
+	    loopCount = 1,  
+	    loopDirection = "forward",
+	}
+    evo1 = display.newSprite(imageSheet, sequenceData)
+    evo1:scale(1*resizer,1*resizer)
+    evo1.x,evo1.y = display.contentCenterX,display.contentCenterY-35*resizer
+    evo1.alpha = 0
+
+    local options = {
+        width = 192,
+        height = 192,
+        numFrames = 25,
+    }
+    local imageSheet2 = graphics.newImageSheet("img/others/effects/light.png", options)
+    local sequenceData = {
+	    name="normal",
+	    start=1,
+	    count=25,
+	    time=75*30,
+	    loopCount = 2,  
+	    loopDirection = "forward",
+	}
+    evo2 = display.newSprite(imageSheet2, sequenceData)
+    evo2:scale(1.5*resizer,1.5*resizer)
+    evo2.x,evo2.y = display.contentCenterX,display.contentCenterY-35*resizer
+    evo2.alpha = 0
+    
+    local options = {
+        width = 192,
+        height = 192,
+        numFrames = 20,
+    }
+    local imageSheet3 = graphics.newImageSheet("img/others/effects/heal.png", options)
+    local sequenceData = {
+	    name="normal",
+	    start=1,
+	    count=20,
+	    time=75*30,
+	    loopCount = 2,  
+	    loopDirection = "forward",
+	}
+    evo3 = display.newSprite(imageSheet3, sequenceData)
+    evo3:scale(1.5*resizer,1.5*resizer)
+    evo3.x,evo3.y = display.contentCenterX,display.contentCenterY-65*resizer
+    evo3.alpha = 0
+
+    return evo1,evo2,evo3
 end
 
 function setUpEvolveBackground()
@@ -99,11 +224,17 @@ end
 -- Called when the scene's view does not exist:
 function scene:create( event )
 	local sceneGroup = self.view
+	cacheMonsterInfo()
+
 	evolveBackgroud = setUpEvolveBackground()	
 	sceneGroup:insert(evolveBackgroud)
 
-	curr_monster = getMonster()
-    setMonsterLocation(0,-30)	
+ 	evo1,evo2,evo3 = setUpEvolveAnimation()
+ 	sceneGroup:insert(evo1)
+ 	sceneGroup:insert(evo2)
+ 	sceneGroup:insert(evo3)
+
+	curr_monster.alpha = 1
  	sceneGroup:insert(curr_monster)
 end
 

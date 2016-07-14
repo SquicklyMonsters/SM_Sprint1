@@ -95,5 +95,7 @@ end
 -- Add All Event Listeners Here
 
 function addListeners()
-    evolveIcon:addEventListener("touch", evolveButtonClicked)
+    if evolveIcon~=nil then
+        evolveIcon:addEventListener("touch", evolveButtonClicked)
+    end
 end

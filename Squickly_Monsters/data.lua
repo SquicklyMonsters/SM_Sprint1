@@ -300,6 +300,10 @@ function setMonsterLevel(level)
     monsterLevel = level
 end
 
+function setMonsterName(name)
+    monsterName = name
+end
+
 -- Need Rates
 
 function getHungerRate()

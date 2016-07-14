@@ -74,7 +74,7 @@ local monsterDescription = {
 	    "Pikachu", 87, 18.0, "Pika-Pika-Pikachuuuuu", nil, nil,
 	},
 	{ --cat
-	    "Ninja Cat", 101, 9.6, "Wax On, Wax Off, repeat", 3, "pikachu",
+	    "Ninja Cat", 101, 9.6, "Wax On, Wax Off, repeat", 1, "pikachu",
 	},
 	{ --egg_electric
 	    "Egg", 55, 8.8, "I wonder who's inside?", 2, "voltorb",
