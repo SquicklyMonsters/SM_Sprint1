@@ -4,6 +4,7 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 
 require("custompage.cp_background")
+require("custompage.cp_interactions")
 require("data")
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -22,6 +23,10 @@ local monster;
 -- local banana;
 -- local strawberry2;
 
+local evolveIcon;
+local HW_display;
+local disc_display;
+
 local cp_background;
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -37,8 +42,6 @@ function scene:create( event )
 	-- Set background
     setUpBackground()
     cp_background = getBackground()
-
-    
 
     -- mint = display.newImage("img/others/mint/dialog.png", display.contentCenterX-135*resizer, display.contentCenterY-115*resizer)
     -- mint:scale(0.3*resizer, 0.3*resizer )
@@ -58,26 +61,35 @@ function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
 
-    -- Get Latest Monster
-    monster = getMonster()
-    setMonsterLocation(100,20)
-    
-	 -- Add display objects into group
-    -- ============BACK===============
-    back:insert(cp_background)
-    -- ===========MIDDLE==============
-    middle:insert(monster)
-    -- middle:insert(mint)
-    -- middle:insert(strawberry)
-    -- middle:insert(banana)
-    -- middle:insert(strawberry2)
-    -- ===========FRONT===============
-    -- ===============================
-    sceneGroup:insert(back)
-    sceneGroup:insert(middle)
-    sceneGroup:insert(front)
-
 	if phase == "will" then
+
+        -- Get Latest Monster
+        monster = getMonster()
+        setMonsterLocation(100,20)
+
+        -- Display Monster Descriptions
+        evolveIcon, HW_display, disc_display = displayAllMonsterDescriptions(getMonsterName())
+        
+         -- Add display objects into group
+        -- ============BACK===============
+        back:insert(cp_background)
+        -- ===========MIDDLE==============
+        middle:insert(monster)
+        -- middle:insert(mint)
+        -- middle:insert(strawberry)
+        -- middle:insert(banana)
+        -- middle:insert(strawberry2)
+        -- ===========FRONT===============
+        if evolveIcon~=nil then
+            front:insert(evolveIcon)
+        end
+        front:insert(HW_display)
+        front:insert(disc_display)
+        -- ===============================
+        sceneGroup:insert(back)
+        sceneGroup:insert(middle)
+        sceneGroup:insert(front)
+
         composer.showOverlay("menubar")
 		-- Called when the scene is still off screen and is about to move on screen
 	elseif phase == "did" then
