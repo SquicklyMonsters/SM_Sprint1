@@ -3,7 +3,6 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 
 require( 'inventory.interactions' )
--- require( 'menubar' )
 
 require( 'squicklyrun.sr_interactions' )
 require( 'squicklyrun.sr_background' )

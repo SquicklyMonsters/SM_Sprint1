@@ -5,7 +5,11 @@ local backgroundShop;
 
 -- -------------------------------------------------------------------------------
 
+<<<<<<< HEAD
 function setUpBackgroundShop() 
+=======
+function setUpShopBackground() 
+>>>>>>> c2df0cbcb9d81da9585129234ecc2ea3aeef3175
     -- Set Background
     -- local background = display.newImage("background.png", display.contentCenterX, display.contentCenterY)
     -- local backgroundOption = {
@@ -36,7 +40,11 @@ function setUpBackgroundShop()
     backgroundShop:scale(display.contentWidth/backgroundShop.width, display.contentHeight/backgroundShop.height )    
 end
 
+<<<<<<< HEAD
 function getBackgroundShop()
+=======
+function getShopBackground()
+>>>>>>> c2df0cbcb9d81da9585129234ecc2ea3aeef3175
     return backgroundShop
 end
 
