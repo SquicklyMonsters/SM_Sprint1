@@ -270,7 +270,7 @@ function mostRecentFood2Clicked(event)
 end
  
 function moreFoodClicked(event)
-    -- if isTouchAble then
+    if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(currentVisibleList)
             if inventoryIsShow then
@@ -280,7 +280,7 @@ function moreFoodClicked(event)
                 showInventory("food")
             end
         end
-    -- end
+    end
 end
  
 function foodShopButtonClicked(event)
@@ -325,7 +325,7 @@ function mostRecentPlay2Clicked(event)
 end
  
 function morePlayClicked(event)
-    -- if isTouchAble then
+    if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(currentVisibleList)
             if inventoryIsShow then
@@ -335,7 +335,7 @@ function morePlayClicked(event)
                 showInventory("toy")
             end
         end
-    -- end
+    end
 end
  
 function toyShopButtonClicked(event)
