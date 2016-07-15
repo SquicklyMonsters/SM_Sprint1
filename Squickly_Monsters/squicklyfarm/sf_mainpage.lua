@@ -58,8 +58,8 @@ function scene:show( event )
             name = "bug",
             x = 0*resizer,
             y = 0*resizer,
-            width = 400*resizer,
-            height = 200*resizer,
+            width = display.contentWidth,
+            height = display.contentHeight,
             imageDir = "img/icons/UIIcons/comingsoon.png"
             }
             comingsoon.x = display.contentCenterX
