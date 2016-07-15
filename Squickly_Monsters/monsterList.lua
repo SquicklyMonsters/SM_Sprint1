@@ -6,6 +6,7 @@ local monsterList =  {"fireball","pikachu","cat","egg_electric","voltorb","elect
 -- Monster Img + State Attr
 
 local monsterImageAttr = {
+	-- fileName,fileWidth,fileHeight,rows,columns,nFrames,scaling
 	{ --fireball
 		monsterDir.."fireball.png",3104,4600,8,10,80,0.3,
 	}, 
