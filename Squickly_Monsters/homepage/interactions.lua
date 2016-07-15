@@ -123,12 +123,16 @@ end
 -- -------------------------------------------------------------------------------
 -- Hide / Show Icons with Lock
 
-function enableTouch()
+function enableHomeTouch()
     isTouchAble = true
 end
 
+function disableHomeTouch()
+    isTouchAble = false
+end
+
 function hideShowAllIcons(iconsTable)
-    xAxis = {-90*resizer,-30*resizer,50*resizer,110*resizer} -- idx 1=play, 2=clean, 3=sleep/wakeup, 4=feed
+    xAxis = {-110*resizer,-45*resizer,45*resizer,110*resizer} -- idx 1=play, 2=clean, 3=sleep/wakeup, 4=feed
     yAxis = {70*resizer,120*resizer,120*resizer,70*resizer}
     monster = getMonster()
 
@@ -150,7 +154,7 @@ function hideShowAllIcons(iconsTable)
         currentVisibleList = nil
     end
     -- Release lock after icons transition is finish
-    timer.performWithDelay(250, enableTouch)
+    timer.performWithDelay(250, enableHomeTouch)
 end
 -- -------------------------------------------------------------------------------
 -- Set reaction when press button
@@ -315,7 +319,8 @@ function inventoryClicked(event)
             composer.gotoScene(composer.getSceneName("current"))
             inventoryIsShow = false
         else
-            composer.showOverlay("inventory")
+            local options = {params = {tab = "all"}}
+            composer.showOverlay("inventory", options)
             inventoryIsShow = true
         end
     end
@@ -362,7 +367,7 @@ end
 --     end
 --     saveData()
 -- end
-
+--
 -- function isItRewardTime() -- calculates how much time is left for reward, returns false if done
 --     -- lastTime = loadLastRewardDate()
 --     local receiveDate = getReceiveDate()
@@ -392,93 +397,39 @@ end
 --     return false, currentDate, rewardTimer
 -- end
 --
--- function ticktick(event)
---   timeleft, currentDate, rewardTimer = isItRewardTime()
---   -- timeleft, currentDate, rewardTimer = isItRewardTime()
---   tmp = 24*60*60 - rewardTimer
---   -- print(tmp)
---   hours = math.floor(tmp/(60*60))
---   minutes = math.floor((tmp - (hours*60*60)) / 60)
---   seconds = tmp - (minutes*60) - (hours*60*60)
---   timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
---   clockText.text = timeDisplay
---   clockText:setFillColor( 0.7, 0.7, 1 )
---   -- clockText:setFillColor( 0.7, 0.7, 1 )
---   -- transition.fadeOut( clockText, { time=3000 } )
--- end
-
 -- function rewardIconClicked(event)
 --     if event.phase == "ended" then
---       dailyRewardClicked(event)
+--         timeleft, currentDate, rewardTimer = isItRewardTime()
+--         if timeleft == true or rewardTimer == nil then -- if the timer is done
+--             -- reward animation
+--
+--             -- add to inventory
+--             getDailyReward()
+--             print("GET REWARD!")
+--
+--             -- reset timer and save date
+--             -- saveRewardTimerData()
+--             setReceiveDate(currentDate)
+--
+--
+--             --change visibility
+--             dailyRewardTrueIcon.alpha = 0
+--             dailyRewardFalseIcon.alpha = 1
+--
+--         else -- if the timer is still ticking
+--             -- show timer
+--             tmp = 24*60*60 - rewardTimer
+--             print(tmp)
+--             hours = math.floor(tmp/(60*60))
+--             minutes = math.floor((tmp - (hours*60*60)) / 60)
+--             seconds = tmp - (minutes*60) - (hours*60*60)
+--             timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
+--             clockText = display.newText(timeDisplay, display.contentCenterX, display.contentCenterY*0.7, native.systemFontBold, 80)
+--             clockText:setFillColor( 0.0, 0.0, 0.0 )
+--             transition.fadeOut( clockText, { time=1500 } )
+--         end
 --     end
-    --     timeleft, currentDate, rewardTimer = isItRewardTime()
-    --     if timeleft == true or rewardTimer == nil then -- if the timer is done
-    --         -- reward animation
-    --
-    --         -- add to inventory
-    --         getDailyReward()
-    --         print("GET REWARD!")
-    --
-    --         -- reset timer and save date
-    --         -- saveRewardTimerData()
-    --         setReceiveDate(currentDate)
-    --
-    --
-    --         --change visibility
-    --         dailyRewardTrueIcon.alpha = 0
-    --         dailyRewardFalseIcon.alpha = 1
-    --
-    --     else -- if the timer is still ticking
-    --         -- show timer
-    --         tmp = 24*60*60 - rewardTimer
-    --         print(tmp)
-    --         hours = math.floor(tmp/(60*60))
-    --         minutes = math.floor((tmp - (hours*60*60)) / 60)
-    --         seconds = tmp - (minutes*60) - (hours*60*60)
-    --         timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
-    --         clockText = display.newText(timeDisplay, display.contentCenterX, display.contentCenterY*0.7, native.systemFontBold, 80)
-    --         clockText:setFillColor( 0.7, 0.7, 1 )
-    --         ticktick()
-    --         timer.performWithDelay(1000, ticktick, -1)
-    --         -- transition.fadeOut( clockText, { time=3000 } )
-    --     end
-    -- end
 -- end
-
-function rewardIconClicked(event)
-    if event.phase == "ended" then
-        timeleft, currentDate, rewardTimer = isItRewardTime()
-        if timeleft == true or rewardTimer == nil then -- if the timer is done
-            -- reward animation
-
-            -- add to inventory
-            getDailyReward()
-            print("GET REWARD!")
-
-            -- reset timer and save date
-            -- saveRewardTimerData()
-            setReceiveDate(currentDate)
-
-
-            --change visibility
-            dailyRewardTrueIcon.alpha = 0
-            dailyRewardFalseIcon.alpha = 1
-
-        else -- if the timer is still ticking
-            -- show timer
-            tmp = 24*60*60 - rewardTimer
-            print(tmp)
-            hours = math.floor(tmp/(60*60))
-            minutes = math.floor((tmp - (hours*60*60)) / 60)
-            seconds = tmp - (minutes*60) - (hours*60*60)
-            timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
-            clockText = display.newText(timeDisplay, display.contentCenterX, display.contentCenterY*0.7, native.systemFontBold, 80)
-            clockText:setFillColor( 0.0, 0.0, 0.0 )
-            transition.fadeOut( clockText, { time=1500 } )
-        end
-    end
-end
->>>>>>> refs/remotes/origin/master
 
 -- -------------------------------------------------------------------------------
 -- EXP functions
@@ -553,7 +504,7 @@ function addListeners()
 
     inventoryIcon:addEventListener("touch", inventoryClicked)
 
-    dailyRewardTrueIcon:addEventListener("touch", dailyRewardClicked)
+    -- dailyRewardTrueIcon:addEventListener("touch", dailyRewardClicked)
     dailyRewardFalseIcon:addEventListener("touch", dailyRewardClicked)
     timer.performWithDelay(1000, isItRewardTime, -1)
     -- timer.performWithDelay(1000, updateTime, -1 )

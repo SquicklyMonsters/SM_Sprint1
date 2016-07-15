@@ -18,8 +18,10 @@ local inventory;
 local dailyRewardPanel;
 local itemList = getItemList()
 
-local stackLogInCount = 1
+local stackLogInCount = getDailyLoginCount()
 local clockText;
+local tickLoop;
+
 -- If you want to change reward in daily reward, you just need to change
 -- itemsOfReward. The item that can be changed depend on the itemList file.
 -- Therefore, you have to add item in itemList file first.
@@ -28,89 +30,82 @@ local itemsOfReward = {
 			"ball", "chucky", "cards"
 			}
 
+-- ----------------------------------------------------------------
+
 function isItRewardTime() -- calculates how much time is left for reward, returns false if done
-	-- lastTime = loadLastRewardDate()
-	local receiveDate = getReceiveDate()
-	local currentDate = os.date( '*t' )
+													-- lastTime = loadLastRewardDate()
+		local receiveDate = getReceiveDate()
+		local currentDate = os.date( '*t' )
+		if receiveDate == nil then -- receiveDate is false if user has never gotten daily reward before
+				return false, currentDate, nil
+		end
 
-	if receiveDate == nil then -- receiveDate is false if user has never gotten daily reward before
-			-- dailyRewardTrueIcon.alpha = 1
-			-- dailyRewardFalseIcon.alpha = 0
-			return false, currentDate, nil
-	end
-
-	setTime = os.time{  year = receiveDate.year, month = receiveDate.month, day = receiveDate.day,
+		setTime = os.time{  year = receiveDate.year, month = receiveDate.month, day = receiveDate.day,
 			              	hour = receiveDate.hour, min = receiveDate.min, sec = receiveDate.sec }
-
-	endTime = os.time{  year = currentDate.year, month = currentDate.month, day = currentDate.day,
+		endTime = os.time{  year = currentDate.year, month = currentDate.month, day = currentDate.day,
 			                hour = currentDate.hour, min = currentDate.min, sec = currentDate.sec }
 
-	local rewardTimer = ( endTime - setTime ) -- difference in seconds
-	-- print(rewardTimer)
-	-- set to 5 seconds for now for testing
-	-- limit = 24*60*60 -- 24 hours in sec
-		limit = 1
-	if rewardTimer >= limit then
-		-- dailyRewardTrueIcon.alpha = 1
-		-- dailyRewardFalseIcon.alpha = 0
-		return true, currentDate, rewardTimer
-	end
+		local rewardTimer = ( endTime - setTime ) -- difference in seconds
+		limit = 24*60*60											-- 24 hours in sec
+		-- limit = 1				-- this is for test, which can claim item in 1 sec
+		if rewardTimer >= limit then
+				return true, currentDate, rewardTimer
+		end
 
-	return false, currentDate, rewardTimer
+		return false, currentDate, rewardTimer
 end
 
-function ticktick()
-	timeleft, currentDate, rewardTimer = isItRewardTime()
-	-- timeleft, currentDate, rewardTimer = isItRewardTime()
-	tmp = 24*60*60 - rewardTimer
-	-- print(tmp)
-	hours = math.floor(tmp/(60*60))
-	minutes = math.floor((tmp - (hours*60*60)) / 60)
-	seconds = tmp - (minutes*60) - (hours*60*60)
-	timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
-	clockText.text = timeDisplay
+-- ----------------------------------------------------------------
 
+function tickTick()  -- Count down the clock function
+		timeleft, currentDate, rewardTimer = isItRewardTime()
+		tmp = 24*60*60 - rewardTimer
+		if (tmp <= 0) or (rewardTimer == nil) then  -- This handle the case where the timer with go negative
+				hours = 0
+				minutes = 0
+				seconds = 0
+		else
+				hours = math.floor(tmp/(60*60))
+				minutes = math.floor((tmp - (hours*60*60)) / 60)
+				seconds = tmp - (minutes*60) - (hours*60*60)
+		end
+		timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
+		clockText.text = timeDisplay
 end
+
+-- ----------------------------------------------------------------
 
 function setUpRewardTime()
-	-- if event.phase == "ended" then
-	-- dailyRewardClicked(event)
-	timeleft, currentDate, rewardTimer = isItRewardTime()
-	-- if the timer is still ticking
-			-- show timer
-	tmp = 24*60*60 - rewardTimer
-	print(tmp)
-	hours = math.floor(tmp/(60*60))
-	minutes = math.floor((tmp - (hours*60*60)) / 60)
-	seconds = tmp - (minutes*60) - (hours*60*60)
-	timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
-	clockText = display.newText(timeDisplay, -(dailyRewardPanel.width)/20, -dailyRewardPanel.height/7, native.systemFontBold, 80)
-	clockText:setFillColor( 0.7, 0.7, 1 )
-	timer.performWithDelay(1000, ticktick, -1)
-	-- transition.fadeOut( clockText, { time=3000 } )
+		timeleft, currentDate, rewardTimer = isItRewardTime()
+		if rewardTimer == nil then
+				rewardTimer = 24*60*60
+		end
+		tmp = 24*60*60 - rewardTimer
+		hours = math.floor(tmp/(60*60))
+		minutes = math.floor((tmp - (hours*60*60)) / 60)
+		seconds = tmp - (minutes*60) - (hours*60*60)
+		timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
+		clockText = display.newText(timeDisplay, -(dailyRewardPanel.width)/20, -dailyRewardPanel.height/7, native.systemFontBold, 80)
+		clockText:setFillColor( 0.7, 0.7, 1 )
+		if tmp > 0 then
+				tickLoop = timer.performWithDelay(1000, tickTick, -1)
+		end
 end
--- end
 
+-- ----------------------------------------------------------------
 
 function closeEvent(event)
-  if event.phase == "ended" then
-    dailyRewardClicked(event)
-  end
+		if event.phase == "ended" then
+    		dailyRewardClicked(event)
+				if tickLoop == nil then
+						emergencyClose()
+				else
+						timer.cancel(tickLoop)
+				end
+  	end
 end
 
-
-
--- function suddenReward(event)
--- 	if event.phase == "ended" then
--- 			timeleft = true
--- 			rewardTimer = nil
--- 			hours = 0
--- 			minutes = 0
--- 			seconds = 0
--- 			timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
--- 			clockText.text = timeDisplay
--- 		end
--- 	end
+-- ----------------------------------------------------------------
 
 function widget.newPanel(options)
 	  local background = display.newImage(options.imageDir)
@@ -121,72 +116,85 @@ function widget.newPanel(options)
 	  return container
 end
 
+-- ----------------------------------------------------------------
+
 function setUpDailyReward()
-  dailyRewardPanel = widget.newPanel {
+  	dailyRewardPanel = widget.newPanel {
     height = 390,
     width = 390,
     imageDir = "img/others/NEW2.png"
   }
--- ----------------------------------------------------------------
 -- Add 7 item in the reward slot panel
-  local startX = -dailyRewardPanel.width*(1/2)
-  local startY = -dailyRewardPanel.height*(1/20)
+  	local startX = -dailyRewardPanel.width*(1/2)
+  	local startY = -dailyRewardPanel.height*(1/20)
 
-  local spacingX = (dailyRewardPanel.width)/9
-  local spacingY = dailyRewardPanel.height/9
+  	local spacingX = (dailyRewardPanel.width)/9
+  	local spacingY = dailyRewardPanel.height/9
 
+  	for t = 1, 7 do
+    		local x = startX
+    		local y = startY
+				local item = itemList[itemsOfReward[t]] -- get all item in the itemsOfReward
+				local itemIcon = display.newImage(item.image, ((x+5) + spacingX*(t))+20, y+20)
+				itemIcon:scale(0.8, 0.8)
+    		dailyRewardPanel:insert(itemIcon)
 
-  for t = 1, 7 do
-    local x = startX
-    local y = startY
-		local item = itemList[itemsOfReward[t]] -- get all item in the itemsOfReward
-    -- local new = widget.newButton {
-    --         top = y, -- division of row
-    --         left = (x+5) + spacingX*(t), -- modulo of row
-    --         width = 40,
-    --         height = 40,
-    --         defaultFile = item.image,
-    --     }
-		local new = display.newImage(item.image, ((x+5) + spacingX*(t))+20, y+20)
-		new:scale(0.8, 0.8)
-    dailyRewardPanel:insert(new)
-  end
-
-	function getDailyReward(event)
-		if event.phase == "ended" then
-			timeleft, currentDate, rewardTimer = isItRewardTime()
-			if timeleft == true or rewardTimer == nil then -- if the timer is done
-				-- reward animation
-				-- add to inventory
-				local getItem = itemList[itemsOfReward[stackLogInCount]]
-				local idx = isInInventory(getItem.name)
-				if idx then
-						increaseQuantity(idx)
-				else
-						addToInventory(item.name)
-				end
-
-
-				print("GET REWARD!")
-
-				-- reset timer and save date
-				-- saveRewardTimerData()
-				setReceiveDate(currentDate)
-				for i = 1, stackLogInCount do
-					local x = startX
-			    local y = startY
-					local new2 = display.newImage("img/others/cross.png", ((x+5) + spacingX*(i))+20, y+20)
-					new2:scale(0.1, 0.1)
-			    dailyRewardPanel:insert(new2)
-			  end
-				stackLogInCount = stackLogInCount 1
-				--change visibility
-				-- dailyRewardTrueIcon.alpha = 0
-				-- dailyRewardFalseIcon.alpha = 1
-
-			end
+		for i = 1, stackLogInCount do
+				local x = startX
+				local y = startY
+				local cross = display.newImage("img/others/cross.png", ((x+5) + spacingX*(i))+20, y+20)
+				cross:scale(0.1, 0.1)
+				dailyRewardPanel:insert(cross)
 		end
-	end
+end
+
+-- ----------------------------------------------------------------
+
+function emergencyClose()
+		dailyRewardPanel:removeSelf()
+end
+
+-- ----------------------------------------------------------------
+
+function getDailyReward(event)
+		if event.phase == "ended" then
+				timeleft, currentDate, rewardTimer = isItRewardTime()
+				if timeleft == true or rewardTimer == nil then -- if the timer is done
+						-- reward animation
+						-- add to inventory
+						stackLogInCount = stackLogInCount + 1
+						local getItem = itemList[itemsOfReward[stackLogInCount]]
+						local idx = isInInventory(getItem.name)
+						if idx then
+								increaseQuantity(idx)
+						else
+								addToInventory(item.name)
+						end
+						print("GET REWARD!")
+
+						-- reset timer and save date
+						-- saveRewardTimerData()
+						setReceiveDate(currentDate)
+						for i = 1, stackLogInCount do
+								local x = startX
+			  				local y = startY
+								cross = display.newImage("img/others/cross.png", ((x+5) + spacingX*(i))+20, y+20)
+								cross:scale(0.1, 0.1)
+			    			dailyRewardPanel:insert(cross)
+			  		end
+						print (tmp)
+						if tmp == 0 then
+								tickLoop = timer.performWithDelay(1000, tickTick, -1)
+						end
+						if stackLogInCount == 7 then
+								timer.performWithDelay(5000, emergencyClose)
+								stackLogInCount = 0
+						end
+						setDailyLoginReward(stackLogInCount)
+						saveData()
+				end
+		end
+end
 -- ------------------------------------------------------------
 -- Create close button and create claim reward button
   dailyRewardPanel.close = widget.newButton {
@@ -197,14 +205,6 @@ function setUpDailyReward()
     defaultFile = "img/bg/close.png",
     onEvent = closeEvent,
   }
-	-- dailyRewardPanel.close2 = widget.newButton {
-	-- 	top = startY,
-	-- 	left = startX + (spacingX*7.5),
-	-- 	width = 50,
-	-- 	height = 50,
-	-- 	defaultFile = "img/bg/close.png",
-	-- 	onEvent = suddenReward,
-	-- }
 
   dailyRewardPanel.claim = widget.newButton {
     top = startY - (spacingY*-1.1),
@@ -219,7 +219,6 @@ function setUpDailyReward()
 	setUpRewardTime()
 	dailyRewardPanel:insert(dailyRewardPanel.close)
   dailyRewardPanel:insert(dailyRewardPanel.claim)
-	-- dailyRewardPanel:insert(dailyRewardPanel.close2)
 	dailyRewardPanel:insert(clockText)
 
   -- dailyRewardPanel:scale(

@@ -155,7 +155,7 @@ function setUpAllIcons()
     dailyRewardFalseIcon = setUpIcon(iconsDir .. "RewardFalse.png", 1*resizer, display.contentWidth/15, display.contentHeight*0.65, 1)
 
     hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 1*resizer, getMonster().x + 60*resizer, getMonster().y - 20*resizer)
-    tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 1*resizer, getMonster().x - 35*resizer, getMonster().y - 20*resizer)
+    tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 1*resizer, getMonster().x - 60*resizer, getMonster().y - 20*resizer)
     thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
 
     invenList, itemQuantities, gold, platinum = getInventoryData()

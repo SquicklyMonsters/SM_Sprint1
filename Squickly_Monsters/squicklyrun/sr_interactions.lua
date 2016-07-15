@@ -1,5 +1,7 @@
 -- -----------------------------------------------------------------------------------------------------------------
 require('inventory.interactions')
+require('squicklyrun.sr_pause')
+local composer = require("composer")
 -- Local variables go Here
 local resizer = display.contentHeight/320;
 
@@ -20,6 +22,7 @@ local bossSpits;
 --main display groups
 local screen;
 local player;
+local pauseButton;
 
 --setup some variables that we will use to position the ground
 local groundMin;
@@ -39,6 +42,9 @@ local eventRun;
 local score;
 local scoreText;
 local gameOver;
+
+--Variable to keep track of pause state
+pauseGame = false
 
 -- -----------------------------------------------------------------------------------------------------------------
 
@@ -96,9 +102,8 @@ function setupGround()
 end
 
 function setupScoreAndGameOver()
-	score = 0
-
-	gameOver = getGameOver()
+	
+	--setup gameover pic
 	gameOver = display.newImage("img/squicklyrun/gameOver.png")
 	gameOver:scale(resizer,resizer)
 	gameOver.name = "gameOver"
@@ -106,6 +111,8 @@ function setupScoreAndGameOver()
 	gameOver.x = 0*resizer
 	gameOver.y = 500*resizer
 
+	--setup score
+	score = 0
 	local options = {
 		text = "score: " .. score,
 		x = 50*resizer,
@@ -115,26 +122,36 @@ function setupScoreAndGameOver()
 		align = "left",
 	}
 	scoreText = display.newText(options);
+
+	--setup pause button
+	pauseButton = display.newImage("img/squicklyrun/playpause.png")
+	pauseButton:scale(0.25*resizer, 0.25*resizer)
+	pauseButton.x = (display.contentCenterX + display.contentWidth/2.25)--*resizer
+	print(display.contentHeight)
+	pauseButton.y = (display.contentCenterY - display.contentHeight/2.5)--*resizer
 end
 
 function setupSprite()
-	local imgsheetSetup = {
-		width = 100,
-		height = 100,
-		numFrames = 3
-	}
-	local spriteSheet = graphics.newImageSheet("img/squicklyrun/heroSpriteSheet.png", imgsheetSetup);
+	-- fileWidth = 3104
+	-- fileHeight = 4600
+	-- local imgsheetSetup = {
+	-- 	width = fileWidth/8,
+	-- 	height = fileHeight/10,
+	-- 	numFrames = 20
+	-- }
+	-- local spriteSheet = graphics.newImageSheet("img/squicklyrun/sr_fireball.png", imgsheetSetup);
 	
-	local sequenceData = {
-		{ name = "running", start = 1, count = 6, time = 600, loopCount = 0},
-		{ name = "jumping", start = 7, count = 7, time = 1, loopCount = 1 }
-	}
+	-- local sequenceData = {
+	-- 	{ name = "running", start = 1, count = 6, time = 600, loopCount = 0},
+	-- 	{ name = "jumping", start = 16, count = 16, time = 1, loopCount = 1 }
+	-- }
 	
-	--Hero Animation
-	hero = getHero()
-	hero = display.newSprite(spriteSheet, sequenceData);
-	hero:scale(resizer,resizer)
-	hero:setSequence("running")
+	-- --Hero Animation
+	-- hero = getHero()
+	-- hero = display.newSprite(spriteSheet, sequenceData);
+	-- hero:scale(0.2*resizer,0.2*resizer)
+	-- hero:setSequence("running")
+	hero = getMonster()
 	hero:play()
 
 	-- Hero Attributes
@@ -178,7 +195,7 @@ function setupObstaclesAndEnemies()
 	end
 	--create spikes
 	for a = 1, 3, 1 do
-		local spike = display.newImage("img/squicklyrun/spikeBlock.png")
+		local spike = display.newImage("img/squicklyrun/icecream.png")
 		spike:scale(resizer,resizer)
 		spike.name = ("spike" .. a)
 		spike.id = a
@@ -191,8 +208,8 @@ function setupObstaclesAndEnemies()
 	--create blasts
 	blasts = getBlasts()
 	for a=1, 5, 1 do
-		local blast = display.newImage("img/squicklyrun/blast.png")
-		blast:scale(resizer,resizer)
+		local blast = display.newImage("img/squicklyrun/fireball.png")
+		blast:scale(resizer*0.1,resizer*0.1)
 		blast.name = ("blast" .. a)
 		blast.id = a
 		blast.x = 800*resizer
@@ -202,8 +219,8 @@ function setupObstaclesAndEnemies()
 		blasts:insert(blast)
 	end
 
-	boss = display.newImage("img/squicklyrun/boss.png", 150, 150)
-	boss:scale(resizer,resizer)
+	boss = display.newImage("img/squicklyrun/snowboss.png", 150, 150)
+	boss:scale(resizer*0.4,resizer*0.4)
 	boss.x = 300*resizer
 	boss.y = 550*resizer
 	boss.isAlive = false
@@ -219,8 +236,8 @@ function setupObstaclesAndEnemies()
 	--of that for us!
 	boss.spitCycle = 0
 	for a=1, 3, 1 do
-		local bossSpit = display.newImage("img/squicklyrun/bossSpit.png")
-		bossSpit:scale(resizer,resizer)
+		local bossSpit = display.newImage("img/squicklyrun/snowball.png")
+		bossSpit:scale(resizer*0.2,resizer*0.2)
 		bossSpit.x = 400*resizer
 		bossSpit.y = 550*resizer
 		bossSpit.isAlive = false
@@ -236,6 +253,7 @@ end
 --THIS IS THE ONLY UPDATE FUNCTION THAT STAYS HERE FOR NOW IF YOU MOVE IT'LL GLITCH REAL HARD. I AM LAZY TO FIGURE OUT
 --WHY FOR NOW.
 function updateBlocks()
+	score = getScore()
 	blocks = getBlocks()
 	for a = 1, blocks.numChildren, 1 do
 		if(a > 1) then
@@ -253,7 +271,7 @@ function updateBlocks()
 			else
 				--have the boss spit every three block passes
 				boss = getBoss()
-				boss.spitCycle = boss.spitCycle + 1
+				boss.spitCycle = boss.spitCycle + math.floor(score/30)*3
 				if(boss.y > 100 and boss.y < 300 and boss.spitCycle%3 == 0) then
 					for a=1, bossSpits.numChildren, 1 do
 						if(bossSpits[a].isAlive == false) then
@@ -261,8 +279,10 @@ function updateBlocks()
 							bossSpits[a].alpha = 1
 							bossSpits[a].x = boss.x - 35
 							bossSpits[a].y = boss.y + 55
-							bossSpits[a].speed = math.random(5,10)
-							break
+							bossSpits[a].speed = 4 + (math.floor(score/30)*2)
+							if (math.random(5) >= 3) then
+								break
+							end
 						end
 					end
 				end
@@ -308,8 +328,8 @@ function gameOverScreen()
 	hero.isAlive = false
 	--this simply pauses the current animation
 	hero:pause()
-	gameOver.x = display.contentWidth*.65
-	gameOver.y = display.contentHeight/2
+	gameOver.x = display.contentCenterX
+	gameOver.y = display.contentCenterY
 	gameOver.alpha = 1
 	score = getScore()
 end
@@ -353,7 +373,7 @@ function checkEvent()
 			boss.alpha = 1
 			boss.x = 400
 			boss.y = -200
-			boss.health = 10
+			boss.health = 5 * (math.floor(score/30))
 		end
 
 		--if the boss is alive then keep the event set to 15
@@ -400,10 +420,10 @@ function checkEvent()
 			if(ghosts[a].isAlive == false) then
 				ghosts[a].isAlive = true
 				--make the ghosts transparent and more... ghostlike!
-				ghosts[a].isAlive = 0.5
+				ghosts[a].alpha = 0.5
 				ghosts[a].x = 500
 				ghosts[a].y = math.random(-50, 400)
-				ghosts[a].speed = math.random(2,4)
+				ghosts[a].speed = math.random(2,8)
 				break
 			end
 		end
@@ -430,7 +450,6 @@ end
 --function that gives reward to player when dead or leave the game
 function getReward()
 	reward = getScore()
-	print(reward)
 	if reward ~= nil then
 		updateCurrency(reward, 0)
 		changeNeedsLevel("exp", reward*10)
@@ -487,7 +506,7 @@ function restartGame()
 	boss.y = 550
 	--reset the boss's spit
 	for a = 1, bossSpits.numChildren, 1 do
-	bossSpits[a].x = 400
+		bossSpits[a].x = 400
 		bossSpits[a].y = 550
 		bossSpits[a].isAlive = false
 	end
@@ -497,14 +516,14 @@ function restartGame()
 	backgroundnear1= getBackgroundnear1()
 	backgroundnear2 = getBackgroundnear2()
 
-	backgroundfar.x = 480
-	backgroundfar.y = 160
+	--backgroundfar.x = 480
+	--backgroundfar.y = 160
 
-	backgroundnear1.x = 240
-	backgroundnear1.y = 160
+	--backgroundnear1.x = 240
+	--backgroundnear1.y = 160
 
-	backgroundnear2.x = 760
-	backgroundnear2.y = 160
+	--backgroundnear2.x = 760
+	--backgroundnear2.y = 160
 end
 
 --the only difference in the touched function is now if you touch the
@@ -521,19 +540,66 @@ function touched( event )
 						hero.accel = hero.accel + 20
 					end
 				else
-					for a=1, blasts.numChildren, 1 do
-						if(blasts[a].isAlive == false) then
-							blasts[a].isAlive = true
-							blasts[a].alpha = 1
-							blasts[a].x = hero.x + 50
-							blasts[a].y = hero.y
-							break
+					-- if pauseGame == false then
+						for a=1, blasts.numChildren, 1 do
+							if(blasts[a].isAlive == false) then
+								blasts[a].isAlive = true
+								blasts[a].alpha = 1
+								blasts[a].x = hero.x + 50
+								blasts[a].y = hero.y
+								break
+							end
 						end
-					end
+					-- end
 				end
 			end
 		end
 	end
+end
+
+function paused(event)
+	print("pausing..")
+	if event.phase == "ended" then
+		if pauseGame == false then
+			hero:pause()
+			speed = 0
+			timer.pause( updateTimer )
+
+			-- setting speed to 0 actually doesnt do anything to the speed of the object??
+			-- for a = 1, blasts.numChildren, 1 do
+			-- 	-- if (blasts[a].isAlive == true) then
+			-- 		blasts[a].speed = 0
+			-- 	-- end
+			-- end
+
+			-- for a = 1, bossSpits.numChildren, 1 do
+			-- 	-- if (bossSpits[a].isAlive == true) then
+			-- 		bossSpits[a].speed = 0
+			-- 	-- end
+			-- end
+	
+			-- for a = 1, ghosts.numChildren, 1 do
+			-- 	-- if(ghosts[a].isAlive == true) then
+			-- 		ghosts[a].speed = 0
+			-- 	-- end
+			-- end
+
+            composer.showOverlay("squicklyrun.sr_pause")
+			pauseGame = true
+		
+		else
+			resume()
+		end
+	end
+end
+
+function resume()
+	hero:play()
+	speed = 5
+	timer.resume( updateTimer )
+	
+	composer.gotoScene(composer.getSceneName("current"))
+	pauseGame = false
 end
 
 -- GET FUNCTIONS BELOW-------------------------------------------------------------
@@ -557,6 +623,10 @@ end
 
 function getScoreText()
 	return scoreText
+end
+
+function getPauseButton()
+	return pauseButton
 end
 
 function getHero()
