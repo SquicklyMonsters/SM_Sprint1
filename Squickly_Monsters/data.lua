@@ -33,6 +33,26 @@ local dataFile = system.pathForFile( "data.txt", system.DocumentsDirectory )
 
 -- -------------------------------------------------------------------------------
 
+-- Temp for customize background first time visit bug
+local firstTimeCustBG;
+
+function getVisitedCustBG()
+  if firstTimeCustBG == true then
+    firstTimeCustBG = false
+    return true
+  else
+    return false
+  end
+  firstTimeCustBG = getFirstTimeCustBG()
+  updateVisitedCustBG()
+end
+
+function getFirstTimeCustBG()
+    return firstTimeCustBG
+end
+
+-- -------------------------------------------------------------------------------
+
 function writeFile(file, contents)
     file = io.open(file, "w")
     file:write(contents)
@@ -132,6 +152,7 @@ function loadData()
 
         local bgIdx = 11
         background = inTable[bgIdx]
+        firstTimeCustBG = true
 
         local rewIdx = 12
         receiveDate = inTable[rewIdx]
@@ -164,6 +185,7 @@ function loadData()
         monsterLevel = 1
         monsterName = "egg_electric"
         background = "img/bg/ice.png"
+        firstTimeCustBG = true
         receiveDate = nil
         dailyLoginCount = 0
 

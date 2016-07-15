@@ -32,6 +32,7 @@ local selectButton;
 local background;
 local preview;
 
+local sorryclosed;
 local firsttime = true;
 
 -- -------------------------------------------------------------------------------
@@ -209,6 +210,23 @@ function scene:show( event )
 	local phase = event.phase
 
 	if phase == "will" then
+        --- UNTIL BUG IS FIXED
+        firstTime = getVisitedCustBG()
+        if firstTime == true then
+            sorryclosed = widget.newPanel {
+            name = "bug",
+            x = 0*resizer,
+            y = 0*resizer,
+            width = 400*resizer,
+            height = 200*resizer,
+            imageDir = "img/icons/UIIcons/sorryclosed.png"
+            }
+            sorryclosed.x = display.contentCenterX
+            sorryclosed.y = display.contentCenterY
+            sorryclosed:scale(0.5*resizer, 0.5*resizer)
+        -- else
+        --     sorryclosed:removeSelf()
+        end
         -- Add display objects into group
         -- ============BACK===============
         back:insert(preview)
@@ -220,6 +238,7 @@ function scene:show( event )
         sceneGroup:insert(back)
         sceneGroup:insert(middle)
         sceneGroup:insert(front)
+        ---
 
         composer.showOverlay("menubar")
 		-- Called when the scene is still off screen and is about to move on screen
@@ -248,6 +267,10 @@ end
 
 function scene:destroy( event )
 	local sceneGroup = self.view
+    --temp for bug
+    if sorryclosed ~= nil then
+        sorryclosed:removeSelf()
+    end
 	-- Called prior to the removal of scene's "view" (sceneGroup)
 	--
 	-- INSERT code here to cleanup the scene
