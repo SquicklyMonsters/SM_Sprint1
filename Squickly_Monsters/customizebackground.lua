@@ -105,8 +105,8 @@ function setUpPreview()
     preview.x, preview.y = display.contentCenterX, display.contentCenterY
 
     preview:scale(
-                (display.contentWidth/preview.width)*0.8*resizer, 
-                (display.contentHeight/preview.height)*0.8*resizer
+                (display.contentWidth/preview.width)*resizer, 
+                (display.contentHeight/preview.height)*resizer
                 )
 
     return preview
