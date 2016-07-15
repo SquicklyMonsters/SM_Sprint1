@@ -29,10 +29,11 @@ local rightButton;
 local leftButton;
 local selectButton;
 
-local background;
+local pbackground;
 local preview;
 
 local sorryclosed;
+local stopgaptext;
 local firsttime = true;
 
 -- -------------------------------------------------------------------------------
@@ -72,23 +73,23 @@ function updatePreview()
     height = bgPreview[3]*resizer
     imageDir = bgPreview[1]
 
-    container:remove(background)
-    background = display.newImage(imageDir)
-    background:scale(display.contentWidth/background.width, display.contentHeight/background.height )
-    container:insert(background)
+    container:remove(pbackground)
+    pbackground = display.newImage(imageDir)
+    pbackground:scale(display.contentWidth/pbackground.width, display.contentHeight/pbackground.height )
+    container:insert(pbackground)
 end
 
 -- -------------------------------------------------------------------------------
 
 function widget.newPanel(options)                                    
-    local background = display.newImage(options.imageDir)
+    pbackground = display.newImage(options.imageDir)
     container = display.newContainer(options.width, options.height)
     
     if options.type == "preview" then
-        background:scale(display.contentWidth/background.width, display.contentHeight/background.height )
+        pbackground:scale(display.contentWidth/pbackground.width, display.contentHeight/pbackground.height )
     end
 
-    container:insert(background)
+    container:insert(pbackground)
     container.x = display.contentCenterX + options.x
     container.y = display.contentCenterY + options.y
     container.name = options.name
@@ -103,17 +104,12 @@ function setUpPreview()
         name = "preview",
         x = 0*resizer,
         y = 0*resizer,
-        width = 400*resizer,
-        height = 200*resizer,
+        width = display.contentWidth,
+        height = display.contentHeight,
         imageDir = bgPreview[1]
     }
 
     preview.x, preview.y = display.contentCenterX, display.contentCenterY
-
-    preview:scale(
-                (display.contentWidth/preview.width)*resizer, 
-                (display.contentHeight/preview.height)*resizer
-                )
 end
 
 function setUpButtons()
@@ -224,8 +220,10 @@ function scene:show( event )
             sorryclosed.x = display.contentCenterX
             sorryclosed.y = display.contentCenterY
             sorryclosed:scale(0.5*resizer, 0.5*resizer)
-        -- else
-        --     sorryclosed:removeSelf()
+
+            stopgaptext = display.newText("Go to another scene and\ncome back for temp Bug fix!", display.contentCenterX+15*resizer, display.contentCenterY-100*resizer, 400*resizer, 0, "Helvetica", 30*resizer, "center")
+            stopgaptext:setFillColor( 0.0, 0.0, 0.0 )
+            stopgaptext.alpha = 1
         end
         -- Add display objects into group
         -- ============BACK===============
@@ -270,6 +268,9 @@ function scene:destroy( event )
     --temp for bug
     if sorryclosed ~= nil then
         sorryclosed:removeSelf()
+    end
+    if stopgaptext ~= nil then
+        stopgaptext:removeSelf()
     end
 	-- Called prior to the removal of scene's "view" (sceneGroup)
 	--
