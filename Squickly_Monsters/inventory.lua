@@ -97,7 +97,7 @@ function allocateItems(list, quantities, startX, startY, spacingX, spacingY)
 		    	defaultFile = item.image,
 		    	onEvent = itemClickedEvent,
 	 		}
-	 		
+
 	 		inventory.items[invSlotIdx].item = item
 	 		inventory.items[invSlotIdx].invSlotIdx = invSlotIdx
 	 		inventory.items[invSlotIdx].invDataIdx = invDataIdx
@@ -148,19 +148,11 @@ function setUpInventory()
  	local startX = -inventory.width*(1/3)
  	local startY = -inventory.height*(1/3)
 
-<<<<<<< HEAD
- 	spacingX = inventory.width/4
- 	spacingY = inventory.height/4
-
- 	rows = 3
-
- 	allocateItems(invenList, itemQuantities)
-=======
  	local spacingX = inventory.width/4
  	local spacingY = inventory.height/4
- 	
+
  	allocateItems(invenList, itemQuantities, startX, startY, spacingX, spacingY)
->>>>>>> 4da1ee26c92461f298214d0672ba901271cd0b63
+
 
  	inventory.close = widget.newButton {
  		top = startY - (spacingY * 0.6),

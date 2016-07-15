@@ -359,11 +359,17 @@ function dailyRewardClicked(event)
         if dailyRewardIsShown then
             composer.gotoScene(composer.getSceneName("current"))
             dailyRewardIsShown = false
-        else
-            composer.showOverlay("dailyLogInReward")
-            dailyRewardIsShown = true
-        end
-    end
+          else
+              composer.showOverlay("dailyLogInReward")
+              dailyRewardIsShown = true
+          end
+      end
+  end
+
+function showInventory(selectedTab)
+    local options = {params = {tab = selectedTab}}
+    composer.showOverlay("inventory", options)
+    inventoryIsShow = true
 end
 
 -- -------------------------------------------------------------------------------
