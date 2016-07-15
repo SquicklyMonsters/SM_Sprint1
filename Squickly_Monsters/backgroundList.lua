@@ -49,12 +49,8 @@ end
 
 -- Get Background Attr Info
 
-function getBackgroundInfo(backgroundName)
-	for i = 1, #backgroundList do
-		if (backgroundName == backgroundList[i]) then
-			return backgroundImageAttr[i]
-		end
-	end
+function getBackgroundInfo(idx)
+	return backgroundImageAttr[idx]
 end
 
 -- -------------------------------------------------------------------------------

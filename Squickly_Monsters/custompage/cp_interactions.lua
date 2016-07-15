@@ -124,7 +124,7 @@ function evolveButtonClicked(event)
                 composer.gotoScene(composer.getSceneName("current"))
                 evolveIsShow = false
             else
-                composer.showOverlay("custompage.cp_evolve")
+                composer.showOverlay("custompage.cp_evolve",{isModal=true})
                 evolveIsShow = true
             end
         end
