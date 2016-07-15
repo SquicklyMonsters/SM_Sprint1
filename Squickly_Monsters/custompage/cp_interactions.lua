@@ -37,12 +37,20 @@ end
 function updateAllMonsterDescriptions(monsterName)
     local displayTable = getMonsterDescription(monsterName)
     DisplayName, Height, Weight, Description, levelToEvolve, nextEvolution = displayTable[1],displayTable[2],displayTable[3],displayTable[4],displayTable[5],displayTable[6]
-    evolveIcon = displayEvolveIcon(levelToEvolve, nextEvolution)
+    evolveIcon.image = updateEvolveIcon(levelToEvolve, nextEvolution)
     name_display.text = "Name: "..DisplayName
     HW_display.text = "H: "..Height.."cm, W: "..Weight.."kg"
     disc_display.text = Description
 
     isTouchAble = true
+
+    if nextEvolution == nil then
+        if getMonsterLevel() >= levelToEvolve then
+            return 0
+        else
+            return 1
+        end
+    end
 end
 
 function displayAllMonsterDescriptions(monsterName)
@@ -72,18 +80,27 @@ function setUpText(text, size, x, y, alpha)
     return displayText
 end
 
-function displayEvolveIcon(levelToEvolve, nextEvolution)
+function updateEvolveIcon(levelToEvolve, nextEvolution)
     if nextEvolution ~= nil then
         if getMonsterLevel() >= levelToEvolve then
             local iconFile
             if string.starts(getMonsterName(), "egg") then
-                iconFile = "img/icons/UIIcons/hatchEggIcon.png"
-            else
-                iconFile = "img/icons/UIIcons/evolveNow.png"
+                return "img/icons/UIIcons/hatchEggIcon.png"
             end
-            return setUpIcon(iconFile, 0.7*resizer, display.contentCenterX+100*resizer, display.contentCenterY-100*resizer, 1)
         end
     end
+    return "img/icons/UIIcons/evolveNow.png"
+end
+
+function displayEvolveIcon(levelToEvolve, nextEvolution)
+    if nextEvolution ~= nil then
+        if getMonsterLevel() >= levelToEvolve then
+            if string.starts(getMonsterName(), "egg") then
+                return setUpIcon("img/icons/UIIcons/hatchEggIcon.png", 0.7*resizer, display.contentCenterX+100*resizer, display.contentCenterY-100*resizer, 1)
+            end
+        end
+    end
+    return setUpIcon("img/icons/UIIcons/evolveNow.png", 0.7*resizer, display.contentCenterX+100*resizer, display.contentCenterY-100*resizer, 1)
 end
 -- -------------------------------------------------------------------------------
 -- Set reaction when press button

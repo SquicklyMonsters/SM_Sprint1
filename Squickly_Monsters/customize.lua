@@ -74,6 +74,8 @@ function scene:show( event )
         setUpMonster(monsterName)
         monster = getMonster()
         setMonsterLocation(100,20)
+
+        evolveIcon.alpha = updateAllMonsterDescriptions(monsterName)
         
          -- Add display objects into group
         -- ============BACK===============
@@ -84,10 +86,7 @@ function scene:show( event )
         middle:insert(strawberry)
         middle:insert(banana)
         -- ===========FRONT===============
-        updateAllMonsterDescriptions(monsterName)
-        if evolveIcon~=nil then
-            front:insert(evolveIcon)
-        end
+        front:insert(evolveIcon)
         front:insert(name_display)
         front:insert(HW_display)
         front:insert(disc_display)
