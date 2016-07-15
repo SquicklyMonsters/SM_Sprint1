@@ -71,13 +71,16 @@ function scene:show( event )
 
 	if phase == "will" then
         --Set Monster Loc
-
         local oldMonsterName = monsterName
         monsterName = getMonsterName()
         print(oldMonsterName)
         print(monsterName)
         if monsterName ~= oldMonsterName then
-            monster = updateMonster(monsterName)
+            -- monster = updateMonster(monsterName)
+            setUpMonster(monsterName)
+            setMonsterName(monsterName)
+            saveData()
+            monster = getMonster()
         end
         enableEvolution()
 

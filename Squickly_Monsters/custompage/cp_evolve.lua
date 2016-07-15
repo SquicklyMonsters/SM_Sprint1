@@ -283,7 +283,10 @@ function scene:hide( event )
 	local sceneGroup = self.view
 	local phase = event.phase
 	if event.phase == "will" then
+		print("here")
 		sceneGroup:insert(curr_monster)
+		sceneGroup:remove(evolveBackgroud)
+		evolveBackgroud:removeSelf()
 		-- Called when the scene is on screen and is about to move off screen
 		--
 		-- INSERT code here to pause the scene
@@ -295,6 +298,7 @@ function scene:hide( event )
 end
 
 function scene:destroy( event )
+	print("there")
 end
 
 ---------------------------------------------------------------------------------
