@@ -19,7 +19,8 @@ local back;
 local middle;
 local front;
 
-local monster;
+-- local monster;
+local monsterName;
 
 local feedIcon;
 local sleepIcon;
@@ -29,13 +30,18 @@ local playIcon;
 
 local mostRecentFoodIcon1;
 local mostRecentFoodIcon2;
+
 local foodRecentList;
 local moreFoodIcon;
-local shopIcon;
+local foodShopIcon;
+
 local mostRecentPlayIcon1;
 local mostRecentPlayIcon2;
+
 local playRecentList;
 local morePlayIcon;
+local toyShopIcon;
+
 local inventoryIcon;
 local dailyRewardTrueIcon;
 local dailyRewardFalseIcon;
@@ -72,12 +78,13 @@ function scene:create( event )
     middle = display.newGroup()
     front = display.newGroup()
 
-	-- Set background
+	-- Set background 
     setUpBackground()
     background = getBackground()
 
     -- Set Up Monster
-    setUpMonster(getMonsterName())
+    monsterName = getMonsterName()
+    setUpMonster(monsterName)
     monster = getMonster()
     setMonsterLocation(0,70)
 
@@ -105,10 +112,13 @@ function scene:create( event )
     mostRecentFoodIcon1 = getMostRecentFoodIcon1()
     mostRecentFoodIcon2 = getMostRecentFoodIcon2()
     moreFoodIcon = getMoreFoodIcon()
-    shopIcon = getShopIcon()
+    foodShopIcon = getFoodShopIcon()
+
     mostRecentPlayIcon1 = getMostRecentPlayIcon1()
     mostRecentPlayIcon2 = getMostRecentPlayIcon2()
     morePlayIcon = getMorePlayIcon()
+    toyShopIcon = getToyShopIcon()
+
     inventoryIcon = getInventoryIcon()
     dailyRewardTrueIcon = getDailyRewardTrueIcon()
     dailyRewardFalseIcon = getDailyRewardFalseIcon()
@@ -137,6 +147,14 @@ function scene:show( event )
         tiredThoughtCloud = getTiredThoughtCloud()
 
         --Set Monster Position
+        local oldMonsterName = monsterName
+        monsterName = getMonsterName()
+        print(oldMonsterName)
+        print(monsterName)
+        if monsterName ~= oldMonsterName then
+            updateMonster(monsterName)
+        end
+        monster = getMonster()
         setMonsterLocation(0,70)
 
         -- Add display objects into group
@@ -166,19 +184,24 @@ function scene:show( event )
         front:insert(wakeupIcon)
         front:insert(cleanIcon)
         front:insert(playIcon)
+
         front:insert(mostRecentFoodIcon1)
         front:insert(mostRecentFoodIcon2)
         front:insert(moreFoodIcon)
-        front:insert(shopIcon)
+        front:insert(foodShopIcon)
+
         front:insert(mostRecentPlayIcon1)
         front:insert(mostRecentPlayIcon2)
         front:insert(morePlayIcon)
+        front:insert(toyShopIcon)
 
 		front:insert(levelsText)
         -- ===============================
+        
         sceneGroup:insert(back)
         sceneGroup:insert(middle)
         sceneGroup:insert(front)
+
         composer.showOverlay("menubar")
         -- composer.showOverlay("inventory")
 		-- Called when the scene is still off screen and is about to move on screen

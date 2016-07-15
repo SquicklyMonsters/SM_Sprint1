@@ -19,20 +19,18 @@ local back;
 local middle;
 local front;
 
--- local inventoryIcon;
--- local itemList;
--- local itemQuantities;
--- local itemTexts = {};
-
--- local buyHolder;
--- local cannotBuyHolder;
 local notifications;
+local inventoryIcon;
 
 local currentGold;
 local currentPlatinum;
 
 local goldText;
 local platinumText;
+
+local shop;
+
+local tab;
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
@@ -58,21 +56,111 @@ function itemClickedEvent(event)
     end
 end
 
+<<<<<<< HEAD
 function widget.newPanel(options)
+=======
+function allTabClickEvent(event)
+    if event.phase == "ended" then
+        if tab ~= "all" then
+            updateShop("all")
+        end
+    end
+end
+
+function foodTabClickEvent(event)
+    if event.phase == "ended" then
+        if tab ~= "food" then
+            updateShop("food")
+        end
+    end
+end
+
+function toyTabClickEvent(event)
+    if event.phase == "ended" then
+        if tab ~= "toy" then
+            updateShop("toy")
+        end
+    end
+end
+-- -------------------------------------------------------------------------------
+function updateShop(in_tab)
+    -- Pretty much refresh the screen
+    composer.hideOverlay()
+    composer.removeScene(composer.getSceneName("current"))
+    local event = {params = {tab = in_tab}}
+    scene:create(event)
+
+    -- local options = { params = {tab = in_tab} }
+    -- composer.gotoScene("shop", options)
+end
+
+function allocateItems(startX, startY, spacingX, spacingY)
+    local cols = 6
+    local shopIdx = 1
+    for i = 1, #itemList do --loops to create each item on shop
+        local item = itemList[itemList[i]]
+        if tab == "all" or item.type == tab then
+            local x = startX + (spacingX * ((shopIdx-1) - math.floor((shopIdx-1)/cols)*cols))
+            local y = startY + (spacingY * (math.floor((shopIdx-1) / cols)))
+
+            shop.items[shopIdx] = widget.newButton {
+                top = y, -- division of row
+                left = x, -- modulo of row
+                width = 50,
+                height = 50,
+                defaultFile = item.image,
+                onEvent = itemClickedEvent,
+            }
+
+            shop.items[shopIdx].item = item
+
+            local textOptions = {
+                text = item.gold, 
+                x = x + 5,
+                y = y + 65, 
+                width = 50, 
+                height = 50
+            }
+
+            local textGold = display.newText(textOptions)
+            textGold:setFillColor( 255/255, 223/255, 0 )
+
+            local textOptions = {
+                text = item.platinum, 
+                x = x + 80,
+                y = y + 65, 
+                width = 50, 
+                height = 50
+            }
+
+            local textPlatinum = display.newText(textOptions)
+            textPlatinum:setFillColor( 229/255, 228/255, 226/255 )
+
+            shop:insert(shop.items[shopIdx])
+            shop:insert(textGold)
+            shop:insert(textPlatinum)
+            shopIdx = shopIdx + 1
+        end
+    end
+end
+
+-- -------------------------------------------------------------------------------
+
+function widget.newPanel(options)                                    
+>>>>>>> 4da1ee26c92461f298214d0672ba901271cd0b63
     local background = display.newImage(options.imageDir)
     local container = display.newContainer(options.width, options.height)
 
     -- print(background.width, background.height, display.contentWidth, display.contentHeight)
     background:scale(options.width/background.width, options.height/background.height )
     container:insert(background)
-    print(display.contentWidth, background.width)
     container.x = display.contentCenterX
     container.y = display.contentCenterY
     return container
 end
 
 function setUpShop()
-    local shop = widget.newPanel {
+    shop = widget.newPanel {
         width = 749,
         height = 374,
         imageDir = "img/bg/shoplist.png"
@@ -81,19 +169,34 @@ function setUpShop()
     local startX = -shop.width*(1/2.5)
     local startY = -shop.height*(1/3)
 
-    local cols = 6
     local spacingX = (shop.width)/6.8
     local spacingY = (shop.height)/3.75
 
     local itemList = getItemList()
 
     shop.items = {}
+    
+    allocateItems(startX, startY, spacingX, spacingY)
 
-    for i = 1, #itemList do --loops to create each item on shop
-        local x = startX + (spacingX * ((i-1) - math.floor((i-1)/cols)*cols))
-        local y = startY + (spacingY * (math.floor((i-1) / cols)))
-        local item = itemList[itemList[i]]
+    shop.allTab = widget.newButton {
+        top = startY,
+        left = startX - (spacingX * 0.65),
+        width = 50,
+        height = 50,
+        defaultFile = "img/icons/UIIcons/allIcon.png",
+        onEvent = allTabClickEvent,
+    }
 
+    shop.foodTab = widget.newButton {
+        top = startY + (spacingY),
+        left = startX - (spacingX * 0.65),
+        width = 50,
+        height = 50,
+        defaultFile = "img/icons/UIIcons/feedIcon.png",
+        onEvent = foodTabClickEvent,
+    }
+
+<<<<<<< HEAD
         shop.items[i] = widget.newButton {
             top = y, -- division of row
             left = x, -- modulo of row
@@ -137,6 +240,17 @@ function setUpShop()
                 (display.contentWidth/shop.width)*0.8,
                 (display.contentHeight/shop.height)*0.8
                 )
+=======
+     shop.toyTab = widget.newButton {
+        top = startY + (spacingY * 2),
+        left = startX - (spacingX * 0.65),
+        width = 50,
+        height = 50,
+        defaultFile = "img/icons/UIIcons/playIcon.png",
+        onEvent = toyTabClickEvent,
+    }
+
+>>>>>>> 4da1ee26c92461f298214d0672ba901271cd0b63
 
     -- text area to show how much GOLD you have
     local GoldOptions = {
@@ -157,12 +271,22 @@ function setUpShop()
     }
 
     goldText = display.newText(GoldOptions)
-    goldText:setFillColor( 255/255, 223/255, 0 )
-    shop:insert(goldText)
-
     platinumText = display.newText(PlatinumOptions)
+
+    goldText:setFillColor( 255/255, 223/255, 0 )
     platinumText:setFillColor( 229/255, 228/255, 226/255 )
+
+    shop:insert(goldText)
     shop:insert(platinumText)
+
+    shop:insert(shop.allTab)
+    shop:insert(shop.foodTab)
+    shop:insert(shop.toyTab)
+
+    shop:scale(
+            (display.contentWidth/shop.width)*0.8, 
+            (display.contentHeight/shop.height)*0.8
+            )
 
     return shop
 end
@@ -173,6 +297,9 @@ end
 
 function scene:create( event )
 	local sceneGroup = self.view
+    local params = event.params
+    tab = params.tab
+    print('t',tab)
 
     -- Setup layer
     back = display.newGroup()
@@ -185,12 +312,16 @@ function scene:create( event )
     backgroundShop = getBackground()
 
     -- Set Shop
-
     shop = setUpShop()
 
     -- Set up all Icons
     inventoryIcon = getInventoryIcon()
+<<<<<<< HEAD
 
+=======
+    -- print(inventoryIcon)
+    
+>>>>>>> 4da1ee26c92461f298214d0672ba901271cd0b63
     notifications = setUpNotifications()
 
 
@@ -243,6 +374,7 @@ end
 
 function scene:destroy( event )
 	local sceneGroup = self.view
+    print("oh no i die")
 	-- Called prior to the removal of scene's "view" (sceneGroup)
 	--
 	-- INSERT code here to cleanup the scene

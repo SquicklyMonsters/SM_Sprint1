@@ -1,6 +1,6 @@
 local monsterDir = "img/sprites/"
 
-local monsterList =  {"fireball","pikachu","cat","egg","voltorb","electrode"};
+local monsterList =  {"fireball","pikachu","cat","egg_electric","voltorb","electrode"};
 
 -- -------------------------------------------------------------------------------
 -- Monster Img + State Attr
@@ -15,8 +15,8 @@ local monsterImageAttr = {
 	{ --cat
 		monsterDir.."cat.png",500,300,10,6,60,3,
 	}, 
-	{ --egg
-		monsterDir.."egg.png",2400,600,8,2,16,0.5,
+	{ --egg_electric
+		monsterDir.."egg_electric.png",2400,600,8,2,16,0.5,
 	}, 
 	{ --voltorb
 		monsterDir.."voltorb.png",255,187,7,5,30,1.5,
@@ -43,7 +43,7 @@ local monsterStates = {
 	    {"sleep",32,18,200*9,0,"forward"},
 	    {"eat",41,40,200*20,0,"forward"},
 	},
-	{ --egg
+	{ --egg_electric
 	    {"normal",1,8,200*8,0,"forward"},
 	    {"sleep",9,8,200*8,0,"forward"},
 	    {"eat",9,8,200*8,0,"forward"},
@@ -63,12 +63,45 @@ local monsterStates = {
 }
 
 -- -------------------------------------------------------------------------------
+-- Monster Description
+-- In order: DisplayName, Height, Weight, Description, levelToEvolve, nextEvolution
+
+local monsterDescription = {
+	{ --fireball
+	    "Fireball", 61, 15.2, "Heat Up Your Life With this Adorable Creature", nil, nil,
+	},
+	{ --pikachu
+	    "Pikachu", 87, 18.0, "Pika-Pika-Pikachuuuuu", nil, nil,
+	},
+	{ --cat
+	    "Ninja Cat", 101, 9.6, "Wax On, Wax Off, repeat", 1, "pikachu",
+	},
+	{ --egg_electric
+	    "Egg", 55, 8.8, "I wonder who's inside?", 2, "voltorb",
+	},
+	{ --voltorb
+	    "Voltorb", 42, 11.3, "Beware of elctrocution", 5, "electrode",
+	},
+	{ --electrode
+	    "Electrode", 85, 22.2, "Danger: High Voltage", nil, nil,
+	},
+}
+
+-- -------------------------------------------------------------------------------
 -- Get Monster Attr Info
 
 function getMonsterInfo(monsterName)
 	for i = 1, #monsterList do
 		if (monsterName == monsterList[i]) then
 			return monsterImageAttr[i], monsterStates[i]
+		end
+	end
+end
+
+function getMonsterDescription(monsterName)
+	for i = 1, #monsterList do
+		if (monsterName == monsterList[i]) then
+			return monsterDescription[i]
 		end
 	end
 end

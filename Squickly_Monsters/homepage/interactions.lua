@@ -1,4 +1,3 @@
-require("savegame") -- For Testing
 require("data")
 require("itemList")
 local composer = require("composer")
@@ -16,9 +15,13 @@ local sleepIcon;
 local wakeupIcon;
 local cleanIcon;
 local playIcon;
+
+local foodShopIcon;
+local toyShopIcon;
+
 local moreFoodIcon;
-local shopIcon;
 local morePlayIcon;
+
 local mostRecentFoodIcon1;
 local mostRecentFoodIcon2;
 local mostRecentPlayIcon1;
@@ -49,6 +52,8 @@ local monsterLevel;
 local monsterLevelText;
 
 local dailyRewardIsShown = false;
+local chageScenceEffect = "crossFade";
+local chageSceneTime = 250;
 -- -------------------------------------------------------------------------------
 
 function cacheVariables()
@@ -69,21 +74,25 @@ function cacheVariables()
     wakeupIcon = getWakeupIcon()
     cleanIcon = getCleanIcon()
     playIcon = getPlayIcon()
+
     mostRecentFoodIcon1 = getMostRecentFoodIcon1()
     mostRecentFoodIcon2 = getMostRecentFoodIcon2()
     moreFoodIcon = getMoreFoodIcon()
-    shopIcon = getShopIcon()
+    foodShopIcon = getFoodShopIcon()
+
     mostRecentPlayIcon1 = getMostRecentPlayIcon1()
     mostRecentPlayIcon2 = getMostRecentPlayIcon2()
     morePlayIcon = getMorePlayIcon()
+    toyShopIcon = getToyShopIcon()
+
     inventoryIcon = getInventoryIcon()
     dailyRewardTrueIcon = getDailyRewardTrueIcon()
     dailyRewardFalseIcon = getDailyRewardFalseIcon()
 
     -- Create lists
     iconsList = {playIcon, cleanIcon, sleepIcon, feedIcon}
-    foodIconsList = {shopIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, moreFoodIcon}
-    playIconsList = {shopIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, morePlayIcon}
+    foodIconsList = {foodShopIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, moreFoodIcon}
+    playIconsList = {toyShopIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, morePlayIcon}
 
     -- Instantiate hide/show icons lock
     isTouchAble = true
@@ -92,7 +101,7 @@ end
 function updateFoodList(frlist,fr1,fr2)
     mostRecentFoodIcon1 = fr1
     mostRecentFoodIcon2 = fr2
-    foodIconsList = {shopIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, moreFoodIcon}
+    foodIconsList = {foodShopIcon, mostRecentFoodIcon1, mostRecentFoodIcon2, moreFoodIcon}
     foodRecentList = frlist
 
     mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
@@ -102,7 +111,7 @@ end
 function updatePlayList(prlist,pr1,pr2)
     mostRecentPlayIcon1 = pr1
     mostRecentPlayIcon2 = pr2
-    playIconsList = {shopIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, morePlayIcon}
+    playIconsList = {toyShopIcon, mostRecentPlayIcon1, mostRecentPlayIcon2, morePlayIcon}
     playRecentList = prlist
 
     mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
@@ -264,17 +273,22 @@ function moreFoodClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(currentVisibleList)
-            saveNeedsData() -- For Testing
-            setAutoSaveRate(20000) -- For Testing
+            showInventory("food")
         end
     end
 end
 
-function shopButtonClicked(event)
+function foodShopButtonClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(currentVisibleList)
-            composer.gotoScene("shop", "crossFade", 250)
+            local options =
+            {
+              effect = chageScenceEffect,
+              time = chageSceneTime,
+              params = {tab = "food"}
+            }
+            composer.gotoScene("shop", options)
         end
     end
 end
@@ -309,6 +323,22 @@ function morePlayClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(currentVisibleList)
+            showInventory("toy")
+        end
+    end
+end
+
+function toyShopButtonClicked(event)
+    if isTouchAble then
+        if event.phase == "ended" then
+            hideShowAllIcons(currentVisibleList)
+            local options =
+            {
+              effect = chageScenceEffect,
+              time = chageSceneTime,
+              params = {tab = "toy"}
+            }
+            composer.gotoScene("shop", options)
         end
     end
 end
@@ -319,9 +349,7 @@ function inventoryClicked(event)
             composer.gotoScene(composer.getSceneName("current"))
             inventoryIsShow = false
         else
-            local options = {params = {tab = "all"}}
-            composer.showOverlay("inventory", options)
-            inventoryIsShow = true
+            showInventory("all")
         end
     end
 end
@@ -493,14 +521,15 @@ function addListeners()
 
     mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
     mostRecentFoodIcon2:addEventListener("touch", mostRecentFood2Clicked)
-    -- moreFoodIcon:addEventListener("touch", moreFoodClicked)
+    moreFoodIcon:addEventListener("touch", moreFoodClicked)
     moreFoodIcon:addEventListener("touch", inventoryClicked)
-    shopIcon:addEventListener("touch", shopButtonClicked)
+    foodShopIcon:addEventListener("touch", foodShopButtonClicked)
 
     mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
     mostRecentPlayIcon2:addEventListener("touch", mostRecentPlay2Clicked)
-    -- morePlayIcon:addEventListener("touch", morePlayClicked)
+    morePlayIcon:addEventListener("touch", morePlayClicked)
     morePlayIcon:addEventListener("touch", inventoryClicked)
+    toyShopIcon:addEventListener("touch", toyShopButtonClicked)
 
     inventoryIcon:addEventListener("touch", inventoryClicked)
 
