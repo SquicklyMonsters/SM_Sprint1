@@ -270,12 +270,17 @@ function mostRecentFood2Clicked(event)
 end
  
 function moreFoodClicked(event)
-    if isTouchAble then
+    -- if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(currentVisibleList)
-            showInventory("food")
+            if inventoryIsShow then
+                composer.gotoScene(composer.getSceneName("current"))
+                inventoryIsShow = false
+            else
+                showInventory("food")
+            end
         end
-    end
+    -- end
 end
  
 function foodShopButtonClicked(event)
@@ -320,12 +325,17 @@ function mostRecentPlay2Clicked(event)
 end
  
 function morePlayClicked(event)
-    if isTouchAble then
+    -- if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(currentVisibleList)
-            showInventory("toy")
+            if inventoryIsShow then
+                composer.gotoScene(composer.getSceneName("current"))
+                inventoryIsShow = false
+            else
+                showInventory("toy")
+            end
         end
-    end
+    -- end
 end
  
 function toyShopButtonClicked(event)
@@ -528,13 +538,11 @@ function addListeners()
     mostRecentFoodIcon1:addEventListener("touch", mostRecentFood1Clicked)
     mostRecentFoodIcon2:addEventListener("touch", mostRecentFood2Clicked)
     moreFoodIcon:addEventListener("touch", moreFoodClicked)
-    moreFoodIcon:addEventListener("touch", inventoryClicked)
     foodShopIcon:addEventListener("touch", foodShopButtonClicked)
  
     mostRecentPlayIcon1:addEventListener("touch", mostRecentPlay1Clicked)
     mostRecentPlayIcon2:addEventListener("touch", mostRecentPlay2Clicked)
     morePlayIcon:addEventListener("touch", morePlayClicked)
-    morePlayIcon:addEventListener("touch", inventoryClicked)
     toyShopIcon:addEventListener("touch", toyShopButtonClicked)
  
     inventoryIcon:addEventListener("touch", inventoryClicked)
