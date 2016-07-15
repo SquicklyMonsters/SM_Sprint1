@@ -55,7 +55,6 @@ function updateMonster(monsterName)
         sheetContentHeight = fileHeight,
 
     }
-    local imageSheet = graphics.newImageSheet(fileName, options)
 
     -- Setup seqences for each animation
     local sequence = {}
@@ -71,11 +70,11 @@ function updateMonster(monsterName)
         table.insert( sequence, state )
     end
 
-    monster.imageSheet = imageSheet
+    monster.imageSheet = graphics.newImageSheet(fileName, options)
     monster.sequenceData = sequence
 
-    -- monster:scale(scaling*resizer,scaling*resizer)
-    -- monster:play()
+    monster:scale(scaling*resizer,scaling*resizer)
+    monster:play()
 end
 
 function getMonster()

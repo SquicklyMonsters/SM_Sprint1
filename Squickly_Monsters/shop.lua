@@ -56,38 +56,39 @@ function itemClickedEvent(event)
     end
 end
 
--- function allTabClickEvent(event)
---     if event.phase == "ended" then
---         if tab ~= "all" then
---             updateShop("all")
---         end
---     end
--- end
+function allTabClickEvent(event)
+    if event.phase == "ended" then
+        if tab ~= "all" then
+            updateShop("all")
+        end
+    end
+end
 
--- function foodTabClickEvent(event)
---     if event.phase == "ended" then
---         if tab ~= "food" then
---             updateShop("food")
---         end
---     end
--- end
+function foodTabClickEvent(event)
+    if event.phase == "ended" then
+        if tab ~= "food" then
+            updateShop("food")
+        end
+    end
+end
 
--- function toyTabClickEvent(event)
---     if event.phase == "ended" then
---         if tab ~= "toy" then
---             updateShop("toy")
---         end
---     end
--- end
+function toyTabClickEvent(event)
+    if event.phase == "ended" then
+        if tab ~= "toy" then
+            updateShop("toy")
+        end
+    end
+end
 -- -------------------------------------------------------------------------------
 function updateShop(in_tab)
     -- Pretty much refresh the screen
-    -- composer.hideOverlay()
+    composer.hideOverlay()
     composer.removeScene(composer.getSceneName("current"))
-    -- local event = {params = {tab = tab}}
-    -- scene:create(event)
-    local options = { params = {tab = in_tab} }
-    composer.gotoScene("shop", options)
+    local event = {params = {tab = in_tab}}
+    scene:create(event)
+
+    -- local options = { params = {tab = in_tab} }
+    -- composer.gotoScene("shop", options)
 end
 
 function allocateItems(startX, startY, spacingX, spacingY)
@@ -173,32 +174,32 @@ function setUpShop()
     
     allocateItems(startX, startY, spacingX, spacingY)
 
-    -- shop.allTab = widget.newButton {
-    --     top = startY,
-    --     left = startX - (spacingX * 0.65),
-    --     width = 50,
-    --     height = 50,
-    --     defaultFile = "img/icons/UIIcons/allIcon.png",
-    --     onEvent = allTabClickEvent,
-    -- }
+    shop.allTab = widget.newButton {
+        top = startY,
+        left = startX - (spacingX * 0.65),
+        width = 50,
+        height = 50,
+        defaultFile = "img/icons/UIIcons/allIcon.png",
+        onEvent = allTabClickEvent,
+    }
 
-    -- shop.foodTab = widget.newButton {
-    --     top = startY + (spacingY),
-    --     left = startX - (spacingX * 0.65),
-    --     width = 50,
-    --     height = 50,
-    --     defaultFile = "img/icons/UIIcons/feedIcon.png",
-    --     onEvent = foodTabClickEvent,
-    -- }
+    shop.foodTab = widget.newButton {
+        top = startY + (spacingY),
+        left = startX - (spacingX * 0.65),
+        width = 50,
+        height = 50,
+        defaultFile = "img/icons/UIIcons/feedIcon.png",
+        onEvent = foodTabClickEvent,
+    }
 
-    --  shop.toyTab = widget.newButton {
-    --     top = startY + (spacingY * 2),
-    --     left = startX - (spacingX * 0.65),
-    --     width = 50,
-    --     height = 50,
-    --     defaultFile = "img/icons/UIIcons/playIcon.png",
-    --     onEvent = toyTabClickEvent,
-    -- }
+     shop.toyTab = widget.newButton {
+        top = startY + (spacingY * 2),
+        left = startX - (spacingX * 0.65),
+        width = 50,
+        height = 50,
+        defaultFile = "img/icons/UIIcons/playIcon.png",
+        onEvent = toyTabClickEvent,
+    }
 
 
     -- text area to show how much GOLD you have
@@ -228,9 +229,9 @@ function setUpShop()
     shop:insert(goldText)
     shop:insert(platinumText)
 
-    -- shop:insert(shop.allTab)
-    -- shop:insert(shop.foodTab)
-    -- shop:insert(shop.toyTab)
+    shop:insert(shop.allTab)
+    shop:insert(shop.foodTab)
+    shop:insert(shop.toyTab)
 
     shop:scale(
             (display.contentWidth/shop.width)*0.8, 
