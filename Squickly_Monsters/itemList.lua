@@ -33,7 +33,7 @@ itemList.fish = fish
 -- Item Format
 -- itemname = item.new(name, gold, platinum, hunger, happiness, hygiene, energy, exp, image)
 local ball = item.new("ball", "toy", 150, 0, 0, 100, 0, 0, 0, iconsToyDir .. "ball.png")
-local chucky = item.new("chucky", "toy", 250, 0, 1, -500, 0, 0, 2000, iconsToyDir .. "chucky.png")
+local chucky = item.new("chucky", "toy", 250, 0, 1, -500, 0, 0, 10000, iconsToyDir .. "chucky.png")
 local cards = item.new("cards", "toy", 150, 0, 0, 250, 0, 0, 0, iconsToyDir .. "cards.png")
 local teddybear = item.new("teddybear", "toy", 350, 0, 0, 300, 0, 50, 0, iconsToyDir .. "teddybear.png")
 

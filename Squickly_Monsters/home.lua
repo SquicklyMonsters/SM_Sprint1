@@ -85,7 +85,6 @@ function scene:create( event )
     -- Set Up Monster
     setUpMonster(getMonsterName())
     monster = getMonster()
-    monsterName = getMonsterName()
     setMonsterLocation(0,70)
 
     -- Set up Needs Bar
@@ -138,9 +137,9 @@ function scene:show( event )
         enableHomeTouch()
 
         -- Run need levels checker
-        -- checkHunger(1)
-        -- checkTired(1)
-        -- checkHappiness(1)
+        checkHunger(1)
+        checkTired(1)
+        checkHappiness(1)
 
         -- Set up all Thought Clouds
         hungerThoughtCloud = getHungerThoughtCloud()

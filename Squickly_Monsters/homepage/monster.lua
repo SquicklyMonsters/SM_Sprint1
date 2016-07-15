@@ -1,4 +1,5 @@
 require("monsterList")
+require("homepage.UI")
 -- -------------------------------------------------------------------------------
 
 -- Local variables go HERE
@@ -50,7 +51,7 @@ function changeMonster(newMonsterName)
     -- Remove old one
     cancelAllChecker()
     cancelEnergyLoop()
-    monster:removeSelf()
+    -- monster:removeSelf()
     
     -- Set up new one
     setUpMonster(newMonsterName)

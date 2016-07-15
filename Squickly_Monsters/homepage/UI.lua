@@ -411,11 +411,16 @@ end
 -- -------------------------------------------------------------------------------
 
 function cancelAllChecker()
-    timer.cancel(checkHappinessID)
-    timer.cancel(checkTiredID)
-    timer.cancel(checkHungerID)
+    if checkHappinessID ~= nil then
+        timer.cancel(checkHappinessID)
+    end
+    if checkTiredID ~= nil then
+        timer.cancel(checkTiredID)
+    end
+    if checkHungerID ~= nil then
+        timer.cancel(checkHungerID)
+    end
 end
-
 -- -------------------------------------------------------------------------------
 -- Get needs bar
 
