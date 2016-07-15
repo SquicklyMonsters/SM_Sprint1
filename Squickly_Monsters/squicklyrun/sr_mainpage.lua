@@ -127,6 +127,7 @@ function scene:hide( event )
 end
 
 function scene:destroy( event )
+    hero.rotation = 0
 	getReward()
     timer.cancel(updateTimer)
     pauseButton:removeEventListener("touch", paused)

@@ -3,7 +3,6 @@ local widget = require( "widget" )
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-require("custompage.cp_background")
 require("backgroundList")
 require("data")
 
@@ -19,14 +18,23 @@ local front;
 
 local resizer = display.contentHeight/320
 
--- local preview;
-local backgroundList;
+local numOfBackgrounds = 11; --Number you want to include
 local bgPreview;
 local chosenBG;
 local counter;
 local container;
 
-local firstTime = true;
+local buttons;
+local rightButton;
+local leftButton;
+local selectButton;
+
+local pbackground;
+local preview;
+
+local sorryclosed;
+local stopgaptext;
+local firsttime = true;
 
 -- -------------------------------------------------------------------------------
 
@@ -37,50 +45,51 @@ function getChosenBG()
 end
 
 function buttonClicked(event)
+    print(event.target.name)
     if event.phase == "ended" then
         if event.target.name == "right" then
-            counter = counter%#backgroundList+1
+            counter = counter%numOfBackgrounds+1
             updatePreview()
-            print(getBackgroundInfo(backgroundList[counter])[1])
+            print(getBackgroundInfo(counter)[1])
         elseif event.target.name == "left" then
             if counter == 1 then
-                counter = #backgroundList
+                counter = numOfBackgrounds
             else
                 counter = counter-1
             end
-            print(getBackgroundInfo(backgroundList[counter])[1])
+            print(getBackgroundInfo(counter)[1])
             updatePreview()
         else
-            chosenBG = getBackgroundInfo(backgroundList[counter])[1]
+            chosenBG = getBackgroundInfo(counter)[1]
             saveBackground()
         end
     end
 end
 
 function updatePreview()
-    bgPreview = getBackgroundInfo(backgroundList[counter])
+    bgPreview = getBackgroundInfo(counter)
     
     width = bgPreview[2]*resizer
     height = bgPreview[3]*resizer
     imageDir = bgPreview[1]
 
-    container:remove(background)
-    local background = display.newImage(imageDir)
-    background:scale(display.contentWidth/background.width, display.contentHeight/background.height )
-    container:insert(background)
+    container:remove(pbackground)
+    pbackground = display.newImage(imageDir)
+    pbackground:scale(display.contentWidth/pbackground.width, display.contentHeight/pbackground.height )
+    container:insert(pbackground)
 end
 
 -- -------------------------------------------------------------------------------
 
 function widget.newPanel(options)                                    
-    local background = display.newImage(options.imageDir)
+    pbackground = display.newImage(options.imageDir)
     container = display.newContainer(options.width, options.height)
     
     if options.type == "preview" then
-        background:scale(display.contentWidth/background.width, display.contentHeight/background.height )
+        pbackground:scale(display.contentWidth/pbackground.width, display.contentHeight/pbackground.height )
     end
 
-    container:insert(background)
+    container:insert(pbackground)
     container.x = display.contentCenterX + options.x
     container.y = display.contentCenterY + options.y
     container.name = options.name
@@ -88,32 +97,25 @@ function widget.newPanel(options)
 end
 
 function setUpPreview()
-    backgroundList = getBackgroundList()
     counter = 1
+    bgPreview = getBackgroundInfo(counter)
 
-    bgPreview = getBackgroundInfo(backgroundList[counter])
-
-    local preview = widget.newPanel {
+    preview = widget.newPanel {
         name = "preview",
         x = 0*resizer,
         y = 0*resizer,
-        width = 400*resizer,
-        height = 200*resizer,
+        width = display.contentWidth,
+        height = display.contentHeight,
         imageDir = bgPreview[1]
     }
 
     preview.x, preview.y = display.contentCenterX, display.contentCenterY
-
-    preview:scale(
-                (display.contentWidth/preview.width)*0.8*resizer, 
-                (display.contentHeight/preview.height)*0.8*resizer
-                )
-
-    return preview
 end
 
 function setUpButtons()
-    local rightButton = widget.newPanel {
+    buttons = display.newGroup()
+
+    rightButton = widget.newPanel {
         name = "right",
         width = 800*resizer,
         height = 718*resizer,
@@ -129,7 +131,9 @@ function setUpButtons()
                 (display.contentHeight/rightButton.height)*0.2
                 )
 
-    local leftButton = widget.newPanel {
+    buttons:insert(rightButton)
+
+    leftButton = widget.newPanel {
         name = "left",
         width = 800*resizer,
         height = 700*resizer,
@@ -145,7 +149,9 @@ function setUpButtons()
                 (display.contentHeight/leftButton.height)*0.2
                 )
 
-    local selectButton = widget.newPanel {
+    buttons:insert(leftButton)
+
+    selectButton = widget.newPanel {
         name = "select",
         width = 300*resizer,
         height = 72*resizer,
@@ -161,7 +167,15 @@ function setUpButtons()
                 (display.contentHeight/selectButton.height)*0.15
                 )
 
-    return rightButton, leftButton, selectButton
+    buttons:insert(selectButton)
+
+end
+
+function addBGListeners()
+    -- Set up all Event Listeners
+    rightButton:addEventListener("touch", buttonClicked)
+    leftButton:addEventListener("touch", buttonClicked)
+    selectButton:addEventListener("touch", buttonClicked)
 end
 
 -- -------------------------------------------------------------------------------
@@ -176,23 +190,15 @@ function scene:create( event )
     middle = display.newGroup()
     front = display.newGroup()
 
-	-- Set background
-    setUpEvolveBackground()
-
-    background = getEvolveBackground()
-
     -- Set preview
-    rightButton, leftButton, selectButton = setUpButtons()
-    preview = setUpPreview()
+    setUpButtons()
+    setUpPreview()
 
     -- Set monster
     monster = getMonster()
     setMonsterLocation(0,50)
-
-    -- Set up all Event Listeners
-    rightButton:addEventListener("touch", buttonClicked)
-    leftButton:addEventListener("touch", buttonClicked)
-    selectButton:addEventListener("touch", buttonClicked)
+        
+    addBGListeners()
 end
 
 function scene:show( event )
@@ -200,20 +206,37 @@ function scene:show( event )
 	local phase = event.phase
 
 	if phase == "will" then
+        --- UNTIL BUG IS FIXED
+        firstTime = getVisitedCustBG()
+        if firstTime == true then
+            sorryclosed = widget.newPanel {
+            name = "bug",
+            x = 0*resizer,
+            y = 0*resizer,
+            width = 400*resizer,
+            height = 200*resizer,
+            imageDir = "img/icons/UIIcons/sorryclosed.png"
+            }
+            sorryclosed.x = display.contentCenterX
+            sorryclosed.y = display.contentCenterY
+            sorryclosed:scale(0.5*resizer, 0.5*resizer)
+
+            stopgaptext = display.newText("Go to another scene and\ncome back for temp Bug fix!", display.contentCenterX+15*resizer, display.contentCenterY-100*resizer, 400*resizer, 0, "Helvetica", 30*resizer, "center")
+            stopgaptext:setFillColor( 0.0, 0.0, 0.0 )
+            stopgaptext.alpha = 1
+        end
         -- Add display objects into group
         -- ============BACK===============
-        back:insert(background)
+        back:insert(preview)
         -- ===========MIDDLE==============
-        middle:insert(preview)
-        middle:insert(rightButton)
-        middle:insert(leftButton)
-        middle:insert(selectButton)
+        middle:insert(buttons)
         -- ===========FRONT===============
         front:insert(monster)
         -- ===============================
         sceneGroup:insert(back)
         sceneGroup:insert(middle)
         sceneGroup:insert(front)
+        ---
 
         composer.showOverlay("menubar")
 		-- Called when the scene is still off screen and is about to move on screen
@@ -242,6 +265,13 @@ end
 
 function scene:destroy( event )
 	local sceneGroup = self.view
+    --temp for bug
+    if sorryclosed ~= nil then
+        sorryclosed:removeSelf()
+    end
+    if stopgaptext ~= nil then
+        stopgaptext:removeSelf()
+    end
 	-- Called prior to the removal of scene's "view" (sceneGroup)
 	--
 	-- INSERT code here to cleanup the scene
