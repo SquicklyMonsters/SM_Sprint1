@@ -20,7 +20,7 @@ local middle;
 local front;
 
 local notifications;
-local inventoryIcon;
+-- local inventoryIcon;
 
 local currentGold;
 local currentPlatinum;
@@ -83,11 +83,15 @@ end
 function updateShop(in_tab)
     -- Pretty much refresh the screen
     -- composer.hideOverlay()
-    composer.removeScene(composer.getSceneName("current"))
-    local event = {params = {tab = in_tab}}
-    scene:create(event)
-    -- local options = { params = {tab = in_tab} }
-    -- composer.gotoScene("shop", options)
+    composer.removeScene("shop",true)
+    -- local event = {params = {tab = in_tab}}
+    -- scene:create(event)
+    -- composer.showOverlay("menubar")
+    local options = {
+        effect = "fade",
+        params = {tab = in_tab},
+    }
+    composer.gotoScene("shop", options)
 end
 
 function allocateItems(startX, startY, spacingX, spacingY)
@@ -256,17 +260,16 @@ function scene:create( event )
     front = display.newGroup()
 
 	-- Set background
-    setUpShopBackground()
-
-    backgroundShop = getShopBackground()
+    setUpBackgroundShop()
+    backgroundShop = getBackgroundShop()
 
     -- Set Shop
     shop = setUpShop()
 
     -- Set up all Icons
 
-    inventoryIcon = getInventoryIcon()
-    
+    -- inventoryIcon = getInventoryIcon()
+
     notifications = setUpNotifications()
 
 
@@ -277,14 +280,13 @@ function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
 
-
 	if phase == "will" then
         -- Add display objects into group
         -- ============BACK===============
         back:insert(backgroundShop)
         -- ===========MIDDLE==============
         middle:insert(shop)
-        middle:insert(inventoryIcon)
+        -- middle:insert(inventoryIcon)
         -- ===========FRONT===============
         front:insert(notifications[1])
         front:insert(notifications[2])

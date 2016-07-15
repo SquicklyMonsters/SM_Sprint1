@@ -127,6 +127,8 @@ function scene:create( event )
 
     -- Set up all Event Listeners
     addListeners()
+
+    composer.isDebug = true
 end
 
 function scene:show( event )

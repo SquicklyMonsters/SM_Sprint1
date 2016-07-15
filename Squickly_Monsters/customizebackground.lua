@@ -3,7 +3,6 @@ local widget = require( "widget" )
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-require("custompage.cp_background")
 require("backgroundList")
 require("data")
 
@@ -19,14 +18,21 @@ local front;
 
 local resizer = display.contentHeight/320
 
--- local preview;
-local backgroundList;
+local numOfBackgrounds = 11; --Number you want to include
 local bgPreview;
 local chosenBG;
 local counter;
 local container;
 
-local firstTime = true;
+local buttons;
+local rightButton;
+local leftButton;
+local selectButton;
+
+local background;
+local preview;
+
+local firsttime = true;
 
 -- -------------------------------------------------------------------------------
 
@@ -37,35 +43,36 @@ function getChosenBG()
 end
 
 function buttonClicked(event)
+    print(event.target.name)
     if event.phase == "ended" then
         if event.target.name == "right" then
-            counter = counter%#backgroundList+1
+            counter = counter%numOfBackgrounds+1
             updatePreview()
-            print(getBackgroundInfo(backgroundList[counter])[1])
+            print(getBackgroundInfo(counter)[1])
         elseif event.target.name == "left" then
             if counter == 1 then
-                counter = #backgroundList
+                counter = numOfBackgrounds
             else
                 counter = counter-1
             end
-            print(getBackgroundInfo(backgroundList[counter])[1])
+            print(getBackgroundInfo(counter)[1])
             updatePreview()
         else
-            chosenBG = getBackgroundInfo(backgroundList[counter])[1]
+            chosenBG = getBackgroundInfo(counter)[1]
             saveBackground()
         end
     end
 end
 
 function updatePreview()
-    bgPreview = getBackgroundInfo(backgroundList[counter])
+    bgPreview = getBackgroundInfo(counter)
     
     width = bgPreview[2]*resizer
     height = bgPreview[3]*resizer
     imageDir = bgPreview[1]
 
     container:remove(background)
-    local background = display.newImage(imageDir)
+    background = display.newImage(imageDir)
     background:scale(display.contentWidth/background.width, display.contentHeight/background.height )
     container:insert(background)
 end
@@ -88,12 +95,10 @@ function widget.newPanel(options)
 end
 
 function setUpPreview()
-    backgroundList = getBackgroundList()
     counter = 1
+    bgPreview = getBackgroundInfo(counter)
 
-    bgPreview = getBackgroundInfo(backgroundList[counter])
-
-    local preview = widget.newPanel {
+    preview = widget.newPanel {
         name = "preview",
         x = 0*resizer,
         y = 0*resizer,
@@ -108,12 +113,12 @@ function setUpPreview()
                 (display.contentWidth/preview.width)*resizer, 
                 (display.contentHeight/preview.height)*resizer
                 )
-
-    return preview
 end
 
 function setUpButtons()
-    local rightButton = widget.newPanel {
+    buttons = display.newGroup()
+
+    rightButton = widget.newPanel {
         name = "right",
         width = 800*resizer,
         height = 718*resizer,
@@ -129,7 +134,9 @@ function setUpButtons()
                 (display.contentHeight/rightButton.height)*0.2
                 )
 
-    local leftButton = widget.newPanel {
+    buttons:insert(rightButton)
+
+    leftButton = widget.newPanel {
         name = "left",
         width = 800*resizer,
         height = 700*resizer,
@@ -145,7 +152,9 @@ function setUpButtons()
                 (display.contentHeight/leftButton.height)*0.2
                 )
 
-    local selectButton = widget.newPanel {
+    buttons:insert(leftButton)
+
+    selectButton = widget.newPanel {
         name = "select",
         width = 300*resizer,
         height = 72*resizer,
@@ -161,7 +170,15 @@ function setUpButtons()
                 (display.contentHeight/selectButton.height)*0.15
                 )
 
-    return rightButton, leftButton, selectButton
+    buttons:insert(selectButton)
+
+end
+
+function addListeners()
+    -- Set up all Event Listeners
+    rightButton:addEventListener("touch", buttonClicked)
+    leftButton:addEventListener("touch", buttonClicked)
+    selectButton:addEventListener("touch", buttonClicked)
 end
 
 -- -------------------------------------------------------------------------------
@@ -176,23 +193,15 @@ function scene:create( event )
     middle = display.newGroup()
     front = display.newGroup()
 
-	-- Set background
-    setUpEvolveBackground()
-
-    background = getEvolveBackground()
-
     -- Set preview
-    rightButton, leftButton, selectButton = setUpButtons()
-    preview = setUpPreview()
+    setUpButtons()
+    setUpPreview()
 
     -- Set monster
     monster = getMonster()
     setMonsterLocation(0,50)
-
-    -- Set up all Event Listeners
-    rightButton:addEventListener("touch", buttonClicked)
-    leftButton:addEventListener("touch", buttonClicked)
-    selectButton:addEventListener("touch", buttonClicked)
+        
+    addListeners()
 end
 
 function scene:show( event )
@@ -202,12 +211,9 @@ function scene:show( event )
 	if phase == "will" then
         -- Add display objects into group
         -- ============BACK===============
-        back:insert(background)
+        back:insert(preview)
         -- ===========MIDDLE==============
-        middle:insert(preview)
-        middle:insert(rightButton)
-        middle:insert(leftButton)
-        middle:insert(selectButton)
+        middle:insert(buttons)
         -- ===========FRONT===============
         front:insert(monster)
         -- ===============================
