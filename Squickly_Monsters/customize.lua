@@ -76,6 +76,8 @@ function scene:show( event )
         setMonsterLocation(100,20)
 
         evolveIcon.alpha = updateAllMonsterDescriptions(monsterName)
+
+        enableEvolution()
         
          -- Add display objects into group
         -- ============BACK===============

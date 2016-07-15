@@ -19,6 +19,7 @@ local nextEvolution;
 
 local evolveIsShow = false;
 local isTouchAble;
+local canEvolve;
 
 -- -------------------------------------------------------------------------------
 
@@ -32,6 +33,18 @@ end
 
 function disableEvolveTouch()
     isTouchAble = false
+end
+
+function isEvolable()
+    return canEvolve
+end
+
+function enableEvolution()
+    canEvolve = true
+end
+
+function disableEvolution()
+    canEvolve = false
 end
 
 function updateAllMonsterDescriptions(monsterName)
@@ -95,11 +108,11 @@ function displayEvolveIcon(levelToEvolve, nextEvolution)
     if nextEvolution ~= nil then
         if getMonsterLevel() >= levelToEvolve then
             if string.starts(getMonsterName(), "egg") then
-                return setUpIcon("img/icons/UIIcons/hatchEggIcon.png", 0.7*resizer, display.contentCenterX+100*resizer, display.contentCenterY-100*resizer, 1)
+                return setUpIcon("img/icons/UIIcons/hatchEggIcon.png", 0.7*resizer, display.contentCenterX+200*resizer, display.contentCenterY-100*resizer, 1)
             end
         end
     end
-    return setUpIcon("img/icons/UIIcons/evolveNow.png", 0.7*resizer, display.contentCenterX+100*resizer, display.contentCenterY-100*resizer, 1)
+    return setUpIcon("img/icons/UIIcons/evolveNow.png", 0.7*resizer, display.contentCenterX+200*resizer, display.contentCenterY-100*resizer, 1)
 end
 -- -------------------------------------------------------------------------------
 -- Set reaction when press button
