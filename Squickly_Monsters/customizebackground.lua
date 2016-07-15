@@ -174,7 +174,7 @@ function setUpButtons()
 
 end
 
-function addListeners()
+function addBGListeners()
     -- Set up all Event Listeners
     rightButton:addEventListener("touch", buttonClicked)
     leftButton:addEventListener("touch", buttonClicked)
@@ -201,7 +201,7 @@ function scene:create( event )
     monster = getMonster()
     setMonsterLocation(0,50)
         
-    addListeners()
+    addBGListeners()
 end
 
 function scene:show( event )
