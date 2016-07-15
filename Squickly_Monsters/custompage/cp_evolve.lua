@@ -78,7 +78,7 @@ function evolveSeq4(event)
 	evo3.alpha = 0
 	evolveDescription.text = doneEvolutionMsg()
 	timer.performWithDelay( 1000, closeClickEvent ) -- auto close after evolve
-    timer.performWithDelay( 5000, enableEvolveTouch )
+    timer.performWithDelay( 2000, enableEvolveTouch )
 end
 
 function evolveNow(event)

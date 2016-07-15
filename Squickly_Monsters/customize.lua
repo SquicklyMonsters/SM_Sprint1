@@ -71,7 +71,7 @@ function scene:show( event )
 	if phase == "will" then
         --Set Monster Loc
         monsterName = getMonsterName()
-        setUpMonster(monsterName)
+        updateMonster(monsterName)
         monster = getMonster()
         setMonsterLocation(100,20)
 

@@ -77,7 +77,7 @@ function scene:create( event )
     middle = display.newGroup()
     front = display.newGroup()
 
-	-- Set background
+	-- Set background 
     setUpBackground()
     background = getBackground()
 
@@ -145,6 +145,8 @@ function scene:show( event )
         tiredThoughtCloud = getTiredThoughtCloud()
 
         --Set Monster Position
+        updateMonster(getMonsterName())
+        monster = getMonster()
         setMonsterLocation(0,70)
 
         -- Add display objects into group
@@ -212,6 +214,7 @@ function scene:hide( event )
 		--
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
+        monster = nil
         disableHomeTouch()
 	elseif phase == "did" then
         --composer.hideOverlay()
