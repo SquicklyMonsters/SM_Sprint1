@@ -29,7 +29,6 @@ function changeSceneButtonEvent(event)
     local currentScene = composer.getSceneName("current")
     if currentScene ~= scene then
       if currentScene ~= "home" then
-        print("1!")
         composer.removeScene(currentScene)
       end
 
@@ -42,7 +41,6 @@ function changeSceneButtonEvent(event)
         }
         composer.gotoScene(scene, options)
       else
-        print("2!")
         composer.gotoScene(scene, chageScenceEffect, chageSceneTime)
       end
     end
