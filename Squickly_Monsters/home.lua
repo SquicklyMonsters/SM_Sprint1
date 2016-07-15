@@ -79,8 +79,8 @@ function scene:create( event )
     front = display.newGroup()
 
 	-- Set background 
-    setUpBackground()
-    background = getBackground()
+    setUpHomeBackground()
+    background = getHomeBackground()
 
     -- Set Up Monster
     monsterName = getMonsterName()
@@ -135,6 +135,9 @@ function scene:show( event )
 
 
 	if phase == "will" then
+        -- Set up background
+        background = getHomeBackground()
+
         enableHomeTouch()
 
         -- Run need levels checker

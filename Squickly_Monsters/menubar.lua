@@ -29,6 +29,7 @@ function changeSceneButtonEvent(event)
     local currentScene = composer.getSceneName("current")
     if currentScene ~= scene then
       if currentScene ~= "home" then
+        print("1!")
         composer.removeScene(currentScene)
       end
 
@@ -41,6 +42,7 @@ function changeSceneButtonEvent(event)
         }
         composer.gotoScene(scene, options)
       else
+        print("2!")
         composer.gotoScene(scene, chageScenceEffect, chageSceneTime)
       end
     end
@@ -141,17 +143,28 @@ function setUpMenuBar()
     onEvent = changeSceneButtonEvent,
   }
 
+  menuBar.settingButton = widget.newButton{
+    top = startX + spacingX*3.75,
+    left = middleY + spacingX*0.4,
+    width = 25,
+    height = 25,
+    defaultFile = iconsDir .. "settingIcon.png",
+    onEvent = changeSceneButtonEvent,
+}
+
   -- Set scene file for each buttons to be use in changeSceneButtonEvent
   menuBar.homeButton.scene = "home"
   menuBar.shopButton.scene = "shop"
   menuBar.miniGameButton.scene = "miniGame"
   menuBar.customizeButton.scene = "customize"
+  menuBar.settingButton.scene = "customizebackground"
 
   menuBar:insert(menuBar.slideButton)
   menuBar:insert(menuBar.homeButton)
   menuBar:insert(menuBar.shopButton)
   menuBar:insert(menuBar.miniGameButton)
   menuBar:insert(menuBar.customizeButton)
+  menuBar:insert(menuBar.settingButton)
 
 end
 -- -------------------------------------------------------------------------------

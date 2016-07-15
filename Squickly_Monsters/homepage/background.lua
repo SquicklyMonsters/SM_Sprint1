@@ -1,16 +1,20 @@
 -------------------------------------------------------------------------------
 -- Local variables go HERE
 
+require("customizebackground")
+require("data")
+
 local background;
 
 -- -------------------------------------------------------------------------------
 
-function setUpBackground() 
+function setUpHomeBackground() 
+    local bg = getSaveBackground()
     -- Set Background
     -- background = display.newImage("img/bg/mountains.jpg", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/waterfall.png", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/hotday.png", display.contentCenterX, display.contentCenterY)
-    background = display.newImage("img/bg/ice.png", display.contentCenterX, display.contentCenterY)
+    background = display.newImage(bg, display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/planets.png", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/underwater.jpg", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/underwater2.jpg", display.contentCenterX, display.contentCenterY)
@@ -53,7 +57,16 @@ function setUpBackground()
     -- background:play()
 end
 
-function getBackground()
+function updateBackground()
+    newBG = getChosenBG()
+    if newBG ~= nil then
+        background = display.newImage(newBG, display.contentCenterX, display.contentCenterY)
+        background:scale(display.contentWidth/background.width, display.contentHeight/background.height )
+    end
+end
+
+function getHomeBackground()
+    updateBackground()
     return background
 end
 

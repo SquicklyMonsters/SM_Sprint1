@@ -41,8 +41,8 @@ function scene:create( event )
     front = display.newGroup()
 
 	-- Set background
-    setUpBackground()
-    cp_background = getBackground()
+    setUpEvolveBackground()
+    cp_background = getEvolveBackground()
 
     -- Get Latest Monster
     monster = getMonster()
