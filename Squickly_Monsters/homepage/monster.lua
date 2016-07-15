@@ -74,7 +74,8 @@ function updateMonster(monsterName)
     monster.sequenceData = sequence
 
     -- monster:scale(scaling*resizer,scaling*resizer)
-    monster:play()
+    -- monster:play()
+    -- return monster
 end
 
 function getMonster()
