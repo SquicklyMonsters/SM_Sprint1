@@ -71,8 +71,8 @@ function scene:show( event )
 	if phase == "will" then
         --Set Monster Loc
         monsterName = getMonsterName()
-        updateMonster(monsterName)
         monster = getMonster()
+        print(monster, "mosnter in cus")
         setMonsterLocation(100,20)
 
         evolveIcon.alpha = updateAllMonsterDescriptions(monsterName)
@@ -83,7 +83,7 @@ function scene:show( event )
         -- ============BACK===============
         back:insert(cp_background)
         -- ===========MIDDLE==============
-        middle:insert(monster)
+        -- middle:insert(monster)
         middle:insert(mint)
         middle:insert(strawberry)
         middle:insert(banana)

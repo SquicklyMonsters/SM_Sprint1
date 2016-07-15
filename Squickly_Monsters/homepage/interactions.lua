@@ -54,7 +54,12 @@ local monsterLevelText;
 local chageScenceEffect = "crossFade";
 local chageSceneTime = 250;
 -- -------------------------------------------------------------------------------
+function updateMonsterListener()
+    monster = getMonster()
+    monster:addEventListener("touch", monsterClicked)
+end
 
+-- -------------------------------------------------------------------------------
 function cacheVariables()
     monster = getMonster()
     background = getBackground()
@@ -502,7 +507,7 @@ function addListeners()
     setDecrementRate()
     -------------------
 
-    monster:addEventListener("touch", monsterClicked)
+    updateMonsterListener()
     background:addEventListener("touch", backgroundClicked)
     feedIcon:addEventListener("touch", feedButtonClicked)
     sleepIcon:addEventListener("touch", sleepButtonClicked)
