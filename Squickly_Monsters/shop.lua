@@ -256,14 +256,8 @@ function scene:create( event )
     front = display.newGroup()
 
 	-- Set background
-<<<<<<< HEAD
     setUpBackgroundShop()
     backgroundShop = getBackgroundShop()
-=======
-    setUpShopBackground()
-
-    backgroundShop = getShopBackground()
->>>>>>> c2df0cbcb9d81da9585129234ecc2ea3aeef3175
 
     -- Set Shop
     shop = setUpShop()
