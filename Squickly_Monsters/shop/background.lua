@@ -5,7 +5,7 @@ local backgroundShop;
 
 -- -------------------------------------------------------------------------------
 
-function setUpShopBackground() 
+function setUpBackgroundShop() 
     -- Set Background
     -- local background = display.newImage("background.png", display.contentCenterX, display.contentCenterY)
     -- local backgroundOption = {
