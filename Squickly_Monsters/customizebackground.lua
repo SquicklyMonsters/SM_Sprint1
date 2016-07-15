@@ -18,7 +18,7 @@ local front;
 
 local resizer = display.contentHeight/320
 
-local numOfBackgrounds = 11; --Number you want to include
+local numOfBackgrounds = #getBackgroundList(); --Number you want to include
 local bgPreview;
 local chosenBG;
 local counter;
