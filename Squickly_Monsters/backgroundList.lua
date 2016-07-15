@@ -1,6 +1,6 @@
 local backgroundDir = "img/bg/"
 
-local backgroundList =  {"fireball","pikachu","cat","egg","voltorb","electrode"};
+local backgroundList =  {"grassland","mountains","hotday","ice","jungle","mystery"};
 
 -- -------------------------------------------------------------------------------
 -- Background Img + Dimensions
@@ -10,7 +10,7 @@ local backgroundImageAttr = {
 		backgroundDir.."grassland.png",1136,640,
 	}, 
 	{ --fantasy
-		backgroundDir.."fantasy.jpg",600,450,
+		backgroundDir.."mountains.jpg",736,437,
 	}, 
 	{ --hotday
 		backgroundDir.."hotday.png",850,511,

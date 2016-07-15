@@ -22,6 +22,8 @@ local backgroundList;
 local counter;
 local bgPreview;
 
+local container;
+
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
@@ -30,40 +32,56 @@ function buttonClicked(event)
     if event.phase == "ended" then
         if event.target.name == "right" then
             counter = counter%#backgroundList+1
-        else
+            updatePreview()
+        elseif event.target.name == "left" then
             if counter == 1 then
                 counter = #backgroundList
             else
                 counter = counter-1
             end
+            updatePreview()
+        else
+            print("change me!")
+            bg = getBackgroundInfo(backgroundList[counter])
+            print(bg[1])
         end
-        updatePreview()
     end
 end
 
 function updatePreview()
     bgPreview = getBackgroundInfo(backgroundList[counter])
 
-    preview = widget.newPanel {
-        name = "preview",
-        x = 0,
-        y = 0,
-        width = bgPreview[2],
-        height = bgPreview[3],
-        imageDir = bgPreview[1]
-    }
 
-    preview:scale(
-                (display.contentWidth/preview.width)*0.8, 
-                (display.contentHeight/preview.height)*0.8
-                )
+    -- preview = widget.newPanel {
+    --     name = "preview",
+    --     x = 0,
+    --     y = 0,
+    --     width = bgPreview[2],
+    --     height = bgPreview[3],
+    --     imageDir = bgPreview[1]
+    -- }
+
+    -- preview:scale(
+    --             (display.contentWidth/preview.width)*0.8, 
+    --             (display.contentHeight/preview.height)*0.8
+
+    --            )
+    
+    width = bgPreview[2]
+    height = bgPreview[3]
+    imageDir = bgPreview[1]
+
+    container:remove(background)
+    local background = display.newImage(imageDir)
+    background:scale(width/background.width, height/background.height )
+    container:insert(background)
 end
 
 -- -------------------------------------------------------------------------------
 
 function widget.newPanel(options)                                    
     local background = display.newImage(options.imageDir)
-    local container = display.newContainer(options.width, options.height)
+    container = display.newContainer(options.width, options.height)
     
     -- print(background.width, background.height, display.contentWidth, display.contentHeight)
     background:scale(options.width/background.width, options.height/background.height )
@@ -89,6 +107,8 @@ function setUpPreview()
         imageDir = bgPreview[1]
     }
 
+    print(preview.width)
+
     preview:scale(
                 (display.contentWidth/preview.width)*0.8, 
                 (display.contentHeight/preview.height)*0.8
@@ -97,7 +117,7 @@ function setUpPreview()
     return preview
 end
 
-function setUpButton()
+function setUpButtons()
     local rightButton = widget.newPanel {
         name = "right",
         width = 200,
@@ -111,8 +131,6 @@ function setUpButton()
                 (display.contentWidth/rightButton.width)*0.15,
                 (display.contentHeight/rightButton.height)*0.15
                 )
-
-    -- rightbutton.x = display.contentCenterX - 100
 
     local leftButton = widget.newPanel {
         name = "left",
@@ -128,9 +146,21 @@ function setUpButton()
                 (display.contentHeight/leftButton.height)*0.15
                 )
 
-    -- print(leftButton.options.image)
+    local selectButton = widget.newPanel {
+        name = "select",
+        width = 100,
+        height = 50,
+        imageDir = "img/icons/UIIcons/select.png",
+        x = 0,
+        y = 150
+    }
 
-    return rightButton, leftButton
+    leftButton:scale(
+                (display.contentWidth/selectButton.width)*0.1,
+                (display.contentHeight/selectButton.height)*0.1
+                )
+
+    return rightButton, leftButton, selectButton
 end
 
 -- -------------------------------------------------------------------------------
@@ -151,8 +181,8 @@ function scene:create( event )
     background = getBackground()
 
     -- Set preview
+    rightButton, leftButton, selectButton = setUpButtons()
     preview = setUpPreview()
-    rightButton, leftButton = setUpButton()
 
     -- Set monster
     monster = getMonster()
@@ -161,6 +191,7 @@ function scene:create( event )
     -- Set up all Event Listeners
     rightButton:addEventListener("touch", buttonClicked)
     leftButton:addEventListener("touch", buttonClicked)
+    selectButton:addEventListener("touch", buttonClicked)
 end
 
 function scene:show( event )
