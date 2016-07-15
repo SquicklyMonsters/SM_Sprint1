@@ -147,12 +147,12 @@ function scene:show( event )
         tiredThoughtCloud = getTiredThoughtCloud()
 
         -- Set Monster Position
-        print(monsterName, getMonsterName())
-        if monsterName ~= getMonsterName() then
-            print("monster differ")
-            -- monster:removeSelf()
-            -- updateMonsterListener()
-        end
+        -- print(monsterName, getMonsterName())
+        -- if monsterName ~= getMonsterName() then
+        --     print("monster differ")
+        --     -- monster:removeSelf()
+        --     -- updateMonsterListener()
+        -- end
         monster = getMonster()
         setMonsterLocation(0,70)
 

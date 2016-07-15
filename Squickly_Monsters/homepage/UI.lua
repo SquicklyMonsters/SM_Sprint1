@@ -409,35 +409,12 @@ function checkHappiness(delay)
     checkHappinessID = timer.performWithDelay(delay, checkHappinessEventHandler, 1)
 end
 -- -------------------------------------------------------------------------------
--- -- Get needs level
 
--- function getCurrentNeedsLevels()
---     return needsLevels
--- end
-
--- function getMaxNeedsLevels()
---     return maxNeedsLevels
--- end
-
--- function getHungerLevel()
---     return needsLevels.hunger
--- end
-
--- function getHappinessLevel()
---     return needsLevels.happiness
--- end
-
--- function getHygieneLevel()
---     return needsLevels.hygiene
--- end
-
--- function getEnergyLevel()
---     return needsLevels.energy
--- end
-
--- function getExpLevel()
---     return needsLevels.exp
--- end
+function cancelAllChecker()
+    timer.cancel(checkHappinessID)
+    timer.cancel(checkTiredID)
+    timer.cancel(checkHungerID)
+end
 
 -- -------------------------------------------------------------------------------
 -- Get needs bar

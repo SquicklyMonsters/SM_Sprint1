@@ -59,7 +59,8 @@ function evolveSeq2(event)
 
 	-- Set New Monster
 	setMonsterName(nextMonsterName)
-	setUpMonster(nextMonsterName)
+	changeMonster(nextMonsterName)
+	-- setUpMonster(nextMonsterName)
 	saveData()
 
 	--Update to Latest Data

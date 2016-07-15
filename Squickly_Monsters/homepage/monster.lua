@@ -46,6 +46,16 @@ function getMonster()
     return monster
 end
 -- -------------------------------------------------------------------------------
+function changeMonster(newMonsterName)
+    -- Remove old one
+    cancelAllChecker()
+    cancelEnergyLoop()
+    monster:removeSelf()
+    
+    -- Set up new one
+    setUpMonster(newMonsterName)
+    updateMonsterListener()
+end
 
 function setMonsterLocation(offset_x,offset_y)
     monster.x = display.contentCenterX+offset_x*resizer
@@ -53,7 +63,7 @@ function setMonsterLocation(offset_x,offset_y)
 end
 
 function setMonsterSequence(sequence)
-    print(monster, "from sequence", sequence)
+    -- print(monster, "from sequence", sequence)
     monster:setSequence(sequence)
     monster:play()
 end
