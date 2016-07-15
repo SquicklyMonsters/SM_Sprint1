@@ -85,7 +85,7 @@ function setUpRewardTime()
 		minutes = math.floor((tmp - (hours*60*60)) / 60)
 		seconds = tmp - (minutes*60) - (hours*60*60)
 		timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
-		clockText = display.newText(timeDisplay, -(dailyRewardPanel.width)/20, -dailyRewardPanel.height/7, native.systemFontBold, 80)
+		clockText = display.newText(timeDisplay, -(dailyRewardPanel.width)/20 + 25, -dailyRewardPanel.height/7 -20, native.systemFontBold, 80)
 		clockText:setFillColor( 0.7, 0.7, 1 )
 		if tmp > 0 then
 				tickLoop = timer.performWithDelay(1000, tickTick, -1)
@@ -108,9 +108,13 @@ end
 -- ----------------------------------------------------------------
 
 function widget.newPanel(options)
-	  local background = display.newImage(options.imageDir)
+		local myRoundedRect = display.newRoundedRect( 0, 0, 380, 280, 12 )
+		myRoundedRect.strokeWidth = 3
+		myRoundedRect:setFillColor( 0.5 )
+		myRoundedRect:setStrokeColor( 1, 0, 0 )
+	  -- local background = display.newImage(options.imageDir)
 	  local container = display.newContainer(options.width, options.height)
-	  container:insert(background, true)
+	  container:insert(myRoundedRect, true)
 	  container.x = display.contentCenterX
 	  container.y = display.contentCenterY
 	  return container
@@ -122,12 +126,17 @@ function setUpDailyReward()
   	dailyRewardPanel = widget.newPanel {
     height = 390,
     width = 390,
-    imageDir = "img/others/NEW2.png"
   }
+		local slot = display.newImage("img/others/NEW2.png")
+		dailyRewardPanel:insert(slot)
+		-- local myRoundedRect = display.newRoundedRect( 0, 0, 380, 280, 12 )
+		-- myRoundedRect.strokeWidth = 3
+		-- myRoundedRect:setFillColor( 0.5 )
+		-- myRoundedRect:setStrokeColor( 1, 0, 0 )
+		-- dailyRewardPanel:insert(myRoundedRect)
 -- Add 7 item in the reward slot panel
   	local startX = -dailyRewardPanel.width*(1/2)
   	local startY = -dailyRewardPanel.height*(1/20)
-
   	local spacingX = (dailyRewardPanel.width)/9
   	local spacingY = dailyRewardPanel.height/9
 
@@ -145,6 +154,7 @@ function setUpDailyReward()
 				local cross = display.newImage("img/others/cross.png", ((x+5) + spacingX*(i))+20, y+20)
 				cross:scale(0.1, 0.1)
 				dailyRewardPanel:insert(cross)
+
 		end
 end
 
@@ -198,8 +208,10 @@ end
 -- ------------------------------------------------------------
 -- Create close button and create claim reward button
   dailyRewardPanel.close = widget.newButton {
-    top = startY - (spacingY),
-    left = startX + (spacingX*7.5),
+    -- top = startY - (spacingY),
+    -- left = startX + (spacingX*7.5),
+		top = startY - (spacingY * 3),
+		left = startX +(spacingX * 8) ,
     width = 50,
     height = 50,
     defaultFile = "img/bg/close.png",
