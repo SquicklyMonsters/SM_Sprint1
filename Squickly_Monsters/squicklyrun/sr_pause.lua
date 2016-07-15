@@ -20,7 +20,7 @@ function quitClickEvent(event)
 	if event.phase == "ended" then
 		-- restartGame()
 		composer.removeScene("squicklyrun.sr_mainpage")
-		composer.gotoScene("home", "crossFade", 250)
+		composer.gotoScene("miniGame", "crossFade", 250)
 		
 	end
 end
