@@ -1,11 +1,13 @@
 -------------------------------------------------------------------------------
 -- Local variables go HERE
 
+require("customizebackground")
+
 local background;
 
 -- -------------------------------------------------------------------------------
 
-function setUpBackground() 
+function setUpHomeBackground() 
     -- Set Background
     -- background = display.newImage("img/bg/mountains.jpg", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/waterfall.png", display.contentCenterX, display.contentCenterY)
@@ -53,7 +55,15 @@ function setUpBackground()
     -- background:play()
 end
 
-function getBackground()
+function updateBackground()
+    newBG = getChosenBG()
+    if newBG ~= nil then
+        background = display.newImage(newBG, display.contentCenterX, display.contentCenterY)
+    end
+end
+
+function getHomeBackground()
+    updateBackground()
     return background
 end
 

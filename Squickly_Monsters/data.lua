@@ -152,7 +152,7 @@ function loadData()
         }
 
         monsterLevel = 1
-        monsterName = "voltorb"
+        monsterName = "egg_electric"
         receiveDate = nil
 
     end
@@ -298,6 +298,10 @@ end
 
 function setMonsterLevel(level)
     monsterLevel = level
+end
+
+function setMonsterName(name)
+    monsterName = name
 end
 
 -- Need Rates

@@ -32,7 +32,17 @@ function changeSceneButtonEvent(event)
         composer.removeScene(currentScene)
       end
 
-      composer.gotoScene(scene, chageScenceEffect, chageSceneTime)
+      if scene == "shop" then
+        local options = 
+        {
+          effect = chageScenceEffect, 
+          time = chageSceneTime, 
+          params = {tab = "all"}
+        }
+        composer.gotoScene(scene, options)
+      else
+        composer.gotoScene(scene, chageScenceEffect, chageSceneTime)
+      end
     end
   end
 end

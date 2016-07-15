@@ -24,11 +24,17 @@ local backgroundList;
 local counter;
 local bgPreview;
 
+local chosenBG
+
 local container;
 
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
+
+function getChosenBG()
+    return chosenBG
+end
 
 function buttonClicked(event)
     if event.phase == "ended" then
@@ -44,30 +50,13 @@ function buttonClicked(event)
             updatePreview()
         else
             print("change me!")
-            bg = getBackgroundInfo(backgroundList[counter])
-            print(bg[1])
+            chosenBG = getBackgroundInfo(backgroundList[counter])[1]
         end
     end
 end
 
 function updatePreview()
     bgPreview = getBackgroundInfo(backgroundList[counter])
-
-
-    -- preview = widget.newPanel {
-    --     name = "preview",
-    --     x = 0,
-    --     y = 0,
-    --     width = bgPreview[2],
-    --     height = bgPreview[3],
-    --     imageDir = bgPreview[1]
-    -- }
-
-    -- preview:scale(
-    --             (display.contentWidth/preview.width)*0.8, 
-    --             (display.contentHeight/preview.height)*0.8
-
-    --            )
     
     width = bgPreview[2]
     height = bgPreview[3]
@@ -76,8 +65,6 @@ function updatePreview()
     container:remove(background)
     local background = display.newImage(imageDir)
     background:scale(width/background.width, height/background.height )
-    print(width/background.width)
-    print(height/background.height)
     container:insert(background)
 end
 
@@ -178,9 +165,9 @@ function scene:create( event )
     front = display.newGroup()
 
 	-- Set background
-    setUpBackground()
+    setUpEvolveBackground()
 
-    background = getBackground()
+    background = getEvolveBackground()
 
     -- Set preview
     rightButton, leftButton, selectButton = setUpButtons()
