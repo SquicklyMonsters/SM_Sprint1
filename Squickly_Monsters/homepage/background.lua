@@ -2,17 +2,19 @@
 -- Local variables go HERE
 
 require("customizebackground")
+require("data")
 
 local background;
 
 -- -------------------------------------------------------------------------------
 
 function setUpHomeBackground() 
+    local bg = getSaveBackground()
     -- Set Background
     -- background = display.newImage("img/bg/mountains.jpg", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/waterfall.png", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/hotday.png", display.contentCenterX, display.contentCenterY)
-    background = display.newImage("img/bg/ice.png", display.contentCenterX, display.contentCenterY)
+    background = display.newImage(bg, display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/planets.png", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/underwater.jpg", display.contentCenterX, display.contentCenterY)
     -- background = display.newImage("img/bg/underwater2.jpg", display.contentCenterX, display.contentCenterY)
@@ -63,6 +65,7 @@ function updateBackground()
 end
 
 function getHomeBackground()
+    saveBackground()
     updateBackground()
     return background
 end
