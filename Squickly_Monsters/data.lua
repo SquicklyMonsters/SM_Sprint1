@@ -24,6 +24,7 @@ local hygieneRate = -50;
 local energyRate = -50;
 
 local receiveDate;
+local dailyLoginCount;
 
 local saveRate;
 local dataFile = system.pathForFile( "data.txt", system.DocumentsDirectory )
@@ -33,37 +34,38 @@ local dataFile = system.pathForFile( "data.txt", system.DocumentsDirectory )
 function writeFile(file, contents)
     file = io.open(file, "w")
     file:write(contents)
-    io.close(file)    
+    io.close(file)
 end
 
 function saveData()
-    local outTable = 
+    local outTable =
     {
     -- UI Data
-    foodRecentList, playRecentList, 
+    foodRecentList, playRecentList,
     -- Inventory Data
     invenList, itemQuantities, gold, platinum,
     -- Needs Data
     	{
-    	maxNeedsLevels.hunger, 
-    	maxNeedsLevels.happiness, 
-    	maxNeedsLevels.hygiene, 
-    	maxNeedsLevels.energy, 
+    	maxNeedsLevels.hunger,
+    	maxNeedsLevels.happiness,
+    	maxNeedsLevels.hygiene,
+    	maxNeedsLevels.energy,
     	maxNeedsLevels.exp
     	},
 
     	{
-    	needsLevels.hunger, 
-    	needsLevels.happiness, 
-    	needsLevels.hygiene, 
-    	needsLevels.energy, 
-    	needsLevels.exp    	
+    	needsLevels.hunger,
+    	needsLevels.happiness,
+    	needsLevels.hygiene,
+    	needsLevels.energy,
+    	needsLevels.exp
     	},
     -- Monster
     monsterLevel,
     monsterName,
     -- Daily Rewards
     receiveDate,
+    dailyLoginCount,
 	}
     local contents = json.encode(outTable)
     writeFile(dataFile, contents)
@@ -103,7 +105,7 @@ function loadData()
         platinum = inTable[invIdx + 3]
 
         local needIdx = 7
-        maxNeedsLevels = 
+        maxNeedsLevels =
         {
         hunger = inTable[needIdx][1],
         happiness = inTable[needIdx][2],
@@ -111,7 +113,7 @@ function loadData()
         energy = inTable[needIdx][4],
         exp = inTable[needIdx][5]
     	}
-        needsLevels = 
+        needsLevels =
         {
         hunger = inTable[needIdx + 1][1],
         happiness = inTable[needIdx + 1][2],
@@ -126,6 +128,7 @@ function loadData()
 
         local rewIdx = 11
         receiveDate = inTable[rewIdx]
+        dailyLoginCount = inTable[rewIdx + 1]
 
     else
     	foodRecentList = {}
@@ -154,6 +157,7 @@ function loadData()
         monsterLevel = 1
         monsterName = "egg_electric"
         receiveDate = nil
+        dailyLoginCount = 0
 
     end
 
@@ -328,13 +332,19 @@ function getReceiveDate()
     return receiveDate
 end
 
+function getDailyLoginCount()
+    return dailyLoginCount
+end
+
 -- --
 
 function setReceiveDate(date)
     receiveDate = date
 end
 
+
+function setDailyLoginReward(stackLogInCount)
+    dailyLoginCount = stackLogInCount
+end
+
 -- -------------------------------------------------------------------------------
-
-
-

@@ -163,10 +163,10 @@ function setUpAllIcons()
     hungerThoughtCloud = setUpIcon(iconsDir.. "hungry.png", 1*resizer, getMonster().x + 60*resizer, getMonster().y - 20*resizer)
     tiredThoughtCloud = setUpIcon(iconsDir.. "tired.png", 1*resizer, getMonster().x - 60*resizer, getMonster().y - 20*resizer)
     thoughtClouds = {hungerThoughtCloud, tiredThoughtCloud}
-    
+
     invenList, itemQuantities, gold, platinum = getInventoryData()
     foodRecentList, playRecentList = getRecentList()
-    
+
     updateFoodIcons()
     updatePlayIcons()
 end
@@ -202,7 +202,7 @@ function levelUp(exp)  -- Level up then change text and set exp bar to = 0
 
     monsterLevel = monsterLevel + 1
     monsterLevelText.text = monsterLevel
-    
+
     setNeedLevel("exp", exp)
     setMonsterLevel(monsterLevel)
     saveData()

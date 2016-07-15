@@ -51,6 +51,7 @@ local inventoryIsShow = false;
 local monsterLevel;
 local monsterLevelText;
 
+local dailyRewardIsShown = false;
 local chageScenceEffect = "crossFade";
 local chageSceneTime = 250;
 -- -------------------------------------------------------------------------------
@@ -281,10 +282,10 @@ function foodShopButtonClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(currentVisibleList)
-            local options = 
+            local options =
             {
-              effect = chageScenceEffect, 
-              time = chageSceneTime, 
+              effect = chageScenceEffect,
+              time = chageSceneTime,
               params = {tab = "food"}
             }
             composer.gotoScene("shop", options)
@@ -331,10 +332,10 @@ function toyShopButtonClicked(event)
     if isTouchAble then
         if event.phase == "ended" then
             hideShowAllIcons(currentVisibleList)
-            local options = 
+            local options =
             {
-              effect = chageScenceEffect, 
-              time = chageSceneTime, 
+              effect = chageScenceEffect,
+              time = chageSceneTime,
               params = {tab = "toy"}
             }
             composer.gotoScene("shop", options)
@@ -353,102 +354,110 @@ function inventoryClicked(event)
     end
 end
 
-function showInventory(selectedTab)
-    local options = {params = {tab = selectedTab}}
-    composer.showOverlay("inventory", options)
-    inventoryIsShow = true
+function dailyRewardClicked(event)
+    if event.phase == "ended" then
+        if dailyRewardIsShown then
+            composer.gotoScene(composer.getSceneName("current"))
+            dailyRewardIsShown = false
+        else
+            composer.showOverlay("dailyLogInReward")
+            dailyRewardIsShown = true
+        end
+    end
 end
+
 -- -------------------------------------------------------------------------------
 -- Daily Reward Functions
 
-function getDailyReward()
-    p = math.random()
-    if p >= 0.35 then
-        -- get random item
-        r = math.random(#itemList)
-        item = itemList[itemList[r]]
-        idx = isInInventory(item.name)
-        if idx then
-            increaseQuantity(idx)
-        else
-            addToInventory(item.name)
-        end
-    else
-        if p >= 0.25 then
-            -- get gold
-            r = math.random(100, 1000)
-            updateCurrency(r, 0)
-        else
-            -- get platinum
-            r = math.random(5)
-            updateCurrency(0, r)
-        end
-    end
-    saveData()
-end
 
-function isItRewardTime() -- calculates how much time is left for reward, returns false if done
-    -- lastTime = loadLastRewardDate()
-    local receiveDate = getReceiveDate()
-    local currentDate = os.date( '*t' )
-
-    if receiveDate == nil then -- receiveDate is false if user has never gotten daily reward before
-        dailyRewardTrueIcon.alpha = 1
-        dailyRewardFalseIcon.alpha = 0
-        return false, currentDate, nil
-    end
-
-    setTime = os.time{  year = receiveDate.year, month = receiveDate.month, day = receiveDate.day,
-                        hour = receiveDate.hour, min = receiveDate.min, sec = receiveDate.sec }
-    endTime = os.time{  year = currentDate.year, month = currentDate.month, day = currentDate.day,
-                        hour = currentDate.hour, min = currentDate.min, sec = currentDate.sec }
-
-    local rewardTimer = ( endTime - setTime ) -- difference in seconds
-    -- print(rewardTimer)
-    -- set to 5 seconds for now for testing
-    limit = 24*60*60 -- 24 hours in sec
-    
-    if rewardTimer >= limit then
-        dailyRewardTrueIcon.alpha = 1
-        dailyRewardFalseIcon.alpha = 0
-        return true, currentDate, rewardTimer 
-    end
-    return false, currentDate, rewardTimer
-end
-
-function rewardIconClicked(event)
-    if event.phase == "ended" then
-        timeleft, currentDate, rewardTimer = isItRewardTime()
-        if timeleft == true or rewardTimer == nil then -- if the timer is done
-            -- reward animation
-
-            -- add to inventory
-            getDailyReward()
-            print("GET REWARD!")
-
-            -- reset timer and save date
-            -- saveRewardTimerData()
-            setReceiveDate(currentDate)
-            
-
-            --change visibility
-            dailyRewardTrueIcon.alpha = 0
-            dailyRewardFalseIcon.alpha = 1
-
-        else -- if the timer is still ticking
-            -- show timer
-            tmp = 24*60*60 - rewardTimer
-            print(tmp)
-            hours = math.floor(tmp/(60*60))
-            minutes = math.floor((tmp - (hours*60*60)) / 60)
-            seconds = tmp - (minutes*60) - (hours*60*60)
-            timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
-            clockText = display.newText(timeDisplay, display.contentCenterX, display.contentCenterY*0.7, native.systemFontBold, 80)
-            clockText:setFillColor( 0.0, 0.0, 0.0 )
-            transition.fadeOut( clockText, { time=1500 } )
-        end
-    end
-end
+-- function getDailyReward()
+--     p = math.random()
+--     if p >= 0.35 then
+--         -- get random item
+--         r = math.random(#itemList)
+--         item = itemList[itemList[r]]
+--         idx = isInInventory(item.name)
+--         if idx then
+--             increaseQuantity(idx)
+--         else
+--             addToInventory(item.name)
+--         end
+--     else
+--         if p >= 0.25 then
+--             -- get gold
+--             r = math.random(100, 1000)
+--             updateCurrency(r, 0)
+--         else
+--             -- get platinum
+--             r = math.random(5)
+--             updateCurrency(0, r)
+--         end
+--     end
+--     saveData()
+-- end
+--
+-- function isItRewardTime() -- calculates how much time is left for reward, returns false if done
+--     -- lastTime = loadLastRewardDate()
+--     local receiveDate = getReceiveDate()
+--     local currentDate = os.date( '*t' )
+--
+--     if receiveDate == nil then -- receiveDate is false if user has never gotten daily reward before
+--         dailyRewardTrueIcon.alpha = 1
+--         dailyRewardFalseIcon.alpha = 0
+--         return false, currentDate, nil
+--     end
+--
+--     setTime = os.time{  year = receiveDate.year, month = receiveDate.month, day = receiveDate.day,
+--                         hour = receiveDate.hour, min = receiveDate.min, sec = receiveDate.sec }
+--     endTime = os.time{  year = currentDate.year, month = currentDate.month, day = currentDate.day,
+--                         hour = currentDate.hour, min = currentDate.min, sec = currentDate.sec }
+--
+--     local rewardTimer = ( endTime - setTime ) -- difference in seconds
+--     -- print(rewardTimer)
+--     -- set to 5 seconds for now for testing
+--     limit = 24*60*60 -- 24 hours in sec
+--
+--     if rewardTimer >= limit then
+--         dailyRewardTrueIcon.alpha = 1
+--         dailyRewardFalseIcon.alpha = 0
+--         return true, currentDate, rewardTimer
+--     end
+--     return false, currentDate, rewardTimer
+-- end
+--
+-- function rewardIconClicked(event)
+--     if event.phase == "ended" then
+--         timeleft, currentDate, rewardTimer = isItRewardTime()
+--         if timeleft == true or rewardTimer == nil then -- if the timer is done
+--             -- reward animation
+--
+--             -- add to inventory
+--             getDailyReward()
+--             print("GET REWARD!")
+--
+--             -- reset timer and save date
+--             -- saveRewardTimerData()
+--             setReceiveDate(currentDate)
+--
+--
+--             --change visibility
+--             dailyRewardTrueIcon.alpha = 0
+--             dailyRewardFalseIcon.alpha = 1
+--
+--         else -- if the timer is still ticking
+--             -- show timer
+--             tmp = 24*60*60 - rewardTimer
+--             print(tmp)
+--             hours = math.floor(tmp/(60*60))
+--             minutes = math.floor((tmp - (hours*60*60)) / 60)
+--             seconds = tmp - (minutes*60) - (hours*60*60)
+--             timeDisplay = string.format( "%02d:%02d:%02d", hours, minutes, seconds )
+--             clockText = display.newText(timeDisplay, display.contentCenterX, display.contentCenterY*0.7, native.systemFontBold, 80)
+--             clockText:setFillColor( 0.0, 0.0, 0.0 )
+--             transition.fadeOut( clockText, { time=1500 } )
+--         end
+--     end
+-- end
 
 -- -------------------------------------------------------------------------------
 -- EXP functions
@@ -460,7 +469,7 @@ function giveTakeCareEXP(expGain, needBar) -- Unless the NeedBar is less than 90
 end
 
 function increaseEXP(expGain) -- give exp and check the bar that Level up or not
-    local exp = (getExpLevel() + expGain) - getMaxNeedsLevels().exp 
+    local exp = (getExpLevel() + expGain) - getMaxNeedsLevels().exp
     changeNeedsLevel("exp", expGain)
     if exp >= 0 then
         levelUp(exp)
@@ -524,8 +533,8 @@ function addListeners()
 
     inventoryIcon:addEventListener("touch", inventoryClicked)
 
-    dailyRewardTrueIcon:addEventListener("touch", rewardIconClicked)
-    dailyRewardFalseIcon:addEventListener("touch", rewardIconClicked)
+    -- dailyRewardTrueIcon:addEventListener("touch", dailyRewardClicked)
+    dailyRewardFalseIcon:addEventListener("touch", dailyRewardClicked)
     timer.performWithDelay(1000, isItRewardTime, -1)
     -- timer.performWithDelay(1000, updateTime, -1 )
 end
