@@ -98,7 +98,7 @@ function allocateItems(list, quantities, startX, startY, spacingX, spacingY)
 		    	defaultFile = item.image,
 		    	onEvent = itemClickedEvent,
 	 		}
-	 		
+
 	 		inventory.items[invSlotIdx].item = item
 	 		inventory.items[invSlotIdx].invSlotIdx = invSlotIdx
 	 		inventory.items[invSlotIdx].invDataIdx = invDataIdx
@@ -120,7 +120,7 @@ function allocateItems(list, quantities, startX, startY, spacingX, spacingY)
 	 		invSlotIdx = invSlotIdx + 1
 	 	end
  		--another smaller frame for quantity
- 	end	
+ 	end
 end
 -- -------------------------------------------------------------------------------
 
@@ -151,8 +151,9 @@ function setUpInventory()
 
  	local spacingX = inventory.width/4
  	local spacingY = inventory.height/4
- 	
+
  	allocateItems(invenList, itemQuantities, startX, startY, spacingX, spacingY)
+
 
  	inventory.close = widget.newButton {
  		top = startY - (spacingY * 0.6),
@@ -245,7 +246,7 @@ function scene:create( event )
 	local sceneGroup = self.view
 	local params = event.params
 	tab = params.tab
-	inventory = setUpInventory()	
+	inventory = setUpInventory()
 	sceneGroup:insert(inventory)
 
 end

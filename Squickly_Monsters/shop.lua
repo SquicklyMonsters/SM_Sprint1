@@ -1,23 +1,9 @@
--- Import dependency
-local widget = require( "widget" )
-local composer = require( "composer" )
-local scene = composer.newScene()
-
-require("shop.background")
-require("shop.interactions")
-require("inventory.interactions")
-require("itemList")
+local composer = require("composer")
 require("data")
+-- -------------------------------------------------------------------------------
+-- Local variables go HERE
 
--- -----------------------------------------------------------------------------------------------------------------
--- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
--- -----------------------------------------------------------------------------------------------------------------
-
--- Local variables go Here
-
-local back;
-local middle;
-local front;
+local background;
 
 local notifications;
 -- local inventoryIcon;
@@ -28,50 +14,29 @@ local currentPlatinum;
 local goldText;
 local platinumText;
 
-local shop;
-
-local tab;
 -- -------------------------------------------------------------------------------
 
--- Non-scene functions go Here
-
-function itemClickedEvent(event)
-    -- TODO: Add not enough space case handler
-    if event.phase == "ended" then
-        local item = event.target.item
-        local idx = isInInventory(item.name)
-        if sufficientGold(item.gold) and sufficientPlatinum(item.platinum) then
-            buyNotice(1)
-            if idx then
-                increaseQuantity(idx)
-            else
-                addToInventory(item.name)
-            end
-            updateCurrency(-item.gold, -item.platinum)
-        else
-            buyNotice(2)
-        end
-        saveData()
-        refreshDisplayCurrency(goldText, platinumText)
-    end
+function cacheVariables()
+    background = getBackground()
 end
 
-function allTabClickEvent(event)
-    if event.phase == "ended" then
-        if tab ~= "all" then
-            updateShop("all")
-        end
-    end
+function buyNotice(i)
+    notifications[i].alpha = 1
+    transition.fadeOut( notifications[i], { time=500 } )
 end
 
-function foodTabClickEvent(event)
-    if event.phase == "ended" then
-        if tab ~= "food" then
-            updateShop("food")
-        end
-    end
-end
+function setUpNotifications()
+    local boughtNotice = display.newImageRect("img/icons/UIIcons/buy.png", 150, 150)
+    boughtNotice.x = display.contentCenterX
+    boughtNotice.y = display.contentCenterY
+    boughtNotice.alpha = 0
 
+<<<<<<< HEAD
+    local cantBuyNotice = display.newImageRect("img/icons/UIIcons/cannotbuy.png", 150, 150)
+    cantBuyNotice.x = display.contentCenterX
+    cantBuyNotice.y = display.contentCenterY
+    cantBuyNotice.alpha = 0
+=======
 function toyTabClickEvent(event)
     if event.phase == "ended" then
         if tab ~= "toy" then
@@ -115,10 +80,10 @@ function allocateItems(startX, startY, spacingX, spacingY)
             shop.items[shopIdx].item = item
 
             local textOptions = {
-                text = item.gold, 
+                text = item.gold,
                 x = x + 5,
-                y = y + 65, 
-                width = 50, 
+                y = y + 65,
+                width = 50,
                 height = 50
             }
 
@@ -126,10 +91,10 @@ function allocateItems(startX, startY, spacingX, spacingY)
             textGold:setFillColor( 255/255, 223/255, 0 )
 
             local textOptions = {
-                text = item.platinum, 
+                text = item.platinum,
                 x = x + 80,
-                y = y + 65, 
-                width = 50, 
+                y = y + 65,
+                width = 50,
                 height = 50
             }
 
@@ -146,102 +111,18 @@ end
 
 -- -------------------------------------------------------------------------------
 
-function widget.newPanel(options)                 
+function widget.newPanel(options)
     local background = display.newImage(options.imageDir)
     local container = display.newContainer(options.width, options.height)
+>>>>>>> 544eda97f1bab6f7035c9d7f4c6cffa75e853b89
 
-    -- print(background.width, background.height, display.contentWidth, display.contentHeight)
-    background:scale(options.width/background.width, options.height/background.height )
-    container:insert(background)
-    container.x = display.contentCenterX
-    container.y = display.contentCenterY
-    return container
+    notifications = {boughtNotice, cantBuyNotice}
+    return notifications
 end
 
-function setUpShop()
-    shop = widget.newPanel {
-        width = 749,
-        height = 374,
-        imageDir = "img/bg/shoplist.png"
-    }
-    shop.x,shop.y = display.contentCenterX, display.contentCenterY
-
-    local startX = -shop.width*(1/2.5)
-    local startY = -shop.height*(1/3)
-
-    local spacingX = (shop.width)/6.8
-    local spacingY = (shop.height)/3.75
-
-    local itemList = getItemList()
-
-    shop.items = {}
-    
-    allocateItems(startX, startY, spacingX, spacingY)
-
-    shop.allTab = widget.newButton {
-        top = startY,
-        left = startX - (spacingX * 0.65),
-        width = 50,
-        height = 50,
-        defaultFile = "img/icons/UIIcons/allIcon.png",
-        onEvent = allTabClickEvent,
-    }
-
-    shop.foodTab = widget.newButton {
-        top = startY + (spacingY),
-        left = startX - (spacingX * 0.65),
-        width = 50,
-        height = 50,
-        defaultFile = "img/icons/UIIcons/feedIcon.png",
-        onEvent = foodTabClickEvent,
-    }
-
-     shop.toyTab = widget.newButton {
-        top = startY + (spacingY * 2),
-        left = startX - (spacingX * 0.65),
-        width = 50,
-        height = 50,
-        defaultFile = "img/icons/UIIcons/playIcon.png",
-        onEvent = toyTabClickEvent,
-    }
-
-    -- text area to show how much GOLD you have
-    local GoldOptions = {
-    text = "Gold: " .. getGold(),
-    x = startX + 0.3*spacingX,
-    y = startY - 0.3*spacingY,
-    font = native.systemFontBold,
-    fontSize = 25
-    }
-
-    -- text area to show how much PlATINUM you have
-    local PlatinumOptions = {
-    text = "Platinum: " .. getPlatinum(),
-    x = startX + 5*spacingX,
-    y = startY - 0.3*spacingY,
-    font = native.systemFontBold,
-    fontSize = 25
-    }
-
-    goldText = display.newText(GoldOptions)
-    platinumText = display.newText(PlatinumOptions)
-
-    goldText:setFillColor( 255/255, 223/255, 0 )
-    platinumText:setFillColor( 229/255, 228/255, 226/255 )
-
-    shop:insert(goldText)
-    shop:insert(platinumText)
-
-    shop:insert(shop.allTab)
-    shop:insert(shop.foodTab)
-    shop:insert(shop.toyTab)
-
-    shop:scale(
-            (display.contentWidth/shop.width)*0.8, 
-            (display.contentHeight/shop.height)*0.8
-            )
-
-    return shop
+function refreshDisplayCurrency(goldText, platinumText)
+    goldText.text = "Gold: " .. getGold()
+    platinumText.text = "Platinum: " .. getPlatinum()
 end
 
 -- -------------------------------------------------------------------------------
@@ -268,7 +149,11 @@ function scene:create( event )
 
     -- Set up all Icons
 
+<<<<<<< HEAD
+    inventoryIcon = getInventoryIcon()
+=======
     -- inventoryIcon = getInventoryIcon()
+>>>>>>> 544eda97f1bab6f7035c9d7f4c6cffa75e853b89
 
     notifications = setUpNotifications()
 
@@ -339,4 +224,5 @@ scene:addEventListener( "destroy", scene )
 
 -----------------------------------------------------------------------------------------
 
-return scene
+-- -------------------------------------------------------------------------------
+-- Add All Event Listeners Here
