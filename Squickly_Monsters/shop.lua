@@ -256,9 +256,8 @@ function scene:create( event )
     front = display.newGroup()
 
 	-- Set background
-    setUpBackground()
-
-    backgroundShop = getBackground()
+    setUpBackgroundShop()
+    backgroundShop = getBackgroundShop()
 
     -- Set Shop
     shop = setUpShop()
@@ -266,7 +265,7 @@ function scene:create( event )
     -- Set up all Icons
 
     inventoryIcon = getInventoryIcon()
-    
+
     notifications = setUpNotifications()
 
 
