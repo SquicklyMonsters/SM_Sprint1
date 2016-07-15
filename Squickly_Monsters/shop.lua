@@ -72,20 +72,6 @@ function foodTabClickEvent(event)
     end
 end
 
-
-function setUpNotifications()
-    local boughtNotice = display.newImageRect("img/icons/UIIcons/buy.png", 150, 150)
-    boughtNotice.x = display.contentCenterX
-    boughtNotice.y = display.contentCenterY
-    boughtNotice.alpha = 0
-
-
-    local cantBuyNotice = display.newImageRect("img/icons/UIIcons/cannotbuy.png", 150, 150)
-    cantBuyNotice.x = display.contentCenterX
-    cantBuyNotice.y = display.contentCenterY
-    cantBuyNotice.alpha = 0
-end
-
 function toyTabClickEvent(event)
     if event.phase == "ended" then
         if tab ~= "toy" then
@@ -282,8 +268,7 @@ function scene:create( event )
 
     -- Set up all Icons
 
-    inventoryIcon = getInventoryIcon()
-
+    -- inventoryIcon = getInventoryIcon()
 
     notifications = setUpNotifications()
 
