@@ -1,4 +1,5 @@
 -- Import dependency
+local widget = require( "widget" )
 local composer = require( "composer" )
 local scene = composer.newScene()
 
@@ -11,6 +12,25 @@ require( 'squicklyfarm.sf_background' )
 
 local screen;
 local player;
+
+local resizer = display.contentHeight/320
+
+-- -------------------------------------------------------------------------------
+
+function widget.newPanel(options)                                    
+    local background = display.newImage(options.imageDir)
+    container = display.newContainer(options.width, options.height)
+    
+    if options.type == "preview" then
+        background:scale(display.contentWidth/background.width, display.contentHeight/background.height )
+    end
+
+    container:insert(background)
+    container.x = display.contentCenterX + options.x
+    container.y = display.contentCenterY + options.y
+    container.name = options.name
+    return container
+end
 
 -- -------------------------------------------------------------------------------
 -- Scene functions go Here
@@ -33,6 +53,19 @@ function scene:show( event )
 	local phase = event.phase
 
 	if phase == "will" then
+		--tmp
+		comingsoon = widget.newPanel {
+            name = "bug",
+            x = 0*resizer,
+            y = 0*resizer,
+            width = display.contentWidth,
+            height = display.contentHeight,
+            imageDir = "img/icons/UIIcons/comingsoon.png"
+            }
+            comingsoon.x = display.contentCenterX
+            comingsoon.y = display.contentCenterY
+            comingsoon:scale(0.5*resizer, 0.5*resizer)
+
         composer.showOverlay("menubar")
         -- Background
         back:insert(backbackground)
@@ -72,6 +105,7 @@ function scene:hide( event )
 end
 
 function scene:destroy( event )
+	comingsoon:removeSelf()
 	saveData()
 end
 
