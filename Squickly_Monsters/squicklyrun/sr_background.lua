@@ -48,4 +48,3 @@ end
 function getBackgroundnear2()
     return backgroundnear2
 end
-

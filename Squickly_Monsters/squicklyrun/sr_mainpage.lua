@@ -62,6 +62,23 @@ function scene:create( event )
     scoreText = getScoreText()
     pauseButton = getPauseButton()
 
+-- ------------------------------------
+-- temp for adding text
+		local options = {
+    text = "Your experience might not be optimal",
+    x = 300,
+    y = 50,
+    width = 500,
+    font = native.systemFontBold,
+    fontSize = 18,
+    align = "right"
+}
+
+local myText = display.newText( options )
+myText.alpha = 0
+transition.fadeIn( myText, { time=2000 } )
+myText:setFillColor( 1, 0, 0 )
+-- ------------------------------------------
 	-- updateTimer = timer.performWithDelay(1, update, 0)
 
     pauseButton:addEventListener("touch", paused)

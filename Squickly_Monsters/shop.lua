@@ -31,12 +31,13 @@ function setUpNotifications()
     boughtNotice.y = display.contentCenterY
     boughtNotice.alpha = 0
 
-<<<<<<< HEAD
+
     local cantBuyNotice = display.newImageRect("img/icons/UIIcons/cannotbuy.png", 150, 150)
     cantBuyNotice.x = display.contentCenterX
     cantBuyNotice.y = display.contentCenterY
     cantBuyNotice.alpha = 0
-=======
+end
+
 function toyTabClickEvent(event)
     if event.phase == "ended" then
         if tab ~= "toy" then
@@ -114,7 +115,6 @@ end
 function widget.newPanel(options)
     local background = display.newImage(options.imageDir)
     local container = display.newContainer(options.width, options.height)
->>>>>>> 544eda97f1bab6f7035c9d7f4c6cffa75e853b89
 
     notifications = {boughtNotice, cantBuyNotice}
     return notifications
@@ -149,11 +149,7 @@ function scene:create( event )
 
     -- Set up all Icons
 
-<<<<<<< HEAD
     inventoryIcon = getInventoryIcon()
-=======
-    -- inventoryIcon = getInventoryIcon()
->>>>>>> 544eda97f1bab6f7035c9d7f4c6cffa75e853b89
 
     notifications = setUpNotifications()
 
