@@ -58,9 +58,6 @@ function itemClickedEvent(event)
     end
 end
 
-<<<<<<< HEAD
-function widget.newPanel(options)
-=======
 function allTabClickEvent(event)
     if event.phase == "ended" then
         if tab ~= "all" then
@@ -116,10 +113,10 @@ function allocateItems(startX, startY, spacingX, spacingY)
             shop.items[shopIdx].item = item
 
             local textOptions = {
-                text = item.gold, 
+                text = item.gold,
                 x = x + 5,
-                y = y + 65, 
-                width = 50, 
+                y = y + 65,
+                width = 50,
                 height = 50
             }
 
@@ -127,10 +124,10 @@ function allocateItems(startX, startY, spacingX, spacingY)
             textGold:setFillColor( 255/255, 223/255, 0 )
 
             local textOptions = {
-                text = item.platinum, 
+                text = item.platinum,
                 x = x + 80,
-                y = y + 65, 
-                width = 50, 
+                y = y + 65,
+                width = 50,
                 height = 50
             }
 
@@ -147,8 +144,7 @@ end
 
 -- -------------------------------------------------------------------------------
 
-function widget.newPanel(options)                 
->>>>>>> 2cd44c9ed3fe20ea58ce3dfd105e1d43813d353e
+function widget.newPanel(options)
     local background = display.newImage(options.imageDir)
     local container = display.newContainer(options.width, options.height)
     container:insert(background, true)
@@ -163,12 +159,9 @@ function setUpShop()
         height = 400,
         imageDir = "img/bg/shoplist.png"
     }
-<<<<<<< HEAD
     inventory:scale(2.,1.5)
     inventory.x = display.contentCenterX + (display.contentWidth/30)
-=======
     shop.x,shop.y = display.contentCenterX, display.contentCenterY
->>>>>>> 2cd44c9ed3fe20ea58ce3dfd105e1d43813d353e
 
     local startX = -inventory.width*(1/2.45)
     local startY = -inventory.height*(1/3)
@@ -186,7 +179,6 @@ function setUpShop()
         local y = startY + (spacingY * (math.floor((i-1) / cols)))
         local item = itemList[itemList[i]]
 
-<<<<<<< HEAD
         inventory.items[i] = widget.newButton {
             top = y, -- division of row
             left = x, -- modulo of row
@@ -230,7 +222,6 @@ function setUpShop()
                 (display.contentWidth/inventory.width)*0.4,
                 (display.contentHeight/inventory.height)*0.5
                 )
-=======
      shop.toyTab = widget.newButton {
         top = startY + (spacingY * 2),
         left = startX - (spacingX * 0.65),
@@ -239,7 +230,6 @@ function setUpShop()
         defaultFile = "img/icons/UIIcons/playIcon.png",
         onEvent = toyTabClickEvent,
     }
->>>>>>> 2cd44c9ed3fe20ea58ce3dfd105e1d43813d353e
 
     -- text area to show how much GOLD you have
     local GoldOptions = {
@@ -295,14 +285,9 @@ function scene:create( event )
     shop = setUpShop()
 
     -- Set up all Icons
-<<<<<<< HEAD
-    inventoryIcon = getInventoryIcon()
-
-=======
 
     inventoryIcon = getInventoryIcon()
-    
->>>>>>> 2cd44c9ed3fe20ea58ce3dfd105e1d43813d353e
+
     notifications = setUpNotifications()
 
 
