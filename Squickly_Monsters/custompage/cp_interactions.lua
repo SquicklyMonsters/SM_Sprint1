@@ -44,13 +44,12 @@ function updateAllMonsterDescriptions(monsterName)
 
     isTouchAble = true
 
-    if nextEvolution == nil then
+    if nextEvolution ~= nil then
         if getMonsterLevel() >= levelToEvolve then
-            return 0
-        else
             return 1
         end
     end
+    return 0
 end
 
 function displayAllMonsterDescriptions(monsterName)
