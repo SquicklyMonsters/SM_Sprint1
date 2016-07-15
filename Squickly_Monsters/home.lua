@@ -19,7 +19,8 @@ local back;
 local middle;
 local front;
 
-local monster;
+-- local monster;
+local monsterName;
 
 local feedIcon;
 local sleepIcon;
@@ -82,7 +83,8 @@ function scene:create( event )
     background = getBackground()
 
     -- Set Up Monster
-    setUpMonster(getMonsterName())
+    monsterName = getMonsterName()
+    setUpMonster(monsterName)
     monster = getMonster()
     setMonsterLocation(0,70)
 
@@ -145,7 +147,13 @@ function scene:show( event )
         tiredThoughtCloud = getTiredThoughtCloud()
 
         --Set Monster Position
-        updateMonster(getMonsterName())
+        local oldMonsterName = monsterName
+        monsterName = getMonsterName()
+        print(oldMonsterName)
+        print(monsterName)
+        if monsterName ~= oldMonsterName then
+            updateMonster(monsterName)
+        end
         monster = getMonster()
         setMonsterLocation(0,70)
 
@@ -214,7 +222,6 @@ function scene:hide( event )
 		--
 		-- INSERT code here to pause the scene
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
-        monster = nil
         disableHomeTouch()
 	elseif phase == "did" then
         --composer.hideOverlay()
