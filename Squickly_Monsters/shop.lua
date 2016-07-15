@@ -142,10 +142,10 @@ end
 
 -- -------------------------------------------------------------------------------
 
-function widget.newPanel(options)                                    
+function widget.newPanel(options)                 
     local background = display.newImage(options.imageDir)
     local container = display.newContainer(options.width, options.height)
-    
+
     -- print(background.width, background.height, display.contentWidth, display.contentHeight)
     background:scale(options.width/background.width, options.height/background.height )
     container:insert(background)
@@ -201,7 +201,6 @@ function setUpShop()
         onEvent = toyTabClickEvent,
     }
 
-
     -- text area to show how much GOLD you have
     local GoldOptions = {
     text = "Gold: " .. getGold(),
@@ -219,7 +218,7 @@ function setUpShop()
     font = native.systemFontBold,
     fontSize = 25
     }
- 
+
     goldText = display.newText(GoldOptions)
     platinumText = display.newText(PlatinumOptions)
 
@@ -265,9 +264,8 @@ function scene:create( event )
     shop = setUpShop()
 
     -- Set up all Icons
+
     inventoryIcon = getInventoryIcon()
-    print(inventoryIcon.x)
-    print(inventoryIcon.y)
     
     notifications = setUpNotifications()
 
