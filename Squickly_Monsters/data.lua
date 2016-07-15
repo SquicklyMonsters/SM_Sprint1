@@ -18,6 +18,8 @@ local maxNeedsLevels;
 local monsterLevel;
 local monsterName;
 
+local background;
+
 local hungerRate = -50;
 local happinessRate = -50;
 local hygieneRate = -50;
@@ -63,6 +65,8 @@ function saveData()
     -- Monster
     monsterLevel,
     monsterName,
+    -- Background
+    background,
     -- Daily Rewards
     receiveDate,
     dailyLoginCount,
@@ -126,7 +130,10 @@ function loadData()
         monsterLevel = inTable[monIdx]
         monsterName = inTable[monIdx + 1]
 
-        local rewIdx = 11
+        local bgIdx = 11
+        background = inTable[bgIdx]
+
+        local rewIdx = 12
         receiveDate = inTable[rewIdx]
         dailyLoginCount = inTable[rewIdx + 1]
 
@@ -156,6 +163,7 @@ function loadData()
 
         monsterLevel = 1
         monsterName = "egg_electric"
+        background = "img/bg/ice.png"
         receiveDate = nil
         dailyLoginCount = 0
 
@@ -210,6 +218,17 @@ function useItem(item)
     if idx then
         local quantity = reduceQuantity(idx)
         item:use(item.type)
+        saveData()
+    end
+end
+
+-- -------------------------------------------------------------------------------
+-- Background Data Modify
+
+function saveBackground()
+    newBG = getChosenBG()
+    if newBG ~= nil then
+        background = newBG
         saveData()
     end
 end
@@ -286,6 +305,12 @@ end
 
 function getRecentList()
     return foodRecentList, playRecentList
+end
+
+-- Background
+
+function getSaveBackground()
+    return background
 end
 
 -- Monster
