@@ -82,11 +82,10 @@ end
 -- -------------------------------------------------------------------------------
 function updateShop(in_tab)
     -- Pretty much refresh the screen
-    composer.hideOverlay()
+    -- composer.hideOverlay()
     composer.removeScene(composer.getSceneName("current"))
     local event = {params = {tab = in_tab}}
     scene:create(event)
-
     -- local options = { params = {tab = in_tab} }
     -- composer.gotoScene("shop", options)
 end
@@ -143,10 +142,10 @@ end
 
 -- -------------------------------------------------------------------------------
 
-function widget.newPanel(options)                                    
+function widget.newPanel(options)                 
     local background = display.newImage(options.imageDir)
     local container = display.newContainer(options.width, options.height)
-    
+
     -- print(background.width, background.height, display.contentWidth, display.contentHeight)
     background:scale(options.width/background.width, options.height/background.height )
     container:insert(background)
@@ -161,6 +160,7 @@ function setUpShop()
         height = 374,
         imageDir = "img/bg/shoplist.png"
     }
+    shop.x,shop.y = display.contentCenterX, display.contentCenterY
 
     local startX = -shop.width*(1/2.5)
     local startY = -shop.height*(1/3)
@@ -201,7 +201,6 @@ function setUpShop()
         onEvent = toyTabClickEvent,
     }
 
-
     -- text area to show how much GOLD you have
     local GoldOptions = {
     text = "Gold: " .. getGold(),
@@ -219,7 +218,7 @@ function setUpShop()
     font = native.systemFontBold,
     fontSize = 25
     }
- 
+
     goldText = display.newText(GoldOptions)
     platinumText = display.newText(PlatinumOptions)
 
@@ -265,8 +264,8 @@ function scene:create( event )
     shop = setUpShop()
 
     -- Set up all Icons
+
     inventoryIcon = getInventoryIcon()
-    -- print(inventoryIcon)
     
     notifications = setUpNotifications()
 
@@ -277,6 +276,7 @@ end
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
+
 
 	if phase == "will" then
         -- Add display objects into group
