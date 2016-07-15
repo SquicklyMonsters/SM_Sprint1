@@ -26,7 +26,11 @@ local chosenBG;
 local counter;
 local container;
 
-local firstTime = true;
+local rightButton;
+local leftButton;
+local selectButton;
+
+local preview;
 
 -- -------------------------------------------------------------------------------
 
@@ -37,6 +41,7 @@ function getChosenBG()
 end
 
 function buttonClicked(event)
+    print(event.target.name)
     if event.phase == "ended" then
         if event.target.name == "right" then
             counter = counter%#backgroundList+1
@@ -93,7 +98,7 @@ function setUpPreview()
 
     bgPreview = getBackgroundInfo(backgroundList[counter])
 
-    local preview = widget.newPanel {
+    preview = widget.newPanel {
         name = "preview",
         x = 0*resizer,
         y = 0*resizer,
@@ -108,12 +113,10 @@ function setUpPreview()
                 (display.contentWidth/preview.width)*0.8*resizer, 
                 (display.contentHeight/preview.height)*0.8*resizer
                 )
-
-    return preview
 end
 
 function setUpButtons()
-    local rightButton = widget.newPanel {
+    rightButton = widget.newPanel {
         name = "right",
         width = 800*resizer,
         height = 718*resizer,
@@ -129,7 +132,7 @@ function setUpButtons()
                 (display.contentHeight/rightButton.height)*0.2
                 )
 
-    local leftButton = widget.newPanel {
+    leftButton = widget.newPanel {
         name = "left",
         width = 800*resizer,
         height = 700*resizer,
@@ -145,7 +148,7 @@ function setUpButtons()
                 (display.contentHeight/leftButton.height)*0.2
                 )
 
-    local selectButton = widget.newPanel {
+    selectButton = widget.newPanel {
         name = "select",
         width = 300*resizer,
         height = 72*resizer,
@@ -160,8 +163,13 @@ function setUpButtons()
                 (display.contentWidth/selectButton.width)*0.30,
                 (display.contentHeight/selectButton.height)*0.15
                 )
+end
 
-    return rightButton, leftButton, selectButton
+function addListeners()
+    -- Set up all Event Listeners
+    rightButton:addEventListener("touch", buttonClicked)
+    leftButton:addEventListener("touch", buttonClicked)
+    selectButton:addEventListener("touch", buttonClicked)
 end
 
 -- -------------------------------------------------------------------------------
@@ -182,17 +190,14 @@ function scene:create( event )
     background = getEvolveBackground()
 
     -- Set preview
-    rightButton, leftButton, selectButton = setUpButtons()
-    preview = setUpPreview()
+    setUpButtons()
+    setUpPreview()
 
     -- Set monster
     monster = getMonster()
     setMonsterLocation(0,50)
-
-    -- Set up all Event Listeners
-    rightButton:addEventListener("touch", buttonClicked)
-    leftButton:addEventListener("touch", buttonClicked)
-    selectButton:addEventListener("touch", buttonClicked)
+        
+    addListeners()
 end
 
 function scene:show( event )
