@@ -56,9 +56,6 @@ function itemClickedEvent(event)
     end
 end
 
-<<<<<<< HEAD
-function widget.newPanel(options)
-=======
 function allTabClickEvent(event)
     if event.phase == "ended" then
         if tab ~= "all" then
@@ -85,11 +82,10 @@ end
 -- -------------------------------------------------------------------------------
 function updateShop(in_tab)
     -- Pretty much refresh the screen
-    composer.hideOverlay()
+    -- composer.hideOverlay()
     composer.removeScene(composer.getSceneName("current"))
     local event = {params = {tab = in_tab}}
     scene:create(event)
-
     -- local options = { params = {tab = in_tab} }
     -- composer.gotoScene("shop", options)
 end
@@ -146,8 +142,7 @@ end
 
 -- -------------------------------------------------------------------------------
 
-function widget.newPanel(options)                                    
->>>>>>> 4da1ee26c92461f298214d0672ba901271cd0b63
+function widget.newPanel(options)                 
     local background = display.newImage(options.imageDir)
     local container = display.newContainer(options.width, options.height)
 
@@ -165,6 +160,7 @@ function setUpShop()
         height = 374,
         imageDir = "img/bg/shoplist.png"
     }
+    shop.x,shop.y = display.contentCenterX, display.contentCenterY
 
     local startX = -shop.width*(1/2.5)
     local startY = -shop.height*(1/3)
@@ -196,51 +192,6 @@ function setUpShop()
         onEvent = foodTabClickEvent,
     }
 
-<<<<<<< HEAD
-        shop.items[i] = widget.newButton {
-            top = y, -- division of row
-            left = x, -- modulo of row
-            width = 50,
-            height = 50,
-            defaultFile = item.image,
-            onEvent = itemClickedEvent,
-        }
-
-        shop.items[i].item = item
-        shop.items[i].idx = i
-
-        local textOptions = {
-            text = item.gold,
-            x = x + 5,
-            y = y + 65,
-            width = 50,
-            height = 50
-        }
-
-        local textGold = display.newText(textOptions)
-        textGold:setFillColor( 255/255, 223/255, 0 )
-
-        local textOptions = {
-            text = item.platinum,
-            x = x + 80,
-            y = y + 65,
-            width = 50,
-            height = 50
-        }
-
-        local textPlatinum = display.newText(textOptions)
-        textPlatinum:setFillColor( 229/255, 228/255, 226/255 )
-
-        shop:insert(shop.items[i])
-        shop:insert(textGold)
-        shop:insert(textPlatinum)
-    end
-
-    shop:scale(
-                (display.contentWidth/shop.width)*0.8,
-                (display.contentHeight/shop.height)*0.8
-                )
-=======
      shop.toyTab = widget.newButton {
         top = startY + (spacingY * 2),
         left = startX - (spacingX * 0.65),
@@ -249,8 +200,6 @@ function setUpShop()
         defaultFile = "img/icons/UIIcons/playIcon.png",
         onEvent = toyTabClickEvent,
     }
-
->>>>>>> 4da1ee26c92461f298214d0672ba901271cd0b63
 
     -- text area to show how much GOLD you have
     local GoldOptions = {
@@ -315,13 +264,9 @@ function scene:create( event )
     shop = setUpShop()
 
     -- Set up all Icons
-    inventoryIcon = getInventoryIcon()
-<<<<<<< HEAD
 
-=======
-    -- print(inventoryIcon)
+    inventoryIcon = getInventoryIcon()
     
->>>>>>> 4da1ee26c92461f298214d0672ba901271cd0b63
     notifications = setUpNotifications()
 
 
@@ -331,6 +276,7 @@ end
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
+
 
 	if phase == "will" then
         -- Add display objects into group

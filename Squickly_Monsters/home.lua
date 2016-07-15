@@ -149,8 +149,6 @@ function scene:show( event )
         --Set Monster Position
         local oldMonsterName = monsterName
         monsterName = getMonsterName()
-        print(oldMonsterName)
-        print(monsterName)
         if monsterName ~= oldMonsterName then
             updateMonster(monsterName)
         end
