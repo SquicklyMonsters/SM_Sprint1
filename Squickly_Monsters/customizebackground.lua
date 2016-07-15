@@ -43,7 +43,7 @@ function buttonClicked(event)
         else
             print("change me!")
             bg = getBackgroundInfo(backgroundList[counter])
-            print(bg[1
+            print(bg[1])
         end
     end
 end
