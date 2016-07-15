@@ -61,11 +61,11 @@ function updateBackground()
     newBG = getChosenBG()
     if newBG ~= nil then
         background = display.newImage(newBG, display.contentCenterX, display.contentCenterY)
+        background:scale(display.contentWidth/background.width, display.contentHeight/background.height )
     end
 end
 
 function getHomeBackground()
-    saveBackground()
     updateBackground()
     return background
 end

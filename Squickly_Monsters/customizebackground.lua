@@ -19,14 +19,14 @@ local front;
 
 local resizer = display.contentHeight/320
 
-local preview;
+-- local preview;
 local backgroundList;
-local counter;
 local bgPreview;
-
-local chosenBG
-
+local chosenBG;
+local counter;
 local container;
+
+local firstTime = true;
 
 -- -------------------------------------------------------------------------------
 
@@ -41,16 +41,18 @@ function buttonClicked(event)
         if event.target.name == "right" then
             counter = counter%#backgroundList+1
             updatePreview()
+            print(getBackgroundInfo(backgroundList[counter])[1])
         elseif event.target.name == "left" then
             if counter == 1 then
                 counter = #backgroundList
             else
                 counter = counter-1
             end
+            print(getBackgroundInfo(backgroundList[counter])[1])
             updatePreview()
         else
-            print("change me!")
             chosenBG = getBackgroundInfo(backgroundList[counter])[1]
+            saveBackground()
         end
     end
 end
@@ -58,13 +60,13 @@ end
 function updatePreview()
     bgPreview = getBackgroundInfo(backgroundList[counter])
     
-    width = bgPreview[2]
-    height = bgPreview[3]
+    width = bgPreview[2]*resizer
+    height = bgPreview[3]*resizer
     imageDir = bgPreview[1]
 
     container:remove(background)
     local background = display.newImage(imageDir)
-    background:scale(width/background.width, height/background.height )
+    background:scale(display.contentWidth/background.width, display.contentHeight/background.height )
     container:insert(background)
 end
 
@@ -74,8 +76,10 @@ function widget.newPanel(options)
     local background = display.newImage(options.imageDir)
     container = display.newContainer(options.width, options.height)
     
-    -- print(background.width, background.height, display.contentWidth, display.contentHeight)
-    background:scale(options.width/background.width, options.height/background.height )
+    if options.type == "preview" then
+        background:scale(display.contentWidth/background.width, display.contentHeight/background.height )
+    end
+
     container:insert(background)
     container.x = display.contentCenterX + options.x
     container.y = display.contentCenterY + options.y
@@ -89,18 +93,20 @@ function setUpPreview()
 
     bgPreview = getBackgroundInfo(backgroundList[counter])
 
-    preview = widget.newPanel {
+    local preview = widget.newPanel {
         name = "preview",
         x = 0*resizer,
         y = 0*resizer,
-        width = 500*resizer,
-        height = 250*resizer,
+        width = 400*resizer,
+        height = 200*resizer,
         imageDir = bgPreview[1]
     }
 
+    preview.x, preview.y = display.contentCenterX, display.contentCenterY
+
     preview:scale(
-                (display.contentWidth/preview.width)*0.8, 
-                (display.contentHeight/preview.height)*0.8
+                (display.contentWidth/preview.width)*0.8*resizer, 
+                (display.contentHeight/preview.height)*0.8*resizer
                 )
 
     return preview
@@ -109,44 +115,50 @@ end
 function setUpButtons()
     local rightButton = widget.newPanel {
         name = "right",
-        width = 200*resizer,
-        height = 200*resizer,
+        width = 800*resizer,
+        height = 718*resizer,
         imageDir = "img/icons/UIIcons/rightbutton.png",
         x = 225*resizer,
         y = 0*resizer
     }
 
+    rightButton.x, rightButton.y = display.contentCenterX + (225*resizer), display.contentCenterY
+
     rightButton:scale(
-                (display.contentWidth/rightButton.width)*0.10,
-                (display.contentHeight/rightButton.height)*0.10
+                (display.contentWidth/rightButton.width)*0.2,
+                (display.contentHeight/rightButton.height)*0.2
                 )
 
     local leftButton = widget.newPanel {
         name = "left",
-        width = 200*resizer,
-        height = 200*resizer,
+        width = 800*resizer,
+        height = 700*resizer,
         imageDir = "img/icons/UIIcons/leftbutton.png",
         x = -225*resizer,
         y = 0*resizer
     }
 
+    leftButton.x, leftButton.y = display.contentCenterX - (225*resizer), display.contentCenterY
+
     leftButton:scale(
-                (display.contentWidth/leftButton.width)*0.16,
-                (display.contentHeight/leftButton.height)*0.16
+                (display.contentWidth/leftButton.width)*0.2,
+                (display.contentHeight/leftButton.height)*0.2
                 )
 
     local selectButton = widget.newPanel {
         name = "select",
-        width = 100*resizer,
-        height = 30*resizer,
+        width = 300*resizer,
+        height = 72*resizer,
         imageDir = "img/icons/UIIcons/select.png",
         x = 0*resizer,
         y = 125*resizer
     }
 
-    leftButton:scale(
-                (display.contentWidth/selectButton.width)*0.1,
-                (display.contentHeight/selectButton.height)*0.1
+    selectButton.x, selectButton.y = display.contentCenterX, display.contentCenterY + (125*resizer)
+
+    selectButton:scale(
+                (display.contentWidth/selectButton.width)*0.30,
+                (display.contentHeight/selectButton.height)*0.15
                 )
 
     return rightButton, leftButton, selectButton
@@ -175,7 +187,7 @@ function scene:create( event )
 
     -- Set monster
     monster = getMonster()
-    setMonsterLocation(0,70)
+    setMonsterLocation(0,50)
 
     -- Set up all Event Listeners
     rightButton:addEventListener("touch", buttonClicked)
