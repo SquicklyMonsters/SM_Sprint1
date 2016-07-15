@@ -82,11 +82,10 @@ end
 -- -------------------------------------------------------------------------------
 function updateShop(in_tab)
     -- Pretty much refresh the screen
-    composer.hideOverlay()
+    -- composer.hideOverlay()
     composer.removeScene(composer.getSceneName("current"))
     local event = {params = {tab = in_tab}}
     scene:create(event)
-
     -- local options = { params = {tab = in_tab} }
     -- composer.gotoScene("shop", options)
 end
@@ -161,6 +160,7 @@ function setUpShop()
         height = 374,
         imageDir = "img/bg/shoplist.png"
     }
+    shop.x,shop.y = display.contentCenterX, display.contentCenterY
 
     local startX = -shop.width*(1/2.5)
     local startY = -shop.height*(1/3)
@@ -266,7 +266,8 @@ function scene:create( event )
 
     -- Set up all Icons
     inventoryIcon = getInventoryIcon()
-    -- print(inventoryIcon)
+    print(inventoryIcon.x)
+    print(inventoryIcon.y)
     
     notifications = setUpNotifications()
 
@@ -277,6 +278,7 @@ end
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
+
 
 	if phase == "will" then
         -- Add display objects into group
