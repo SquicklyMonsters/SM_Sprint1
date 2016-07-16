@@ -19,6 +19,7 @@ local screen;
 local player;
 updateTimer = timer.performWithDelay(1, update, 0);
 
+local bugText;
 -- -------------------------------------------------------------------------------
 -- Scene functions go Here
 
@@ -62,6 +63,7 @@ function scene:create( event )
     scoreText = getScoreText()
     pauseButton = getPauseButton()
 
+-- ------------------------------------------
 	-- updateTimer = timer.performWithDelay(1, update, 0)
 
     pauseButton:addEventListener("touch", paused)

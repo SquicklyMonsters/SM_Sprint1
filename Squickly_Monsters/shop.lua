@@ -115,10 +115,10 @@ function allocateItems(startX, startY, spacingX, spacingY)
             shop.items[shopIdx].item = item
 
             local textOptions = {
-                text = item.gold, 
+                text = item.gold,
                 x = x + 5,
-                y = y + 65, 
-                width = 50, 
+                y = y + 65,
+                width = 50,
                 height = 50
             }
 
@@ -126,10 +126,10 @@ function allocateItems(startX, startY, spacingX, spacingY)
             textGold:setFillColor( 255/255, 223/255, 0 )
 
             local textOptions = {
-                text = item.platinum, 
+                text = item.platinum,
                 x = x + 80,
-                y = y + 65, 
-                width = 50, 
+                y = y + 65,
+                width = 50,
                 height = 50
             }
 
@@ -146,7 +146,7 @@ end
 
 -- -------------------------------------------------------------------------------
 
-function widget.newPanel(options)                 
+function widget.newPanel(options)
     local background = display.newImage(options.imageDir)
     local container = display.newContainer(options.width, options.height)
 
@@ -175,7 +175,7 @@ function setUpShop()
     local itemList = getItemList()
 
     shop.items = {}
-    
+
     allocateItems(startX, startY, spacingX, spacingY)
 
     shop.allTab = widget.newButton {
@@ -237,7 +237,7 @@ function setUpShop()
     shop:insert(shop.toyTab)
 
     shop:scale(
-            (display.contentWidth/shop.width)*0.8, 
+            (display.contentWidth/shop.width)*0.8,
             (display.contentHeight/shop.height)*0.8
             )
 

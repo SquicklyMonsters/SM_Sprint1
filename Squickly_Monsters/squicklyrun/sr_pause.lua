@@ -7,6 +7,23 @@ local scene = composer.newScene()
 local resizer = display.contentHeight/320
 
 -- -------------------------------------------------------------------------------
+-- temp for adding text
+		local options = {
+    text = "Your experience might not be optimal because your screen resolution is not 320x480",
+    x = 350,
+    y = 50,
+    width = 400,
+    font = native.systemFontBold,
+    fontSize = 18,
+    align = "left"
+}
+
+bugText = display.newText( options )
+bugText.alpha = 0
+transition.fadeIn( bugText, { time=2000 } )
+bugText:setFillColor( 1, 0, 0 )
+
+-- -------------------------------------------------------------------------------
 -- Set all Event listeners HERE
 
 function resumeClickEvent(event)
@@ -21,7 +38,8 @@ function quitClickEvent(event)
 		-- restartGame()
 		composer.removeScene("squicklyrun.sr_mainpage")
 		composer.gotoScene("miniGame", "crossFade", 250)
-		
+		bugText:removeSelf()
+
 	end
 end
 
@@ -75,7 +93,7 @@ end
 -- Called when the scene's view does not exist:
 function scene:create( event )
 	local sceneGroup = self.view
-	pause = setUpPause()	
+	pause = setUpPause()
 	sceneGroup:insert(pause)
 end
 
