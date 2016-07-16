@@ -58,6 +58,7 @@ local chageSceneTime = 250;
 
 function cacheVariables()
     monster = getMonster()
+    -- background = getBackground()
     background = getHomeBackground()
 
     -- Cache Need Levels

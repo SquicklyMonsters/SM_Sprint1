@@ -36,9 +36,25 @@ local sorryclosed;
 local stopgaptext;
 local firsttime = true;
 
+local notifications;
 -- -------------------------------------------------------------------------------
 
 -- Non-scene functions go Here
+function setUpNotifications()
+    local boughtNotice = display.newImageRect("img/icons/UIIcons/buy.png", 150, 150)
+    boughtNotice.x = display.contentCenterX
+    boughtNotice.y = display.contentCenterY
+    boughtNotice.alpha = 0
+
+    notifications = boughtNotice
+    return notifications
+end
+
+function buyNotice()
+    notifications.alpha = 1
+    transition.fadeOut( notifications, { time=500 } )
+end
+
 
 function getChosenBG()
     return chosenBG
@@ -60,6 +76,7 @@ function buttonClicked(event)
             print(getBackgroundInfo(counter)[1])
             updatePreview()
         else
+            buyNotice()
             chosenBG = getBackgroundInfo(counter)[1]
             saveBackground()
         end
@@ -199,6 +216,10 @@ function scene:create( event )
     setMonsterLocation(0,50)
         
     addBGListeners()
+
+
+
+    notifications = setUpNotifications()
 end
 
 function scene:show( event )
@@ -232,6 +253,7 @@ function scene:show( event )
         middle:insert(buttons)
         -- ===========FRONT===============
         front:insert(monster)
+        front:insert(notifications)
         -- ===============================
         sceneGroup:insert(back)
         sceneGroup:insert(middle)

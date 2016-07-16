@@ -46,10 +46,9 @@ function scene:create( event )
 
     -- Get Latest Monster
     monster = getMonster()
-    monsterName = getMonsterName()
 
     -- Display Monster Descriptions
-    evolveIcon, name_display, HW_display, disc_display = displayAllMonsterDescriptions(monsterName)
+    evolveIcon, name_display, HW_display, disc_display = displayAllMonsterDescriptions(getMonsterName())
     enableEvolveTouch()
 
     addListeners()
@@ -71,20 +70,14 @@ function scene:show( event )
 
     if phase == "will" then
         --Set Monster Loc
-
-        local oldMonsterName = monsterName
         monsterName = getMonsterName()
-        print(oldMonsterName)
-        print(monsterName)
-        if monsterName ~= oldMonsterName then
-            monster = updateMonster(monsterName)
-        end
-        enableEvolution()
-
+        setUpMonster(monsterName)
+        monster = getMonster()
         setMonsterLocation(100,20)
 
         evolveIcon.alpha = updateAllMonsterDescriptions(monsterName)
 
+        enableEvolution()
         
          -- Add display objects into group
         -- ============BACK===============

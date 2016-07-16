@@ -19,8 +19,7 @@ local back;
 local middle;
 local front;
 
--- local monster;
-local monsterName;
+local monster;
 
 local feedIcon;
 local sleepIcon;
@@ -78,13 +77,12 @@ function scene:create( event )
     middle = display.newGroup()
     front = display.newGroup()
 
-    -- Set background 
+    -- Set background
     setUpHomeBackground()
     background = getHomeBackground()
 
     -- Set Up Monster
-    monsterName = getMonsterName()
-    setUpMonster(monsterName)
+    setUpMonster(getMonsterName())
     monster = getMonster()
     setMonsterLocation(0,70)
 
@@ -127,8 +125,6 @@ function scene:create( event )
 
     -- Set up all Event Listeners
     addListeners()
-
-    composer.isDebug = true
 end
 
 function scene:show( event )
@@ -137,10 +133,8 @@ function scene:show( event )
 
 
     if phase == "will" then
-        -- Set up background
-        background = getHomeBackground()
-
         enableHomeTouch()
+        background = getHomeBackground()
 
         -- Run need levels checker
         checkHunger(1)
@@ -152,12 +146,6 @@ function scene:show( event )
         tiredThoughtCloud = getTiredThoughtCloud()
 
         --Set Monster Position
-        local oldMonsterName = monsterName
-        monsterName = getMonsterName()
-        if monsterName ~= oldMonsterName then
-            updateMonster(monsterName)
-        end
-        monster = getMonster()
         setMonsterLocation(0,70)
 
         -- Add display objects into group
