@@ -15,6 +15,11 @@ require("data")
 
 -- Local variables go Here
 
+local resizer = display.contentHeight/320;
+
+local swidth = 749;
+local sheight = 374;
+
 local back;
 local middle;
 local front;
@@ -166,11 +171,11 @@ function setUpShop()
     }
     shop.x,shop.y = display.contentCenterX, display.contentCenterY
 
-    local startX = -shop.width*(1/2.5)
-    local startY = -shop.height*(1/3)
+    local startX = -swidth*(1/2.5)
+    local startY = -sheight*(1/3)
 
-    local spacingX = (shop.width)/6.8
-    local spacingY = (shop.height)/3.75
+    local spacingX = (swidth)/6.8
+    local spacingY = (sheight)/3.75
 
     local itemList = getItemList()
 
@@ -237,8 +242,8 @@ function setUpShop()
     shop:insert(shop.toyTab)
 
     shop:scale(
-            (display.contentWidth/shop.width)*0.8,
-            (display.contentHeight/shop.height)*0.8
+            (display.contentWidth/swidth)*0.8,
+            (display.contentHeight/sheight)*0.8
             )
 
     return shop

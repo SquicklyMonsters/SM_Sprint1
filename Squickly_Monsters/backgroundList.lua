@@ -1,6 +1,6 @@
 local backgroundDir = "img/bg/"
 
-local backgroundList =  {"hotday","grassland","mountains","ice","jungle","mystery", "castle", "dragon", "opera", "underwater", "underwater2"};
+local backgroundList =  {"hotday","grassland","mountains","ice","jungle","mystery", "castle", "dragon", "opera", "underwater", "underwater2","dark-castle"};
 
 -- -------------------------------------------------------------------------------
 -- Background Img + Dimensions
@@ -38,6 +38,9 @@ local backgroundImageAttr = {
 	},
 	{ --underwater2
 		backgroundDir.."underwater2.jpg",800,544,
+	},
+	{ --dark-castle.png
+		backgroundDir.."dark-castle.png",960,644,
 	},
 }
 

@@ -13,4 +13,3 @@ end
 function getEvolveBackground()
     return cp_background
 end
-

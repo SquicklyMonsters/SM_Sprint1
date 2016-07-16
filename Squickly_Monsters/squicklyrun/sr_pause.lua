@@ -8,13 +8,17 @@ local resizer = display.contentHeight/320
 
 -- -------------------------------------------------------------------------------
 -- temp for adding text
-		local options = {
-    text = "Your experience might not be optimal because your screen resolution is not 320x480",
-    x = 350,
-    y = 50,
-    width = 400,
+local tmptext = ""
+if display.contentHeight~=320 then
+	tmptext = "Your experience might not be optimal because your screen resolution is not 320x480"
+end
+local options = {
+    text = tmptext,
+    x = 300*resizer,
+    y = 50*resizer,
+    width = 400*resizer,
     font = native.systemFontBold,
-    fontSize = 18,
+    fontSize = 18*resizer,
     align = "left"
 }
 
