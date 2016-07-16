@@ -73,9 +73,8 @@ function updateMonster(monsterName)
     monster.imageSheet = graphics.newImageSheet(fileName, options)
     monster.sequenceData = sequence
 
-    -- monster:scale(scaling*resizer,scaling*resizer)
-    -- monster:play()
-    -- return monster
+    monster:scale(scaling*resizer,scaling*resizer)
+    monster:play()
 end
 
 function getMonster()

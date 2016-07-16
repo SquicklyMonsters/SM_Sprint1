@@ -11,23 +11,7 @@ local background;
 function setUpHomeBackground() 
     local bg = getSaveBackground()
     -- Set Background
-    -- background = display.newImage("img/bg/mountains.jpg", display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/waterfall.png", display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/hotday.png", display.contentCenterX, display.contentCenterY)
     background = display.newImage(bg, display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/planets.png", display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/underwater.jpg", display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/underwater2.jpg", display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/underwater3.png", display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/fantasy.jpg", display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/jungle.png", display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/beach.png", display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/castle.jpg", display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/swiss.png", display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/village.jpeg", display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/dragon.jpg", display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/grassland.png", display.contentCenterX, display.contentCenterY)
-    -- background = display.newImage("img/bg/opera.png", display.contentCenterX, display.contentCenterY)
     background:scale(display.contentWidth/background.width, display.contentHeight/background.height )
     
     -- local backgroundOption = {

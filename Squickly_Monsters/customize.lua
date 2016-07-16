@@ -33,14 +33,14 @@ local cp_background;
 -- -----------------------------------------------------------------------------------------------------------------
 
 function scene:create( event )
-	local sceneGroup = self.view
+    local sceneGroup = self.view
 
     -- Setup layer
     back = display.newGroup()
     middle = display.newGroup()
     front = display.newGroup()
 
-	-- Set background
+    -- Set background
     setUpEvolveBackground()
     cp_background = getEvolveBackground()
 
@@ -66,21 +66,18 @@ function scene:create( event )
 end
 
 function scene:show( event )
-	local sceneGroup = self.view
-	local phase = event.phase
+    local sceneGroup = self.view
+    local phase = event.phase
 
-	if phase == "will" then
+    if phase == "will" then
         --Set Monster Loc
+
         local oldMonsterName = monsterName
         monsterName = getMonsterName()
         print(oldMonsterName)
         print(monsterName)
         if monsterName ~= oldMonsterName then
-            -- monster = updateMonster(monsterName)
-            setUpMonster(monsterName)
-            setMonsterName(monsterName)
-            saveData()
-            monster = getMonster()
+            monster = updateMonster(monsterName)
         end
         enableEvolution()
 
@@ -108,28 +105,28 @@ function scene:show( event )
         sceneGroup:insert(front)
 
         composer.showOverlay("menubar")
-		-- Called when the scene is still off screen and is about to move on screen
-	elseif phase == "did" then
-		-- Called when the scene is now on screen
-		--
-		-- INSERT code here to make the scene come alive
-		-- e.g. start timers, begin animation, play audio, etc.
-	end
+        -- Called when the scene is still off screen and is about to move on screen
+    elseif phase == "did" then
+        -- Called when the scene is now on screen
+        --
+        -- INSERT code here to make the scene come alive
+        -- e.g. start timers, begin animation, play audio, etc.
+    end
 end
 
 function scene:hide( event )
-	local sceneGroup = self.view
-	local phase = event.phase
+    local sceneGroup = self.view
+    local phase = event.phase
 
-	if event.phase == "will" then
-		-- Called when the scene is on screen and is about to move off screen
-		--
-		-- INSERT code here to pause the scene
-		-- e.g. stop timers, stop animation, unload sounds, etc.)
-	elseif phase == "did" then
+    if event.phase == "will" then
+        -- Called when the scene is on screen and is about to move off screen
+        --
+        -- INSERT code here to pause the scene
+        -- e.g. stop timers, stop animation, unload sounds, etc.)
+    elseif phase == "did" then
         --composer.hideOverlay()
-		-- Called when the scene is now off screen
-	end
+        -- Called when the scene is now off screen
+    end
 end
 
 function scene:destroy( event )
